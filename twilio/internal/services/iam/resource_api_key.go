@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -73,6 +74,10 @@ func resourceApiKeyRead(d *schema.ResourceData, meta interface{}) error {
 	keyResponse, err := client.Keys.Get(context, sid)
 
 	if err != nil {
+		if strings.Contains(err.Error(), fmt.Sprintf("%s.json was not found", sid)) {
+			d.SetId("")
+			return nil
+		}
 		return fmt.Errorf("Failed to read key: %s", err.Error())
 	}
 
