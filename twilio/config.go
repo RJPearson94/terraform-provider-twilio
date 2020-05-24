@@ -1,6 +1,9 @@
 package twilio
 
-import twilio "github.com/kevinburke/twilio-go"
+import (
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	twilio "github.com/kevinburke/twilio-go"
+)
 
 type Config struct {
 	AccountSid       string
@@ -8,19 +11,13 @@ type Config struct {
 	terraformVersion string
 }
 
-type TwilioClient struct {
-	accountSid       string
-	terraformVersion string
-	twilio           *twilio.Client
-}
-
 func (config *Config) Client() (interface{}, error) {
 	twilioClient := twilio.NewClient(config.AccountSid, config.AuthToken, nil)
 
-	client := &TwilioClient{
-		accountSid:       config.AccountSid,
-		terraformVersion: config.terraformVersion,
-		twilio:           twilioClient,
+	client := &common.TwilioClient{
+		AccountSid:       config.AccountSid,
+		TerraformVersion: config.terraformVersion,
+		Twilio:           twilioClient,
 	}
 	return client, nil
 }

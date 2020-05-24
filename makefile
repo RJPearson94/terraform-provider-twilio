@@ -13,6 +13,9 @@ build: fmtcheck generate
 test: fmtcheck generate
 	go test $(TESTARGS) -timeout=30s -parallel=4 $(TEST)
 
+testacc: fmtcheck
+	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 10m
+
 fmt:
 	@echo "==> Fixing source code with gofmt..."
 	gofmt -w -s ./$(PKG_NAME)
@@ -29,4 +32,4 @@ tools:
 generate:
 	go generate  ./...
 
-.PHONY: download build test fmt tools generate
+.PHONY: download build test testacc fmt tools generate
