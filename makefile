@@ -9,7 +9,6 @@ download:
 
 build: fmtcheck generate
 	go install
-	go build -o terraform-provider-twilio
 
 test: fmtcheck generate
 	go test $(TESTARGS) -timeout=30s -parallel=4 $(TEST)
