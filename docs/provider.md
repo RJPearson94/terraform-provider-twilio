@@ -9,10 +9,10 @@ View the [resources](./resources) folder and the [data sources](./data_sources) 
 The Twilio provider offers a various way of providing credentials for
 authentication. The following methods are supported, in precedence order:
 
-- Static credentials *(Not Recommended)*
+- Static credentials
 - Environment variables
 
-### Static credentials *(Not Recommended)*
+### Static credentials
 
 **Warning:** This method is supported however it is not recommend for use as secrets could be leaked if the provider was committed to public version control.
 
