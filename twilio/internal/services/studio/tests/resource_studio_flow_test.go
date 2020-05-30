@@ -6,7 +6,7 @@ import (
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
-	"github.com/RJPearson94/twilio-sdk-go/utils"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
@@ -110,10 +110,8 @@ func testAccCheckTwilioStudioFlowDestroy(s *terraform.State) error {
 		}
 
 		if _, err := client.Flow(rs.Primary.ID).Get(); err != nil {
-			if _, ok := err.(*utils.TwilioError); ok {
-				if err.(*utils.TwilioError).IsNotFoundError() {
-					return nil
-				}
+			if utils.IsNotFoundError(err) {
+				return nil
 			}
 			return fmt.Errorf("Error occurred when retrieving flow information %s", err)
 		}
