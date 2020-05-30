@@ -70,7 +70,6 @@ func resourceApiKeyRead(d *schema.ResourceData, meta interface{}) error {
 	context := context.Background()
 
 	sid := d.Id()
-
 	keyResponse, err := client.Keys.Get(context, sid)
 
 	if err != nil {
@@ -106,7 +105,6 @@ func resourceApiKeyUpdate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	d.SetId(updateKeyResult.Sid)
-
 	return resourceApiKeyRead(d, meta)
 }
 
@@ -114,11 +112,10 @@ func resourceApiKeyDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Twilio
 	context := context.Background()
 
-	err := client.Keys.Delete(context, d.Id())
-
-	if err != nil {
+	if err := client.Keys.Delete(context, d.Id()); err != nil {
 		return fmt.Errorf("Failed to delete key: %s", err.Error())
 	}
 
+	d.SetId("")
 	return nil
 }
