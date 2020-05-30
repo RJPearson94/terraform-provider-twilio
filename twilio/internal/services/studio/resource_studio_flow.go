@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	studio "github.com/RJPearson94/twilio-sdk-go/service/studio/v2"
-	"github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -104,11 +104,9 @@ func resourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 
 	getResponse, err := client.Flow(d.Id()).Get()
 	if err != nil {
-		if _, ok := err.(*utils.TwilioError); ok {
-			if err.(*utils.TwilioError).IsNotFoundError() {
-				d.SetId("")
-				return nil
-			}
+		if utils.IsNotFoundError(err) {
+			d.SetId("")
+			return nil
 		}
 		return fmt.Errorf("[ERROR] Failed to read studio flow: %s", err)
 	}
