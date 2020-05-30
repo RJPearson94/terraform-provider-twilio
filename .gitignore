@@ -8,6 +8,7 @@
 *.tfstate
 *.tfplan
 .terraform/
+crash.log
 
 # Artefact
 terraform-provider-twilio

@@ -1,0 +1,20 @@
+{
+  "description": "A New Flow",
+  "flags": {
+    "allow_concurrent_calls": true
+  },
+  "initial_state": "Trigger",
+  "states": [
+    {
+      "name": "Trigger",
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "transitions": [],
+      "type": "trigger"
+    }
+  ]
+}
