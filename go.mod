@@ -1,6 +1,9 @@
 module github.com/RJPearson94/terraform-provider-twilio
 
+replace github.com/RJPearson94/twilio-sdk-go => ../twilio-sdk-go
+
 require (
+	github.com/RJPearson94/twilio-sdk-go v0.0.1
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.3.0 // indirect
@@ -19,7 +22,6 @@ require (
 	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550 // indirect
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
-	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
 
 go 1.14
