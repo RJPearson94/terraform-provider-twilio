@@ -27,10 +27,11 @@ jobs:
       with:
         go-version: ${{ env.GO_VERSION }}
     
+    - name: Granting private modules access
+      run: git config --global url."https://${{ secrets.GO_MODULES_TOKEN }}:x-oauth-basic@github.com/RJPearson94".insteadOf "https://github.com/RJPearson94"
+
     - name: Install tools
-      run:  |
-        go env -w GOPRIVATE=github.com/RJPearson94/twilio-sdk-go
-        make tools
+      run: make tools
     
     - name: Download Dependencies
       run: make download
