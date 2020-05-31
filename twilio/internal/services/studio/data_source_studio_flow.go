@@ -2,6 +2,7 @@ package studio
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
@@ -85,8 +86,11 @@ func dataSourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("revision", getResponse.Revision)
 	d.Set("commit_message", getResponse.CommitMessage)
 	d.Set("valid", getResponse.Valid)
-	d.Set("date_created", getResponse.DateCreated)
-	d.Set("date_updated", getResponse.DateUpdated)
+	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
+
+	if getResponse.DateUpdated != nil {
+		d.Set("date_updated", getResponse.DateUpdated.Format(time.RFC3339))
+	}
 	d.Set("url", getResponse.URL)
 	d.Set("webhook_url", getResponse.WebhookURL)
 
