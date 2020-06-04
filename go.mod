@@ -5,7 +5,7 @@ require (
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.3.0 // indirect
-	github.com/hashicorp/terraform-plugin-sdk v1.13.0
+	github.com/hashicorp/terraform-plugin-sdk v1.13.1
 	github.com/inconshreveable/log15 v0.0.0-20200109203555-b30bc20e4fd1 // indirect
 	github.com/kevinburke/go-types v0.0.0-20200309064045-f2d4aea18a7a // indirect
 	github.com/kevinburke/go.uuid v1.2.0 // indirect
