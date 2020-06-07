@@ -6,7 +6,9 @@ import (
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	studio "github.com/RJPearson94/twilio-sdk-go/service/studio/v2"
+	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flow"
+	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flow_validation"
+	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flows"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -84,7 +86,7 @@ func resourceStudioFlowCreate(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	createInput := &studio.CreateFlowInput{
+	createInput := &flows.CreateFlowInput{
 		FriendlyName:  d.Get("friendly_name").(string),
 		Status:        d.Get("status").(string),
 		Definition:    d.Get("definition").(string),
@@ -144,7 +146,7 @@ func resourceStudioFlowUpdate(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	updateInput := &studio.UpdateFlowInput{
+	updateInput := &flow.UpdateFlowInput{
 		FriendlyName:  d.Get("friendly_name").(string),
 		Status:        d.Get("status").(string),
 		Definition:    d.Get("definition").(string),
@@ -174,7 +176,7 @@ func validateRequest(d *schema.ResourceData, meta interface{}) error {
 	if d.Get("validate").(bool) {
 		client := meta.(*common.TwilioClient).Studio
 
-		validateInput := &studio.ValidateFlowInput{
+		validateInput := &flow_validation.ValidateFlowInput{
 			FriendlyName:  d.Get("friendly_name").(string),
 			Status:        d.Get("status").(string),
 			Definition:    d.Get("definition").(string),
