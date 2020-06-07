@@ -12,6 +12,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/RJPearson94/twilio-sdk-go v0.0.0-20200607183543-ab01847d394c h1:gBvVM6X4clC8NI0f46j57+wanYUVlqHfDTLkgg7X4+s=
 github.com/RJPearson94/twilio-sdk-go v0.0.0-20200607183543-ab01847d394c/go.mod h1:OGTtnb+SdDTBeHlH/+yEBJ96VSn1bwQHjqRoAWtv8wI=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200607213352-d630367add9e h1:yVdcJBU32yQXYx9wqIfhmuLeyDVDYtPzRJlL5qlgDSc=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200607213352-d630367add9e/go.mod h1:OGTtnb+SdDTBeHlH/+yEBJ96VSn1bwQHjqRoAWtv8wI=
 github.com/agext/levenshtein v1.2.1/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
 github.com/agext/levenshtein v1.2.2 h1:0S/Yg6LYmFJ5stwQeRp6EeOcCbj7xiqQSdNelsXvaqE=
 github.com/agext/levenshtein v1.2.2/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
