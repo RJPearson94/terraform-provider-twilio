@@ -55,7 +55,7 @@ The following attributes are exported:
 * `friendly_name` - The name of the Studio Flow
 * `definition` - The Flow Definition JSON
 * `status` -  The status of the Studio Flow
-* `revision` - The revision number of teh Studio Flow
+* `revision` - The revision number of the Studio Flow
 * `valid` -  Whether the Studio Flow is valid
 * `validate` -  Whether the Studio Flow has been validated on creation and on updates
 * `date_created` - The date that the Studio Flow was created

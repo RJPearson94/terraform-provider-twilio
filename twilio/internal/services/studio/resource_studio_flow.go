@@ -120,11 +120,7 @@ func resourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("definition", getResponse.Definition)
 	d.Set("status", getResponse.Status)
 	d.Set("revision", getResponse.Revision)
-
-	if getResponse.CommitMessage != nil {
-		d.Set("commit_message", getResponse.CommitMessage)
-	}
-
+	d.Set("commit_message", getResponse.CommitMessage)
 	d.Set("valid", getResponse.Valid)
 	d.Set("validate", d.Get("validate").(bool))
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
