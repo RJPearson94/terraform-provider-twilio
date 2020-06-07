@@ -12,21 +12,21 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
-var workspaceActivityResourceName = "twilio_taskrouter_workspace_activity"
+var ActivityResourceName = "twilio_taskrouter_activity"
 
-func TestAccTwilioTaskRouterWorkspaceActivity_basic(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.activity", workspaceActivityResourceName)
+func TestAccTwilioTaskRouterActivity_basic(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.activity", ActivityResourceName)
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { acceptance.PreCheck(t) },
 		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioTaskRouterWorkspaceActivityDestroy,
+		CheckDestroy: testAccCheckTwilioTaskRouterActivityDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioTaskRouterWorkspaceActivity_basic(friendlyName),
+				Config: testAccTwilioTaskRouterActivity_basic(friendlyName),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioTaskRouterWorkspaceActivityExists(stateResourceName),
+					testAccCheckTwilioTaskRouterActivityExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "available", "true"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
@@ -42,8 +42,8 @@ func TestAccTwilioTaskRouterWorkspaceActivity_basic(t *testing.T) {
 	})
 }
 
-func TestAccTwilioTaskRouterWorkspaceActivity_update(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.activity", workspaceActivityResourceName)
+func TestAccTwilioTaskRouterActivity_update(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.activity", ActivityResourceName)
 
 	friendlyName := acctest.RandString(10)
 	newFriendlyName := acctest.RandString(10)
@@ -51,12 +51,12 @@ func TestAccTwilioTaskRouterWorkspaceActivity_update(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { acceptance.PreCheck(t) },
 		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioTaskRouterWorkspaceActivityDestroy,
+		CheckDestroy: testAccCheckTwilioTaskRouterActivityDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioTaskRouterWorkspaceActivity_basic(friendlyName),
+				Config: testAccTwilioTaskRouterActivity_basic(friendlyName),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioTaskRouterWorkspaceActivityExists(stateResourceName),
+					testAccCheckTwilioTaskRouterActivityExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "available", "true"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
@@ -69,9 +69,9 @@ func TestAccTwilioTaskRouterWorkspaceActivity_update(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccTwilioTaskRouterWorkspaceActivity_basic(newFriendlyName),
+				Config: testAccTwilioTaskRouterActivity_basic(newFriendlyName),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioTaskRouterWorkspaceActivityExists(stateResourceName),
+					testAccCheckTwilioTaskRouterActivityExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "available", "true"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
@@ -87,11 +87,11 @@ func TestAccTwilioTaskRouterWorkspaceActivity_update(t *testing.T) {
 	})
 }
 
-func testAccCheckTwilioTaskRouterWorkspaceActivityDestroy(s *terraform.State) error {
+func testAccCheckTwilioTaskRouterActivityDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).TaskRouter
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != workspaceActivityResourceName {
+		if rs.Type != ActivityResourceName {
 			continue
 		}
 
@@ -99,14 +99,14 @@ func testAccCheckTwilioTaskRouterWorkspaceActivityDestroy(s *terraform.State) er
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
-			return fmt.Errorf("Error occurred when retrieving workspace activity information %s", err)
+			return fmt.Errorf("Error occurred when retrieving activity information %s", err)
 		}
 	}
 
 	return nil
 }
 
-func testAccCheckTwilioTaskRouterWorkspaceActivityExists(name string) resource.TestCheckFunc {
+func testAccCheckTwilioTaskRouterActivityExists(name string) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).TaskRouter
 
@@ -117,14 +117,14 @@ func testAccCheckTwilioTaskRouterWorkspaceActivityExists(name string) resource.T
 		}
 
 		if _, err := client.Workspace(rs.Primary.Attributes["workspace_sid"]).Activity(rs.Primary.ID).Get(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving workspace activity information %s", err)
+			return fmt.Errorf("Error occurred when retrieving activity information %s", err)
 		}
 
 		return nil
 	}
 }
 
-func testAccTwilioTaskRouterWorkspaceActivity_basic(friendlyName string) string {
+func testAccTwilioTaskRouterActivity_basic(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_taskrouter_workspace" "workspace" {
 	friendly_name          = "%s"
@@ -132,7 +132,7 @@ resource "twilio_taskrouter_workspace" "workspace" {
 	prioritize_queue_order = "FIFO"
 }
 
-resource "twilio_taskrouter_workspace_activity" "activity" {
+resource "twilio_taskrouter_activity" "activity" {
 	workspace_sid = twilio_taskrouter_workspace.workspace.sid
 	friendly_name = "%s"
 	available 	  = true

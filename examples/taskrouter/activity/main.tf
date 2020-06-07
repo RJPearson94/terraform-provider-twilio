@@ -4,8 +4,8 @@ resource "twilio_taskrouter_workspace" "workspace" {
   prioritize_queue_order = "FIFO"
 }
 
-resource "twilio_taskrouter_workspace_activity" "activity" {
+resource "twilio_taskrouter_activity" "activity" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "Test Workspace Activity"
+  friendly_name = "Test Activity"
   available     = true
 }
