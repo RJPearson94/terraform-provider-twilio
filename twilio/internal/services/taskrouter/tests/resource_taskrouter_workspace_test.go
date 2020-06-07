@@ -12,10 +12,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
-var resourceName = "twilio_taskrouter_workspace"
+var workspaceResourceName = "twilio_taskrouter_workspace"
 
 func TestAccTwilioTaskRouterWorkspace_basic(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.workspace", resourceName)
+	stateResourceName := fmt.Sprintf("%s.workspace", workspaceResourceName)
 	friendlyName := acctest.RandString(10)
 	queueOrder := "FIFO"
 
@@ -51,7 +51,7 @@ func TestAccTwilioTaskRouterWorkspace_basic(t *testing.T) {
 }
 
 func TestAccTwilioTaskRouterWorkspace_update(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.workspace", resourceName)
+	stateResourceName := fmt.Sprintf("%s.workspace", workspaceResourceName)
 
 	friendlyName := acctest.RandString(10)
 	queueOrder := "FIFO"
@@ -114,7 +114,7 @@ func testAccCheckTwilioTaskRouterWorkspaceDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).TaskRouter
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != resourceName {
+		if rs.Type != workspaceResourceName {
 			continue
 		}
 
