@@ -12,12 +12,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-func resourceTaskRouterWorkspaceActivity() *schema.Resource {
+func resourceTaskRouterActivity() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceTaskRouterWorkspaceActivityCreate,
-		Read:   resourceTaskRouterWorkspaceActivityRead,
-		Update: resourceTaskRouterWorkspaceActivityUpdate,
-		Delete: resourceTaskRouterWorkspaceActivityDelete,
+		Create: resourceTaskRouterActivityCreate,
+		Read:   resourceTaskRouterActivityRead,
+		Update: resourceTaskRouterActivityUpdate,
+		Delete: resourceTaskRouterActivityDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -60,7 +60,7 @@ func resourceTaskRouterWorkspaceActivity() *schema.Resource {
 	}
 }
 
-func resourceTaskRouterWorkspaceActivityCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterActivityCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	createInput := &activities.CreateActivityInput{
@@ -74,10 +74,10 @@ func resourceTaskRouterWorkspaceActivityCreate(d *schema.ResourceData, meta inte
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceTaskRouterWorkspaceActivityRead(d, meta)
+	return resourceTaskRouterActivityRead(d, meta)
 }
 
-func resourceTaskRouterWorkspaceActivityRead(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterActivityRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	getResponse, err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).Get()
@@ -105,7 +105,7 @@ func resourceTaskRouterWorkspaceActivityRead(d *schema.ResourceData, meta interf
 	return nil
 }
 
-func resourceTaskRouterWorkspaceActivityUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterActivityUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	updateInput := &activity.UpdateActivityInput{
@@ -118,10 +118,10 @@ func resourceTaskRouterWorkspaceActivityUpdate(d *schema.ResourceData, meta inte
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceTaskRouterWorkspaceActivityRead(d, meta)
+	return resourceTaskRouterActivityRead(d, meta)
 }
 
-func resourceTaskRouterWorkspaceActivityDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterActivityDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	if err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).Delete(); err != nil {
