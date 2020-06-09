@@ -30,7 +30,7 @@ The following arguments are supported:
 The following attributes are exported:
 
 * `id` - The ID of the worker (Same as the SID)
-* `sid` - The SID of the v (Same as the ID)
+* `sid` - The SID of the worker (Same as the ID)
 * `account_sid` - The Account SID of the worker is deployed into
 * `workspaceSid` - The Workspace SID to create the worker under
 * `friendly_name` - The name of the worker
