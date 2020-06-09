@@ -20,5 +20,6 @@ func (r Registration) SupportedResources() map[string]*schema.Resource {
 		"twilio_taskrouter_workspace":  resourceTaskRouterWorkspace(),
 		"twilio_taskrouter_activity":   resourceTaskRouterActivity(),
 		"twilio_taskrouter_task_queue": resourceTaskRouterTaskQueue(),
+		"twilio_taskrouter_worker":     resourceTaskRouterWorker(),
 	}
 }
