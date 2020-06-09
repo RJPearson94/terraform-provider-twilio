@@ -9,6 +9,8 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/worker"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/workers"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func resourceTaskRouterWorker() *schema.Resource {
@@ -54,9 +56,11 @@ func resourceTaskRouterWorker() *schema.Resource {
 				Computed: true,
 			},
 			"attributes": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "{}",
+				Type:             schema.TypeString,
+				Optional:         true,
+				ValidateFunc:     validation.StringIsJSON,
+				DiffSuppressFunc: structure.SuppressJsonDiff,
+				Default:          "{}",
 			},
 			"activity_name": {
 				Type:     schema.TypeString,
