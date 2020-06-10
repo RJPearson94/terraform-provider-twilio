@@ -5,11 +5,6 @@ Manages a TaskRouter workflow
 ## Example Usage
 
 ```hcl
-resource "twilio_taskrouter_worker" "worker" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "Test Worker"
-}
-
 resource "twilio_taskrouter_workspace" "workspace" {
   friendly_name          = "%s"
   multi_task_enabled     = true
@@ -53,14 +48,14 @@ The following attributes are exported:
 
 * `id` - The ID of the workflow (Same as the SID)
 * `sid` - The SID of the workflow (Same as the ID)
-* `account_sid` - The Account SID of the worker is deployed into
-* `workspaceSid` - The Workspace SID to create the worker under
-* `friendly_name` - The name of the worker
+* `account_sid` - The Account SID of the workflow is deployed into
+* `workspaceSid` - The Workspace SID to create the workflow under
+* `friendly_name` - The name of the workflow
 * `configuration` - JSON string of workflow configuration
 * `assignment_callback_url` - Assignment Callback URL
 * `fallback_assignment_callback_url` - Fallback Assignment Callback URL
 * `task_reservation_timeout` - Maximum time the task can be unassigned for before it times out
 * `document_content_type` - The MIME type of the document
-* `date_created` - The date that the worker was created
-* `date_updated` - The date that the worker was updated
-* `url` - The url of the worker
+* `date_created` - The date that the workflow was created
+* `date_updated` - The date that the workflow was updated
+* `url` - The url of the workflow
