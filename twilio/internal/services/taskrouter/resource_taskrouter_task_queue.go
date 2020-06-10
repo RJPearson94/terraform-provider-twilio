@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_queue"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_queues"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
