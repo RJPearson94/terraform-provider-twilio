@@ -10,6 +10,8 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flow_validation"
 	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flows"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func resourceStudioFlow() *schema.Resource {
@@ -39,8 +41,10 @@ func resourceStudioFlow() *schema.Resource {
 				Required: true,
 			},
 			"definition": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:             schema.TypeString,
+				Required:         true,
+				ValidateFunc:     validation.StringIsJSON,
+				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
 			"commit_message": {
 				Type:     schema.TypeString,
