@@ -70,7 +70,7 @@ func resourceTaskRouterActivityCreate(d *schema.ResourceData, meta interface{}) 
 
 	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).Activities.Create(createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create taskrouter workspace activity: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create taskrouter activity: %s", err)
 	}
 
 	d.SetId(createResult.Sid)
@@ -86,7 +86,7 @@ func resourceTaskRouterActivityRead(d *schema.ResourceData, meta interface{}) er
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read taskrouter workspace activity: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read taskrouter activity: %s", err)
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -114,7 +114,7 @@ func resourceTaskRouterActivityUpdate(d *schema.ResourceData, meta interface{}) 
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).Update(updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update taskrouter workspace activity: %s", err.Error())
+		return fmt.Errorf("Failed to update taskrouter activity: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
@@ -125,7 +125,7 @@ func resourceTaskRouterActivityDelete(d *schema.ResourceData, meta interface{}) 
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	if err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).Delete(); err != nil {
-		return fmt.Errorf("Failed to delete taskrouter workspace activity: %s", err.Error())
+		return fmt.Errorf("Failed to delete taskrouter activity: %s", err.Error())
 	}
 	d.SetId("")
 	return nil
