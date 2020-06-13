@@ -10,8 +10,8 @@ cloud.google.com/go/datastore v1.0.0/go.mod h1:LXYbyblFSglQ5pkeyhO+Qmw7ukd3C+pD7
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/RJPearson94/twilio-sdk-go v0.0.0-20200613024628-854b934bd02f h1:pCBrJGF4sKbTfMUyw1mBp0lTBpoy4GRTQsEscTbXNGw=
-github.com/RJPearson94/twilio-sdk-go v0.0.0-20200613024628-854b934bd02f/go.mod h1:swzhzlxCl1c0UOAeEngVEg91X1R2mjs2TCJCsdXYb6s=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200613171027-c490e52877e3 h1:zA4vFAOJCK8B9ikjxiRBQLvhyo8pozLXK6Fneiqw1DM=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200613171027-c490e52877e3/go.mod h1:swzhzlxCl1c0UOAeEngVEg91X1R2mjs2TCJCsdXYb6s=
 github.com/agext/levenshtein v1.2.1/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
 github.com/agext/levenshtein v1.2.2 h1:0S/Yg6LYmFJ5stwQeRp6EeOcCbj7xiqQSdNelsXvaqE=
 github.com/agext/levenshtein v1.2.2/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
