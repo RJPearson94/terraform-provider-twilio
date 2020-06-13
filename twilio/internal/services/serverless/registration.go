@@ -19,5 +19,6 @@ func (r Registration) SupportedResources() map[string]*schema.Resource {
 	return map[string]*schema.Resource{
 		"twilio_serverless_environment": resourceServerlessEnvironment(),
 		"twilio_serverless_service":     resourceServerlessService(),
+		"twilio_serverless_variable":    resourceServerlessVariable(),
 	}
 }
