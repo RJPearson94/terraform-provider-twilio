@@ -20,6 +20,7 @@ resource "twilio_serverless_environment" "environment" {
 
 The following arguments are supported:
 
+- `service_sid` - (Mandatory) The Service SID of the environment is managed under. Changing this forces a new resource to be created
 - `unique_name` - (Mandatory) The unique name of the environment
 - `domain_suffix` - (Optional) The domain suffix of the environment
 
@@ -27,8 +28,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the service (Same as the SID)
-- `sid` - The SID of the service (Same as the ID)
+- `id` - The ID of the environment (Same as the SID)
+- `sid` - The SID of the environment (Same as the ID)
 - `account_sid` - The Account SID of the environment is deployed into
 - `service_sid` - The Service SID of the environment is managed under
 - `build_sid` - The Build SID of the current build deployed to the environment

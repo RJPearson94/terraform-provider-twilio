@@ -4,6 +4,6 @@ output "service" {
 }
 
 output "environment" {
-  description = "The Generated Staging Serverless Environment"
+  description = "The Generated Serverless Environment"
   value       = twilio_serverless_environment.environment
 }

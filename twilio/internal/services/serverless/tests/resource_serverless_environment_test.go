@@ -17,7 +17,6 @@ var environmentResourceName = "twilio_serverless_environment"
 func TestAccTwilioServerlessEnvironment_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.environment", environmentResourceName)
 	uniqueName := acctest.RandString(10)
-	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { acceptance.PreCheck(t) },
@@ -25,7 +24,7 @@ func TestAccTwilioServerlessEnvironment_basic(t *testing.T) {
 		CheckDestroy: testAccCheckTwilioServerlessEnvironmentDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioServerlessEnvironment_basic(uniqueName, friendlyName),
+				Config: testAccTwilioServerlessEnvironment_basic(uniqueName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessEnvironmentExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
@@ -81,15 +80,15 @@ func testAccCheckTwilioServerlessEnvironmentExists(name string) resource.TestChe
 	}
 }
 
-func testAccTwilioServerlessEnvironment_basic(uniqueName string, friendlyName string) string {
+func testAccTwilioServerlessEnvironment_basic(uniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
-	unique_name   = "%s"
-	friendly_name = "%s"
+	unique_name   = "service-%s"
+	friendly_name = "test"
 }
 
 resource "twilio_serverless_environment" "environment" {
 	service_sid   = twilio_serverless_service.service.sid
 	unique_name = "%s"
-}`, uniqueName, friendlyName, uniqueName)
+}`, uniqueName, uniqueName)
 }
