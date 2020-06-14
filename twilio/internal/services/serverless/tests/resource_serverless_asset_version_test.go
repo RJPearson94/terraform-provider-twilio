@@ -28,9 +28,9 @@ func TestAccTwilioServerlessAssetVersion_basic(t *testing.T) {
 				Config: testAccTwilioServerlessAssetVersion_basic(uniqueName, friendlyName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessAssetVersionExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "content_body", "e30="),
+					resource.TestCheckResourceAttr(stateResourceName, "content", "e30="),
 					resource.TestCheckResourceAttr(stateResourceName, "content_type", "application/json"),
-					resource.TestCheckResourceAttr(stateResourceName, "file_name", "test.json"),
+					resource.TestCheckResourceAttr(stateResourceName, "content_file_name", "test.json"),
 					resource.TestCheckResourceAttr(stateResourceName, "path", "/test-asset"),
 					resource.TestCheckResourceAttr(stateResourceName, "visibility", "private"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
@@ -96,12 +96,12 @@ resource "twilio_serverless_asset" "asset" {
 }
 
 resource "twilio_serverless_asset_version" "asset_version" {
-	service_sid  = twilio_serverless_service.service.sid
-	asset_sid    = twilio_serverless_asset.asset.sid
-	content_body = "e30="
-	content_type = "application/json"
-	file_name    = "test.json"
-	path         = "/test-asset"
-	visibility   = "private"
+	service_sid       = twilio_serverless_service.service.sid
+	asset_sid         = twilio_serverless_asset.asset.sid
+	content           = "{}"
+	content_type      = "application/json"
+	content_file_name = "test.json"
+	path              = "/test-asset"
+	visibility        = "private"
 }`, uniqueName, friendlyName)
 }

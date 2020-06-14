@@ -16,13 +16,13 @@ resource "twilio_serverless_asset" "asset" {
 }
 
 resource "twilio_serverless_asset_version" "asset_version" {
-  service_sid  = twilio_serverless_service.service.sid
-  asset_sid    = twilio_serverless_asset.asset.sid
-  content_body = "e30="
-  content_type = "application/json"
-  file_name    = "test.json"
-  path         = "/test-asset"
-  visibility   = "private"
+  service_sid       = twilio_serverless_service.service.sid
+  asset_sid         = twilio_serverless_asset.asset.sid
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset"
+  visibility        = "private"
 }
 ```
 
@@ -32,11 +32,15 @@ The following arguments are supported:
 
 - `service_sid` - (Mandatory) The Service SID of the asset version is deployed into. Changing this forces a new resource to be created
 - `asset_sid` - (Mandatory) The Service SID of the asset version is managed under. Changing this forces a new resource to be created
-- `file_name` - (Mandatory) The name of the file
-- `content_body` - (Mandatory) Base64 encoded file contents
+- `content_file_name` - (Optional) The name of the file. Conflicts with source
+- `content` - (Optional) The file contents as string.Conflicts with source
+- `source` - (Optional) The relative path to the asset file. Conflicts with content
+- `source_hash` - (Optional) A hash of the asset file to trigger deployments. Conflicts with content
 - `content_type` - (Mandatory) The file MINE type
 - `path` - (Mandatory) The request uri path
 - `visibility` - (Mandatory) The visibility of the asset. Options are `public` or `protected` or `private`
+
+*NOTE:* Either source or content need to be specified
 
 ## Attributes Reference
 
@@ -47,8 +51,9 @@ The following attributes are exported:
 - `account_sid` - The Account SID of the asset version is deployed into
 - `service_sid` - The Service SID of the asset version is deployed into
 - `asset_sid` - The Service SID of the asset version is managed under
-- `file_name` - The name of the file
-- `content_body` - Base64 encoded file contents
+- `content_file_name` - The name of the file
+- `source` - The relative path to the asset file
+- `source_hash` - A hash of the asset file to trigger deployments
 - `content_type` - The file MINE type
 - `path` - The request uri path
 - `visibility` - The visibility of the asset

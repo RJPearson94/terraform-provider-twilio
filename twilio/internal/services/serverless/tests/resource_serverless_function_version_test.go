@@ -28,9 +28,9 @@ func TestAccTwilioServerlessFunctionVersion_basic(t *testing.T) {
 				Config: testAccTwilioServerlessFunctionVersion_basic(uniqueName, friendlyName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessFunctionVersionExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "content_body", "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="),
+					resource.TestCheckResourceAttr(stateResourceName, "content", "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="),
 					resource.TestCheckResourceAttr(stateResourceName, "content_type", "application/javascript"),
-					resource.TestCheckResourceAttr(stateResourceName, "file_name", "helloWorld.js"),
+					resource.TestCheckResourceAttr(stateResourceName, "content_file_name", "helloWorld.js"),
 					resource.TestCheckResourceAttr(stateResourceName, "path", "/test-function"),
 					resource.TestCheckResourceAttr(stateResourceName, "visibility", "private"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
@@ -98,9 +98,9 @@ resource "twilio_serverless_function" "function" {
 resource "twilio_serverless_function_version" "function_version" {
 	service_sid  = twilio_serverless_service.service.sid
 	function_sid = twilio_serverless_function.function.sid
-	content_body = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
+	content 	 = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
 	content_type = "application/javascript"
-	file_name    = "helloWorld.js"
+	content_file_name = "helloWorld.js"
 	path         = "/test-function"
 	visibility   = "private"
   }`, uniqueName, friendlyName)

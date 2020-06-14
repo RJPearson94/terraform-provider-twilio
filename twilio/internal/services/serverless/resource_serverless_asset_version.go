@@ -2,18 +2,24 @@ package serverless
 
 import (
 	"fmt"
+	"io"
+	"log"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/asset/versions"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/mitchellh/go-homedir"
 )
 
 func resourceServerlessAssetVersion() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceServerlessAssetVersionCreate,
 		Read:   resourceServerlessAssetVersionRead,
+		Update: resourceServerlessAsserVersionUpdate,
 		Delete: resourceServerlessAssetVersionDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
@@ -37,20 +43,29 @@ func resourceServerlessAssetVersion() *schema.Resource {
 				Required: true,
 				ForceNew: true,
 			},
-			"file_name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+			"source": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ConflictsWith: []string{"content"},
 			},
-			"content_body": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+			"source_hash": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ConflictsWith: []string{"content"},
+			},
+			"content": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ConflictsWith: []string{"source"},
+			},
+			"content_file_name": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ConflictsWith: []string{"source"},
 			},
 			"content_type": {
 				Type:     schema.TypeString,
 				Required: true,
-				ForceNew: true,
 			},
 			"path": {
 				Type:     schema.TypeString,
@@ -77,11 +92,45 @@ func resourceServerlessAssetVersion() *schema.Resource {
 func resourceServerlessAssetVersionCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
 
+	var body io.ReadSeeker
+	var fileName string
+	var contentType = d.Get("content_type").(string)
+
+	if value, ok := d.GetOk("content"); ok {
+		body = strings.NewReader(value.(string))
+		fileName = d.Get("content_file_name").(string)
+	}
+
+	if value, ok := d.GetOk("source"); ok {
+		path, err := homedir.Expand(value.(string))
+		if err != nil {
+			return fmt.Errorf("[ERROR] Error expanding homedir: %s", err)
+		}
+		file, err := os.Open(path)
+		if err != nil {
+			return fmt.Errorf("Error opening source: %s", err)
+		}
+
+		body = file
+		fileName = file.Name()
+
+		defer func() {
+			err := file.Close()
+			if err != nil {
+				log.Printf("[WARN] Error closing source: %s", err)
+			}
+		}()
+	}
+
+	if body == nil || fileName == "" || contentType == "" {
+		return fmt.Errorf("[ERROR] body (%v), file name (%v) and content type (%v) are all required", body, fileName, contentType)
+	}
+
 	createInput := &versions.CreateVersionInput{
 		Content: versions.ContentDetails{
-			Body:        d.Get("content_body").(string),
-			ContentType: d.Get("content_type").(string),
-			FileName:    d.Get("file_name").(string),
+			Body:        body,
+			ContentType: contentType,
+			FileName:    fileName,
 		},
 		Path:       d.Get("path").(string),
 		Visibility: d.Get("visibility").(string),
@@ -112,9 +161,10 @@ func resourceServerlessAssetVersionRead(d *schema.ResourceData, meta interface{}
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("service_sid", getResponse.ServiceSid)
 	d.Set("asset_sid", getResponse.AssetSid)
-	d.Set("content_body", d.Get("content_body").(string))
 	d.Set("content_type", d.Get("content_type").(string))
-	d.Set("file_name", d.Get("file_name").(string))
+	d.Set("file_name", d.Get("content_file_name").(string))
+	d.Set("content", d.Get("content").(string))
+	d.Set("source_hash", d.Get("source_hash").(string))
 	d.Set("path", getResponse.Path)
 	d.Set("visibility", getResponse.Visibility)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
@@ -122,6 +172,11 @@ func resourceServerlessAssetVersionRead(d *schema.ResourceData, meta interface{}
 	d.Set("url", getResponse.URL)
 
 	return nil
+}
+
+func resourceServerlessAsserVersionUpdate(d *schema.ResourceData, meta interface{}) error {
+	fmt.Printf("[INFO] Serverless asset versions cannot be updated. So a new resource will be created")
+	return resourceServerlessAssetVersionCreate(d, meta)
 }
 
 func resourceServerlessAssetVersionDelete(d *schema.ResourceData, meta interface{}) error {
