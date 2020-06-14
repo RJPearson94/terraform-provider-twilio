@@ -32,11 +32,15 @@ The following arguments are supported:
 
 - `service_sid` - (Mandatory) The Service SID of the function version is deployed into. Changing this forces a new resource to be created
 - `function_sid` - (Mandatory) The Service SID of the function version is managed under. Changing this forces a new resource to be created
-- `file_name` - (Mandatory) The name of the file
-- `content_body` - (Mandatory) Base64 encoded file contents
+- `content_file_name` - (Optional) The name of the file. Conflicts with source
+- `content` - (Optional) The file contents as string.Conflicts with source
+- `source` - (Optional) The relative path to the function file. Conflicts with content
+- `source_hash` - (Optional) A hash of the function file to trigger deployments. Conflicts with content
 - `content_type` - (Mandatory) The file MINE type
 - `path` - (Mandatory) The request uri path
 - `visibility` - (Mandatory) The visibility of the function. Options are `public` or `protected` or `private`
+
+*NOTE:* Either source or content need to be specified
 
 ## Attributes Reference
 
@@ -47,8 +51,9 @@ The following attributes are exported:
 - `account_sid` - The Account SID of the function version is deployed into
 - `service_sid` - The Service SID of the function version is deployed into
 - `function_sid` - The Service SID of the function version is managed under
-- `file_name` - The name of the file
-- `content_body` - Base64 encoded file contents
+- `content_file_name` - The name of the file
+- `source` - The relative path to the function file
+- `source_hash` - A hash of the function file to trigger deployments
 - `content_type` - The file MINE type
 - `path` - The request uri path
 - `visibility` - The visibility of the function

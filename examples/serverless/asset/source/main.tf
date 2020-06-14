@@ -16,9 +16,9 @@ resource "twilio_serverless_asset" "asset" {
 resource "twilio_serverless_asset_version" "asset_version" {
   service_sid  = twilio_serverless_service.service.sid
   asset_sid    = twilio_serverless_asset.asset.sid
-  content_body = filebase64("${path.module}/module.png")
+  source       = "module.png"
+  source_hash  = filemd5("${module.path}/module.png")
   content_type = "image/png"
-  file_name    = "module.png"
   path         = "/test-2"
   visibility   = "private"
 }
