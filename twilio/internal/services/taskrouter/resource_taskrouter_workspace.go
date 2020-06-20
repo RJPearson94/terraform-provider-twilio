@@ -91,11 +91,11 @@ func resourceTaskRouterWorkspaceCreate(d *schema.ResourceData, meta interface{})
 
 	createInput := &workspaces.CreateWorkspaceInput{
 		FriendlyName:         d.Get("friendly_name").(string),
-		EventCallbackUrl:     d.Get("event_callback_url").(string),
-		EventsFilter:         d.Get("events_filter").(string),
+		EventCallbackUrl:     sdkUtils.String(d.Get("event_callback_url").(string)),
+		EventsFilter:         sdkUtils.String(d.Get("events_filter").(string)),
 		MultiTaskEnabled:     sdkUtils.Bool(d.Get("multi_task_enabled").(bool)),
-		Template:             d.Get("template").(string),
-		PrioritizeQueueOrder: d.Get("prioritize_queue_order").(string),
+		Template:             sdkUtils.String(d.Get("template").(string)),
+		PrioritizeQueueOrder: sdkUtils.String(d.Get("prioritize_queue_order").(string)),
 	}
 
 	createResult, err := client.Workspaces.Create(createInput)
@@ -130,7 +130,11 @@ func resourceTaskRouterWorkspaceRead(d *schema.ResourceData, meta interface{}) e
 	d.Set("prioritize_queue_order", getResponse.PrioritizeQueueOrder)
 	d.Set("timeout_activity_name", getResponse.TimeoutActivityName)
 	d.Set("timeout_activity_sid", getResponse.TimeoutActivitySid)
-	d.Set("template", d.Get("template").(string))
+
+	if value, ok := d.GetOk("template"); ok {
+		d.Set("template", value.(string))
+	}
+
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {
@@ -146,12 +150,12 @@ func resourceTaskRouterWorkspaceUpdate(d *schema.ResourceData, meta interface{})
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	updateInput := &workspace.UpdateWorkspaceInput{
-		FriendlyName:         d.Get("friendly_name").(string),
-		EventCallbackUrl:     d.Get("event_callback_url").(string),
-		EventsFilter:         d.Get("events_filter").(string),
+		FriendlyName:         sdkUtils.String(d.Get("friendly_name").(string)),
+		EventCallbackUrl:     sdkUtils.String(d.Get("event_callback_url").(string)),
+		EventsFilter:         sdkUtils.String(d.Get("events_filter").(string)),
 		MultiTaskEnabled:     sdkUtils.Bool(d.Get("multi_task_enabled").(bool)),
-		Template:             d.Get("template").(string),
-		PrioritizeQueueOrder: d.Get("prioritize_queue_order").(string),
+		Template:             sdkUtils.String(d.Get("template").(string)),
+		PrioritizeQueueOrder: sdkUtils.String(d.Get("prioritize_queue_order").(string)),
 	}
 
 	updateResp, err := client.Workspace(d.Id()).Update(updateInput)

@@ -7,6 +7,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/environment/deployments"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -62,7 +63,7 @@ func resourceServerlessDeploymentCreate(d *schema.ResourceData, meta interface{}
 	client := meta.(*common.TwilioClient).Serverless
 
 	createInput := &deployments.CreateDeploymentInput{
-		BuildSid: d.Get("build_sid").(string),
+		BuildSid: sdkUtils.String(d.Get("build_sid").(string)),
 	}
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Deployments.Create(createInput)

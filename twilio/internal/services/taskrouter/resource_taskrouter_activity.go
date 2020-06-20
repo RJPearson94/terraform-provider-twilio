@@ -109,7 +109,7 @@ func resourceTaskRouterActivityUpdate(d *schema.ResourceData, meta interface{}) 
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	updateInput := &activity.UpdateActivityInput{
-		FriendlyName: d.Get("friendly_name").(string),
+		FriendlyName: sdkUtils.String(d.Get("friendly_name").(string)),
 	}
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).Update(updateInput)

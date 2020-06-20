@@ -8,6 +8,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/environment/variable"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/environment/variables"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -113,8 +114,8 @@ func resourceServerlessVariableUpdate(d *schema.ResourceData, meta interface{}) 
 	client := meta.(*common.TwilioClient).Serverless
 
 	updateInput := &variable.UpdateVariableInput{
-		Key:   d.Get("key").(string),
-		Value: d.Get("value").(string),
+		Key:   sdkUtils.String(d.Get("key").(string)),
+		Value: sdkUtils.String(d.Get("value").(string)),
 	}
 
 	updateResp, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variable(d.Id()).Update(updateInput)
