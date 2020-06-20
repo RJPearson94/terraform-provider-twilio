@@ -117,7 +117,7 @@ func resourceServerlessServiceUpdate(d *schema.ResourceData, meta interface{}) e
 	client := meta.(*common.TwilioClient).Serverless
 
 	updateInput := &service.UpdateServiceInput{
-		FriendlyName:       d.Get("friendly_name").(string),
+		FriendlyName:       sdkUtils.String(d.Get("friendly_name").(string)),
 		IncludeCredentials: sdkUtils.Bool(d.Get("include_credentials").(bool)),
 		UiEditable:         sdkUtils.Bool(d.Get("ui_editable").(bool)),
 	}

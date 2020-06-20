@@ -94,11 +94,11 @@ func resourceTaskRouterTaskQueueCreate(d *schema.ResourceData, meta interface{})
 
 	createInput := &task_queues.CreateTaskQueueInput{
 		FriendlyName:           d.Get("friendly_name").(string),
-		AssignmentActivitySid:  d.Get("assignment_activity_sid").(string),
+		AssignmentActivitySid:  sdkUtils.String(d.Get("assignment_activity_sid").(string)),
 		MaxReservedWorkers:     sdkUtils.Int(d.Get("max_reserved_workers").(int)),
-		TargetWorkers:          d.Get("target_workers").(string),
-		TaskOrder:              d.Get("task_order").(string),
-		ReservationActivitySid: d.Get("reservation_activity_sid").(string),
+		TargetWorkers:          sdkUtils.String(d.Get("target_workers").(string)),
+		TaskOrder:              sdkUtils.String(d.Get("task_order").(string)),
+		ReservationActivitySid: sdkUtils.String(d.Get("reservation_activity_sid").(string)),
 	}
 
 	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueues.Create(createInput)
@@ -149,12 +149,12 @@ func resourceTaskRouterTaskQueueUpdate(d *schema.ResourceData, meta interface{})
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	updateInput := &task_queue.UpdateTaskQueueInput{
-		FriendlyName:           d.Get("friendly_name").(string),
-		AssignmentActivitySid:  d.Get("assignment_activity_sid").(string),
+		FriendlyName:           sdkUtils.String(d.Get("friendly_name").(string)),
+		AssignmentActivitySid:  sdkUtils.String(d.Get("assignment_activity_sid").(string)),
 		MaxReservedWorkers:     sdkUtils.Int(d.Get("max_reserved_workers").(int)),
-		TargetWorkers:          d.Get("target_workers").(string),
-		TaskOrder:              d.Get("task_order").(string),
-		ReservationActivitySid: d.Get("reservation_activity_sid").(string),
+		TargetWorkers:          sdkUtils.String(d.Get("target_workers").(string)),
+		TaskOrder:              sdkUtils.String(d.Get("task_order").(string)),
+		ReservationActivitySid: sdkUtils.String(d.Get("reservation_activity_sid").(string)),
 	}
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).Update(updateInput)

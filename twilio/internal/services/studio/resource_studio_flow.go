@@ -9,6 +9,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flow"
 	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flow_validation"
 	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flows"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -94,7 +95,7 @@ func resourceStudioFlowCreate(d *schema.ResourceData, meta interface{}) error {
 		FriendlyName:  d.Get("friendly_name").(string),
 		Status:        d.Get("status").(string),
 		Definition:    d.Get("definition").(string),
-		CommitMessage: d.Get("commit_message").(string),
+		CommitMessage: sdkUtils.String(d.Get("commit_message").(string)),
 	}
 
 	createResult, err := client.Flows.Create(createInput)
@@ -147,10 +148,10 @@ func resourceStudioFlowUpdate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	updateInput := &flow.UpdateFlowInput{
-		FriendlyName:  d.Get("friendly_name").(string),
+		FriendlyName:  sdkUtils.String(d.Get("friendly_name").(string)),
 		Status:        d.Get("status").(string),
-		Definition:    d.Get("definition").(string),
-		CommitMessage: d.Get("commit_message").(string),
+		Definition:    sdkUtils.String(d.Get("definition").(string)),
+		CommitMessage: sdkUtils.String(d.Get("commit_message").(string)),
 	}
 
 	updateResp, err := client.Flow(d.Id()).Update(updateInput)
@@ -180,7 +181,7 @@ func validateRequest(d *schema.ResourceData, meta interface{}) error {
 			FriendlyName:  d.Get("friendly_name").(string),
 			Status:        d.Get("status").(string),
 			Definition:    d.Get("definition").(string),
-			CommitMessage: d.Get("commit_message").(string),
+			CommitMessage: sdkUtils.String(d.Get("commit_message").(string)),
 		}
 
 		resp, err := client.FlowValidation.Validate(validateInput)

@@ -1,7 +1,7 @@
 module github.com/RJPearson94/terraform-provider-twilio
 
 require (
-	github.com/RJPearson94/twilio-sdk-go v0.0.0-20200614172704-ddf47f117e6c
+	github.com/RJPearson94/twilio-sdk-go v0.0.0-20200620123358-e8938e93e770
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.3.0 // indirect

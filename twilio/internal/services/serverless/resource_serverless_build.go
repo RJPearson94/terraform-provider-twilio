@@ -9,6 +9,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/build"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/builds"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -193,7 +194,7 @@ func resourceServerlessBuildCreate(d *schema.ResourceData, meta interface{}) err
 	createInput := &builds.CreateBuildInput{
 		AssetVersions:    expandVersionSids(d.Get("asset_version_sids").([]interface{})),
 		FunctionVersions: expandVersionSids(d.Get("function_version_sids").([]interface{})),
-		Dependencies:     string(dependencies),
+		Dependencies:     sdkUtils.String(string(dependencies)),
 	}
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Builds.Create(createInput)

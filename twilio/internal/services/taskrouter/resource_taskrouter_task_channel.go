@@ -116,7 +116,7 @@ func resourceTaskRouterTaskChannelUpdate(d *schema.ResourceData, meta interface{
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	updateInput := &task_channel.UpdateTaskChannelInput{
-		FriendlyName:            d.Get("friendly_name").(string),
+		FriendlyName:            sdkUtils.String(d.Get("friendly_name").(string)),
 		ChannelOptimizedRouting: sdkUtils.Bool(d.Get("channel_optimized_routing").(bool)),
 	}
 
