@@ -6,12 +6,20 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
+type TestData struct {
+	PhoneNumberSid string
+}
+
 var TestAccProviders map[string]terraform.ResourceProvider
 var TestAccProvider *schema.Provider
+var TestAccData *TestData
 
 func init() {
 	TestAccProvider = twilio.Provider().(*schema.Provider)
 	TestAccProviders = map[string]terraform.ResourceProvider{
 		"twilio": TestAccProvider,
+	}
+	TestAccData = &TestAccData{
+		PhoneNumberSid: os.Getenv("TWILIO_PHONE_NUMBER_SID")
 	}
 }
