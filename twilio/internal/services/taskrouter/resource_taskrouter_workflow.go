@@ -8,7 +8,6 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/workflow"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/workflows"
-	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -86,9 +85,9 @@ func resourceTaskRouterWorkflowCreate(d *schema.ResourceData, meta interface{}) 
 	createInput := &workflows.CreateWorkflowInput{
 		FriendlyName:                  d.Get("friendly_name").(string),
 		Configuration:                 d.Get("configuration").(string),
-		AssignmentCallbackURL:         sdkUtils.String(d.Get("assignment_callback_url").(string)),
-		FallbackAssignmentCallbackURL: sdkUtils.String(d.Get("fallback_assignment_callback_url").(string)),
-		TaskReservationTimeout:        sdkUtils.Int(d.Get("task_reservation_timeout").(int)),
+		AssignmentCallbackURL:         utils.OptionalString(d, "assignment_callback_url"),
+		FallbackAssignmentCallbackURL: utils.OptionalString(d, "fallback_assignment_callback_url"),
+		TaskReservationTimeout:        utils.OptionalInt(d, "task_reservation_timeout"),
 	}
 
 	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).Workflows.Create(createInput)
@@ -136,11 +135,11 @@ func resourceTaskRouterWorkflowUpdate(d *schema.ResourceData, meta interface{}) 
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	updateInput := &workflow.UpdateWorkflowInput{
-		FriendlyName:                  sdkUtils.String(d.Get("friendly_name").(string)),
-		Configuration:                 sdkUtils.String(d.Get("configuration").(string)),
-		AssignmentCallbackURL:         sdkUtils.String(d.Get("assignment_callback_url").(string)),
-		FallbackAssignmentCallbackURL: sdkUtils.String(d.Get("fallback_assignment_callback_url").(string)),
-		TaskReservationTimeout:        sdkUtils.Int(d.Get("task_reservation_timeout").(int)),
+		FriendlyName:                  utils.OptionalString(d, "friendly_name"),
+		Configuration:                 utils.OptionalString(d, "configuration"),
+		AssignmentCallbackURL:         utils.OptionalString(d, "assignment_callback_url"),
+		FallbackAssignmentCallbackURL: utils.OptionalString(d, "fallback_assignment_callback_url"),
+		TaskReservationTimeout:        utils.OptionalInt(d, "task_reservation_timeout"),
 	}
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Workflow(d.Id()).Update(updateInput)

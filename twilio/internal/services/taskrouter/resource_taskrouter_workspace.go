@@ -8,7 +8,6 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspaces"
-	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -91,11 +90,11 @@ func resourceTaskRouterWorkspaceCreate(d *schema.ResourceData, meta interface{})
 
 	createInput := &workspaces.CreateWorkspaceInput{
 		FriendlyName:         d.Get("friendly_name").(string),
-		EventCallbackUrl:     sdkUtils.String(d.Get("event_callback_url").(string)),
-		EventsFilter:         sdkUtils.String(d.Get("events_filter").(string)),
-		MultiTaskEnabled:     sdkUtils.Bool(d.Get("multi_task_enabled").(bool)),
-		Template:             sdkUtils.String(d.Get("template").(string)),
-		PrioritizeQueueOrder: sdkUtils.String(d.Get("prioritize_queue_order").(string)),
+		EventCallbackUrl:     utils.OptionalString(d, "event_callback_url"),
+		EventsFilter:         utils.OptionalString(d, "events_filter"),
+		MultiTaskEnabled:     utils.OptionalBool(d, "multi_task_enabled"),
+		Template:             utils.OptionalString(d, "template"),
+		PrioritizeQueueOrder: utils.OptionalString(d, "prioritize_queue_order"),
 	}
 
 	createResult, err := client.Workspaces.Create(createInput)
@@ -150,12 +149,12 @@ func resourceTaskRouterWorkspaceUpdate(d *schema.ResourceData, meta interface{})
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	updateInput := &workspace.UpdateWorkspaceInput{
-		FriendlyName:         sdkUtils.String(d.Get("friendly_name").(string)),
-		EventCallbackUrl:     sdkUtils.String(d.Get("event_callback_url").(string)),
-		EventsFilter:         sdkUtils.String(d.Get("events_filter").(string)),
-		MultiTaskEnabled:     sdkUtils.Bool(d.Get("multi_task_enabled").(bool)),
-		Template:             sdkUtils.String(d.Get("template").(string)),
-		PrioritizeQueueOrder: sdkUtils.String(d.Get("prioritize_queue_order").(string)),
+		FriendlyName:         utils.OptionalString(d, "friendly_name"),
+		EventCallbackUrl:     utils.OptionalString(d, "event_callback_url"),
+		EventsFilter:         utils.OptionalString(d, "events_filter"),
+		MultiTaskEnabled:     utils.OptionalBool(d, "multi_task_enabled"),
+		Template:             utils.OptionalString(d, "template"),
+		PrioritizeQueueOrder: utils.OptionalString(d, "prioritize_queue_order"),
 	}
 
 	updateResp, err := client.Workspace(d.Id()).Update(updateInput)

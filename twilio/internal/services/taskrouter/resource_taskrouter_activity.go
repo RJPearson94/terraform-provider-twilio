@@ -8,7 +8,6 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/activities"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/activity"
-	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -65,7 +64,7 @@ func resourceTaskRouterActivityCreate(d *schema.ResourceData, meta interface{}) 
 
 	createInput := &activities.CreateActivityInput{
 		FriendlyName: d.Get("friendly_name").(string),
-		Available:    sdkUtils.Bool(d.Get("available").(bool)),
+		Available:    utils.OptionalBool(d, "available"),
 	}
 
 	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).Activities.Create(createInput)
@@ -109,7 +108,7 @@ func resourceTaskRouterActivityUpdate(d *schema.ResourceData, meta interface{}) 
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	updateInput := &activity.UpdateActivityInput{
-		FriendlyName: sdkUtils.String(d.Get("friendly_name").(string)),
+		FriendlyName: utils.OptionalString(d, "friendly_name"),
 	}
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).Update(updateInput)
