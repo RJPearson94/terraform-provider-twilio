@@ -1,6 +1,8 @@
 package acceptance
 
 import (
+	"os"
+
 	"github.com/RJPearson94/terraform-provider-twilio/twilio"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
@@ -19,7 +21,7 @@ func init() {
 	TestAccProviders = map[string]terraform.ResourceProvider{
 		"twilio": TestAccProvider,
 	}
-	TestAccData = &TestAccData{
-		PhoneNumberSid: os.Getenv("TWILIO_PHONE_NUMBER_SID")
+	TestAccData = &TestData{
+		PhoneNumberSid: os.Getenv("TWILIO_PHONE_NUMBER_SID"),
 	}
 }

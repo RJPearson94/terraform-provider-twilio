@@ -12,10 +12,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
-var proxyServiceResourceName = "twilio_proxy_phone_number"
+var proxyPhoneNumberResourceName = "twilio_proxy_phone_number"
 
-func TestAccTwilioStudio_basic(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.phone_number", proxyServiceResourceName)
+func TestAccTwilioProxyPhoneNumber_basic(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.phone_number", proxyPhoneNumberResourceName)
 
 	testData := acceptance.TestAccData
 	uniqueName := acctest.RandString(10)
@@ -48,7 +48,7 @@ func TestAccTwilioStudio_basic(t *testing.T) {
 }
 
 func TestAccTwilioProxyPhoneNumber_update(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.phone_number", proxyServiceResourceName)
+	stateResourceName := fmt.Sprintf("%s.phone_number", proxyPhoneNumberResourceName)
 
 	testData := acceptance.TestAccData
 	uniqueName := acctest.RandString(10)
@@ -106,7 +106,7 @@ func testAccCheckTwilioProxyPhoneNumberDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Service(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).PhoneNumber(rs.Primary.ID).Get(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -127,7 +127,7 @@ func testAccCheckTwilioProxyPhoneNumberExists(name string) resource.TestCheckFun
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Service(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).PhoneNumber(rs.Primary.ID).Get(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving proxy phone number information %s", err)
 		}
 

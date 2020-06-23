@@ -14,7 +14,7 @@ import (
 
 var proxyServiceResourceName = "twilio_proxy_service"
 
-func TestAccTwilioStudio_basic(t *testing.T) {
+func TestAccTwilioProxyService_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.service", proxyServiceResourceName)
 	uniqueName := acctest.RandString(10)
 
