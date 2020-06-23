@@ -7,7 +7,6 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/environments"
-	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -72,7 +71,7 @@ func resourceServerlessEnvironmentCreate(d *schema.ResourceData, meta interface{
 
 	createInput := &environments.CreateEnvironmentInput{
 		UniqueName:   d.Get("unique_name").(string),
-		DomainSuffix: sdkUtils.String(d.Get("domain_suffix").(string)),
+		DomainSuffix: utils.OptionalString(d, "domain_suffix"),
 	}
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Environments.Create(createInput)

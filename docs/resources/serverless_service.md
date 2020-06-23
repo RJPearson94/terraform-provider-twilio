@@ -17,8 +17,8 @@ The following arguments are supported:
 
 - `unique_name` - (Mandatory) The unique name of the service
 - `friendly_name` - (Mandatory) The name of the service
-- `include_credentials` - (Optional) Whether or not credentials are included in the service runtime. Default is false
-- `ui_editable` - (Optional) Whether or not the service is editable in the console. Default is false
+- `include_credentials` - (Optional) Whether or not credentials are included in the service runtime
+- `ui_editable` - (Optional) Whether or not the service is editable in the console
 
 ## Attributes Reference
 
@@ -29,7 +29,7 @@ The following attributes are exported:
 - `account_sid` - The Account SID of the service is deployed into
 - `unique_name` - The unique name of the service
 - `friendly_name` - The name of the service
-- `include_credentials` - (Whether or not credentials are included in the service runtime
+- `include_credentials` - Whether or not credentials are included in the service runtime
 - `ui_editable` - Whether or not the service is editable in the console
 - `date_created` - The date that the service was created
 - `date_updated` - The date that the service was updated
