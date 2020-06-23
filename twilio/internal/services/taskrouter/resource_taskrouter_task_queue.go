@@ -8,7 +8,6 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_queue"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_queues"
-	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -94,11 +93,11 @@ func resourceTaskRouterTaskQueueCreate(d *schema.ResourceData, meta interface{})
 
 	createInput := &task_queues.CreateTaskQueueInput{
 		FriendlyName:           d.Get("friendly_name").(string),
-		AssignmentActivitySid:  sdkUtils.String(d.Get("assignment_activity_sid").(string)),
-		MaxReservedWorkers:     sdkUtils.Int(d.Get("max_reserved_workers").(int)),
-		TargetWorkers:          sdkUtils.String(d.Get("target_workers").(string)),
-		TaskOrder:              sdkUtils.String(d.Get("task_order").(string)),
-		ReservationActivitySid: sdkUtils.String(d.Get("reservation_activity_sid").(string)),
+		AssignmentActivitySid:  utils.OptionalString(d, "assignment_activity_sid"),
+		MaxReservedWorkers:     utils.OptionalInt(d, "max_reserved_workers"),
+		TargetWorkers:          utils.OptionalString(d, "target_workers"),
+		TaskOrder:              utils.OptionalString(d, "task_order"),
+		ReservationActivitySid: utils.OptionalString(d, "reservation_activity_sid"),
 	}
 
 	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueues.Create(createInput)
@@ -149,12 +148,12 @@ func resourceTaskRouterTaskQueueUpdate(d *schema.ResourceData, meta interface{})
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	updateInput := &task_queue.UpdateTaskQueueInput{
-		FriendlyName:           sdkUtils.String(d.Get("friendly_name").(string)),
-		AssignmentActivitySid:  sdkUtils.String(d.Get("assignment_activity_sid").(string)),
-		MaxReservedWorkers:     sdkUtils.Int(d.Get("max_reserved_workers").(int)),
-		TargetWorkers:          sdkUtils.String(d.Get("target_workers").(string)),
-		TaskOrder:              sdkUtils.String(d.Get("task_order").(string)),
-		ReservationActivitySid: sdkUtils.String(d.Get("reservation_activity_sid").(string)),
+		FriendlyName:           utils.OptionalString(d, "friendly_name"),
+		AssignmentActivitySid:  utils.OptionalString(d, "assignment_activity_sid"),
+		MaxReservedWorkers:     utils.OptionalInt(d, "max_reserved_workers"),
+		TargetWorkers:          utils.OptionalString(d, "target_workers"),
+		TaskOrder:              utils.OptionalString(d, "task_order"),
+		ReservationActivitySid: utils.OptionalString(d, "reservation_activity_sid"),
 	}
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).Update(updateInput)

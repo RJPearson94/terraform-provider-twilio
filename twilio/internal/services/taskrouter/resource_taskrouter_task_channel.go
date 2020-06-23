@@ -8,7 +8,6 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_channel"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_channels"
-	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -71,7 +70,7 @@ func resourceTaskRouterTaskChannelCreate(d *schema.ResourceData, meta interface{
 	createInput := &task_channels.CreateTaskChannelInput{
 		FriendlyName:            d.Get("friendly_name").(string),
 		UniqueName:              d.Get("unique_name").(string),
-		ChannelOptimizedRouting: sdkUtils.Bool(d.Get("channel_optimized_routing").(bool)),
+		ChannelOptimizedRouting: utils.OptionalBool(d, "channel_optimized_routing"),
 	}
 
 	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).TaskChannels.Create(createInput)
@@ -116,8 +115,8 @@ func resourceTaskRouterTaskChannelUpdate(d *schema.ResourceData, meta interface{
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	updateInput := &task_channel.UpdateTaskChannelInput{
-		FriendlyName:            sdkUtils.String(d.Get("friendly_name").(string)),
-		ChannelOptimizedRouting: sdkUtils.Bool(d.Get("channel_optimized_routing").(bool)),
+		FriendlyName:            utils.OptionalString(d, "friendly_name"),
+		ChannelOptimizedRouting: utils.OptionalBool(d, "channel_optimized_routing"),
 	}
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).TaskChannel(d.Id()).Update(updateInput)

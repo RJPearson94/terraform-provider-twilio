@@ -8,7 +8,6 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/worker"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/workers"
-	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -96,8 +95,8 @@ func resourceTaskRouterWorkerCreate(d *schema.ResourceData, meta interface{}) er
 
 	createInput := &workers.CreateWorkerInput{
 		FriendlyName: d.Get("friendly_name").(string),
-		ActivitySid:  sdkUtils.String(d.Get("activity_sid").(string)),
-		Attributes:   sdkUtils.String(d.Get("attributes").(string)),
+		ActivitySid:  utils.OptionalString(d, "activity_sid"),
+		Attributes:   utils.OptionalString(d, "attributes"),
 	}
 
 	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).Workers.Create(createInput)
@@ -154,9 +153,9 @@ func resourceTaskRouterWorkerUpdate(d *schema.ResourceData, meta interface{}) er
 	client := meta.(*common.TwilioClient).TaskRouter
 
 	updateInput := &worker.UpdateWorkerInput{
-		FriendlyName: sdkUtils.String(d.Get("friendly_name").(string)),
-		ActivitySid:  sdkUtils.String(d.Get("activity_sid").(string)),
-		Attributes:   sdkUtils.String(d.Get("attributes").(string)),
+		FriendlyName: utils.OptionalString(d, "friendly_name"),
+		ActivitySid:  utils.OptionalString(d, "activity_sid"),
+		Attributes:   utils.OptionalString(d, "attributes"),
 	}
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Worker(d.Id()).Update(updateInput)

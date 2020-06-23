@@ -28,7 +28,7 @@ func TestAccTwilioServerlessAssetVersion_basic(t *testing.T) {
 				Config: testAccTwilioServerlessAssetVersion_basic(uniqueName, friendlyName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessAssetVersionExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "content", "e30="),
+					resource.TestCheckResourceAttr(stateResourceName, "content", "{}"),
 					resource.TestCheckResourceAttr(stateResourceName, "content_type", "application/json"),
 					resource.TestCheckResourceAttr(stateResourceName, "content_file_name", "test.json"),
 					resource.TestCheckResourceAttr(stateResourceName, "path", "/test-asset"),

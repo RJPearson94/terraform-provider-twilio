@@ -8,7 +8,6 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/services"
-	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -42,12 +41,12 @@ func resourceServerlessService() *schema.Resource {
 			"include_credentials": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
 			"ui_editable": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
 			"date_created": {
 				Type:     schema.TypeString,
@@ -71,8 +70,8 @@ func resourceServerlessServiceCreate(d *schema.ResourceData, meta interface{}) e
 	createInput := &services.CreateServiceInput{
 		UniqueName:         d.Get("unique_name").(string),
 		FriendlyName:       d.Get("friendly_name").(string),
-		IncludeCredentials: sdkUtils.Bool(d.Get("include_credentials").(bool)),
-		UiEditable:         sdkUtils.Bool(d.Get("ui_editable").(bool)),
+		IncludeCredentials: utils.OptionalBool(d, "include_credentials"),
+		UiEditable:         utils.OptionalBool(d, "ui_editable"),
 	}
 
 	createResult, err := client.Services.Create(createInput)
@@ -117,9 +116,9 @@ func resourceServerlessServiceUpdate(d *schema.ResourceData, meta interface{}) e
 	client := meta.(*common.TwilioClient).Serverless
 
 	updateInput := &service.UpdateServiceInput{
-		FriendlyName:       sdkUtils.String(d.Get("friendly_name").(string)),
-		IncludeCredentials: sdkUtils.Bool(d.Get("include_credentials").(bool)),
-		UiEditable:         sdkUtils.Bool(d.Get("ui_editable").(bool)),
+		FriendlyName:       utils.OptionalString(d, "friendly_name"),
+		IncludeCredentials: utils.OptionalBool(d, "include_credentials"),
+		UiEditable:         utils.OptionalBool(d, "ui_editable"),
 	}
 
 	updateResp, err := client.Service(d.Id()).Update(updateInput)
