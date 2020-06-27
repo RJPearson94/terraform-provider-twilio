@@ -16,17 +16,17 @@ resource "twilio_serverless_function" "function" {
 resource "twilio_serverless_function_version" "function_version" {
   service_sid  = twilio_serverless_service.service.sid
   function_sid = twilio_serverless_function.function.sid
-  content_body = filebase64("${path.module}/helloWorld.js")
+  source       = "helloWorld.js"
+  source_hash  = filemd5("${path.module}/helloWorld.js")
   content_type = "application/javascript"
-  file_name    = "helloWorld.js"
   path         = "/test-function"
   visibility   = "private"
 }
 
 resource "twilio_serverless_build" "build" {
-  service_sid   = twilio_serverless_service.service.sid
+  service_sid           = twilio_serverless_service.service.sid
   function_version_sids = [twilio_serverless_function_version.function_version.sid]
   dependencies = {
-    "twilio": "3.6.3"
+    "twilio" : "3.6.3"
   }
 }

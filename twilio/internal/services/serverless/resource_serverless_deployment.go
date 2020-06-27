@@ -2,12 +2,12 @@ package serverless
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/environment/deployments"
-	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -60,13 +60,7 @@ func resourceServerlessDeployment() *schema.Resource {
 }
 
 func resourceServerlessDeploymentCreate(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*common.TwilioClient).Serverless
-
-	createInput := &deployments.CreateDeploymentInput{
-		BuildSid: sdkUtils.String(d.Get("build_sid").(string)),
-	}
-
-	createResult, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Deployments.Create(createInput)
+	createResult, err := createServerlessDeployment(d, meta, utils.OptionalString(d, "build_sid"))
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create serverless deployment: %s", err)
 	}
@@ -104,8 +98,22 @@ func resourceServerlessDeploymentRead(d *schema.ResourceData, meta interface{}) 
 }
 
 func resourceServerlessDeploymentDelete(d *schema.ResourceData, meta interface{}) error {
-	fmt.Printf("[INFO] Serverless deployments cannot be deleted. So the resource will remain until the environment resource has been removed")
+	log.Printf("[INFO] Serverless deployments cannot be deleted. So a new deployment will be create without a build sid as this will supersede the current deployment")
+
+	if _, err := createServerlessDeployment(d, meta, nil); err != nil {
+		return fmt.Errorf("[ERROR] Failed to create deployment without build sid: %s", err)
+	}
 
 	d.SetId("")
 	return nil
+}
+
+func createServerlessDeployment(d *schema.ResourceData, meta interface{}, sid *string) (*deployments.CreateDeploymentOutput, error) {
+	client := meta.(*common.TwilioClient).Serverless
+
+	createInput := &deployments.CreateDeploymentInput{
+		BuildSid: sid,
+	}
+
+	return client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Deployments.Create(createInput)
 }

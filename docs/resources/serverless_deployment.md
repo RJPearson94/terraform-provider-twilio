@@ -1,11 +1,13 @@
-resource "random_string" "random" {
-  length  = 16
-  special = false
-}
+# twilio_serverless_deployment
 
+Manages a Serverless deployment
+
+## Example Usage
+
+```hcl
 resource "twilio_serverless_service" "service" {
-  unique_name   = "rjpearson94-${random_string.random.result}"
-  friendly_name = "test"
+  unique_name   = "twilio-test"
+  friendly_name = "twilio-test"
 }
 
 resource "twilio_serverless_function" "function" {
@@ -27,25 +29,9 @@ EOF
   visibility        = "public"
 }
 
-resource "twilio_serverless_asset" "asset" {
-  service_sid   = twilio_serverless_service.service.sid
-  friendly_name = "test"
-}
-
-resource "twilio_serverless_asset_version" "asset_version" {
-  service_sid  = twilio_serverless_service.service.sid
-  asset_sid    = twilio_serverless_asset.asset.sid
-  source       = "module.png"
-  source_hash  = filemd5("${path.module}/module.png")
-  content_type = "image/png"
-  path         = "/test-asset"
-  visibility   = "public"
-}
-
 resource "twilio_serverless_build" "build" {
   service_sid           = twilio_serverless_service.service.sid
   function_version_sids = [twilio_serverless_function_version.function_version.sid]
-  asset_version_sids    = [twilio_serverless_asset_version.asset_version.sid]
   dependencies = {
     "twilio" : "3.6.3"
   }
@@ -65,3 +51,26 @@ resource "twilio_serverless_deployment" "deployment" {
   environment_sid = twilio_serverless_environment.environment.sid
   build_sid       = twilio_serverless_build.build.sid
 }
+```
+
+## Argument Reference
+
+The following arguments are supported:
+
+- `service_sid` - (Mandatory) The Service SID associated with the deployment. Changing this forces a new resource to be created
+- `environment_sid` - (Mandatory) The Environment SID associated with the deployment. Changing this forces a new resource to be created
+- `build_sid` - (Optional) The Build SID to be deployed to the environment. Changing this forces a new resource to be created
+
+## Attributes Reference
+
+The following attributes are exported:
+
+- `id` - The ID of the deployment (Same as the SID)
+- `sid` - The SID of the deployment (Same as the ID)
+- `account_sid` - The Account SID associated with the deployment
+- `service_sid` - The Service SID associated with the deployment
+- `environment_sid` - The Environment SID associated with the deployment
+- `build_sid` - The Build SID to be deployed to the environment
+- `date_created` - The date that the deployment was created
+- `date_updated` - The date that the deployment was updated
+- `url` - The url of the deployment

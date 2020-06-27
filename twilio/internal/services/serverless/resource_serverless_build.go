@@ -3,10 +3,12 @@ package serverless
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
+	serverless "github.com/RJPearson94/twilio-sdk-go/service/serverless/v1"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/build"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/builds"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
@@ -145,7 +147,7 @@ func resourceServerlessBuild() *schema.Resource {
 						"max_attempts": {
 							Type:     schema.TypeInt,
 							Optional: true,
-							Default:  10,
+							Default:  30,
 						},
 						"delay_in_ms": {
 							Type:     schema.TypeInt,
@@ -206,21 +208,8 @@ func resourceServerlessBuildCreate(d *schema.ResourceData, meta interface{}) err
 
 	pollings := d.Get("polling").([]interface{})
 	if len(pollings) == 1 {
-		polling := pollings[0].(map[string]interface{})
-		if polling["enabled"].(bool) {
-			for i := 0; i < polling["max_attempts"].(int); i++ {
-				getResponse, err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).Get()
-				if err != nil {
-					return fmt.Errorf("[ERROR] Failed to poll serverless build: %s", err)
-				}
-				if getResponse.Status == "Failed" {
-					return fmt.Errorf("[ERROR] Serverless build failed")
-				}
-				if getResponse.Status == "Verified" {
-					break
-				}
-				time.Sleep(time.Duration(polling["delay_in_ms"].(int)) * time.Millisecond)
-			}
+		if err := poll(d, client, pollings[0].(map[string]interface{})); err != nil {
+			return err
 		}
 	}
 
@@ -260,6 +249,8 @@ func resourceServerlessBuildRead(d *schema.ResourceData, meta interface{}) error
 }
 
 func resourceServerlessBuildUpdate(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[INFO] Serverless deployments cannot be updated. So only polling config can be updated without a new resource being created")
+
 	return nil
 }
 
@@ -344,4 +335,27 @@ func flatternDependencies(input *[]build.Dependency) *[]interface{} {
 	}
 
 	return &results
+}
+
+func poll(d *schema.ResourceData, client *serverless.Serverless, pollingConfig map[string]interface{}) error {
+	if pollingConfig["enabled"].(bool) {
+		for i := 0; i < pollingConfig["max_attempts"].(int); i++ {
+			log.Printf("[INFO] Build Polling attempt # %v", i+1)
+
+			getResponse, err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).Get()
+			if err != nil {
+				return fmt.Errorf("[ERROR] Failed to poll serverless build: %s", err)
+			}
+
+			if getResponse.Status == "failed" {
+				return fmt.Errorf("[ERROR] Serverless build failed")
+			}
+			if getResponse.Status == "completed" {
+				return nil
+			}
+			time.Sleep(time.Duration(pollingConfig["delay_in_ms"].(int)) * time.Millisecond)
+		}
+		return fmt.Errorf("[ERROR] Reached max polling attempts without a completed build")
+	}
+	return nil
 }

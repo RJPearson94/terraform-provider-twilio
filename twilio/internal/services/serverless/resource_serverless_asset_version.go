@@ -12,6 +12,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/asset/versions"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"github.com/mitchellh/go-homedir"
 )
 
@@ -19,7 +20,6 @@ func resourceServerlessAssetVersion() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceServerlessAssetVersionCreate,
 		Read:   resourceServerlessAssetVersionRead,
-		Update: resourceServerlessAsserVersionUpdate,
 		Delete: resourceServerlessAssetVersionDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
@@ -47,25 +47,30 @@ func resourceServerlessAssetVersion() *schema.Resource {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"content"},
+				ForceNew:      true,
 			},
 			"source_hash": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"content"},
+				ForceNew:      true,
 			},
 			"content": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"source"},
+				ForceNew:      true,
 			},
 			"content_file_name": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"source"},
+				ForceNew:      true,
 			},
 			"content_type": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 			"path": {
 				Type:     schema.TypeString,
@@ -76,6 +81,11 @@ func resourceServerlessAssetVersion() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"public",
+					"protected",
+					"private",
+				}, false),
 			},
 			"date_created": {
 				Type:     schema.TypeString,
@@ -168,19 +178,13 @@ func resourceServerlessAssetVersionRead(d *schema.ResourceData, meta interface{}
 	d.Set("path", getResponse.Path)
 	d.Set("visibility", getResponse.Visibility)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
-
 	d.Set("url", getResponse.URL)
 
 	return nil
 }
 
-func resourceServerlessAsserVersionUpdate(d *schema.ResourceData, meta interface{}) error {
-	fmt.Printf("[INFO] Serverless asset versions cannot be updated. So a new resource will be created")
-	return resourceServerlessAssetVersionCreate(d, meta)
-}
-
 func resourceServerlessAssetVersionDelete(d *schema.ResourceData, meta interface{}) error {
-	fmt.Printf("[INFO] Serverless asset versions cannot be deleted. So the resource will remain until the asset resource has been removed")
+	log.Printf("[INFO] Serverless asset versions cannot be deleted. So the resource will remain until the asset resource has been removed")
 
 	d.SetId("")
 	return nil
