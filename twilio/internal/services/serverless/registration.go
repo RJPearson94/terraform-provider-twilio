@@ -24,5 +24,7 @@ func (r Registration) SupportedResources() map[string]*schema.Resource {
 		"twilio_serverless_asset_version":    resourceServerlessAssetVersion(),
 		"twilio_serverless_function":         resourceServerlessFunction(),
 		"twilio_serverless_function_version": resourceServerlessFunctionVersion(),
+		"twilio_serverless_build":            resourceServerlessBuild(),
+		"twilio_serverless_deployment":       resourceServerlessDeployment(),
 	}
 }

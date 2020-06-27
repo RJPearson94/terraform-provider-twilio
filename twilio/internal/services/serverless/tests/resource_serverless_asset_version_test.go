@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -18,6 +19,7 @@ func TestAccTwilioServerlessAssetVersion_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.asset_version", assetVersionResourceName)
 	uniqueName := acctest.RandString(10)
 	friendlyName := acctest.RandString(10)
+	visibility := "private"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { acceptance.PreCheck(t) },
@@ -25,7 +27,7 @@ func TestAccTwilioServerlessAssetVersion_basic(t *testing.T) {
 		CheckDestroy: testAccCheckTwilioServerlessAssetVersionDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioServerlessAssetVersion_basic(uniqueName, friendlyName),
+				Config: testAccTwilioServerlessAssetVersion_basic(uniqueName, friendlyName, visibility),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessAssetVersionExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "content", "{}"),
@@ -40,6 +42,24 @@ func TestAccTwilioServerlessAssetVersion_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessAssetVersion_invalidVisibility(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	friendlyName := acctest.RandString(10)
+	visibility := "test"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:     func() { acceptance.PreCheck(t) },
+		Providers:    acceptance.TestAccProviders,
+		CheckDestroy: testAccCheckTwilioServerlessAssetVersionDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessAssetVersion_basic(uniqueName, friendlyName, visibility),
+				ExpectError: regexp.MustCompile("config is invalid: expected visibility to be one of \\[public protected private\\], got test"),
 			},
 		},
 	})
@@ -83,7 +103,7 @@ func testAccCheckTwilioServerlessAssetVersionExists(name string) resource.TestCh
 	}
 }
 
-func testAccTwilioServerlessAssetVersion_basic(uniqueName string, friendlyName string) string {
+func testAccTwilioServerlessAssetVersion_basic(uniqueName string, friendlyName string, visibility string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
 	unique_name   = "service-%s"
@@ -102,6 +122,6 @@ resource "twilio_serverless_asset_version" "asset_version" {
 	content_type      = "application/json"
 	content_file_name = "test.json"
 	path              = "/test-asset"
-	visibility        = "private"
-}`, uniqueName, friendlyName)
+	visibility        = "%s"
+}`, uniqueName, friendlyName, visibility)
 }
