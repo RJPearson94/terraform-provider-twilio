@@ -11,6 +11,7 @@ Manages a API Key for a Twilio Account
 
 ```hcl
 resource "twilio_iam_api_key" "api_key" {
+  account_sid   = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   friendly_name = "Test API Key"
 }
 ```
@@ -19,6 +20,7 @@ resource "twilio_iam_api_key" "api_key" {
 
 The following arguments are supported:
 
+* `account_sid` - (Mandatory) The Account SID associated with the API Key
 * `friendly_name` - (Optional) The name of the API Key
 
 ## Attributes Reference
@@ -27,6 +29,7 @@ The following attributes are exported:
 
 * `id` - The ID of the API Key (Same as the SID)
 * `sid` - The SID of the API Key (Same as the ID)
+* `account_sid` - The Account SID associated with the API Key
 * `friendly_name` - The name of the API Key
 * `secret` - The API Key Secret
 * `date_created` - The date in RFC3339 format that the API Key was created

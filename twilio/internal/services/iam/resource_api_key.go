@@ -1,17 +1,17 @@
 package iam
 
 import (
-	"context"
 	"fmt"
-	"net/url"
-	"strings"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
+	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/key"
+	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/keys"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-func resourceApiKey() *schema.Resource {
+func resourceIamApiKey() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceApiKeyCreate,
 		Read:   resourceApiKeyRead,
@@ -24,6 +24,11 @@ func resourceApiKey() *schema.Resource {
 			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
+			},
+			"account_sid": {
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,
@@ -47,73 +52,67 @@ func resourceApiKey() *schema.Resource {
 }
 
 func resourceApiKeyCreate(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*common.TwilioClient).Twilio
-	context := context.Background()
+	client := meta.(*common.TwilioClient).API
 
-	createKeyInput := url.Values{}
-	createKeyInput.Add("FriendlyName", d.Get("friendly_name").(string))
+	createInput := &keys.CreateKeyInput{
+		FriendlyName: utils.OptionalString(d, "friendly_name"),
+	}
 
-	createResult, err := client.Keys.Create(context, createKeyInput)
-
+	createResult, err := client.Account(d.Get("account_sid").(string)).Keys.Create(createInput)
 	if err != nil {
-		return fmt.Errorf("Failed to create key: %s", err.Error())
+		return fmt.Errorf("Failed to create account api key: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
 	d.Set("secret", createResult.Secret)
-
 	return resourceApiKeyRead(d, meta)
 }
 
 func resourceApiKeyRead(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*common.TwilioClient).Twilio
-	context := context.Background()
+	client := meta.(*common.TwilioClient).API
 
-	sid := d.Id()
-	keyResponse, err := client.Keys.Get(context, sid)
-
+	getResponse, err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).Get()
 	if err != nil {
-		if strings.Contains(err.Error(), fmt.Sprintf("%s.json was not found", sid)) {
+		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("Failed to read key: %s", err.Error())
+		return fmt.Errorf("[ERROR] Failed to read account api key: %s", err)
 	}
 
-	d.Set("sid", keyResponse.Sid)
-	d.Set("friendly_name", keyResponse.FriendlyName)
-	d.Set("date_created", keyResponse.DateCreated.Time.Format(time.RFC3339))
-	d.Set("date_updated", keyResponse.DateUpdated.Time.Format(time.RFC3339))
+	d.Set("sid", getResponse.Sid)
+	d.Set("account_sid", d.Get("account_sid").(string))
+	d.Set("friendly_name", getResponse.FriendlyName)
+	d.Set("date_created", getResponse.DateCreated.Time.Format(time.RFC3339))
+
+	if getResponse.DateUpdated != nil {
+		d.Set("date_updated", getResponse.DateUpdated.Time.Format(time.RFC3339))
+	}
 
 	return nil
 }
 
 func resourceApiKeyUpdate(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*common.TwilioClient).Twilio
-	context := context.Background()
+	client := meta.(*common.TwilioClient).API
 
-	updateKeyInput := url.Values{}
-
-	if d.HasChange("friendly_name") {
-		updateKeyInput.Set("FriendlyName", d.Get("friendly_name").(string))
+	updateInput := &key.UpdateKeyInput{
+		FriendlyName: utils.OptionalString(d, "friendly_name"),
 	}
 
-	updateKeyResult, err := client.Keys.Update(context, d.Id(), updateKeyInput)
-
+	updateResp, err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).Update(updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to Update key: %s", err.Error())
+		return fmt.Errorf("Failed to update account api key: %s", err.Error())
 	}
 
-	d.SetId(updateKeyResult.Sid)
+	d.SetId(updateResp.Sid)
 	return resourceApiKeyRead(d, meta)
 }
 
 func resourceApiKeyDelete(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*common.TwilioClient).Twilio
-	context := context.Background()
+	client := meta.(*common.TwilioClient).API
 
-	if err := client.Keys.Delete(context, d.Id()); err != nil {
-		return fmt.Errorf("Failed to delete key: %s", err.Error())
+	if err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).Delete(); err != nil {
+		return fmt.Errorf("Failed to delete account api key: %s", err.Error())
 	}
 
 	d.SetId("")

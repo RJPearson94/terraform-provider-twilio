@@ -9,6 +9,7 @@ import (
 )
 
 type TestData struct {
+	AccountSid     string
 	PhoneNumberSid string
 }
 
@@ -22,6 +23,7 @@ func init() {
 		"twilio": TestAccProvider,
 	}
 	TestAccData = &TestData{
+		AccountSid:     os.Getenv("TWILIO_ACCOUNT_SID"),
 		PhoneNumberSid: os.Getenv("TWILIO_PHONE_NUMBER_SID"),
 	}
 }

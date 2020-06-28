@@ -1,18 +1,18 @@
 package common
 
 import (
+	api "github.com/RJPearson94/twilio-sdk-go/service/api/v2010"
 	chat "github.com/RJPearson94/twilio-sdk-go/service/chat/v2"
 	proxy "github.com/RJPearson94/twilio-sdk-go/service/proxy/v1"
 	serverless "github.com/RJPearson94/twilio-sdk-go/service/serverless/v1"
 	studio "github.com/RJPearson94/twilio-sdk-go/service/studio/v2"
 	taskrouter "github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1"
-	"github.com/kevinburke/twilio-go"
 )
 
 type TwilioClient struct {
 	AccountSid       string
 	TerraformVersion string
-	Twilio           *twilio.Client
+	API              *api.V2010
 	Chat             *chat.Chat
 	Proxy            *proxy.Proxy
 	Serverless       *serverless.Serverless
