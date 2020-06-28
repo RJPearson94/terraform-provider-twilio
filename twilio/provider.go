@@ -47,6 +47,7 @@ func validateAndRegisterSupportedResources(registeredResources map[string]*schem
 	log.Printf("[DEBUG] Registering %s for %q..", resourceType, serviceName)
 	for key, value := range resourcesToAdd {
 		if existing := registeredResources[key]; existing != nil {
+			//lintignore:R009
 			panic(fmt.Sprintf("An existing %s exists for %q", resourceType, key))
 		}
 

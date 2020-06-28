@@ -12,7 +12,7 @@ import (
 
 var dataSourceName = "twilio_studio_flow"
 
-func TestAccDataSourceTwilioStudioFlow(t *testing.T) {
+func TestAccDataSourceTwilioStudioFlow_complete(t *testing.T) {
 	stateDataSourceName := fmt.Sprintf("%s.flow", dataSourceName)
 	friendlyName := acctest.RandString(10)
 	status := "draft"
