@@ -1,4 +1,9 @@
-# twilio_taskrouter_task_queue
+---
+page_title: "Twilio TaskRouter Task Queue"
+subcategory: "TaskRouter"
+---
+
+# twilio_taskrouter_task_queue Resource
 
 Manages a TaskRouter Task Queue
 

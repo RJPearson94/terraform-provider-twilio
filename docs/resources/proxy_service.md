@@ -1,4 +1,9 @@
-# twilio_proxy_service
+---
+page_title: "Twilio Proxy Service"
+subcategory: "Proxy"
+---
+
+# twilio_proxy_service Resource
 
 Manages a Proxy service
 

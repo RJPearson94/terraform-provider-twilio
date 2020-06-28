@@ -1,4 +1,9 @@
-# twilio_proxy_phone_number
+---
+page_title: "Twilio Proxy Phone Number"
+subcategory: "Proxy"
+---
+
+# twilio_proxy_phone_number Resource
 
 Manages a Proxy Phone Number
 

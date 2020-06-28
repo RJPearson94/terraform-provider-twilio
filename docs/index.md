@@ -1,20 +1,17 @@
 # Twilio Provider
 
-The Twilio provider is used to interact with the many resources supported by Twilio. The provider needs to be configured with the proper credentials before it can be used.
-
-View the [resources](./resources) folder and the [data sources](./data_sources) folder to see all the resources that are available.
+The Twilio provider is used to interact with the many resources supported by Twilio. The provider needs to be configured with your Twilio credentials before it can be used.
 
 ## Authentication
 
-The Twilio provider offers a various way of providing credentials for
-authentication. The following methods are supported, in precedence order:
+The Twilio provider offers a various way of providing credentials for authentication. The following methods are supported, in precedence order:
 
 - Static credentials
 - Environment variables
 
 ### Static credentials
 
-**Warning:** This method is supported however it is not recommend for use as secrets could be leaked if the provider was committed to public version control.
+!> This method is supported however it is not recommend for use as secrets could be leaked if the provider was committed to public version control.
 
 Static credentials can be provided by adding an `account_sid` and `auth_token` in-line in the Twilio provider block:
 
@@ -57,4 +54,4 @@ In addition to [generic provider arguments](https://www.terraform.io/docs/config
 
 - `auth_token` - (Optional) This is the Auth token. This token is mandatory, but it can also be retrieved from the `TWILIO_AUTH_TOKEN` environment variable.
 
-**Note:** In the future there is plans to support API Key and Secret Authentication too
+-> In the future there is plans to support API Key and Secret Authentication too

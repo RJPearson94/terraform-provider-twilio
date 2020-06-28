@@ -1,4 +1,9 @@
-# twilio_chat_service
+---
+page_title: "Twilio Programmable Chat Service"
+subcategory: "Programmable Chat"
+---
+
+# twilio_chat_service Resource
 
 Manages a Chat Service
 

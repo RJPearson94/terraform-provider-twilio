@@ -1,6 +1,13 @@
-# twilio_serverless_service
+---
+page_title: "Twilio Serverless Resource"
+subcategory: "Serverless"
+---
+
+# twilio_serverless_service Resource
 
 Manages a Serverless service
+
+!> This resource is in beta
 
 ## Example Usage
 

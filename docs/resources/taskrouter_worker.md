@@ -1,4 +1,9 @@
-# twilio_taskrouter_worker
+---
+page_title: "Twilio TaskRouter Resource"
+subcategory: "TaskRouter"
+---
+
+# twilio_taskrouter_worker Resource
 
 Manages a TaskRouter worker
 

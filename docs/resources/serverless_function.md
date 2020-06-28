@@ -1,6 +1,13 @@
-# twilio_serverless_function
+---
+page_title: "Twilio Serverless Function"
+subcategory: "Serverless"
+---
+
+# twilio_serverless_function Resource
 
 Manages a Serverless function
+
+!> This resource is in beta
 
 ## Example Usage
 

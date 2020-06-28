@@ -1,4 +1,9 @@
-# twilio_chat_role
+---
+page_title: "Twilio Programmable Chat Role"
+subcategory: "Programmable Chat"
+---
+
+# twilio_chat_role Resource
 
 Manages a Chat Role
 

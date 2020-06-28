@@ -1,4 +1,9 @@
-# twilio_taskrouter_task_channel
+---
+page_title: "Twilio TaskRouter Task Channel"
+subcategory: "TaskRouter"
+---
+
+# twilio_taskrouter_task_channel Resource
 
 Manages a TaskRouter Task Channel
 
