@@ -187,7 +187,7 @@ func validateRequest(d *schema.ResourceData, meta interface{}) error {
 		if err != nil {
 			return fmt.Errorf("[ERROR] Failed to validate studio flow: %s", err)
 		}
-		if resp.Valid == false {
+		if !resp.Valid {
 			return fmt.Errorf("[ERROR] The template is invalid")
 		}
 	}

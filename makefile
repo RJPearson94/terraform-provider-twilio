@@ -26,8 +26,11 @@ fmtcheck:
 
 tools:
 	@echo "==> installing required tooling..."
-	go install github.com/client9/misspell/cmd/misspell
-	go install github.com/katbyte/terrafmt
+	GO111MODULE=off go get -u github.com/client9/misspell/cmd/misspell
+	GO111MODULE=off go get -u github.com/bflad/tfproviderlint/cmd/tfproviderlint
+	GO111MODULE=off go get -u github.com/bflad/tfproviderdocs
+	GO111MODULE=off go get -u github.com/katbyte/terrafmt
+	GO111MODULE=off go get -u github.com/boyter/scc
 
 generate:
 	go generate  ./...
