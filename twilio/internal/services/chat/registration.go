@@ -19,5 +19,6 @@ func (r Registration) SupportedResources() map[string]*schema.Resource {
 	return map[string]*schema.Resource{
 		"twilio_chat_service": resourceChatService(),
 		"twilio_chat_role":    resourceChatRole(),
+		"twilio_chat_channel": resourceChatChannel(),
 	}
 }
