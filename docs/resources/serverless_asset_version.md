@@ -64,6 +64,6 @@ The following attributes are exported:
 - `content_type` - The file MIME type
 - `path` - The request uri path
 - `visibility` - The visibility of the asset
-- `date_created` - The date that the asset version was created
-- `date_updated` - The date that the asset version was updated
+- `date_created` - The date in RFC3339 format that the asset version was created
+- `date_updated` - The date in RFC3339 format that the asset version was updated
 - `url` - The url of the asset version

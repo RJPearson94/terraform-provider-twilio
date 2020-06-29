@@ -45,6 +45,6 @@ The following attributes are exported:
 - `callback_url` - The callback url for the service
 - `intercept_callback_url` - The intercept callback url for the service
 - `out_of_session_callback_url` - The out of session callback url for the service
-- `date_created` - The date that the service was created
-- `date_updated` - The date that the service was updated
+- `date_created` - The date in RFC3339 format that the service was created
+- `date_updated` - The date in RFC3339 format that the service was updated
 - `url` - The url of the service

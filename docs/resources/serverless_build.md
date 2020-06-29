@@ -82,8 +82,8 @@ The following attributes are exported:
 - `function_versions` - List of `function_version` blocks as documented below.
 - `dependencies` - Map of dependencies to be included in the build
 - `status` - The current status of the build job
-- `date_created` - The date that the build was created
-- `date_updated` - The date that the build was updated
+- `date_created` - The date in RFC3339 format that the build was created
+- `date_updated` - The date in RFC3339 format that the build was updated
 - `url` - The url of the build
 
 ---
@@ -94,7 +94,7 @@ A `asset_version` block supports the following:
 - `account_sid` - The Account SID of the asset version is deployed into
 - `service_sid` - The Service SID of the asset version is deployed into
 - `asset_sid` - The Service SID of the asset version is managed under
-- `date_created` - The date that the asset version was created
+- `date_created` - The date in RFC3339 format that the asset version was created
 - `path` - The request uri path
 - `visibility` - The visibility of the asset
 
@@ -106,6 +106,6 @@ A `function_version` block supports the following:
 - `account_sid` - The Account SID of the function version is deployed into
 - `service_sid` - The Service SID of the function version is deployed into
 - `function_sid` - The Service SID of the function version is managed under
-- `date_created` - The date that the function version was created
+- `date_created` - The date in RFC3339 format that the function version was created
 - `path` - The request uri path
 - `visibility` - The visibility of the function

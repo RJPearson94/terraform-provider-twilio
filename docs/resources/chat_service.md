@@ -112,8 +112,8 @@ The following attributes are exported:
 - `reachability_enabled` - Whether the Reachability Indicator (for Programmable Chat) is enabled
 - `read_status_enabled` - Whether the Message Consumption Horizon (for Programmable Chat) is enabled
 - `typing_indicator_timeout` - How many seconds should the service wait after receiving a `started typing` event before assuming a user is no longer typing
-- `date_created` - The date that the service was created
-- `date_updated` - The date that the service was updated
+- `date_created` - The date in RFC3339 format that the service was created
+- `date_updated` - The date in RFC3339 format that the service was updated
 - `url` - The url of the service
 
 ---

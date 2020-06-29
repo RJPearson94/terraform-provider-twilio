@@ -45,6 +45,6 @@ The following attributes are exported:
 - `created_by` - Who created the chat channel
 - `members_count` - The number of members currently associated with the channel
 - `messages_count` - The number of message currently associated with the channel
-- `date_created` - The date that the channel was created
-- `date_updated` - The date that the channel was updated
+- `date_created` - The date in RFC3339 format that the channel was created
+- `date_updated` - The date in RFC3339 format that the channel was updated
 - `url` - The url of the channel

@@ -43,6 +43,6 @@ The following attributes are exported:
 - `unique_name` - The unique name of the environment
 - `domain_suffix` - The domain suffix of the environment
 - `domain_name` - The domain name of the environment
-- `date_created` - The date that the environment was created
-- `date_updated` - The date that the environment was updated
+- `date_created` - The date in RFC3339 format that the environment was created
+- `date_updated` - The date in RFC3339 format that the environment was updated
 - `url` - The url of the environment

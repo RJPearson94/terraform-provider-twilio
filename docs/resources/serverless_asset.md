@@ -39,6 +39,6 @@ The following attributes are exported:
 - `account_sid` - The Account SID of the asset is deployed into
 - `service_sid` - The Service SID of the asset is managed under
 - `friendly_name` - The name of the asset
-- `date_created` - The date that the asset was created
-- `date_updated` - The date that the asset was updated
+- `date_created` - The date in RFC3339 format that the asset was created
+- `date_updated` - The date in RFC3339 format that the asset was updated
 - `url` - The url of the asset

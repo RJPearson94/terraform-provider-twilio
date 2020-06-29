@@ -39,6 +39,6 @@ The following attributes are exported:
 - `account_sid` - The Account SID of the function is deployed into
 - `service_sid` - The Service SID of the function is managed under
 - `friendly_name` - The name of the function
-- `date_created` - The date that the function was created
-- `date_updated` - The date that the function was updated
+- `date_created` - The date in RFC3339 format that the function was created
+- `date_updated` - The date in RFC3339 format that the function was updated
 - `url` - The url of the function

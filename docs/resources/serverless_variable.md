@@ -50,6 +50,6 @@ The following attributes are exported:
 - `environment_sid` - The Environment SID of the environment variable is managed under
 - `key` - The key of the environment variable
 - `value` - The value of the environment variable
-- `date_created` - The date that the environment was created
-- `date_updated` - The date that the environment was updated
+- `date_created` - The date in RFC3339 format that the environment variable was created
+- `date_updated` - The date in RFC3339 format that the environment variable was updated
 - `url` - The url of the environment

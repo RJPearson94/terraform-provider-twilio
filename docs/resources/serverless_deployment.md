@@ -78,6 +78,6 @@ The following attributes are exported:
 - `service_sid` - The Service SID associated with the deployment
 - `environment_sid` - The Environment SID associated with the deployment
 - `build_sid` - The Build SID to be deployed to the environment
-- `date_created` - The date that the deployment was created
-- `date_updated` - The date that the deployment was updated
+- `date_created` - The date in RFC3339 format that the deployment was created
+- `date_updated` - The date in RFC3339 format that the deployment was updated
 - `url` - The url of the deployment

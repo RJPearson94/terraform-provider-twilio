@@ -45,6 +45,6 @@ The following attributes are exported:
 - `friendly_name` - The friendly name of the role
 - `type` - The type of role
 - `permissions` - The list of permissions the role has
-- `date_created` - The date that the role was created
-- `date_updated` - The date that the role was updated
+- `date_created` - The date in RFC3339 format that the role was created
+- `date_updated` - The date in RFC3339 format that the role was updated
 - `url` - The url of the role

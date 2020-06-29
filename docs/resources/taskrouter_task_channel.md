@@ -27,21 +27,21 @@ resource "twilio_taskrouter_task_channel" "task_channel" {
 
 The following arguments are supported:
 
-* `friendly_name` - (Mandatory) The name of the task channel
-* `unique_name` - (Mandatory) The unique name of the task channel. Changing this forces a new resource to be created
-* `channel_optimized_routing` - (Optional) Whether the task channel should prioritise idle workers. Default is false
+- `friendly_name` - (Mandatory) The name of the task channel
+- `unique_name` - (Mandatory) The unique name of the task channel. Changing this forces a new resource to be created
+- `channel_optimized_routing` - (Optional) Whether the task channel should prioritise idle workers. Default is false
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-* `id` - The ID of the task channel (Same as the SID)
-* `sid` - The SID of the task channel (Same as the ID)
-* `account_sid` - The Account SID of the task channel is deployed into
-* `workspaceSid` - The Workspace SID to create the task channel under
-* `friendly_name` - The name of the task channel
-* `unique_name` - The unique name of the task channel
-* `channel_optimized_routing` - Whether the task channel should prioritise idle workers
-* `date_created` - The date that the task channel was created
-* `date_updated` - The date that the task channel was updated
-* `url` - The url of the task channel
+- `id` - The ID of the task channel (Same as the SID)
+- `sid` - The SID of the task channel (Same as the ID)
+- `account_sid` - The Account SID of the task channel is deployed into
+- `workspaceSid` - The Workspace SID to create the task channel under
+- `friendly_name` - The name of the task channel
+- `unique_name` - The unique name of the task channel
+- `channel_optimized_routing` - Whether the task channel should prioritise idle workers
+- `date_created` - The date in RFC3339 format that the task channel was created
+- `date_updated` - The date in RFC3339 format that the task channel was updated
+- `url` - The url of the task channel

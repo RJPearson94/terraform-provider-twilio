@@ -42,6 +42,6 @@ The following attributes are exported:
 - `friendly_name` - The friendly name associated with the SID
 - `iso_country` - The ISO country associated with the SID
 - `in_use` - The number of active calls associated with the SID
-- `date_created` - The date that the proxy phone number resource was created
-- `date_updated` - The date that the proxy phone number resource was updated
+- `date_created` - The date in RFC3339 format that the proxy phone number resource was created
+- `date_updated` - The date in RFC3339 format that the proxy phone number resource was updated
 - `url` - The url of the proxy phone number

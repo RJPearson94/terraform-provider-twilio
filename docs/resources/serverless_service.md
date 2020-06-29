@@ -38,6 +38,6 @@ The following attributes are exported:
 - `friendly_name` - The name of the service
 - `include_credentials` - Whether or not credentials are included in the service runtime
 - `ui_editable` - Whether or not the service is editable in the console
-- `date_created` - The date that the service was created
-- `date_updated` - The date that the service was updated
+- `date_created` - The date in RFC3339 format that the service was created
+- `date_updated` - The date in RFC3339 format that the service was updated
 - `url` - The url of the service
