@@ -9,6 +9,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspaces"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func resourceTaskRouterWorkspace() *schema.Resource {
@@ -52,6 +53,10 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 			"prioritize_queue_order": {
 				Type:     schema.TypeString,
 				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"LIFO",
+					"FIFO",
+				}, false),
 			},
 			"default_activity_name": {
 				Type:     schema.TypeString,

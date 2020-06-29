@@ -61,7 +61,7 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 			"max_reserved_workers": {
 				Type:     schema.TypeInt,
 				Optional: true,
-				Default:  1,
+				Computed: true,
 			},
 			"target_workers": {
 				Type:     schema.TypeString,
@@ -70,7 +70,7 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 			"task_order": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "FIFO",
+				Computed: true,
 			},
 			"date_created": {
 				Type:     schema.TypeString,

@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -45,6 +46,23 @@ func TestAccTwilioTaskRouterWorkspace_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "timeout_activity_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterWorkspace_invalidOrderQueue(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	queueOrder := "test"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:     func() { acceptance.PreCheck(t) },
+		Providers:    acceptance.TestAccProviders,
+		CheckDestroy: testAccCheckTwilioTaskRouterWorkspaceDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterWorkspace_basic(friendlyName, queueOrder),
+				ExpectError: regexp.MustCompile("config is invalid: expected prioritize_queue_order to be one of \\[LIFO FIFO\\], got test"),
 			},
 		},
 	})

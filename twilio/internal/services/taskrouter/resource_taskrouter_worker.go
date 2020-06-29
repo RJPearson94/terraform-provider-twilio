@@ -43,16 +43,6 @@ func resourceTaskRouterWorker() *schema.Resource {
 			"activity_sid": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					if d.Get("activity_sid_default") != nil {
-						return old == d.Get("activity_sid_default").(string) && new == ""
-					}
-					return false
-				},
-			},
-			"activity_sid_default": {
-				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"attributes": {
@@ -124,16 +114,10 @@ func resourceTaskRouterWorkerRead(d *schema.ResourceData, meta interface{}) erro
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("workspace_sid", getResponse.WorkspaceSid)
 	d.Set("friendly_name", getResponse.FriendlyName)
-
-	if d.Get("activity_sid").(string) == "" {
-		d.Set("activity_sid_default", getResponse.ActivitySid)
-	}
-
 	d.Set("activity_sid", getResponse.ActivitySid)
 	d.Set("attributes", getResponse.Attributes)
 	d.Set("activity_name", getResponse.ActivityName)
 	d.Set("available", getResponse.Available)
-	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {

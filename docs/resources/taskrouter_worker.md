@@ -41,7 +41,6 @@ The following attributes are exported:
 - `friendly_name` - The name of the worker
 - `attributes` - JSON string of worker attributes
 - `activity_sid` - Activity SID to be assigned to the worker
-- `activity_sid_default` - Workspace default activity SID
 - `activity_name` - Friendly name of activity
 - `available` - Is the worker available to receive tasks
 - `date_created` - The date in RFC3339 format that the worker was created

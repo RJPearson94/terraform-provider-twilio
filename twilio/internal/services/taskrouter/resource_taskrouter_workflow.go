@@ -51,7 +51,7 @@ func resourceTaskRouterWorkflow() *schema.Resource {
 			"task_reservation_timeout": {
 				Type:     schema.TypeInt,
 				Optional: true,
-				Default:  120,
+				Computed: true,
 			},
 			"document_content_type": {
 				Type:     schema.TypeString,

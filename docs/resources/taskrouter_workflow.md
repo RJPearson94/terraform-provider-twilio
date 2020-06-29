@@ -45,7 +45,7 @@ The following arguments are supported:
 - `configuration` - (Mandatory) JSON string of workflow configuration
 - `assignment_callback_url` - (Optional) Assignment Callback URL
 - `fallback_assignment_callback_url` - (Optional) Fallback Assignment Callback URL
-- `task_reservation_timeout` - (Optional) Maximum time the task can be unassigned for before it times out. Default is 120s
+- `task_reservation_timeout` - (Optional) Maximum time the task can be unassigned for before it times out
 
 ## Attributes Reference
 

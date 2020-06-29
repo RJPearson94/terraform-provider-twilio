@@ -14,39 +14,6 @@ import (
 
 var proxyPhoneNumberResourceName = "twilio_proxy_phone_number"
 
-func TestAccTwilioProxyPhoneNumber_basic(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.phone_number", proxyPhoneNumberResourceName)
-
-	testData := acceptance.TestAccData
-	uniqueName := acctest.RandString(10)
-	isReserved := true
-
-	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioProxyPhoneNumberDestroy,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccTwilioProxyPhoneNumber_basic(testData, uniqueName, isReserved),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioProxyPhoneNumberExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "sid", testData.PhoneNumberSid),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "is_reserved", "true"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "phone_number"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "friendly_name"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "iso_country"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "in_use"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
-				),
-			},
-		},
-	})
-}
-
 func TestAccTwilioProxyPhoneNumber_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.phone_number", proxyPhoneNumberResourceName)
 

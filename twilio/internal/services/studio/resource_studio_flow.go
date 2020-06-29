@@ -39,6 +39,10 @@ func resourceStudioFlow() *schema.Resource {
 			"status": {
 				Type:     schema.TypeString,
 				Required: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"draft",
+					"published",
+				}, false),
 			},
 			"definition": {
 				Type:             schema.TypeString,

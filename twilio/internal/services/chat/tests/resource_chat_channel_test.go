@@ -35,7 +35,7 @@ func TestAccTwilioChatChannel_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "unique_name", ""),
-s					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "type"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "created_by"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "members_count"),

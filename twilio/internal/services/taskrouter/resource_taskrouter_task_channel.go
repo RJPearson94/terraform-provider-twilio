@@ -46,7 +46,7 @@ func resourceTaskRouterTaskChannel() *schema.Resource {
 			"channel_optimized_routing": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  false,
+				Computed: true,
 			},
 			"date_created": {
 				Type:     schema.TypeString,

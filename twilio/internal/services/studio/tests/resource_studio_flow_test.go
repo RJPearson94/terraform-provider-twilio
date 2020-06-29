@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -43,6 +44,23 @@ func TestAccTwilioStudio_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckNoResourceAttr(stateResourceName, "date_updated"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioStudioFlow_invalidStatus(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	status := "test"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:     func() { acceptance.PreCheck(t) },
+		Providers:    acceptance.TestAccProviders,
+		CheckDestroy: testAccCheckTwilioStudioFlowDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioStudioFlow_basic(friendlyName, status),
+				ExpectError: regexp.MustCompile("config is invalid: expected status to be one of \\[draft published\\], got test"),
 			},
 		},
 	})

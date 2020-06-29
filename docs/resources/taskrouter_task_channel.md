@@ -29,7 +29,7 @@ The following arguments are supported:
 
 - `friendly_name` - (Mandatory) The name of the task channel
 - `unique_name` - (Mandatory) The unique name of the task channel. Changing this forces a new resource to be created
-- `channel_optimized_routing` - (Optional) Whether the task channel should prioritise idle workers. Default is false
+- `channel_optimized_routing` - (Optional) Whether the task channel should prioritise idle workers
 
 ## Attributes Reference
 
