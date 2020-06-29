@@ -29,8 +29,9 @@ resource "twilio_chat_role" "role" {
 
 The following arguments are supported:
 
-- `friendly_name` - (Mandatory) The friendly name of the role
-- `type` - (Mandatory) The type of role. Valid values are `channel` or `deployment`
+- `service_sid` - (Mandatory) The Service SID associated with the role. Changing this forces a new resource to be created
+- `friendly_name` - (Mandatory) The friendly name of the role. Changing this forces a new resource to be created
+- `type` - (Mandatory) The type of role. Valid values are `channel` or `deployment`. Changing this forces a new resource to be created
 - `permissions` - (Mandatory) The list of permissions the role has
 
 ## Attributes Reference
