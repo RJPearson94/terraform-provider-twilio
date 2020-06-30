@@ -4,6 +4,6 @@ resource "random_string" "random" {
 }
 
 resource "twilio_serverless_service" "service" {
-  unique_name   = "twilio-${random_string.random.result}"
+  unique_name   = "twilio-test-${random_string.random.result}"
   friendly_name = "twilio-test"
 }

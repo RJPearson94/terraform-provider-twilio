@@ -1,3 +1,27 @@
 # TaskRouter Workspace
 
-This example provisions a FIFO Task Router Workspace with Multi Task Enabled with the friendly name `Test Workspace`
+This example provisions the following resources:
+
+- taskrouter workspace
+
+## Requirements
+
+| Name      | Version |
+| --------- | ------- |
+| terraform | >= 0.12 |
+
+## Providers
+
+| Name   | Version |
+| ------ | ------- |
+| twilio | n/a     |
+
+## Inputs
+
+No input.
+
+## Outputs
+
+| Name      | Description                        |
+| --------- | ---------------------------------- |
+| workspace | The Generated TaskRouter Workspace |

@@ -9,7 +9,7 @@ output "function" {
 }
 
 output "function_version" {
-  description = "The Generated Serverless Function"
+  description = "The Generated Serverless Function Version"
   value       = twilio_serverless_function_version.function_version
 }
 

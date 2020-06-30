@@ -1,9 +1,8 @@
-# Chat Channel
+# Serverless Service
 
 This example provisions the following resources:
 
-- chat service
-- chat channel
+- serverless service
 
 ## Requirements
 
@@ -15,6 +14,7 @@ This example provisions the following resources:
 
 | Name   | Version |
 | ------ | ------- |
+| random | n/a     |
 | twilio | n/a     |
 
 ## Inputs
@@ -23,7 +23,6 @@ No input.
 
 ## Outputs
 
-| Name    | Description                   |
-| ------- | ----------------------------- |
-| channel | The Generated Channel Channel |
-| service | The Generated Chat Service    |
+| Name    | Description                      |
+| ------- | -------------------------------- |
+| service | The Generated Serverless Service |

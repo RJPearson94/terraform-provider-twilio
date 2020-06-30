@@ -4,6 +4,6 @@ output "workspace" {
 }
 
 output "worker" {
-  description = "The generated Worker"
+  description = "The Generated Worker"
   value       = twilio_taskrouter_worker.worker
 }

@@ -1,3 +1,27 @@
 # IAM API Key
 
-This example provisions a Standard Twilio API Key with the friendly name `Test API Key` for account sid `ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX` (This account sid will need replacing with your account sid)
+This example provisions the following resources:
+
+- account key
+
+## Requirements
+
+| Name      | Version |
+| --------- | ------- |
+| terraform | >= 0.12 |
+
+## Providers
+
+| Name   | Version |
+| ------ | ------- |
+| twilio | n/a     |
+
+## Inputs
+
+No input.
+
+## Outputs
+
+| Name    | Description           |
+| ------- | --------------------- |
+| api_key | The Generated API Key |

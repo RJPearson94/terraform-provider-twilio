@@ -1,9 +1,12 @@
-# Chat Channel
+# Studio Flow - Basic
 
 This example provisions the following resources:
 
-- chat service
-- chat channel
+- studio flow
+
+This example uses the following Flow Widgets
+
+- trigger
 
 ## Requirements
 
@@ -23,7 +26,6 @@ No input.
 
 ## Outputs
 
-| Name    | Description                   |
-| ------- | ----------------------------- |
-| channel | The Generated Channel Channel |
-| service | The Generated Chat Service    |
+| Name | Description               |
+| ---- | ------------------------- |
+| flow | The Generated Studio Flow |
