@@ -5,9 +5,10 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/chat/v2/service/role"
 	"github.com/RJPearson94/twilio-sdk-go/service/chat/v2/service/roles"
-	"github.com/RJPearson94/twilio-sdk-go/utils"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
@@ -78,7 +79,7 @@ func resourceChatRoleCreate(d *schema.ResourceData, meta interface{}) error {
 	createInput := &roles.CreateRoleInput{
 		FriendlyName: d.Get("friendly_name").(string),
 		Type:         d.Get("type").(string),
-		Permission:   convertToStringArray(d.Get("permissions").([]interface{})),
+		Permission:   utils.ConvertToStringSlice(d.Get("permissions").([]interface{})),
 	}
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Roles.Create(createInput)
@@ -95,7 +96,7 @@ func resourceChatRoleRead(d *schema.ResourceData, meta interface{}) error {
 
 	getResponse, err := client.Service(d.Get("service_sid").(string)).Role(d.Id()).Get()
 	if err != nil {
-		if twilioError, ok := err.(*utils.TwilioError); ok {
+		if twilioError, ok := err.(*sdkUtils.TwilioError); ok {
 			// currently programmable chat returns a 403 if the service instance does not exist
 			if twilioError.Status == 403 && twilioError.Message == "Service instance not found" {
 				d.SetId("")
@@ -130,7 +131,7 @@ func resourceChatRoleUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
 
 	updateInput := &role.UpdateRoleInput{
-		Permission: convertToStringArray(d.Get("permissions").([]interface{})),
+		Permission: utils.ConvertToStringSlice(d.Get("permissions").([]interface{})),
 	}
 
 	updateResp, err := client.Service(d.Get("service_sid").(string)).Role(d.Id()).Update(updateInput)
@@ -150,12 +151,4 @@ func resourceChatRoleDelete(d *schema.ResourceData, meta interface{}) error {
 	}
 	d.SetId("")
 	return nil
-}
-
-func convertToStringArray(input []interface{}) []string {
-	stringArray := make([]string, len(input))
-	for index, value := range input {
-		stringArray[index] = value.(string)
-	}
-	return stringArray
 }
