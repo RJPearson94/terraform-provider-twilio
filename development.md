@@ -37,7 +37,7 @@ $GOPATH/bin/terraform-provider-twilio
 ...
 ```
 
-## Testings
+## Testing
 
 In order to test the provider, run the following command
 

@@ -4,6 +4,6 @@ output "service" {
 }
 
 output "channel" {
-  description = "The Generated Channel Channel"
+  description = "The Generated Chat Channel"
   value       = twilio_chat_channel.channel
 }

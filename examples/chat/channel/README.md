@@ -23,7 +23,7 @@ No input.
 
 ## Outputs
 
-| Name    | Description                   |
-| ------- | ----------------------------- |
-| channel | The Generated Channel Channel |
-| service | The Generated Chat Service    |
+| Name    | Description                |
+| ------- | -------------------------- |
+| channel | The Generated Chat Channel |
+| service | The Generated Chat Service |
