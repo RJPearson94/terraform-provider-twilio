@@ -7,22 +7,18 @@ download:
 	@echo "==> Download dependencies"
 	go mod vendor
 
-build: fmtcheck generate
+build: fmt generate
 	go install
 
-test: fmtcheck generate
+test: fmt generate
 	go test $(TESTARGS) -timeout=30s -parallel=4 $(TEST)
 
-testacc: fmtcheck
+testacc: fmt
 	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 10m
 
 fmt:
-	@echo "==> Fixing source code with gofmt..."
-	gofmt -w -s ./$(PKG_NAME)
-
-fmtcheck:
-	@echo "==> Checking that code complies with gofmt requirements..."
-	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
+	@echo "==> Fixing source code with goimports (uses gofmt under the hood)..."
+	goimports -w ./$(PKG_NAME)
 
 tools:
 	@echo "==> installing required tooling..."
@@ -31,6 +27,7 @@ tools:
 	GO111MODULE=off go get -u github.com/bflad/tfproviderdocs
 	GO111MODULE=off go get -u github.com/katbyte/terrafmt
 	GO111MODULE=off go get -u github.com/boyter/scc
+	GO111MODULE=off go get -u golang.org/x/tools/cmd/goimports
 
 generate:
 	go generate  ./...
