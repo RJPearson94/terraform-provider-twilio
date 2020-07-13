@@ -108,7 +108,7 @@ func resourceServerlessDeploymentDelete(d *schema.ResourceData, meta interface{}
 	return nil
 }
 
-func createServerlessDeployment(d *schema.ResourceData, meta interface{}, sid *string) (*deployments.CreateDeploymentOutput, error) {
+func createServerlessDeployment(d *schema.ResourceData, meta interface{}, sid *string) (*deployments.CreateDeploymentResponse, error) {
 	client := meta.(*common.TwilioClient).Serverless
 
 	createInput := &deployments.CreateDeploymentInput{
