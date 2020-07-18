@@ -1,0 +1,23 @@
+{
+  "style_sheet": {
+    "voice": {
+      "say_voice": "${voice}"
+    },
+    "collect": {
+      "validate": {
+        "on_failure": {
+          "messages": [
+            {
+              "say": "I'm sorry, can you please repeat that"
+            }
+          ],
+          "repeat_question": false
+        },
+        "on_success": {
+          "say": ""
+        },
+        "max_attempts": 2
+      }
+    }
+  }
+}

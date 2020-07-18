@@ -1,0 +1,6 @@
+{
+  "defaults": {
+    "assistant_initiation": "",
+    "fallback": "${fallbackURLOrTask}"
+  }
+}
