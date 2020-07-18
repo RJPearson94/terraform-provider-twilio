@@ -41,7 +41,7 @@ The following arguments are supported:
 - `unique_name` - (Optional) The unique name of the assistant
 - `log_queries` - (Optional) Whether or not queries are recorded/ logged
 - `development_stage` - (Optional) The stage description for the assistant. Valid values are `in-development` or `in-production`.
-- `callback_url` - (Optional)  The webhook URL the assistant will callback to when an event is fired
+- `callback_url` - (Optional)  The URL the assistant will call back to when an event is fired
 - `callback_events` - (Optional) A list of callback events strings which trigger the callback webhook
 - `defaults` - (Optional) JSON string of an Autopilot defaults
 - `stylesheet` - (Optional) JSON string of an Autopilot stylesheet
@@ -59,7 +59,7 @@ The following attributes are exported:
 - `needs_model_build` - Whether or not a model build is required for the assistant
 - `log_queries` - Whether or not queries are recorded/ logged
 - `development_stage` - The stage description for the assistant
-- `callback_url` - The webhook URL the assistant will callback to when an event is fired
+- `callback_url` - The URL the assistant will call back to when an event is fired
 - `callback_events` - A list of callback events strings which trigger the callback webhook
 - `defaults` - JSON string of an Autopilot defaults
 - `stylesheet` - JSON string of an Autopilot stylesheet

@@ -1,8 +1,6 @@
 package utils
 
 import (
-	"strings"
-
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
@@ -35,8 +33,7 @@ func OptionalSeperatedString(d *schema.ResourceData, key string, seperator strin
 		return nil
 	}
 
-	stringSlice := ConvertToStringSlice(retrievedKey.([]interface{}))
-	return sdkUtils.String(strings.Join(stringSlice[:], seperator))
+	return sdkUtils.String(ConvertSliceToSeperatedString(retrievedKey.([]interface{}), seperator))
 }
 
 func OptionalStringSlice(d *schema.ResourceData, key string) *[]string {
