@@ -49,7 +49,6 @@ The following attributes are exported:
 - `sid` - The SID of the task (Same as the ID)
 - `account_sid` - The Account SID associated with the task
 - `assistant_sid` - The SID of the assistant to attach the task to
-- `assistant_sid` - The SID of the assistant to attach the task to
 - `unique_name` - The unique name of the task
 - `friendly_name` - The friendly name of the task
 - `actions_url` - The url to retrieve the actions json
