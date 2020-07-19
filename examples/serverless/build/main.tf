@@ -25,7 +25,9 @@ resource "twilio_serverless_function_version" "function_version" {
 
 resource "twilio_serverless_build" "build" {
   service_sid           = twilio_serverless_service.service.sid
-  function_version_sids = [twilio_serverless_function_version.function_version.sid]
+  function_version {
+    sid = twilio_serverless_function_version.function_version.sid
+  }
   dependencies = {
     "twilio" : "3.6.3"
   }

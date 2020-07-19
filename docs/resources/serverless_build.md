@@ -39,7 +39,9 @@ EOF
 
 resource "twilio_serverless_build" "build" {
   service_sid           = twilio_serverless_service.service.sid
-  function_version_sids = [twilio_serverless_function_version.function_version.sid]
+  function_version {
+    sid = twilio_serverless_function_version.function_version.sid
+  }
   dependencies = {
     "twilio" : "3.6.3"
   }
@@ -55,10 +57,22 @@ resource "twilio_serverless_build" "build" {
 The following arguments are supported:
 
 - `service_sid` - (Mandatory) The Service SID associated with the build. Changing this forces a new resource to be created
-- `asset_version_sids` - (Optional) List of Asset Version Sids to be included in the build. Changing this forces a new resource to be created
-- `function_version_sids` - (Optional) List of Function Version Sids to be included in the build. Changing this forces a new resource to be created
+- `asset_version` - (Optional) A `asset_version` block as documented below. Changing this forces a new resource to be created
+- `function_version` - (Optional) A `function_version` block as documented below. Changing this forces a new resource to be created
 - `dependencies` - (Optional) Map of dependencies to be included in the build. Changing this forces a new resource to be created
 - `polling` - (Optional) A `polling` block as documented below.
+
+---
+
+A `asset_version` block supports the following:
+
+- `sid` - (Required) The SID of the asset version
+
+---
+
+A `function_version` block supports the following:
+
+- `sid` - (Required) The SID of the function version
 
 ---
 
@@ -76,10 +90,8 @@ The following attributes are exported:
 - `sid` - The SID of the build (Same as the ID)
 - `account_sid` - The Account SID associated with the build
 - `service_sid` - The Service SID associated with the build
-- `asset_version_sids` - List of Asset Version Sids to be included in the build
-- `asset_versions` - List of `asset_version` blocks as documented below.
-- `function_version_sids` - List of Function Version Sids to be included in the build
-- `function_versions` - List of `function_version` blocks as documented below.
+- `asset_version` - A `asset_version` block as documented below.
+- `function_version` - A `function_version` block as documented below.
 - `dependencies` - Map of dependencies to be included in the build
 - `status` - The current status of the build job
 - `date_created` - The date in RFC3339 format that the build was created
@@ -90,7 +102,7 @@ The following attributes are exported:
 
 A `asset_version` block supports the following:
 
-- `sid` - The SID of the asset version (Same as the ID)
+- `sid` - The SID of the asset version 
 - `account_sid` - The Account SID of the asset version is deployed into
 - `service_sid` - The Service SID of the asset version is deployed into
 - `asset_sid` - The Service SID of the asset version is managed under
@@ -102,7 +114,7 @@ A `asset_version` block supports the following:
 
 A `function_version` block supports the following:
 
-- `sid` - The SID of the function version (Same as the ID)
+- `sid` - The SID of the function version 
 - `account_sid` - The Account SID of the function version is deployed into
 - `service_sid` - The Service SID of the function version is deployed into
 - `function_sid` - The Service SID of the function version is managed under

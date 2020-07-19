@@ -38,22 +38,16 @@ func resourceServerlessBuild() *schema.Resource {
 				Required: true,
 				ForceNew: true,
 			},
-			"asset_version_sids": {
+			"asset_version": {
 				Type:     schema.TypeList,
 				Optional: true,
 				ForceNew: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
-			},
-			"asset_versions": {
-				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"sid": {
 							Type:     schema.TypeString,
-							Computed: true,
+							Required: true,
 						},
 						"account_sid": {
 							Type:     schema.TypeString,
@@ -82,22 +76,16 @@ func resourceServerlessBuild() *schema.Resource {
 					},
 				},
 			},
-			"function_version_sids": {
+			"function_version": {
 				Type:     schema.TypeList,
 				Optional: true,
 				ForceNew: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
-			},
-			"function_versions": {
-				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"sid": {
 							Type:     schema.TypeString,
-							Computed: true,
+							Required: true,
 						},
 						"account_sid": {
 							Type:     schema.TypeString,
@@ -194,8 +182,8 @@ func resourceServerlessBuildCreate(d *schema.ResourceData, meta interface{}) err
 	}
 
 	createInput := &builds.CreateBuildInput{
-		AssetVersions:    expandVersionSids(d.Get("asset_version_sids").([]interface{})),
-		FunctionVersions: expandVersionSids(d.Get("function_version_sids").([]interface{})),
+		AssetVersions:    expandVersionSids(d.Get("asset_version").([]interface{})),
+		FunctionVersions: expandVersionSids(d.Get("function_version").([]interface{})),
 		Dependencies:     sdkUtils.String(string(dependencies)),
 	}
 
@@ -231,10 +219,8 @@ func resourceServerlessBuildRead(d *schema.ResourceData, meta interface{}) error
 	d.Set("sid", getResponse.Sid)
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("service_sid", getResponse.ServiceSid)
-	d.Set("asset_version_sids", d.Get("asset_version_sids").([]interface{}))
-	d.Set("asset_versions", flatternAssetVersions(getResponse.AssetVersions))
-	d.Set("function_version_sids", d.Get("function_version_sids").([]interface{}))
-	d.Set("function_versions", flatternFunctionVersions(getResponse.FunctionVersions))
+	d.Set("asset_version", flatternAssetVersions(getResponse.AssetVersions))
+	d.Set("function_version", flatternFunctionVersions(getResponse.FunctionVersions))
 	d.Set("dependencies", flatternDependencies(getResponse.Dependencies))
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
@@ -267,8 +253,9 @@ func resourceServerlessBuildDelete(d *schema.ResourceData, meta interface{}) err
 
 func expandVersionSids(input []interface{}) *[]string {
 	versionSids := make([]string, 0)
-	for _, sid := range input {
-		versionSids = append(versionSids, sid.(string))
+	for _, version := range input {
+		versionMap := version.(map[string]interface{})
+		versionSids = append(versionSids, versionMap["sid"].(string))
 	}
 	return &versionSids
 }

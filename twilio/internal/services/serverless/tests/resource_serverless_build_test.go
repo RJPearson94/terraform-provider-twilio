@@ -32,8 +32,8 @@ func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "asset_version_sids.#", "0"),
-					resource.TestCheckResourceAttr(stateResourceName, "function_version_sids.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "asset_version.#", "0"),
+					resource.TestCheckResourceAttr(stateResourceName, "function_version.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "dependencies.%", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "dependencies.twilio", version),
 					resource.TestCheckResourceAttrSet(stateResourceName, "status"),
@@ -111,7 +111,9 @@ EOF
 
 resource "twilio_serverless_build" "build" {
 	service_sid           = twilio_serverless_service.service.sid
-	function_version_sids = [twilio_serverless_function_version.function_version.sid]
+	function_version {
+		sid = twilio_serverless_function_version.function_version.sid
+	}
 	dependencies = {
 		"twilio" : "%s"
 	}
