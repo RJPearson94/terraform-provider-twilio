@@ -24,5 +24,6 @@ func (r Registration) SupportedResources() map[string]*schema.Resource {
 		"twilio_autopilot_task_field":  resourceAutopilotTaskField(),
 		"twilio_autopilot_field_type":  resourceAutopilotFieldType(),
 		"twilio_autopilot_field_value": resourceAutopilotFieldValue(),
+		"twilio_autopilot_model_build": resourceAutopilotModelBuild(),
 	}
 }

@@ -66,7 +66,7 @@ A `polling` block supports the following:
 
 - `enabled` - (Required) Enable or or disable polling of the build.
 - `max_attempts` - (Optional) The maximum number of polling attempts. Default is 30
-- `delay_in_ms` - (Optional) The time in milliseconds to wait between polling attempts.
+- `delay_in_ms` - (Optional) The time in milliseconds to wait between polling attempts.Default is 1000ms
 
 ## Attributes Reference
 
