@@ -21,5 +21,6 @@ func (r Registration) SupportedResources() map[string]*schema.Resource {
 		"twilio_autopilot_webhook":     resourceAutopilotWebhook(),
 		"twilio_autopilot_task":        resourceAutopilotTask(),
 		"twilio_autopilot_task_sample": resourceAutopilotTaskSample(),
+		"twilio_autopilot_task_field":  resourceAutopilotTaskField(),
 	}
 }
