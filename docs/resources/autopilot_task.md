@@ -35,7 +35,7 @@ EOF
 
 The following arguments are supported:
 
-- `assistant_sid` - (Mandatory) The SID of the assistant to attach the task to
+- `assistant_sid` - (Mandatory) The SID of the assistant to attach the task to. Changing this forces a new resource to be created
 - `unique_name` - (Mandatory) The unique name of the task
 - `friendly_name` - (Optional) The friendly name of the task
 - `actions_url` - (Optional) The url to retrieve the actions json. Conflicts with actions.

@@ -31,9 +31,9 @@ resource "twilio_autopilot_task_field" "task_field" {
 
 The following arguments are supported:
 
-- `assistant_sid` - (Mandatory) The SID of the assistant to attach the task field to
-- `task_sid` - (Mandatory) The SID of the task to attach the field to
-- `unique_name` - (Mandatory) The unique name of the field
+- `assistant_sid` - (Mandatory) The SID of the assistant to attach the task field to. Changing this forces a new resource to be created
+- `task_sid` - (Mandatory) The SID of the task to attach the field to. Changing this forces a new resource to be created
+- `unique_name` - (Mandatory) The unique name of the field. Changing this forces a new resource to be created
 - `field_type` - (Mandatory) The type of field
 
 ## Attributes Reference

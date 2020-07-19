@@ -31,8 +31,8 @@ resource "twilio_autopilot_task_sample" "task_sample" {
 
 The following arguments are supported:
 
-- `assistant_sid` - (Mandatory) The SID of the assistant to attach the task sample to
-- `task_sid` - (Mandatory) The SID of the task to attach the sample to
+- `assistant_sid` - (Mandatory) The SID of the assistant to attach the task sample to. Changing this forces a new resource to be created
+- `task_sid` - (Mandatory) The SID of the task to attach the sample to. Changing this forces a new resource to be created
 - `language` - (Mandatory) The language of the sample
 - `tagged_text` - (Mandatory) The labelled/ tagged sample text
 - `source_channel` - (Optional) The channel the sample was captured on

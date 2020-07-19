@@ -28,7 +28,7 @@ resource "twilio_autopilot_webhook" "webhook" {
 
 The following arguments are supported:
 
-- `assistant_sid` - (Mandatory) The SID of the assistant to attach the webhook to
+- `assistant_sid` - (Mandatory) The SID of the assistant to attach the webhook to. Changing this forces a new resource to be created
 - `unique_name` - (Mandatory) The unique name of the webhook
 - `webhook_url` - (Mandatory) The webhook url
 - `events` - (Mandatory) A list of webhook events strings which trigger the webhook
