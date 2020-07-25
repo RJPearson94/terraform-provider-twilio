@@ -302,9 +302,9 @@ func resourceChatServiceRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("media", flatternMedia(getResponse.Media))
 	d.Set("notifications", flatternNotifications(getResponse.Notifications))
 	d.Set("post_webhook_retry_count", getResponse.PostWebhookRetryCount)
-	d.Set("post_webhook_url", getResponse.PostWebhookUrl)
+	d.Set("post_webhook_url", getResponse.PostWebhookURL)
 	d.Set("pre_webhook_retry_count", getResponse.PreWebhookRetryCount)
-	d.Set("pre_webhook_url", getResponse.PreWebhookUrl)
+	d.Set("pre_webhook_url", getResponse.PreWebhookURL)
 	d.Set("reachability_enabled", getResponse.ReachabilityEnabled)
 	d.Set("read_status_enabled", getResponse.ReadStatusEnabled)
 	d.Set("typing_indicator_timeout", getResponse.TypingIndicatorTimeout)
@@ -328,9 +328,9 @@ func resourceChatServiceUpdate(d *schema.ResourceData, meta interface{}) error {
 		FriendlyName:           utils.OptionalString(d, "friendly_name"),
 		ReadStatusEnabled:      utils.OptionalBool(d, "read_status_enabled"),
 		TypingIndicatorTimeout: utils.OptionalInt(d, "typing_indicator_timeout"),
-		PostWebhookUrl:         utils.OptionalString(d, "post_webhook_url"),
+		PostWebhookURL:         utils.OptionalString(d, "post_webhook_url"),
 		PostWebhookRetryCount:  utils.OptionalInt(d, "post_webhook_retry_count"),
-		PreWebhookUrl:          utils.OptionalString(d, "pre_webhook_url"),
+		PreWebhookURL:          utils.OptionalString(d, "pre_webhook_url"),
 		PreWebhookRetryCount:   utils.OptionalInt(d, "pre_webhook_retry_count"),
 		WebhookMethod:          utils.OptionalString(d, "webhook_method"),
 	}

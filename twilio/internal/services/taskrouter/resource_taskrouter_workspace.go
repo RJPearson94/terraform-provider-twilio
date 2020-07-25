@@ -95,7 +95,7 @@ func resourceTaskRouterWorkspaceCreate(d *schema.ResourceData, meta interface{})
 
 	createInput := &workspaces.CreateWorkspaceInput{
 		FriendlyName:         d.Get("friendly_name").(string),
-		EventCallbackUrl:     utils.OptionalString(d, "event_callback_url"),
+		EventCallbackURL:     utils.OptionalString(d, "event_callback_url"),
 		EventsFilter:         utils.OptionalString(d, "events_filter"),
 		MultiTaskEnabled:     utils.OptionalBool(d, "multi_task_enabled"),
 		Template:             utils.OptionalString(d, "template"),
@@ -155,7 +155,7 @@ func resourceTaskRouterWorkspaceUpdate(d *schema.ResourceData, meta interface{})
 
 	updateInput := &workspace.UpdateWorkspaceInput{
 		FriendlyName:         utils.OptionalString(d, "friendly_name"),
-		EventCallbackUrl:     utils.OptionalString(d, "event_callback_url"),
+		EventCallbackURL:     utils.OptionalString(d, "event_callback_url"),
 		EventsFilter:         utils.OptionalString(d, "events_filter"),
 		MultiTaskEnabled:     utils.OptionalBool(d, "multi_task_enabled"),
 		Template:             utils.OptionalString(d, "template"),

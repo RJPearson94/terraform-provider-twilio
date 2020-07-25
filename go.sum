@@ -12,6 +12,12 @@ github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym
 github.com/Jeffail/gabs/v2 v2.5.1/go.mod h1:xCn81vdHKxFUuWWAaD5jCTQDNPBMh5pPs9IJ+NcziBI=
 github.com/RJPearson94/twilio-sdk-go v0.0.0-20200716231329-b04c32824e07 h1:btcqKICsJKRK5mZEKU66OmnJ1fFj+FIuqs7DjZzwQPs=
 github.com/RJPearson94/twilio-sdk-go v0.0.0-20200716231329-b04c32824e07/go.mod h1:DjsQio9FqwyYOLcrw/LeH7XLTfLxle45ZpJQ+XVCUQs=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200725203536-cab077bbe2fb h1:9ec42VhlFmk9i9v2EGmbCv/at2W1wHLSYIo970V2ym4=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200725203536-cab077bbe2fb/go.mod h1:NJQVnwA61Gm+gfD/VuOzUnYzGeZVNxeWk+16ydOAOk8=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200725205858-b79a02db8de0 h1:7BEHftdk2kCgvFIR0eWWh2gOIcavpwl/D/0nPlS5X3Y=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200725205858-b79a02db8de0/go.mod h1:NJQVnwA61Gm+gfD/VuOzUnYzGeZVNxeWk+16ydOAOk8=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200725211403-f011d1b928b3 h1:o0qm87bsOLt1y33AHas8ATwPHcS2EZmZ9AyergvyDiY=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200725211403-f011d1b928b3/go.mod h1:NJQVnwA61Gm+gfD/VuOzUnYzGeZVNxeWk+16ydOAOk8=
 github.com/agext/levenshtein v1.2.1/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
 github.com/agext/levenshtein v1.2.2 h1:0S/Yg6LYmFJ5stwQeRp6EeOcCbj7xiqQSdNelsXvaqE=
 github.com/agext/levenshtein v1.2.2/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
@@ -185,6 +191,8 @@ github.com/mitchellh/mapstructure v1.1.2 h1:fmNYVwqnSfB9mZU6OS2O6GsXM+wcskZDuKQz
 github.com/mitchellh/mapstructure v1.1.2/go.mod h1:FVVH3fgwuzCH5S8UJGiWEs2h04kUh9fWfEaFds41c1Y=
 github.com/mitchellh/mapstructure v1.3.2 h1:mRS76wmkOn3KkKAyXDu42V+6ebnXWIztFSYGN7GeoRg=
 github.com/mitchellh/mapstructure v1.3.2/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
+github.com/mitchellh/mapstructure v1.3.3 h1:SzB1nHZ2Xi+17FP0zVQBHIZqvwRN9408fJO8h+eeNA8=
+github.com/mitchellh/mapstructure v1.3.3/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/mitchellh/reflectwalk v1.0.0/go.mod h1:mSTlrgnPZtwu0c4WaC2kGObEpuNDbx0jmZXqmk4esnw=
 github.com/mitchellh/reflectwalk v1.0.1 h1:FVzMWA5RllMAKIdUSC8mdWo3XtwoecrH79BY70sEEpE=
 github.com/mitchellh/reflectwalk v1.0.1/go.mod h1:mSTlrgnPZtwu0c4WaC2kGObEpuNDbx0jmZXqmk4esnw=

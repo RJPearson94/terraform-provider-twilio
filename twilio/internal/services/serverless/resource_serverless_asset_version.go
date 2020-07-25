@@ -137,7 +137,7 @@ func resourceServerlessAssetVersionCreate(d *schema.ResourceData, meta interface
 	}
 
 	createInput := &versions.CreateVersionInput{
-		Content: versions.ContentDetails{
+		Content: versions.CreateContentDetails{
 			Body:        body,
 			ContentType: contentType,
 			FileName:    fileName,

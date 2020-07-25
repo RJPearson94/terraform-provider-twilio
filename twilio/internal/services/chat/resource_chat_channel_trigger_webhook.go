@@ -91,7 +91,7 @@ func resourceChatChannelTriggerWebhookCreate(d *schema.ResourceData, meta interf
 
 	createInput := &webhooks.CreateChannelWebhookInput{
 		Type:                    "trigger",
-		ConfigurationUrl:        utils.OptionalString(d, "webhook_url"),
+		ConfigurationURL:        utils.OptionalString(d, "webhook_url"),
 		ConfigurationMethod:     utils.OptionalString(d, "method"),
 		ConfigurationRetryCount: utils.OptionalInt(d, "retry_count"),
 		ConfigurationTriggers:   utils.OptionalStringSlice(d, "triggers"),
@@ -130,7 +130,7 @@ func resourceChatChannelTriggerWebhookRead(d *schema.ResourceData, meta interfac
 	d.Set("service_sid", getResponse.ServiceSid)
 	d.Set("channel_sid", getResponse.ChannelSid)
 	d.Set("type", getResponse.Type)
-	d.Set("webhook_url", getResponse.Configuration.Url)
+	d.Set("webhook_url", getResponse.Configuration.URL)
 	d.Set("method", getResponse.Configuration.Method)
 	d.Set("retry_count", getResponse.Configuration.RetryCount)
 	d.Set("triggers", getResponse.Configuration.Triggers)
@@ -149,7 +149,7 @@ func resourceChatChannelTriggerWebhookUpdate(d *schema.ResourceData, meta interf
 	client := meta.(*common.TwilioClient).Chat
 
 	updateInput := &webhook.UpdateChannelWebhookInput{
-		ConfigurationUrl:        utils.OptionalString(d, "webhook_url"),
+		ConfigurationURL:        utils.OptionalString(d, "webhook_url"),
 		ConfigurationMethod:     utils.OptionalString(d, "method"),
 		ConfigurationRetryCount: utils.OptionalInt(d, "retry_count"),
 		ConfigurationTriggers:   utils.OptionalStringSlice(d, "triggers"),

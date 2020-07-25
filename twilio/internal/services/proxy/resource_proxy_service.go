@@ -90,11 +90,11 @@ func resourceProxyServiceCreate(d *schema.ResourceData, meta interface{}) error 
 	createInput := &services.CreateServiceInput{
 		UniqueName:              d.Get("unique_name").(string),
 		DefaultTtl:              utils.OptionalInt(d, "default_ttl"),
-		CallbackUrl:             utils.OptionalString(d, "callback_url"),
+		CallbackURL:             utils.OptionalString(d, "callback_url"),
 		GeoMatchLevel:           utils.OptionalString(d, "geo_match_level"),
 		NumberSelectionBehavior: utils.OptionalString(d, "number_selection_behavior"),
-		InterceptCallbackUrl:    utils.OptionalString(d, "intercept_callback_url"),
-		OutOfSessionCallbackUrl: utils.OptionalString(d, "out_of_session_callback_url"),
+		InterceptCallbackURL:    utils.OptionalString(d, "intercept_callback_url"),
+		OutOfSessionCallbackURL: utils.OptionalString(d, "out_of_session_callback_url"),
 		ChatInstanceSid:         utils.OptionalString(d, "chat_instance_sid"),
 	}
 
@@ -125,11 +125,11 @@ func resourceProxyServiceRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("chat_service_sid", getResponse.ChatServiceSid)
 	d.Set("unique_name", getResponse.UniqueName)
 	d.Set("default_ttl", getResponse.DefaultTtl)
-	d.Set("callback_url", getResponse.CallbackUrl)
+	d.Set("callback_url", getResponse.CallbackURL)
 	d.Set("geo_match_level", getResponse.GeoMatchLevel)
 	d.Set("number_selection_behavior", getResponse.NumberSelectionBehavior)
-	d.Set("intercept_callback_url", getResponse.InterceptCallbackUrl)
-	d.Set("out_of_session_callback_url", getResponse.OutOfSessionCallbackUrl)
+	d.Set("intercept_callback_url", getResponse.InterceptCallbackURL)
+	d.Set("out_of_session_callback_url", getResponse.OutOfSessionCallbackURL)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {
@@ -147,11 +147,11 @@ func resourceProxyServiceUpdate(d *schema.ResourceData, meta interface{}) error 
 	updateInput := &service.UpdateServiceInput{
 		UniqueName:              utils.OptionalString(d, "unique_name"),
 		DefaultTtl:              utils.OptionalInt(d, "default_ttl"),
-		CallbackUrl:             utils.OptionalString(d, "callback_url"),
+		CallbackURL:             utils.OptionalString(d, "callback_url"),
 		GeoMatchLevel:           utils.OptionalString(d, "geo_match_level"),
 		NumberSelectionBehavior: utils.OptionalString(d, "number_selection_behavior"),
-		InterceptCallbackUrl:    utils.OptionalString(d, "intercept_callback_url"),
-		OutOfSessionCallbackUrl: utils.OptionalString(d, "out_of_session_callback_url"),
+		InterceptCallbackURL:    utils.OptionalString(d, "intercept_callback_url"),
+		OutOfSessionCallbackURL: utils.OptionalString(d, "out_of_session_callback_url"),
 		ChatInstanceSid:         utils.OptionalString(d, "chat_instance_sid"),
 	}
 

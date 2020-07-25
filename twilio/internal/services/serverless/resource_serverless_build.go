@@ -168,9 +168,9 @@ func resourceServerlessBuild() *schema.Resource {
 func resourceServerlessBuildCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
 
-	dependencyArray := make([]builds.Dependency, 0)
+	dependencyArray := make([]builds.CreateDependency, 0)
 	for key, value := range d.Get("dependencies").(map[string]interface{}) {
-		dependencyArray = append(dependencyArray, builds.Dependency{
+		dependencyArray = append(dependencyArray, builds.CreateDependency{
 			Name:    key,
 			Version: value.(string),
 		})
@@ -260,7 +260,7 @@ func expandVersionSids(input []interface{}) *[]string {
 	return &versionSids
 }
 
-func flatternAssetVersions(input *[]build.AssetVersion) *[]interface{} {
+func flatternAssetVersions(input *[]build.GetAssetVersion) *[]interface{} {
 	if input == nil {
 		return nil
 	}
@@ -283,7 +283,7 @@ func flatternAssetVersions(input *[]build.AssetVersion) *[]interface{} {
 	return &results
 }
 
-func flatternFunctionVersions(input *[]build.FunctionVersion) *[]interface{} {
+func flatternFunctionVersions(input *[]build.GetFunctionVersion) *[]interface{} {
 	if input == nil {
 		return nil
 	}
@@ -306,7 +306,7 @@ func flatternFunctionVersions(input *[]build.FunctionVersion) *[]interface{} {
 	return &results
 }
 
-func flatternDependencies(input *[]build.Dependency) *[]interface{} {
+func flatternDependencies(input *[]build.GetDependency) *[]interface{} {
 	if input == nil {
 		return nil
 	}
