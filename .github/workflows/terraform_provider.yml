@@ -3,7 +3,7 @@ name: Terraform Provider Checks
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     paths:
       - .github/workflows/terraform_provider.yml
@@ -20,24 +20,24 @@ jobs:
   pipeline:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Setup Go with v${{ env.GO_VERSION }}
-      uses: actions/setup-go@v2
-      with:
-        go-version: ${{ env.GO_VERSION }}
-    
-    - name: Granting private modules access
-      run: git config --global url."https://${{ secrets.GO_MODULES_TOKEN }}:x-oauth-basic@github.com/RJPearson94".insteadOf "https://github.com/RJPearson94"
+      - name: Setup Go with v${{ env.GO_VERSION }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.GO_VERSION }}
 
-    - name: Install tools
-      run: make tools
-    
-    - name: Download Dependencies
-      run: make download
+      - name: Granting private modules access
+        run: git config --global url."https://${{ secrets.GO_MODULES_TOKEN }}:x-oauth-basic@github.com/RJPearson94".insteadOf "https://github.com/RJPearson94"
 
-    - name: Build
-      run: make build
+      - name: Install tools
+        run: make tools
 
-    - name: Test
-      run: make test
+      - name: Download Dependencies
+        run: make download
+
+      - name: Build
+        run: make build
+
+      - name: Test
+        run: make test
