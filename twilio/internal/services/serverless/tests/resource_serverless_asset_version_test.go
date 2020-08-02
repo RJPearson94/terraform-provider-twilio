@@ -73,7 +73,7 @@ func testAccCheckTwilioServerlessAssetVersionDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Asset(rs.Primary.Attributes["asset_sid"]).Version(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Asset(rs.Primary.Attributes["asset_sid"]).Version(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -95,7 +95,7 @@ func testAccCheckTwilioServerlessAssetVersionExists(name string) resource.TestCh
 		}
 
 		// Asset versions cannot be destroyed however the supporting resources (service, asset) will be destroyed so this will verify the version is no longer present
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Asset(rs.Primary.Attributes["asset_sid"]).Version(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Asset(rs.Primary.Attributes["asset_sid"]).Version(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving asset version information %s", err)
 		}
 

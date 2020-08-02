@@ -94,7 +94,7 @@ func testAccCheckTwilioServerlessFunctionDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -115,7 +115,7 @@ func testAccCheckTwilioServerlessFunctionExists(name string) resource.TestCheckF
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving function information %s", err)
 		}
 

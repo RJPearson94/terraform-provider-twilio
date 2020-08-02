@@ -69,7 +69,7 @@ func dataSourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Studio
 
 	sid := d.Get("sid").(string)
-	getResponse, err := client.Flow(sid).Get()
+	getResponse, err := client.Flow(sid).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			return fmt.Errorf("[ERROR] Studio flow with sid (%s) was not found", sid)

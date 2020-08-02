@@ -6,7 +6,7 @@ import (
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
@@ -69,13 +69,16 @@ func testAccCheckTwilioProxyPhoneNumberDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Proxy
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != proxyServiceResourceName {
+		if rs.Type != proxyPhoneNumberResourceName {
 			continue
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).PhoneNumber(rs.Primary.ID).Get(); err != nil {
-			if utils.IsNotFoundError(err) {
-				return nil
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).PhoneNumber(rs.Primary.ID).Fetch(); err != nil {
+			if twilioError, ok := err.(*sdkUtils.TwilioError); ok {
+				// currently proxy returns a 400 if the proxy phone number instance does not exist
+				if twilioError.Status == 400 && twilioError.Message == "Invalid Phone Number Sid" {
+					return nil
+				}
 			}
 			return fmt.Errorf("Error occurred when retrieving proxy phone number information %s", err)
 		}
@@ -94,7 +97,7 @@ func testAccCheckTwilioProxyPhoneNumberExists(name string) resource.TestCheckFun
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).PhoneNumber(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).PhoneNumber(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving proxy phone number information %s", err)
 		}
 

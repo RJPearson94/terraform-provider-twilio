@@ -54,7 +54,7 @@ func testAccCheckTwilioAutopilotFieldValueDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).FieldType(rs.Primary.Attributes["field_type_sid"]).FieldValue(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).FieldType(rs.Primary.Attributes["field_type_sid"]).FieldValue(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -75,7 +75,7 @@ func testAccCheckTwilioAutopilotFieldValueExists(name string) resource.TestCheck
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).FieldType(rs.Primary.Attributes["field_type_sid"]).FieldValue(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).FieldType(rs.Primary.Attributes["field_type_sid"]).FieldValue(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving field value information %s", err)
 		}
 

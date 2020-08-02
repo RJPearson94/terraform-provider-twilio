@@ -73,7 +73,7 @@ func resourceServerlessAssetCreate(d *schema.ResourceData, meta interface{}) err
 func resourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).Get()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")

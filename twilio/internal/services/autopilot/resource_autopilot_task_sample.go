@@ -88,7 +88,7 @@ func resourceAutopilotTaskSampleCreate(d *schema.ResourceData, meta interface{})
 func resourceAutopilotTaskSampleRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
 
-	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Sample(d.Id()).Get()
+	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Sample(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")

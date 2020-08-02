@@ -220,7 +220,7 @@ func testAccCheckTwilioChatServiceDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Service(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -241,7 +241,7 @@ func testAccCheckTwilioChatServiceExists(name string) resource.TestCheckFunc {
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Service(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving service information %s", err)
 		}
 

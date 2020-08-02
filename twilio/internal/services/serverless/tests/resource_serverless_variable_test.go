@@ -151,7 +151,7 @@ func testAccCheckTwilioServerlessVariableDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Environment(rs.Primary.Attributes["environment_sid"]).Variable(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Environment(rs.Primary.Attributes["environment_sid"]).Variable(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -172,7 +172,7 @@ func testAccCheckTwilioServerlessVariableExists(name string) resource.TestCheckF
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Environment(rs.Primary.Attributes["environment_sid"]).Variable(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Environment(rs.Primary.Attributes["environment_sid"]).Variable(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving variable information %s", err)
 		}
 

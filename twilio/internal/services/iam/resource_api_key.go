@@ -71,7 +71,7 @@ func resourceApiKeyCreate(d *schema.ResourceData, meta interface{}) error {
 func resourceApiKeyRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).API
 
-	getResponse, err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).Get()
+	getResponse, err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")

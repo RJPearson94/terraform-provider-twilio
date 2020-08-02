@@ -137,7 +137,7 @@ func testAccCheckTwilioChatRoleDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Role(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Role(rs.Primary.ID).Fetch(); err != nil {
 			if twilioError, ok := err.(*sdkUtils.TwilioError); ok {
 				// currently programmable chat returns a 403 if the service instance does not exist
 				if twilioError.Status == 403 && twilioError.Message == "Service instance not found" {
@@ -161,7 +161,7 @@ func testAccCheckTwilioChatRoleExists(name string) resource.TestCheckFunc {
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Role(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Role(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving role information %s", err)
 		}
 

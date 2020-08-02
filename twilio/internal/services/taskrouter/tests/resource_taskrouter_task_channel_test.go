@@ -100,7 +100,7 @@ func testAccCheckTwilioTaskRouterTaskChannelDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Workspace(rs.Primary.Attributes["workspace_sid"]).TaskChannel(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Workspace(rs.Primary.Attributes["workspace_sid"]).TaskChannel(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -121,7 +121,7 @@ func testAccCheckTwilioTaskRouterTaskChannelExists(name string) resource.TestChe
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Workspace(rs.Primary.Attributes["workspace_sid"]).TaskChannel(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Workspace(rs.Primary.Attributes["workspace_sid"]).TaskChannel(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving task channel information %s", err)
 		}
 

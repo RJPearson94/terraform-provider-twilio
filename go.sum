@@ -18,6 +18,8 @@ github.com/RJPearson94/twilio-sdk-go v0.0.0-20200725205858-b79a02db8de0 h1:7BEHf
 github.com/RJPearson94/twilio-sdk-go v0.0.0-20200725205858-b79a02db8de0/go.mod h1:NJQVnwA61Gm+gfD/VuOzUnYzGeZVNxeWk+16ydOAOk8=
 github.com/RJPearson94/twilio-sdk-go v0.0.0-20200725211403-f011d1b928b3 h1:o0qm87bsOLt1y33AHas8ATwPHcS2EZmZ9AyergvyDiY=
 github.com/RJPearson94/twilio-sdk-go v0.0.0-20200725211403-f011d1b928b3/go.mod h1:NJQVnwA61Gm+gfD/VuOzUnYzGeZVNxeWk+16ydOAOk8=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200802193107-64a961a1e256 h1:e9nDV9KCF73zVKNM+GkcrwsI99FG7WIGalyjChB2KN4=
+github.com/RJPearson94/twilio-sdk-go v0.0.0-20200802193107-64a961a1e256/go.mod h1:BRWQz4dEOV5udiVekPCdAlhS/pyu1VX4Oau3j4Q7XBc=
 github.com/agext/levenshtein v1.2.1/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
 github.com/agext/levenshtein v1.2.2 h1:0S/Yg6LYmFJ5stwQeRp6EeOcCbj7xiqQSdNelsXvaqE=
 github.com/agext/levenshtein v1.2.2/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=

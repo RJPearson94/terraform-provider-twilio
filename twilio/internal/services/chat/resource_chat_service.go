@@ -283,7 +283,7 @@ func resourceChatServiceCreate(d *schema.ResourceData, meta interface{}) error {
 func resourceChatServiceRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
 
-	getResponse, err := client.Service(d.Id()).Get()
+	getResponse, err := client.Service(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")

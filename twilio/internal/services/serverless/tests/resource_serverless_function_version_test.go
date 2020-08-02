@@ -73,7 +73,7 @@ func testAccCheckTwilioServerlessFunctionVersionDestroy(s *terraform.State) erro
 			continue
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.Attributes["function_sid"]).Version(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.Attributes["function_sid"]).Version(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -95,7 +95,7 @@ func testAccCheckTwilioServerlessFunctionVersionExists(name string) resource.Tes
 		}
 
 		// Function versions cannot be destroyed however the supporting resources (service, function) will be destroyed so this will verify the version is no longer present
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.Attributes["function_sid"]).Version(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.Attributes["function_sid"]).Version(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving function version information %s", err)
 		}
 

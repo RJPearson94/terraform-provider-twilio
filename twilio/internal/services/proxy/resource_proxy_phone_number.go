@@ -91,7 +91,7 @@ func resourceProxyPhoneNumberCreate(d *schema.ResourceData, meta interface{}) er
 func resourceProxyPhoneNumberRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).Get()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")

@@ -289,7 +289,7 @@ func testAccCheckTwilioAutopilotAssistantDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Assistant(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Assistant(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -310,7 +310,7 @@ func testAccCheckTwilioAutopilotAssistantExists(name string) resource.TestCheckF
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Assistant(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Assistant(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving assistant information %s", err)
 		}
 

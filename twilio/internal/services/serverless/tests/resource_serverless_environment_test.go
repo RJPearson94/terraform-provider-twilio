@@ -51,7 +51,7 @@ func testAccCheckTwilioServerlessEnvironmentDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Environment(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Environment(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -72,7 +72,7 @@ func testAccCheckTwilioServerlessEnvironmentExists(name string) resource.TestChe
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Environment(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Environment(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving environment information %s", err)
 		}
 

@@ -79,7 +79,7 @@ func resourceAutopilotFieldTypeCreate(d *schema.ResourceData, meta interface{}) 
 func resourceAutopilotFieldTypeRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
 
-	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Id()).Get()
+	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")

@@ -116,7 +116,7 @@ func testAccCheckTwilioTaskRouterTaskQueueDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Workspace(rs.Primary.Attributes["workspace_sid"]).TaskQueue(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Workspace(rs.Primary.Attributes["workspace_sid"]).TaskQueue(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -137,7 +137,7 @@ func testAccCheckTwilioTaskRouterTaskQueueExists(name string) resource.TestCheck
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Workspace(rs.Primary.Attributes["workspace_sid"]).TaskQueue(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Workspace(rs.Primary.Attributes["workspace_sid"]).TaskQueue(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving task queue information %s", err)
 		}
 

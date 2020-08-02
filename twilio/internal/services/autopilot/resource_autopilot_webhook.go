@@ -101,7 +101,7 @@ func resourceAutopilotWebhookCreate(d *schema.ResourceData, meta interface{}) er
 func resourceAutopilotWebhookRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
 
-	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Webhook(d.Id()).Get()
+	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Webhook(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")

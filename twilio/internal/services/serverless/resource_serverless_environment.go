@@ -86,7 +86,7 @@ func resourceServerlessEnvironmentCreate(d *schema.ResourceData, meta interface{
 func resourceServerlessEnvironmentRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Environment(d.Id()).Get()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Environment(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")

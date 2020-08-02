@@ -114,7 +114,7 @@ func resourceTaskRouterWorkspaceCreate(d *schema.ResourceData, meta interface{})
 func resourceTaskRouterWorkspaceRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
 
-	getResponse, err := client.Workspace(d.Id()).Get()
+	getResponse, err := client.Workspace(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")

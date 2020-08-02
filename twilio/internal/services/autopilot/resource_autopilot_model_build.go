@@ -124,7 +124,7 @@ func resourceAutopilotModelBuildCreate(d *schema.ResourceData, meta interface{})
 func resourceAutopilotModelBuildRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
 
-	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).Get()
+	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -184,7 +184,7 @@ func poll(d *schema.ResourceData, client *autopilot.Autopilot, pollingConfig map
 		for i := 0; i < pollingConfig["max_attempts"].(int); i++ {
 			log.Printf("[INFO] Build Polling attempt # %v", i+1)
 
-			getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).Get()
+			getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).Fetch()
 			if err != nil {
 				return fmt.Errorf("[ERROR] Failed to poll autopilot model build: %s", err)
 			}

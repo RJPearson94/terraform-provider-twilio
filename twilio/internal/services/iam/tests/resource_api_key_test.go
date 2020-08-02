@@ -114,7 +114,7 @@ func testAccCheckTwilioAPIKeyDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Account(rs.Primary.Attributes["account_sid"]).Key(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Account(rs.Primary.Attributes["account_sid"]).Key(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -135,7 +135,7 @@ func testAccCheckTwilioAPIKeyExists(name string) resource.TestCheckFunc {
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Account(rs.Primary.Attributes["account_sid"]).Key(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Account(rs.Primary.Attributes["account_sid"]).Key(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving account key information %s", err)
 		}
 

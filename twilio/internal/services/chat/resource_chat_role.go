@@ -94,7 +94,7 @@ func resourceChatRoleCreate(d *schema.ResourceData, meta interface{}) error {
 func resourceChatRoleRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Role(d.Id()).Get()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Role(d.Id()).Fetch()
 	if err != nil {
 		if twilioError, ok := err.(*sdkUtils.TwilioError); ok {
 			// currently programmable chat returns a 403 if the service instance does not exist

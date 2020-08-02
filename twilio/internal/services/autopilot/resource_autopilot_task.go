@@ -99,7 +99,7 @@ func resourceAutopilotTaskCreate(d *schema.ResourceData, meta interface{}) error
 func resourceAutopilotTaskRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
 
-	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Id()).Get()
+	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -122,7 +122,7 @@ func resourceAutopilotTaskRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.Set("url", getResponse.URL)
 
-	getActionsResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Id()).Actions().Get()
+	getActionsResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Id()).Actions().Fetch()
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to read autopilot task actions: %s", err.Error())
 	}

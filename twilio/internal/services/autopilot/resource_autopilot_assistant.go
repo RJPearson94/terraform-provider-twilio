@@ -137,7 +137,7 @@ func resourceAutopilotAssistantCreate(d *schema.ResourceData, meta interface{}) 
 func resourceAutopilotAssistantRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
 
-	getResponse, err := client.Assistant(d.Id()).Get()
+	getResponse, err := client.Assistant(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -168,7 +168,7 @@ func resourceAutopilotAssistantRead(d *schema.ResourceData, meta interface{}) er
 
 	d.Set("url", getResponse.URL)
 
-	getDefaultsResponse, err := client.Assistant(d.Id()).Defaults().Get()
+	getDefaultsResponse, err := client.Assistant(d.Id()).Defaults().Fetch()
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to read autopilot assistant defaults: %s", err.Error())
 	}
@@ -176,7 +176,7 @@ func resourceAutopilotAssistantRead(d *schema.ResourceData, meta interface{}) er
 		return err
 	}
 
-	getStyleSheetResponse, err := client.Assistant(d.Id()).StyleSheet().Get()
+	getStyleSheetResponse, err := client.Assistant(d.Id()).StyleSheet().Fetch()
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to read autopilot assistant stylesheet: %s", err.Error())
 	}

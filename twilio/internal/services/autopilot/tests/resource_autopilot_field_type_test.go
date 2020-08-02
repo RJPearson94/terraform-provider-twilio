@@ -96,7 +96,7 @@ func testAccCheckTwilioAutopilotFieldTypeDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).FieldType(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).FieldType(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -117,7 +117,7 @@ func testAccCheckTwilioAutopilotFieldTypeExists(name string) resource.TestCheckF
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).FieldType(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).FieldType(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving field type information %s", err)
 		}
 

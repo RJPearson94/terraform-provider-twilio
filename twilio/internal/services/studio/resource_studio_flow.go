@@ -113,7 +113,7 @@ func resourceStudioFlowCreate(d *schema.ResourceData, meta interface{}) error {
 func resourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Studio
 
-	getResponse, err := client.Flow(d.Id()).Get()
+	getResponse, err := client.Flow(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")

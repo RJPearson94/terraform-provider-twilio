@@ -207,7 +207,7 @@ func resourceServerlessBuildCreate(d *schema.ResourceData, meta interface{}) err
 func resourceServerlessBuildRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).Get()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -260,7 +260,7 @@ func expandVersionSids(input []interface{}) *[]string {
 	return &versionSids
 }
 
-func flatternAssetVersions(input *[]build.GetAssetVersion) *[]interface{} {
+func flatternAssetVersions(input *[]build.FetchAssetVersion) *[]interface{} {
 	if input == nil {
 		return nil
 	}
@@ -283,7 +283,7 @@ func flatternAssetVersions(input *[]build.GetAssetVersion) *[]interface{} {
 	return &results
 }
 
-func flatternFunctionVersions(input *[]build.GetFunctionVersion) *[]interface{} {
+func flatternFunctionVersions(input *[]build.FetchFunctionVersion) *[]interface{} {
 	if input == nil {
 		return nil
 	}
@@ -306,7 +306,7 @@ func flatternFunctionVersions(input *[]build.GetFunctionVersion) *[]interface{} 
 	return &results
 }
 
-func flatternDependencies(input *[]build.GetDependency) *[]interface{} {
+func flatternDependencies(input *[]build.FetchDependency) *[]interface{} {
 	if input == nil {
 		return nil
 	}
@@ -329,7 +329,7 @@ func poll(d *schema.ResourceData, client *serverless.Serverless, pollingConfig m
 		for i := 0; i < pollingConfig["max_attempts"].(int); i++ {
 			log.Printf("[INFO] Build Polling attempt # %v", i+1)
 
-			getResponse, err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).Get()
+			getResponse, err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).Fetch()
 			if err != nil {
 				return fmt.Errorf("[ERROR] Failed to poll serverless build: %s", err)
 			}

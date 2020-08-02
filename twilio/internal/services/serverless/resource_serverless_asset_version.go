@@ -158,7 +158,7 @@ func resourceServerlessAssetVersionCreate(d *schema.ResourceData, meta interface
 func resourceServerlessAssetVersionRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Asset(d.Get("asset_sid").(string)).Version(d.Id()).Get()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Asset(d.Get("asset_sid").(string)).Version(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")

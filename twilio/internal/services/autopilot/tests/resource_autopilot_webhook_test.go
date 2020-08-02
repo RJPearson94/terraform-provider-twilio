@@ -147,7 +147,7 @@ func testAccCheckTwilioAutopilotWebhookDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).Webhook(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).Webhook(rs.Primary.ID).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
@@ -168,7 +168,7 @@ func testAccCheckTwilioAutopilotWebhookExists(name string) resource.TestCheckFun
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).Webhook(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).Webhook(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving webhook information %s", err)
 		}
 

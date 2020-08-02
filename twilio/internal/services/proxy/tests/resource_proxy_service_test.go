@@ -110,7 +110,7 @@ func testAccCheckTwilioProxyServiceDestroy(s *terraform.State) error {
 			continue
 		}
 
-		if _, err := client.Service(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.ID).Fetch(); err != nil {
 			if _, ok := err.(*sdkUtils.TwilioError); ok {
 				// currently proxy returns a 400 error not 404
 				if err.(*sdkUtils.TwilioError).Error() == "Invalid Service Sid" {
@@ -134,7 +134,7 @@ func testAccCheckTwilioProxyServiceExists(name string) resource.TestCheckFunc {
 			return fmt.Errorf("Not found: %s", name)
 		}
 
-		if _, err := client.Service(rs.Primary.ID).Get(); err != nil {
+		if _, err := client.Service(rs.Primary.ID).Fetch(); err != nil {
 			return fmt.Errorf("Error occurred when retrieving service information %s", err)
 		}
 
