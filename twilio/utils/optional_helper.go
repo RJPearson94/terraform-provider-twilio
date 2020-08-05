@@ -7,59 +7,46 @@ import (
 )
 
 func OptionalString(d *schema.ResourceData, key string) *string {
-	if !d.HasChange(key) {
-		return nil
+	if v, ok := d.GetOk(key); ok {
+		return sdkUtils.String(v.(string))
 	}
-	return sdkUtils.String(d.Get(key).(string))
+	return nil
 }
 
 func OptionalJSONString(d *schema.ResourceData, key string) *string {
-	if !d.HasChange(key) {
-		return nil
+	if v, ok := d.GetOk(key); ok {
+		// error not handled as it is assumed stringIsJSON validation is applied to the resource
+		normalizedJSON, _ := structure.NormalizeJsonString(v.(string))
+		return sdkUtils.String(normalizedJSON)
 	}
-
-	// error not handled as it is assumed stringIsJSON validation is applied to the resource
-	normalizedJSON, _ := structure.NormalizeJsonString(d.Get(key).(string))
-	return sdkUtils.String(normalizedJSON)
+	return nil
 }
 
 func OptionalSeperatedString(d *schema.ResourceData, key string, seperator string) *string {
-	if !d.HasChange(key) {
-		return nil
+	if v, ok := d.GetOk(key); ok {
+		return sdkUtils.String(ConvertSliceToSeperatedString(v.([]interface{}), seperator))
 	}
-
-	retrievedKey := d.Get(key)
-	if retrievedKey == nil {
-		return nil
-	}
-
-	return sdkUtils.String(ConvertSliceToSeperatedString(retrievedKey.([]interface{}), seperator))
+	return nil
 }
 
 func OptionalStringSlice(d *schema.ResourceData, key string) *[]string {
-	if !d.HasChange(key) {
-		return nil
+	if v, ok := d.GetOk(key); ok {
+		stringSlice := ConvertToStringSlice(v.([]interface{}))
+		return &stringSlice
 	}
-
-	retrievedKey := d.Get(key)
-	if retrievedKey == nil {
-		return nil
-	}
-
-	stringSlice := ConvertToStringSlice(retrievedKey.([]interface{}))
-	return &stringSlice
+	return nil
 }
 
 func OptionalInt(d *schema.ResourceData, key string) *int {
-	if !d.HasChange(key) {
-		return nil
+	if v, ok := d.GetOk(key); ok {
+		return sdkUtils.Int(v.(int))
 	}
-	return sdkUtils.Int(d.Get(key).(int))
+	return nil
 }
 
 func OptionalBool(d *schema.ResourceData, key string) *bool {
-	if !d.HasChange(key) {
-		return nil
+	if v, ok := d.GetOkExists(key); ok {
+		return sdkUtils.Bool(v.(bool))
 	}
-	return sdkUtils.Bool(d.Get(key).(bool))
+	return nil
 }
