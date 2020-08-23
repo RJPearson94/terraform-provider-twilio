@@ -5,6 +5,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/autopilot"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/chat"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/iam"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/messaging"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/proxy"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/serverless"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/studio"
@@ -16,6 +17,7 @@ func SupportedServices() []common.ServiceRegistration {
 		autopilot.Registration{},
 		chat.Registration{},
 		iam.Registration{},
+		messaging.Registration{},
 		proxy.Registration{},
 		serverless.Registration{},
 		studio.Registration{},
