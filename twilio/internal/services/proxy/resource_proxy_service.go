@@ -100,7 +100,7 @@ func resourceProxyServiceCreate(d *schema.ResourceData, meta interface{}) error 
 
 	createResult, err := client.Services.Create(createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create proxy service: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create proxy service: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -116,7 +116,7 @@ func resourceProxyServiceRead(d *schema.ResourceData, meta interface{}) error {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read proxy service: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read proxy service: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)

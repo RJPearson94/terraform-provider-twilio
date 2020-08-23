@@ -26,6 +26,7 @@ This example provisions the following resources:
 
 ## Outputs
 
-| Name    | Description                 |
-| ------- | --------------------------- |
-| service | The Generated Proxy Service |
+| Name         | Description                                        |
+| ------------ | -------------------------------------------------- |
+| phone_number | The Phone Number associated with the Proxy Service |
+| service      | The Generated Proxy Service                        |

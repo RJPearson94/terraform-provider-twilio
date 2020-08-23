@@ -5,7 +5,7 @@ subcategory: "Proxy"
 
 # twilio_proxy_phone_number Resource
 
-Manages a Proxy Phone Number
+Manages a proxy phone number
 
 ## Example Usage
 
@@ -25,8 +25,9 @@ resource "twilio_proxy_phone_number" "phone_number" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The SID of a Twilio Proxy Service. Changing this forces a new resource to be created
-- `sid` - (Optional) The SID of a Twilio Phone Number to associate with the proxy
+- `service_sid` - (Mandatory) The SID of a Twilio proxy service. Changing this forces a new resource to be created
+- `sid` - (Optional) The SID of a Twilio phone number to associate with the proxy. Changing this forces a new resource to be created. Conflicts with `phone_number`
+- `phone_number` - (Optional) The phone number to associate with the proxy. Changing this forces a new resource to be created. Conflicts with `sid`
 - `is_reserved` - (Optional) Whether the phone number is reserved
 
 ## Attributes Reference
@@ -34,14 +35,35 @@ The following arguments are supported:
 The following attributes are exported:
 
 - `id` - The ID of the proxy phone number resource (Same as the SID)
-- `sid` - The SID of a Twilio Phone Number to associate with the proxy (Same as the ID)
+- `sid` - The SID of a Twilio phone number to associate with the proxy (Same as the ID)
 - `account_sid` - The Account SID of the phone number resource is deployed into
-- `service_sid` - The SID of a Twilio Proxy Service
+- `service_sid` - The SID of a Twilio proxy service
 - `is_reserved` - Whether the phone number is reserved
-- `phone_number` - The phone number associated with the SID
-- `friendly_name` - The friendly name associated with the SID
-- `iso_country` - The ISO country associated with the SID
-- `in_use` - The number of active calls associated with the SID
+- `phone_number` - The phone number to associate with the proxy
+- `friendly_name` - The friendly name of the phone number
+- `iso_country` - The ISO country of the phone number
+- `in_use` - The number of active calls associated with the phone number
+- `capabilities` - A `capabilities` block as documented below.
 - `date_created` - The date in RFC3339 format that the proxy phone number resource was created
 - `date_updated` - The date in RFC3339 format that the proxy phone number resource was updated
-- `url` - The url of the proxy phone number
+- `url` - The url of the proxy phone number resource
+
+---
+
+A `capabilities` block supports the following:
+
+- `fax_inbound` - Whether the phone number is able to accept inbound faxes
+- `fax_outbound` -  Whether the phone number is able to send outbound faxes
+- `mms_inbound` - Whether the phone number is able to accept inbound MMS's
+- `mms_outbound` -  Whether the phone number is able to send outbound MMS's
+- `restriction_fax_domestic` - Whether the phone number is restricted to domestic faxes
+- `restriction_mms_domestic` - Whether the phone number is restricted to domestic MMS'
+- `restriction_sms_domestic` - Whether the phone number is restricted to domestic SMS's
+- `restriction_voice_domestic` - Whether the phone number is restricted to domestic voice calls
+- `sip_trunking` -  Whether the phone number supports SIP trunking
+- `sms_inbound` - Whether the phone number is able to accept inbound SMS's
+- `sms_outbound` - Whether the phone number is able to send outbound SMS's
+- `voice_inbound` - Whether the phone number is able to accept inbound voice calls
+- `voice_outbound` - Whether the phone number is able to make outbound voice calls
+
+---

@@ -19,5 +19,6 @@ func (r Registration) SupportedResources() map[string]*schema.Resource {
 	return map[string]*schema.Resource{
 		"twilio_proxy_service":      resourceProxyService(),
 		"twilio_proxy_phone_number": resourceProxyPhoneNumber(),
+		"twilio_proxy_short_code":   resourceProxyShortCode(),
 	}
 }

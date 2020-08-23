@@ -2,21 +2,22 @@ package proxy
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service/phone_number"
-	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service/phone_numbers"
+	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service/short_code"
+	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service/short_codes"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-func resourceProxyPhoneNumber() *schema.Resource {
+func resourceProxyShortCode() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceProxyPhoneNumberCreate,
-		Read:   resourceProxyPhoneNumberRead,
-		Update: resourceProxyPhoneNumberUpdate,
-		Delete: resourceProxyPhoneNumberDelete,
+		Create: resourceProxyShortCodeCreate,
+		Read:   resourceProxyShortCodeRead,
+		Update: resourceProxyShortCodeUpdate,
+		Delete: resourceProxyShortCodeDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -31,22 +32,14 @@ func resourceProxyPhoneNumber() *schema.Resource {
 				ForceNew: true,
 			},
 			"sid": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Computed:      true,
-				ForceNew:      true,
-				ConflictsWith: []string{"phone_number"},
-			},
-			"phone_number": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Computed:      true,
-				ForceNew:      true,
-				ConflictsWith: []string{"sid"},
+				Type:     schema.TypeString,
+				Optional: true,
+				ForceNew: true,
 			},
 			"is_reserved": {
 				Type:     schema.TypeBool,
 				Optional: true,
+				Computed: true,
 			},
 			"capabilities": {
 				Type:     schema.TypeList,
@@ -108,16 +101,12 @@ func resourceProxyPhoneNumber() *schema.Resource {
 					},
 				},
 			},
-			"friendly_name": {
+			"short_code": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"iso_country": {
 				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"in_use": {
-				Type:     schema.TypeInt,
 				Computed: true,
 			},
 			"date_created": {
@@ -136,45 +125,46 @@ func resourceProxyPhoneNumber() *schema.Resource {
 	}
 }
 
-func resourceProxyPhoneNumberCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyShortCodeCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
 
-	createInput := &phone_numbers.CreatePhoneNumberInput{
-		Sid:         utils.OptionalString(d, "sid"),
-		PhoneNumber: utils.OptionalString(d, "phone_number"),
-		IsReserved:  utils.OptionalBool(d, "is_reserved"),
+	createInput := &short_codes.CreateShortCodeInput{
+		Sid: d.Get("sid").(string),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).PhoneNumbers.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).ShortCodes.Create(createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create proxy phone number resource: %s", err.Error())
+		return fmt.Errorf("[ERROR] Failed to create proxy short code resource: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceProxyPhoneNumberRead(d, meta)
+
+	if _, ok := d.GetOkExists("is_reserved"); ok {
+		log.Println("[INFO] Is reserved can only be set on update, so updating the proxy short code resource to set the `is_reserved` flag")
+		return resourceProxyShortCodeUpdate(d, meta)
+	}
+	return resourceProxyShortCodeRead(d, meta)
 }
 
-func resourceProxyPhoneNumberRead(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyShortCodeRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).ShortCode(d.Id()).Fetch()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read proxy phone number resource: %s", err.Error())
+		return fmt.Errorf("[ERROR] Failed to read proxy short code resource: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("service_sid", getResponse.ServiceSid)
-	d.Set("phone_number", getResponse.PhoneNumber)
-	d.Set("friendly_name", getResponse.FriendlyName)
+	d.Set("short_code", getResponse.ShortCode)
 	d.Set("iso_country", getResponse.IsoCountry)
 	d.Set("is_reserved", getResponse.IsReserved)
-	d.Set("capabilities", flatternPhoneNumberCapabilities(getResponse.Capabilities))
-	d.Set("in_use", getResponse.InUse)
+	d.Set("capabilities", flatternShortCodeCapabilities(getResponse.Capabilities))
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {
@@ -186,33 +176,33 @@ func resourceProxyPhoneNumberRead(d *schema.ResourceData, meta interface{}) erro
 	return nil
 }
 
-func resourceProxyPhoneNumberUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyShortCodeUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
 
-	updateInput := &phone_number.UpdatePhoneNumberInput{
+	updateInput := &short_code.UpdateShortCodeInput{
 		IsReserved: utils.OptionalBool(d, "is_reserved"),
 	}
 
-	updateResp, err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).Update(updateInput)
+	updateResp, err := client.Service(d.Get("service_sid").(string)).ShortCode(d.Id()).Update(updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update proxy phone number resource: %s", err.Error())
+		return fmt.Errorf("Failed to update proxy short code resource: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceProxyPhoneNumberRead(d, meta)
+	return resourceProxyShortCodeRead(d, meta)
 }
 
-func resourceProxyPhoneNumberDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyShortCodeDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
 
-	if err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).Delete(); err != nil {
-		return fmt.Errorf("Failed to delete proxy phone number resource: %s", err.Error())
+	if err := client.Service(d.Get("service_sid").(string)).ShortCode(d.Id()).Delete(); err != nil {
+		return fmt.Errorf("Failed to delete proxy short code resource: %s", err.Error())
 	}
 	d.SetId("")
 	return nil
 }
 
-func flatternPhoneNumberCapabilities(capabilities *phone_number.FetchPhoneNumberResponseCapabilities) *[]interface{} {
+func flatternShortCodeCapabilities(capabilities *short_code.FetchShortCodeResponseCapabilities) *[]interface{} {
 	if capabilities == nil {
 		return nil
 	}
