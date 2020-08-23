@@ -125,7 +125,12 @@ func resourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("sid", getResponse.Sid)
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("friendly_name", getResponse.FriendlyName)
-	d.Set("definition", getResponse.Definition)
+
+	json, err := structure.FlattenJsonToString(getResponse.Definition)
+	if err != nil {
+		return fmt.Errorf("[ERROR] Unable to flattern definition json to string")
+	}
+	d.Set("definition", json)
 	d.Set("status", getResponse.Status)
 	d.Set("revision", getResponse.Revision)
 	d.Set("commit_message", getResponse.CommitMessage)
