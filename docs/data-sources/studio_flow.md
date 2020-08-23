@@ -3,7 +3,7 @@ page_title: "Twilio Studio Flow"
 subcategory: "Studio"
 ---
 
-# Data Source: twilio_studio_flow Data Source
+# twilio_studio_flow Data Source
 
 Use this data source to access information about an existing Studio Flow
 
