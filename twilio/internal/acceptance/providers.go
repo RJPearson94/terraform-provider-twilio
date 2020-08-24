@@ -9,8 +9,9 @@ import (
 )
 
 type TestData struct {
-	AccountSid     string
-	PhoneNumberSid string
+	AccountSid            string
+	PhoneNumberSid        string
+	FlexChannelServiceSid string
 }
 
 var TestAccProviders map[string]terraform.ResourceProvider
@@ -23,7 +24,8 @@ func init() {
 		"twilio": TestAccProvider,
 	}
 	TestAccData = &TestData{
-		AccountSid:     os.Getenv("TWILIO_ACCOUNT_SID"),
-		PhoneNumberSid: os.Getenv("TWILIO_PHONE_NUMBER_SID"),
+		AccountSid:            os.Getenv("TWILIO_ACCOUNT_SID"),
+		PhoneNumberSid:        os.Getenv("TWILIO_PHONE_NUMBER_SID"),
+		FlexChannelServiceSid: os.Getenv("TWILIO_FLEX_CHANNEL_SERVICE_SID"),
 	}
 }

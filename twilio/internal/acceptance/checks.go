@@ -10,6 +10,7 @@ func PreCheck(t *testing.T) {
 		"TWILIO_ACCOUNT_SID",
 		"TWILIO_AUTH_TOKEN",
 		"TWILIO_PHONE_NUMBER_SID",
+		"TWILIO_FLEX_CHANNEL_SERVICE_SID",
 	}
 
 	for _, variable := range variables {

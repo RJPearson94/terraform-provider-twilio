@@ -5,6 +5,7 @@ import (
 	api "github.com/RJPearson94/twilio-sdk-go/service/api/v2010"
 	autopilot "github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1"
 	chat "github.com/RJPearson94/twilio-sdk-go/service/chat/v2"
+	flex "github.com/RJPearson94/twilio-sdk-go/service/flex/v1"
 	messaging "github.com/RJPearson94/twilio-sdk-go/service/messaging/v1"
 	proxy "github.com/RJPearson94/twilio-sdk-go/service/proxy/v1"
 	serverless "github.com/RJPearson94/twilio-sdk-go/service/serverless/v1"
@@ -34,6 +35,7 @@ func (config *Config) Client() (interface{}, error) {
 		API:              api.NewWithCredentials(creds),
 		Autopilot:        autopilot.NewWithCredentials(creds),
 		Chat:             chat.NewWithCredentials(creds),
+		Flex:             flex.NewWithCredentials(creds),
 		Messaging:        messaging.NewWithCredentials(creds),
 		Proxy:            proxy.NewWithCredentials(creds),
 		Serverless:       serverless.NewWithCredentials(creds),
