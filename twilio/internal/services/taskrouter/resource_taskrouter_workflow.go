@@ -82,9 +82,11 @@ func resourceTaskRouterWorkflow() *schema.Resource {
 func resourceTaskRouterWorkflowCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
 
+	normalizedJSON, _ := structure.NormalizeJsonString(d.Get("configuration").(string))
+
 	createInput := &workflows.CreateWorkflowInput{
 		FriendlyName:                  d.Get("friendly_name").(string),
-		Configuration:                 d.Get("configuration").(string),
+		Configuration:                 normalizedJSON,
 		AssignmentCallbackURL:         utils.OptionalString(d, "assignment_callback_url"),
 		FallbackAssignmentCallbackURL: utils.OptionalString(d, "fallback_assignment_callback_url"),
 		TaskReservationTimeout:        utils.OptionalInt(d, "task_reservation_timeout"),
@@ -119,7 +121,7 @@ func resourceTaskRouterWorkflowRead(d *schema.ResourceData, meta interface{}) er
 	d.Set("assignment_callback_url", getResponse.AssignmentCallbackURL)
 	d.Set("task_reservation_timeout", getResponse.TaskReservationTimeout)
 	d.Set("document_content_type", getResponse.DocumentContentType)
-	d.Set("configuration", getResponse.Configuration.(string))
+	d.Set("configuration", getResponse.Configuration)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {
@@ -136,7 +138,7 @@ func resourceTaskRouterWorkflowUpdate(d *schema.ResourceData, meta interface{}) 
 
 	updateInput := &workflow.UpdateWorkflowInput{
 		FriendlyName:                  utils.OptionalString(d, "friendly_name"),
-		Configuration:                 utils.OptionalString(d, "configuration"),
+		Configuration:                 utils.OptionalJSONString(d, "configuration"),
 		AssignmentCallbackURL:         utils.OptionalString(d, "assignment_callback_url"),
 		FallbackAssignmentCallbackURL: utils.OptionalString(d, "fallback_assignment_callback_url"),
 		TaskReservationTimeout:        utils.OptionalInt(d, "task_reservation_timeout"),

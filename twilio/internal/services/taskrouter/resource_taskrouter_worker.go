@@ -86,7 +86,7 @@ func resourceTaskRouterWorkerCreate(d *schema.ResourceData, meta interface{}) er
 	createInput := &workers.CreateWorkerInput{
 		FriendlyName: d.Get("friendly_name").(string),
 		ActivitySid:  utils.OptionalString(d, "activity_sid"),
-		Attributes:   utils.OptionalString(d, "attributes"),
+		Attributes:   utils.OptionalJSONString(d, "attributes"),
 	}
 
 	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).Workers.Create(createInput)
@@ -139,7 +139,7 @@ func resourceTaskRouterWorkerUpdate(d *schema.ResourceData, meta interface{}) er
 	updateInput := &worker.UpdateWorkerInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
 		ActivitySid:  utils.OptionalString(d, "activity_sid"),
-		Attributes:   utils.OptionalString(d, "attributes"),
+		Attributes:   utils.OptionalJSONString(d, "attributes"),
 	}
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Worker(d.Id()).Update(updateInput)
