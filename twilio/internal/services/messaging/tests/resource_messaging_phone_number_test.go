@@ -84,11 +84,12 @@ func testAccCheckTwilioMessagingPhoneNumberExists(name string) resource.TestChec
 func testAccTwilioMessagingPhoneNumber_basic(testData *acceptance.TestData, friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_messaging_service" "service" {
-	friendly_name = "service-%s"
+  friendly_name = "service-%s"
 }
 
 resource "twilio_messaging_phone_number" "phone_number" {
-	service_sid = twilio_messaging_service.service.sid
-	sid = "%s"
-}`, friendlyName, testData.PhoneNumberSid)
+  service_sid = twilio_messaging_service.service.sid
+  sid         = "%s"
+}
+`, friendlyName, testData.PhoneNumberSid)
 }

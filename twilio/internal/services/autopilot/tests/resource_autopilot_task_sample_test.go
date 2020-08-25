@@ -136,18 +136,19 @@ func testAccCheckTwilioAutopilotTaskSampleExists(name string) resource.TestCheck
 func testAccTwilioAutopilotTaskSample_basic(uniqueName string, language string, taggedText string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	unique_name = "%s"
+  unique_name = "%s"
 }
 
 resource "twilio_autopilot_task" "task" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	unique_name = "%s"
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%s"
 }
 
 resource "twilio_autopilot_task_sample" "task_sample" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	task_sid = twilio_autopilot_task.task.sid
-	language = "%s"
-	tagged_text = "%s"
-}`, uniqueName, uniqueName, language, taggedText)
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  task_sid      = twilio_autopilot_task.task.sid
+  language      = "%s"
+  tagged_text   = "%s"
+}
+`, uniqueName, uniqueName, language, taggedText)
 }

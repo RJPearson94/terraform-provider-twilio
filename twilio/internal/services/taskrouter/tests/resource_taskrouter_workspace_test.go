@@ -168,8 +168,9 @@ func testAccCheckTwilioTaskRouterWorkspaceExists(name string) resource.TestCheck
 func testAccTwilioTaskRouterWorkspace_basic(friendlyName string, queueOrder string) string {
 	return fmt.Sprintf(`
 resource "twilio_taskrouter_workspace" "workspace" {
-	friendly_name          = "%s"
-	multi_task_enabled     = true
-	prioritize_queue_order = "%s"
-}`, friendlyName, queueOrder)
+  friendly_name          = "%s"
+  multi_task_enabled     = true
+  prioritize_queue_order = "%s"
+}
+`, friendlyName, queueOrder)
 }

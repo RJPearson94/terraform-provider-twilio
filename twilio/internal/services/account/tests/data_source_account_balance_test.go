@@ -34,7 +34,7 @@ func TestAccDataSourceTwilioAccountBalance_complete(t *testing.T) {
 func testAccTwilioAccountBalance_complete(testData *acceptance.TestData) string {
 	return fmt.Sprintf(`
 data "twilio_account_balance" "balance" {
-	account_sid = "%s"
+  account_sid = "%s"
 }
 `, testData.AccountSid)
 }

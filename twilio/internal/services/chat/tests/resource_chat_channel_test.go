@@ -164,12 +164,13 @@ func testAccCheckTwilioChatChannelExists(name string) resource.TestCheckFunc {
 func testAccTwilioChatChannel_basic(friendlyName string, channelType string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-	friendly_name = "%s"
+  friendly_name = "%s"
 }
 
 resource "twilio_chat_channel" "channel" {
-	service_sid   = twilio_chat_service.service.sid
-	friendly_name = "%s"
-	type		  = "%s"
-}`, friendlyName, friendlyName, channelType)
+  service_sid   = twilio_chat_service.service.sid
+  friendly_name = "%s"
+  type          = "%s"
+}
+`, friendlyName, friendlyName, channelType)
 }

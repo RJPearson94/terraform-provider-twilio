@@ -179,31 +179,33 @@ func testAccCheckTwilioAutopilotWebhookExists(name string) resource.TestCheckFun
 func testAccTwilioAutopilotWebhook_basic(uniqueName string, url string, events []string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	unique_name = "%s"
+  unique_name = "%s"
 }
 
 resource "twilio_autopilot_webhook" "webhook" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	unique_name = "%s"
-	webhook_url = "%s"
-	events = %s
-}`, uniqueName, uniqueName, url, "[\""+strings.Join(events, "\",\"")+"\"]")
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%s"
+  webhook_url   = "%s"
+  events        = %s
+}
+`, uniqueName, uniqueName, url, "[\""+strings.Join(events, "\",\"")+"\"]")
 }
 
 func testAccTwilioAutopilotWebhook_method(uniqueName string, method string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	unique_name = "%s"
+  unique_name = "%s"
 }
 
 resource "twilio_autopilot_webhook" "webhook" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	unique_name = "%s"
-	webhook_url = "http://localhost/webhook"
-	webhook_method = "%s"
-	events = [
-		"onDialogueStart", 
-		"onDialogueEnd"
-	]
-}`, uniqueName, uniqueName, method)
+  assistant_sid  = twilio_autopilot_assistant.assistant.sid
+  unique_name    = "%s"
+  webhook_url    = "http://localhost/webhook"
+  webhook_method = "%s"
+  events = [
+    "onDialogueStart",
+    "onDialogueEnd"
+  ]
+}
+`, uniqueName, uniqueName, method)
 }

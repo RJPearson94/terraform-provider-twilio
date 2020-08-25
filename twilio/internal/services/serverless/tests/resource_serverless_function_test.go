@@ -126,12 +126,13 @@ func testAccCheckTwilioServerlessFunctionExists(name string) resource.TestCheckF
 func testAccTwilioServerlessFunction_basic(uniqueName string, friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
-	unique_name   = "service-%s"
-	friendly_name = "test"
+  unique_name   = "service-%s"
+  friendly_name = "test"
 }
 
 resource "twilio_serverless_function" "function" {
-	service_sid   = twilio_serverless_service.service.sid
-	friendly_name = "%s"
-}`, uniqueName, friendlyName)
+  service_sid   = twilio_serverless_service.service.sid
+  friendly_name = "%s"
+}
+`, uniqueName, friendlyName)
 }

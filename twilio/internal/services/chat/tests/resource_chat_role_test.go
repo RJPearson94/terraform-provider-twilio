@@ -172,13 +172,14 @@ func testAccCheckTwilioChatRoleExists(name string) resource.TestCheckFunc {
 func testAccTwilioChatRole_basic(friendlyName string, roleType string, permissions []string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-	friendly_name = "%s"
+  friendly_name = "%s"
 }
 
 resource "twilio_chat_role" "role" {
-	service_sid   = twilio_chat_service.service.sid
-	friendly_name = "%s"
-	type          = "%s"
-	permissions   = %s
-}`, friendlyName, friendlyName, roleType, `["`+strings.Join(permissions, `","`)+`"]`)
+  service_sid   = twilio_chat_service.service.sid
+  friendly_name = "%s"
+  type          = "%s"
+  permissions   = %s
+}
+`, friendlyName, friendlyName, roleType, `["`+strings.Join(permissions, `","`)+`"]`)
 }

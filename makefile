@@ -20,6 +20,10 @@ fmt:
 	@echo "==> Fixing source code with goimports (uses gofmt under the hood)..."
 	goimports -w ./$(PKG_NAME)
 
+terrafmt:
+	@echo "==> Format acceptance tests"
+	@find twilio | egrep "_test.go" | sort | while read f; do terrafmt fmt -f $$f; done
+
 tools:
 	@echo "==> installing required tooling..."
 	GO111MODULE=off go get -u github.com/client9/misspell/cmd/misspell
@@ -32,4 +36,4 @@ tools:
 generate:
 	go generate  ./...
 
-.PHONY: download build test testacc fmt tools generate
+.PHONY: download build test testacc fmt terrafmt tools generate

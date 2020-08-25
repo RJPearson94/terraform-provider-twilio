@@ -83,12 +83,13 @@ func testAccCheckTwilioServerlessEnvironmentExists(name string) resource.TestChe
 func testAccTwilioServerlessEnvironment_basic(uniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
-	unique_name   = "service-%s"
-	friendly_name = "test"
+  unique_name   = "service-%s"
+  friendly_name = "test"
 }
 
 resource "twilio_serverless_environment" "environment" {
-	service_sid   = twilio_serverless_service.service.sid
-	unique_name = "%s"
-}`, uniqueName, uniqueName)
+  service_sid = twilio_serverless_service.service.sid
+  unique_name = "%s"
+}
+`, uniqueName, uniqueName)
 }

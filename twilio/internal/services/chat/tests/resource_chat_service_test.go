@@ -252,21 +252,23 @@ func testAccCheckTwilioChatServiceExists(name string) resource.TestCheckFunc {
 func testAccTwilioChatService_basic(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-	friendly_name = "%s"
-}`, friendlyName)
+  friendly_name = "%s"
+}
+`, friendlyName)
 }
 
 func testAccTwilioChatService_notifications(friendlyName string, logEnabled bool) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-	friendly_name = "%s"
+  friendly_name = "%s"
 
-	notifications {
-		log_enabled = %v
+  notifications {
+    log_enabled = %t
 
-		new_message {
-			enabled = true
-		}
-	}
-}`, friendlyName, logEnabled)
+    new_message {
+      enabled = true
+    }
+  }
+}
+`, friendlyName, logEnabled)
 }

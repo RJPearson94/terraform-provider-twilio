@@ -86,18 +86,19 @@ func testAccCheckTwilioAutopilotFieldValueExists(name string) resource.TestCheck
 func testAccTwilioAutopilotFieldValue_basic(uniqueName string, language string, value string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	unique_name = "%s"
+  unique_name = "%s"
 }
 
 resource "twilio_autopilot_field_type" "field_type" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	unique_name = "%s"
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%s"
 }
 
 resource "twilio_autopilot_field_value" "field_value" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	field_type_sid = twilio_autopilot_field_type.field_type.sid
-	language = "%s"
-	value = "%s"
-}`, uniqueName, uniqueName, language, value)
+  assistant_sid  = twilio_autopilot_assistant.assistant.sid
+  field_type_sid = twilio_autopilot_field_type.field_type.sid
+  language       = "%s"
+  value          = "%s"
+}
+`, uniqueName, uniqueName, language, value)
 }

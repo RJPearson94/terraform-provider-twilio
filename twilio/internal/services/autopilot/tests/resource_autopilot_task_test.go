@@ -211,25 +211,26 @@ func testAccCheckTwilioAutopilotTaskExists(name string) resource.TestCheckFunc {
 func testAccTwilioAutopilotTask_basic(uniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	unique_name = "%s"
+  unique_name = "%s"
 }
 
 resource "twilio_autopilot_task" "task" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	unique_name = "%s"
-}`, uniqueName, uniqueName)
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%s"
+}
+`, uniqueName, uniqueName)
 }
 
 func testAccTwilioAutopilotTask_actions(uniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	unique_name = "%s"
+  unique_name = "%s"
 }
 
 resource "twilio_autopilot_task" "task" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	unique_name = "%s"
-	actions = <<EOF
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%s"
+  actions       = <<EOF
 {
 	"actions": [
 		{
@@ -240,18 +241,20 @@ resource "twilio_autopilot_task" "task" {
 	]
 }
 EOF
-}`, uniqueName, uniqueName)
+}
+`, uniqueName, uniqueName)
 }
 
 func testAccTwilioAutopilotTask_actionsURL(uniqueName string, url string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	unique_name = "%s"
+  unique_name = "%s"
 }
 
 resource "twilio_autopilot_task" "task" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	unique_name = "%s"
-	actions_url = "%s"
-}`, uniqueName, uniqueName, url)
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%s"
+  actions_url   = "%s"
+}
+`, uniqueName, uniqueName, url)
 }

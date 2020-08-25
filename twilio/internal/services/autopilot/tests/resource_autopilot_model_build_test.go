@@ -137,25 +137,26 @@ func testAccCheckTwilioAutopilotModelBuildExists(name string) resource.TestCheck
 func testAccTwilioAutopilotModelBuild_basic(uniqueName string, modelBuildUniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	unique_name = "%s"
+  unique_name = "%s"
 }
 
 resource "twilio_autopilot_task" "task" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	unique_name = "%s"
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%s"
 }
 
 resource "twilio_autopilot_task_sample" "task_sample" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	task_sid = twilio_autopilot_task.task.sid
-	language = "en-US"
-	tagged_text = "test"
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  task_sid      = twilio_autopilot_task.task.sid
+  language      = "en-US"
+  tagged_text   = "test"
 }
 
 resource "twilio_autopilot_model_build" "model_build" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	unique_name = "%s"
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%s"
 
-	depends_on = [twilio_autopilot_task_sample.task_sample]
-}`, uniqueName, uniqueName, modelBuildUniqueName)
+  depends_on = [twilio_autopilot_task_sample.task_sample]
+}
+`, uniqueName, uniqueName, modelBuildUniqueName)
 }

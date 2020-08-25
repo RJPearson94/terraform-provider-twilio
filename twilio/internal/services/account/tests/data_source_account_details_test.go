@@ -64,11 +64,11 @@ func testAccCheckTwilioAccountDetailsSubAccountDestroy(s *terraform.State) error
 func testAccTwilioAccountDetails_complete(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_account_sub_account" "sub_account" {
-	friendly_name = "%s"
+  friendly_name = "%s"
 }
 
 data "twilio_account_details" "details" {
-	sid = twilio_account_sub_account.sub_account.sid
+  sid = twilio_account_sub_account.sub_account.sid
 }
 `, friendlyName)
 }

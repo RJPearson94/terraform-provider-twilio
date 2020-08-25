@@ -106,22 +106,23 @@ func testAccCheckTwilioServerlessFunctionVersionExists(name string) resource.Tes
 func testAccTwilioServerlessFunctionVersion_basic(uniqueName string, friendlyName string, visibility string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
-	unique_name   = "service-%s"
-	friendly_name = "test"
+  unique_name   = "service-%s"
+  friendly_name = "test"
 }
 
 resource "twilio_serverless_function" "function" {
-	service_sid   = twilio_serverless_service.service.sid
-	friendly_name = "%s"
+  service_sid   = twilio_serverless_service.service.sid
+  friendly_name = "%s"
 }
 
 resource "twilio_serverless_function_version" "function_version" {
-	service_sid  = twilio_serverless_service.service.sid
-	function_sid = twilio_serverless_function.function.sid
-	content 	 = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
-	content_type = "application/javascript"
-	content_file_name = "helloWorld.js"
-	path         = "/test-function"
-	visibility   = "%s"
-  }`, uniqueName, friendlyName, visibility)
+  service_sid       = twilio_serverless_service.service.sid
+  function_sid      = twilio_serverless_function.function.sid
+  content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "%s"
+}
+`, uniqueName, friendlyName, visibility)
 }

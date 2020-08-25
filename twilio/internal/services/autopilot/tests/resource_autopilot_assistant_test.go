@@ -325,57 +325,62 @@ func testAccTwilioAutopilotAssistant_default() string {
 func testAccTwilioAutopilotAssistant_basic(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	friendly_name = "%s"
-}`, friendlyName)
+  friendly_name = "%s"
+}
+`, friendlyName)
 }
 
 func testAccTwilioAutopilotAssistant_developmentStage(friendlyName string, developmentStage string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	friendly_name = "%s"
-	development_stage = "%s"
-}`, friendlyName, developmentStage)
+  friendly_name     = "%s"
+  development_stage = "%s"
+}
+`, friendlyName, developmentStage)
 }
 
 func testAccTwilioAutopilotAssistant_defaults(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	friendly_name = "%s"
-	defaults = <<EOF
+  friendly_name = "%s"
+  defaults      = <<EOF
 {
-	"defaults": {
-		"assistant_initiation": "",
-		"fallback": "http://localhost/fallback"
-	}
+  "defaults": {
+    "assistant_initiation": "",
+    "fallback": "http://localhost/fallback"
+  }
 }  
 EOF
-}`, friendlyName)
+}
+`, friendlyName)
 }
 
 func testAccTwilioAutopilotAssistant_stylesheet(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	friendly_name = "%s"
-	stylesheet = <<EOF
+  friendly_name = "%s"
+  stylesheet    = <<EOF
 {
-	"style_sheet": {
-		"voice": {
-			"say_voice": "Polly.Matthew"
-		}
+  "style_sheet": {
+    "voice": {
+      "say_voice": "Polly.Matthew"
 	}
+  }
 }
 EOF
-}`, friendlyName)
+}
+`, friendlyName)
 }
 
 func testAccTwilioAutopilotAssistant_callbackEvents(friendlyName string, callbackURL string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	friendly_name = "%s"
-	callback_url = "%s"
-	callback_events = [
-		"model_build_completed",
-		"model_build_failed"
-	]
-}`, friendlyName, callbackURL)
+  friendly_name = "%s"
+  callback_url  = "%s"
+  callback_events = [
+    "model_build_completed",
+    "model_build_failed"
+  ]
+}
+`, friendlyName, callbackURL)
 }

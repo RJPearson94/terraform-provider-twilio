@@ -69,9 +69,9 @@ func testAccCheckTwilioStudioFlowResourceDestroy(s *terraform.State) error {
 func testAccTwilioStudioFlow_complete(friendlyName string, status string) string {
 	return fmt.Sprintf(`
 resource "twilio_studio_flow" "flow" {
-	friendly_name = "%s"
-	status        = "%s"
-	definition    = <<EOF
+  friendly_name = "%s"
+  status        = "%s"
+  definition    = <<EOF
 {
 	"description": "A New Flow",
 	"flags": {
@@ -96,7 +96,7 @@ EOF
 }
 
 data "twilio_studio_flow" "flow" {
-	sid = twilio_studio_flow.flow.sid
+  sid = twilio_studio_flow.flow.sid
 }
 `, friendlyName, status)
 }

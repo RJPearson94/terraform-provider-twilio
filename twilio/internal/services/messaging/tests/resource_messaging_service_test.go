@@ -157,6 +157,7 @@ func testAccCheckTwilioMessagingServiceExists(name string) resource.TestCheckFun
 func testAccTwilioMessagingService_basic(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_messaging_service" "service" {
-	friendly_name = "%s"
-}`, friendlyName)
+  friendly_name = "%s"
+}
+`, friendlyName)
 }

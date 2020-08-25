@@ -82,51 +82,52 @@ func testAccCheckTwilioServerlessDeploymentExists(name string) resource.TestChec
 func testAccTwilioServerlessDeployment_basic(uniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
-	unique_name   = "service-%s"
-	friendly_name = "test"
+  unique_name   = "service-%s"
+  friendly_name = "test"
 }
-  
+
 resource "twilio_serverless_function" "function" {
-	service_sid   = twilio_serverless_service.service.sid
-	friendly_name = "test"
+  service_sid   = twilio_serverless_service.service.sid
+  friendly_name = "test"
 }
 
 resource "twilio_serverless_function_version" "function_version" {
-	service_sid  = twilio_serverless_service.service.sid
-	function_sid = twilio_serverless_function.function.sid
-	content      = <<EOF
+  service_sid       = twilio_serverless_service.service.sid
+  function_sid      = twilio_serverless_function.function.sid
+  content           = <<EOF
 exports.handler = function (context, event, callback) {
 	callback(null, "Hello World");
 };
 EOF
-	content_type      = "application/javascript"
-	content_file_name = "helloWorld.js"
-	path              = "/test-function"
-	visibility        = "private"
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "private"
 }
 
 resource "twilio_serverless_build" "build" {
-	service_sid           = twilio_serverless_service.service.sid
-	function_version {
-		sid = twilio_serverless_function_version.function_version.sid
-	}
-	dependencies = {
-		"twilio" : "3.6.3"
-	}
+  service_sid = twilio_serverless_service.service.sid
+  function_version {
+    sid = twilio_serverless_function_version.function_version.sid
+  }
+  dependencies = {
+    "twilio" : "3.6.3"
+  }
 
-	polling {
-		enabled = true
-	}
+  polling {
+    enabled = true
+  }
 }
 
 resource "twilio_serverless_environment" "environment" {
-	service_sid = twilio_serverless_service.service.sid
-	unique_name = "%s"
+  service_sid = twilio_serverless_service.service.sid
+  unique_name = "%s"
 }
 
 resource "twilio_serverless_deployment" "deployment" {
-	service_sid     = twilio_serverless_service.service.sid
-	environment_sid = twilio_serverless_environment.environment.sid
-	build_sid       = twilio_serverless_build.build.sid
-}`, uniqueName, uniqueName)
+  service_sid     = twilio_serverless_service.service.sid
+  environment_sid = twilio_serverless_environment.environment.sid
+  build_sid       = twilio_serverless_build.build.sid
+}
+`, uniqueName, uniqueName)
 }

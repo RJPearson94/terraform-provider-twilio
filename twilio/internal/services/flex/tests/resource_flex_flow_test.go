@@ -175,12 +175,13 @@ func testAccCheckTwilioFlexFlowExists(name string) resource.TestCheckFunc {
 func testAccTwilioFlexFlow_basic(testData *acceptance.TestData, friendlyName string, channelType string, integrationType string, integrationURL string) string {
 	return fmt.Sprintf(`
 resource "twilio_flex_flow" "flow" {
-	friendly_name = "%s"
-	chat_service_sid = "%s"
-	channel_type = "%s"
-	integration_type = "%s"
-	integration {
-		url = "%s"
-	}
-}`, friendlyName, testData.FlexChannelServiceSid, channelType, integrationType, integrationURL)
+  friendly_name    = "%s"
+  chat_service_sid = "%s"
+  channel_type     = "%s"
+  integration_type = "%s"
+  integration {
+    url = "%s"
+  }
+}
+`, friendlyName, testData.FlexChannelServiceSid, channelType, integrationType, integrationURL)
 }

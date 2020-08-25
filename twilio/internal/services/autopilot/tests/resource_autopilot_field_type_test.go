@@ -128,12 +128,13 @@ func testAccCheckTwilioAutopilotFieldTypeExists(name string) resource.TestCheckF
 func testAccTwilioAutopilotFieldType_basic(uniqueName string, fieldTypeFriendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-	unique_name = "%s"
+  unique_name = "%s"
 }
 
 resource "twilio_autopilot_field_type" "field_type" {
-	assistant_sid = twilio_autopilot_assistant.assistant.sid
-	unique_name = "%s"
-	friendly_name = "%s"
-}`, uniqueName, uniqueName, fieldTypeFriendlyName)
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%s"
+  friendly_name = "%s"
+}
+`, uniqueName, uniqueName, fieldTypeFriendlyName)
 }

@@ -126,6 +126,7 @@ func testAccCheckTwilioAccountSubAccountExists(name string) resource.TestCheckFu
 func testAccTwilioAccountSubAccount_basic(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_account_sub_account" "sub_account" {
-	friendly_name = "%s"
-}`, friendlyName)
+  friendly_name = "%s"
+}
+`, friendlyName)
 }

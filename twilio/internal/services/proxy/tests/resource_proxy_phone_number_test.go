@@ -136,12 +136,13 @@ func testAccCheckTwilioProxyPhoneNumberExists(name string) resource.TestCheckFun
 func testAccTwilioProxyPhoneNumber_basic(testData *acceptance.TestData, uniqueName string, isReserved bool) string {
 	return fmt.Sprintf(`
 resource "twilio_proxy_service" "service" {
-	unique_name = "%s"
+  unique_name = "%s"
 }
-  
+
 resource "twilio_proxy_phone_number" "phone_number" {
-	service_sid = twilio_proxy_service.service.sid
-	sid         = "%s"
-	is_reserved = %v
-}`, uniqueName, testData.PhoneNumberSid, isReserved)
+  service_sid = twilio_proxy_service.service.sid
+  sid         = "%s"
+  is_reserved = %t
+}
+`, uniqueName, testData.PhoneNumberSid, isReserved)
 }

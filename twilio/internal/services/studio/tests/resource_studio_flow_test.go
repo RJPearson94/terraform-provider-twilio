@@ -162,9 +162,9 @@ func testAccCheckTwilioStudioFlowExists(name string) resource.TestCheckFunc {
 func testAccTwilioStudioFlow_basic(friendlyName string, status string) string {
 	return fmt.Sprintf(`
 resource "twilio_studio_flow" "flow" {
-	friendly_name = "%s"
-	status        = "%s"
-	definition    = <<EOF
+  friendly_name = "%s"
+  status        = "%s"
+  definition    = <<EOF
 {
 	"description": "A New Flow",
 	"flags": {
@@ -186,5 +186,6 @@ resource "twilio_studio_flow" "flow" {
 	]
 }
 EOF
-}`, friendlyName, status)
+}
+`, friendlyName, status)
 }

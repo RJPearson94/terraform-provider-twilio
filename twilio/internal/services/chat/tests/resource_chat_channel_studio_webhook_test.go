@@ -134,19 +134,19 @@ func testAccCheckTwilioChatChannelStudioWebhookExists(name string) resource.Test
 func testAccTwilioChatChannelStudioWebhook_basic(friendlyName string, flowSid string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-	friendly_name = "%s"
+  friendly_name = "%s"
 }
 
 resource "twilio_chat_channel" "channel" {
-	service_sid   = twilio_chat_service.service.sid
-	friendly_name = "%s"
-	type		  = "private"
+  service_sid   = twilio_chat_service.service.sid
+  friendly_name = "%s"
+  type          = "private"
 }
 
 resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
-	service_sid   = twilio_chat_service.service.sid
-	channel_sid   = twilio_chat_channel.channel.sid
-	flow_sid      = "%s"
+  service_sid = twilio_chat_service.service.sid
+  channel_sid = twilio_chat_channel.channel.sid
+  flow_sid    = "%s"
 }
 `, friendlyName, friendlyName, flowSid)
 }

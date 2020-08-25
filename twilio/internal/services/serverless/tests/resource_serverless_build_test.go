@@ -86,36 +86,37 @@ func testAccCheckTwilioServerlessBuildExists(name string) resource.TestCheckFunc
 func testAccTwilioServerlessBuild_basic(uniqueName string, twilioVersion string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
-	unique_name   = "service-%s"
-	friendly_name = "test"
+  unique_name   = "service-%s"
+  friendly_name = "test"
 }
-  
+
 resource "twilio_serverless_function" "function" {
-	service_sid   = twilio_serverless_service.service.sid
-	friendly_name = "test"
+  service_sid   = twilio_serverless_service.service.sid
+  friendly_name = "test"
 }
 
 resource "twilio_serverless_function_version" "function_version" {
-	service_sid  = twilio_serverless_service.service.sid
-	function_sid = twilio_serverless_function.function.sid
-	content      = <<EOF
+  service_sid       = twilio_serverless_service.service.sid
+  function_sid      = twilio_serverless_function.function.sid
+  content           = <<EOF
 exports.handler = function (context, event, callback) {
 	callback(null, "Hello World");
 };
 EOF
-	content_type      = "application/javascript"
-	content_file_name = "helloWorld.js"
-	path              = "/test-function"
-	visibility        = "private"
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "private"
 }
 
 resource "twilio_serverless_build" "build" {
-	service_sid           = twilio_serverless_service.service.sid
-	function_version {
-		sid = twilio_serverless_function_version.function_version.sid
-	}
-	dependencies = {
-		"twilio" : "%s"
-	}
-}`, uniqueName, twilioVersion)
+  service_sid = twilio_serverless_service.service.sid
+  function_version {
+    sid = twilio_serverless_function_version.function_version.sid
+  }
+  dependencies = {
+    "twilio" : "%s"
+  }
+}
+`, uniqueName, twilioVersion)
 }

@@ -96,19 +96,20 @@ func testAccCheckTwilioFlexChannelExists(name string) resource.TestCheckFunc {
 func testAccTwilioFlexChannel_basic(testData *acceptance.TestData, friendlyName string, chatFriendlyName string, chatUserFriendlyName string, identity string) string {
 	return fmt.Sprintf(`
 resource "twilio_flex_flow" "flow" {
-	friendly_name = "%s"
-	chat_service_sid = "%s"
-	channel_type = "web"
-	integration_type = "external"
-	integration {
-		url = "https://test.com/external"
-	}
+  friendly_name    = "%s"
+  chat_service_sid = "%s"
+  channel_type     = "web"
+  integration_type = "external"
+  integration {
+    url = "https://test.com/external"
+  }
 }
 
 resource "twilio_flex_channel" "channel" {
-	chat_friendly_name = "%s"
-	chat_user_friendly_name = "%s"
-	flex_flow_sid = twilio_flex_flow.flow.sid
-	identity = "%s"
-}`, friendlyName, testData.FlexChannelServiceSid, chatFriendlyName, chatUserFriendlyName, identity)
+  chat_friendly_name      = "%s"
+  chat_user_friendly_name = "%s"
+  flex_flow_sid           = twilio_flex_flow.flow.sid
+  identity                = "%s"
+}
+`, friendlyName, testData.FlexChannelServiceSid, chatFriendlyName, chatUserFriendlyName, identity)
 }

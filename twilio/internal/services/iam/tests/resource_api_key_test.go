@@ -146,7 +146,7 @@ func testAccCheckTwilioAPIKeyExists(name string) resource.TestCheckFunc {
 func testAccTwilioAPIKey_basic(testData *acceptance.TestData) string {
 	return fmt.Sprintf(`
 resource "twilio_iam_api_key" "api_key" {
-	account_sid = "%s"
+  account_sid = "%s"
 }
 `, testData.AccountSid)
 }
@@ -154,8 +154,8 @@ resource "twilio_iam_api_key" "api_key" {
 func testAccTwilioAPIKey_friendlyName(testData *acceptance.TestData, friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_iam_api_key" "api_key" {
-	account_sid   = "%s"
-	friendly_name = "%s"
+  account_sid   = "%s"
+  friendly_name = "%s"
 }
 `, testData.AccountSid, friendlyName)
 }

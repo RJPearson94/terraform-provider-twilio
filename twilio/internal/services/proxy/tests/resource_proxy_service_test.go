@@ -145,6 +145,7 @@ func testAccCheckTwilioProxyServiceExists(name string) resource.TestCheckFunc {
 func testAccTwilioProxyService_basic(uniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_proxy_service" "service" {
-	unique_name = "%s"
-}`, uniqueName)
+  unique_name = "%s"
+}
+`, uniqueName)
 }

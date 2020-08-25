@@ -183,19 +183,20 @@ func testAccCheckTwilioServerlessVariableExists(name string) resource.TestCheckF
 func testAccTwilioServerlessVariable_basic(uniqueName string, key string, value string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
-	unique_name   = "service-%s"
-	friendly_name = "test"
+  unique_name   = "service-%s"
+  friendly_name = "test"
 }
 
 resource "twilio_serverless_environment" "environment" {
-	service_sid   = twilio_serverless_service.service.sid
-	unique_name = "%s"
+  service_sid = twilio_serverless_service.service.sid
+  unique_name = "%s"
 }
 
 resource "twilio_serverless_variable" "variable" {
-	service_sid   	  = twilio_serverless_service.service.sid
-	environment_sid   = twilio_serverless_environment.environment.sid
-	key 	  		  = "%s"
-	value 	  		  = "%s"
-}`, uniqueName, uniqueName, key, value)
+  service_sid     = twilio_serverless_service.service.sid
+  environment_sid = twilio_serverless_environment.environment.sid
+  key             = "%s"
+  value           = "%s"
+}
+`, uniqueName, uniqueName, key, value)
 }
