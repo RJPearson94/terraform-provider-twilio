@@ -19,9 +19,9 @@ func TestAccTwilioChatService_basic(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatServiceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatServiceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatService_basic(friendlyName),
@@ -56,9 +56,9 @@ func TestAccTwilioChatService_notifications(t *testing.T) {
 	logEnabled := true
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatServiceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatServiceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatService_notifications(friendlyName, logEnabled),
@@ -94,9 +94,9 @@ func TestAccTwilioChatService_basicUpdate(t *testing.T) {
 	newFriendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatServiceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatServiceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatService_basic(friendlyName),
@@ -154,9 +154,9 @@ func TestAccTwilioChatService_notificationsUpdate(t *testing.T) {
 	newLogEnabled := false
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatServiceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatServiceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatService_notifications(friendlyName, logEnabled),

@@ -20,9 +20,9 @@ func TestAccTwilioChatChannelStudioWebhook_basic(t *testing.T) {
 	flowSid := "FWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatChannelStudioWebhookDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatChannelStudioWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatChannelStudioWebhook_basic(friendlyName, flowSid),
@@ -51,9 +51,9 @@ func TestAccTwilioChatChannelStudioWebhook_update(t *testing.T) {
 	newFlowSid := "FWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatChannelStudioWebhookDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatChannelStudioWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatChannelStudioWebhook_basic(friendlyName, flowSid),

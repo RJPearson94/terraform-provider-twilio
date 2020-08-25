@@ -24,9 +24,9 @@ func TestAccTwilioFlexFlow_basic(t *testing.T) {
 	testData := acceptance.TestAccData
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioFlexFlowDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioFlexFlowDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioFlexFlow_basic(testData, friendlyName, channelType, integrationType, integrationURL),
@@ -71,9 +71,9 @@ func TestAccTwilioFlexFlow_update(t *testing.T) {
 	testData := acceptance.TestAccData
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioFlexFlowDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioFlexFlowDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioFlexFlow_basic(testData, friendlyName, channelType, integrationType, integrationURL),

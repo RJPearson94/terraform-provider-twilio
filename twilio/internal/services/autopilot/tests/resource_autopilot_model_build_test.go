@@ -20,9 +20,9 @@ func TestAccTwilioAutopilotModelBuild_basic(t *testing.T) {
 	modelBuildUniqueName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotModelBuildDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotModelBuildDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotModelBuild_basic(uniqueName, modelBuildUniqueName),
@@ -53,9 +53,9 @@ func TestAccTwilioAutopilotModelBuild_update(t *testing.T) {
 	newModelBuildUniqueName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotModelBuildDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotModelBuildDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotModelBuild_basic(uniqueName, modelBuildUniqueName),

@@ -21,9 +21,9 @@ func TestAccTwilioChatChannel_basic(t *testing.T) {
 	channelType := "private"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatChannelDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatChannelDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatChannel_basic(friendlyName, channelType),
@@ -54,9 +54,9 @@ func TestAccTwilioChatChannel_invalidType(t *testing.T) {
 	channelType := "test"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatChannelDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatChannelDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioChatChannel_basic(friendlyName, channelType),
@@ -73,9 +73,9 @@ func TestAccTwilioChatChannel_update(t *testing.T) {
 	channelType := "private"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatChannelDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatChannelDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatChannel_basic(friendlyName, channelType),

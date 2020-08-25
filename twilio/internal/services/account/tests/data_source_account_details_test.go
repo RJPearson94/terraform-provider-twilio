@@ -20,9 +20,9 @@ func TestAccDataSourceTwilioAccountDetails_complete(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAccountDetailsSubAccountDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAccountDetailsSubAccountDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAccountDetails_complete(friendlyName),

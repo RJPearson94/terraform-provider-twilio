@@ -22,9 +22,9 @@ func TestAccTwilioServerlessFunctionVersion_basic(t *testing.T) {
 	visibility := "private"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioServerlessFunctionVersionDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessFunctionVersionDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioServerlessFunctionVersion_basic(uniqueName, friendlyName, visibility),
@@ -53,9 +53,9 @@ func TestAccTwilioServerlessFunctionVersion_invalidVisibility(t *testing.T) {
 	visibility := "test"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioServerlessFunctionVersionDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessFunctionVersionDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioServerlessFunctionVersion_basic(uniqueName, friendlyName, visibility),

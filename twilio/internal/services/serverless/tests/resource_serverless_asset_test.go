@@ -20,9 +20,9 @@ func TestAccTwilioServerlessAsset_basic(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioServerlessAssetDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessAssetDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioServerlessAsset_basic(uniqueName, friendlyName),
@@ -50,9 +50,9 @@ func TestAccTwilioServerlessAsset_update(t *testing.T) {
 	newFriendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioServerlessAssetDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessAssetDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioServerlessAsset_basic(uniqueName, friendlyName),

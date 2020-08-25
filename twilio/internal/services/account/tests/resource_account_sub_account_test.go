@@ -19,9 +19,9 @@ func TestAccTwilioAccountSubAccount_basic(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAccountSubAccountDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAccountSubAccountDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAccountSubAccount_basic(friendlyName),
@@ -48,9 +48,9 @@ func TestAccTwilioAccountSubAccount_update(t *testing.T) {
 	newFriendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAccountSubAccountDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAccountSubAccountDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAccountSubAccount_basic(friendlyName),

@@ -21,9 +21,9 @@ func TestAccTwilioAutopilotFieldValue_basic(t *testing.T) {
 	value := "test"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotFieldValueDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotFieldValueDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotFieldValue_basic(uniqueName, language, value),

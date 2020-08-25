@@ -20,9 +20,9 @@ func TestAccTwilioAutopilotFieldType_basic(t *testing.T) {
 	fieldTypeFriendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotFieldTypeDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotFieldTypeDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotFieldType_basic(uniqueName, fieldTypeFriendlyName),
@@ -50,9 +50,9 @@ func TestAccTwilioAutopilotFieldType_update(t *testing.T) {
 	newFieldTypeFriendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotFieldTypeDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotFieldTypeDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotFieldType_basic(uniqueName, fieldTypeFriendlyName),

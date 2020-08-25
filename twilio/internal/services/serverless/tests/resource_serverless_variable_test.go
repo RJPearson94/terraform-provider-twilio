@@ -21,9 +21,9 @@ func TestAccTwilioServerlessVariable_basic(t *testing.T) {
 	value := "test-value"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioServerlessVariableDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessVariableDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioServerlessVariable_basic(uniqueName, key, value),
@@ -54,9 +54,9 @@ func TestAccTwilioServerlessVariableKey_update(t *testing.T) {
 	value := "test-value"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioServerlessServiceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessServiceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioServerlessVariable_basic(uniqueName, key, value),
@@ -103,9 +103,9 @@ func TestAccTwilioServerlessVariableValue_update(t *testing.T) {
 	newValue := "test-value-2"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioServerlessServiceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessServiceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioServerlessVariable_basic(uniqueName, key, value),

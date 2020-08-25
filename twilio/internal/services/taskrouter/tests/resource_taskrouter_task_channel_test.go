@@ -20,9 +20,9 @@ func TestAccTwilioTaskRouterTaskChannel_basic(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioTaskRouterTaskChannelDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioTaskRouterTaskChannelDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioTaskRouterTaskChannel_basic(friendlyName, uniqueName),
@@ -52,9 +52,9 @@ func TestAccTwilioTaskRouterTaskChannel_update(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioTaskRouterTaskChannelDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioTaskRouterTaskChannelDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioTaskRouterTaskChannel_basic(friendlyName, uniqueName),

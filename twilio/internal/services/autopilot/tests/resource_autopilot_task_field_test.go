@@ -20,9 +20,9 @@ func TestAccTwilioAutopilotTaskField_basic(t *testing.T) {
 	fieldType := "Twilio.YES_NO"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotTaskFieldDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskFieldDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotTaskField_basic(uniqueName, fieldType),

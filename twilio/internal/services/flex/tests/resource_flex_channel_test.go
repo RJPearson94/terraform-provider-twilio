@@ -25,9 +25,9 @@ func TestAccTwilioFlexChannel_basic(t *testing.T) {
 	identity := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioFlexChannelDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioFlexChannelDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioFlexChannel_basic(testData, friendlyName, chatFriendlyName, chatUserFriendlyName, identity),

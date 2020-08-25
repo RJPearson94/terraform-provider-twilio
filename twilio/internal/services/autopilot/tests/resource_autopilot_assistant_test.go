@@ -19,9 +19,9 @@ func TestAccTwilioAutopilotAssistant_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.assistant", assistantResourceName)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotAssistantDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotAssistant_default(),
@@ -55,9 +55,9 @@ func TestAccTwilioAutopilotAssistant_developmentStage(t *testing.T) {
 	developmentStage := "in-production"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotAssistantDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotAssistant_developmentStage(friendlyName, developmentStage),
@@ -90,9 +90,9 @@ func TestAccTwilioAutopilotAssistant_defaults(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotAssistantDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotAssistant_defaults(friendlyName),
@@ -124,9 +124,9 @@ func TestAccTwilioAutopilotAssistant_stylesheet(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotAssistantDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotAssistant_stylesheet(friendlyName),
@@ -158,9 +158,9 @@ func TestAccTwilioAutopilotAssistant_invalidDevelopmentStage(t *testing.T) {
 	developmentStage := "test"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotAssistantDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAutopilotAssistant_developmentStage(friendlyName, developmentStage),
@@ -175,9 +175,9 @@ func TestAccTwilioAutopilotAssistant_invalidCallbackURL(t *testing.T) {
 	callbackURL := "callbackURL"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotAssistantDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAutopilotAssistant_callbackEvents(friendlyName, callbackURL),
@@ -193,9 +193,9 @@ func TestAccTwilioAutopilotAssistant_callbackEvents(t *testing.T) {
 	callbackURL := "http://localhost/callback"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotAssistantDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotAssistant_callbackEvents(friendlyName, callbackURL),
@@ -229,9 +229,9 @@ func TestAccTwilioAutopilotAssistant_update(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotAssistantDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotAssistant_default(),

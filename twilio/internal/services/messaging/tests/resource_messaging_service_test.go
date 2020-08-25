@@ -19,9 +19,9 @@ func TestAccTwilioMessagingService_basic(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioMessagingServiceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioMessagingServiceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioMessagingService_basic(friendlyName),
@@ -59,9 +59,9 @@ func TestAccTwilioMessagingService_update(t *testing.T) {
 	newFriendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioMessagingServiceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioMessagingServiceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioMessagingService_basic(friendlyName),

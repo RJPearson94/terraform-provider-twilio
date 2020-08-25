@@ -19,9 +19,9 @@ func TestAccTwilioServerlessEnvironment_basic(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioServerlessEnvironmentDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessEnvironmentDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioServerlessEnvironment_basic(uniqueName),

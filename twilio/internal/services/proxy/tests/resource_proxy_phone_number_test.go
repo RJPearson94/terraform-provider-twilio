@@ -23,9 +23,9 @@ func TestAccTwilioProxyPhoneNumber_update(t *testing.T) {
 	newIsReserved := false
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioProxyPhoneNumberDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioProxyPhoneNumberDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioProxyPhoneNumber_basic(testData, uniqueName, isReserved),

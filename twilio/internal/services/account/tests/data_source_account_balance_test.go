@@ -16,8 +16,8 @@ func TestAccDataSourceTwilioAccountBalance_complete(t *testing.T) {
 	testData := acceptance.TestAccData
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:  func() { acceptance.PreCheck(t) },
-		Providers: acceptance.TestAccProviders,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAccountBalance_complete(testData),

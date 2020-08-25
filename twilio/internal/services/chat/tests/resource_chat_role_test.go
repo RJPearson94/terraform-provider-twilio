@@ -26,9 +26,9 @@ func TestAccTwilioChatRole_basic(t *testing.T) {
 	roleType := "channel"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatRoleDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatRoleDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatRole_basic(friendlyName, roleType, permissions),
@@ -61,9 +61,9 @@ func TestAccTwilioChatRole_invalidType(t *testing.T) {
 	roleType := "test"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatRoleDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatRoleDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioChatRole_basic(friendlyName, roleType, permissions),
@@ -86,9 +86,9 @@ func TestAccTwilioChatRole_update(t *testing.T) {
 	roleType := "channel"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatRoleDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatRoleDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatRole_basic(friendlyName, roleType, permissions),

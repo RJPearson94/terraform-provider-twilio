@@ -23,9 +23,9 @@ func TestAccTwilioAutopilotWebhook_basic(t *testing.T) {
 	events := []string{"onDialogueStart", "onDialogueEnd"}
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotWebhookDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotWebhook_basic(uniqueName, url, events),
@@ -56,9 +56,9 @@ func TestAccTwilioAutopilotWebhook_invalidWebhookURL(t *testing.T) {
 	events := []string{"onDialogueStart"}
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotAssistantDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAutopilotWebhook_basic(uniqueName, url, events),
@@ -73,9 +73,9 @@ func TestAccTwilioAutopilotAssistant_invalidWebhookMethod(t *testing.T) {
 	method := "test"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotAssistantDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAutopilotWebhook_method(uniqueName, method),
@@ -94,9 +94,9 @@ func TestAccTwilioAutopilotWebhook_update(t *testing.T) {
 	newEvents := []string{"onDialogueStart", "onDialogueEnd"}
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotWebhookDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotWebhook_basic(uniqueName, url, events),

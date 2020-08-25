@@ -21,9 +21,9 @@ func TestAccTwilioStudio_basic(t *testing.T) {
 	status := "draft"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioStudioFlowDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioStudioFlowDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioStudioFlow_basic(friendlyName, status),
@@ -54,9 +54,9 @@ func TestAccTwilioStudioFlow_invalidStatus(t *testing.T) {
 	status := "test"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioStudioFlowDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioStudioFlowDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioStudioFlow_basic(friendlyName, status),
@@ -74,9 +74,9 @@ func TestAccTwilioStudioFlow_update(t *testing.T) {
 	newStatus := "published"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioStudioFlowDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioStudioFlowDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioStudioFlow_basic(friendlyName, status),

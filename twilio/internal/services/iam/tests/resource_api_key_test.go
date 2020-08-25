@@ -20,9 +20,9 @@ func TestAccTwilioIAMAPIKey_basic(t *testing.T) {
 	testData := acceptance.TestAccData
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAPIKeyDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAPIKeyDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAPIKey_basic(testData),
@@ -47,9 +47,9 @@ func TestAccTwilioIAMAPIKey_friendlyName(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAPIKeyDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAPIKeyDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAPIKey_friendlyName(testData, friendlyName),
@@ -74,9 +74,9 @@ func TestAccTwilioIAMAPIKey_update(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAPIKeyDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAPIKeyDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAPIKey_basic(testData),

@@ -22,9 +22,9 @@ func TestAccTwilioServerlessAssetVersion_basic(t *testing.T) {
 	visibility := "private"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioServerlessAssetVersionDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessAssetVersionDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioServerlessAssetVersion_basic(uniqueName, friendlyName, visibility),
@@ -53,9 +53,9 @@ func TestAccTwilioServerlessAssetVersion_invalidVisibility(t *testing.T) {
 	visibility := "test"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioServerlessAssetVersionDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessAssetVersionDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioServerlessAssetVersion_basic(uniqueName, friendlyName, visibility),

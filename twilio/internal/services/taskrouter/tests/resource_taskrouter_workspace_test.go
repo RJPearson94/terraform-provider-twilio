@@ -21,9 +21,9 @@ func TestAccTwilioTaskRouterWorkspace_basic(t *testing.T) {
 	queueOrder := "FIFO"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioTaskRouterWorkspaceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioTaskRouterWorkspaceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioTaskRouterWorkspace_basic(friendlyName, queueOrder),
@@ -56,9 +56,9 @@ func TestAccTwilioTaskRouterWorkspace_invalidOrderQueue(t *testing.T) {
 	queueOrder := "test"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioTaskRouterWorkspaceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioTaskRouterWorkspaceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTaskRouterWorkspace_basic(friendlyName, queueOrder),
@@ -76,9 +76,9 @@ func TestAccTwilioTaskRouterWorkspace_update(t *testing.T) {
 	newQueueOrder := "LIFO"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioTaskRouterWorkspaceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioTaskRouterWorkspaceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioTaskRouterWorkspace_basic(friendlyName, queueOrder),

@@ -20,9 +20,9 @@ func TestAccTwilioMessagingPhoneNumber_basic(t *testing.T) {
 	testData := acceptance.TestAccData
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioMessagingPhoneNumberDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioMessagingPhoneNumberDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioMessagingPhoneNumber_basic(testData, friendlyName),

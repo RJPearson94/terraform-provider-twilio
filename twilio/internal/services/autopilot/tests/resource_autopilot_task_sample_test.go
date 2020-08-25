@@ -21,9 +21,9 @@ func TestAccTwilioAutopilotTaskSample_basic(t *testing.T) {
 	taggedText := "test"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotTaskSampleDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskSampleDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotTaskSample_basic(uniqueName, language, taggedText),
@@ -54,9 +54,9 @@ func TestAccTwilioAutopilotTaskSample_update(t *testing.T) {
 	newTaggedText := "new test"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotTaskSampleDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskSampleDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotTaskSample_basic(uniqueName, language, taggedText),

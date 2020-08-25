@@ -21,9 +21,9 @@ func TestAccDataSourceTwilioStudioFlow_complete(t *testing.T) {
 	status := "draft"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioStudioFlowResourceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioStudioFlowResourceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioStudioFlow_complete(friendlyName, status),

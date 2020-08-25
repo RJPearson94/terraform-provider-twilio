@@ -20,9 +20,9 @@ func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 	version := "3.6.2"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioServerlessBuildDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessBuildDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioServerlessBuild_basic(uniqueName, version),

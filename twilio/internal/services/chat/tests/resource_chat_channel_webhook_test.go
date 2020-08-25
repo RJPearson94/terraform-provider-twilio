@@ -20,9 +20,9 @@ func TestAccTwilioChatChannelWebhook_basic(t *testing.T) {
 	webhookURL := "http://localhost:3000/current"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatChannelWebhookDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatChannelWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatChannelWebhook_basic(friendlyName, webhookURL),
@@ -54,9 +54,9 @@ func TestAccTwilioChatChannelWebhook_update(t *testing.T) {
 	newWebhookURL := "http://localhost:3000/new"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioChatChannelWebhookDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioChatChannelWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioChatChannelWebhook_basic(friendlyName, webhookURL),

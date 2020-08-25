@@ -19,9 +19,9 @@ func TestAccTwilioProxyService_basic(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioProxyServiceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioProxyServiceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioProxyService_basic(uniqueName),
@@ -54,9 +54,9 @@ func TestAccTwilioProxyService_update(t *testing.T) {
 	newUniqueName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioProxyServiceDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioProxyServiceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioProxyService_basic(uniqueName),

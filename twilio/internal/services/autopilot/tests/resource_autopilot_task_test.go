@@ -20,9 +20,9 @@ func TestAccTwilioAutopilotTask_basic(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotTaskDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotTask_basic(uniqueName),
@@ -50,9 +50,9 @@ func TestAccTwilioAutopilotTask_actions(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotTaskDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotTask_actions(uniqueName),
@@ -81,9 +81,9 @@ func TestAccTwilioAutopilotTask_actionsURL(t *testing.T) {
 	url := "http://localhost/action"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotTaskDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotTask_actionsURL(uniqueName, url),
@@ -111,9 +111,9 @@ func TestAccTwilioAutopilotTask_invalidActionURL(t *testing.T) {
 	url := "actionURL"
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotTaskDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAutopilotTask_actionsURL(uniqueName, url),
@@ -129,9 +129,9 @@ func TestAccTwilioAutopilotTask_update(t *testing.T) {
 	newUniqueName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { acceptance.PreCheck(t) },
-		Providers:    acceptance.TestAccProviders,
-		CheckDestroy: testAccCheckTwilioAutopilotTaskDestroy,
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAutopilotTask_basic(uniqueName),
