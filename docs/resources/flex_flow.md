@@ -87,3 +87,12 @@ A `integration` block supports the following:
 - `workspace_sid` - The SID of the workspace to send tasks to
 
 ---
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the flow
+- `update` - (Defaults to 10 minutes) Used when updating the flow
+- `read` - (Defaults to 5 minutes) Used when retrieving the flow
+- `delete` - (Defaults to 10 minutes) Used when deleting the flow

@@ -1,6 +1,7 @@
 package flex
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -18,9 +19,18 @@ func resourceFlexFlow() *schema.Resource {
 		Read:   resourceFlexFlowRead,
 		Update: resourceFlexFlowUpdate,
 		Delete: resourceFlexFlowDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -143,6 +153,8 @@ func resourceFlexFlow() *schema.Resource {
 
 func resourceFlexFlowCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Flex
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &flex_flows.CreateFlexFlowInput{
 		ChannelType:     d.Get("channel_type").(string),
@@ -167,7 +179,7 @@ func resourceFlexFlowCreate(d *schema.ResourceData, meta interface{}) error {
 		createInput.IntegrationWorkspaceSid = utils.OptionalString(d, "integration.0.workspace_sid")
 	}
 
-	createResult, err := client.FlexFlows.Create(createInput)
+	createResult, err := client.FlexFlows.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create flex flow: %s", err.Error())
 	}
@@ -178,8 +190,10 @@ func resourceFlexFlowCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceFlexFlowRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Flex
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.FlexFlow(d.Id()).Fetch()
+	getResponse, err := client.FlexFlow(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -212,6 +226,8 @@ func resourceFlexFlowRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceFlexFlowUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Flex
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &flex_flow.UpdateFlexFlowInput{
 		ChannelType:     utils.OptionalString(d, "channel_type"),
@@ -236,7 +252,7 @@ func resourceFlexFlowUpdate(d *schema.ResourceData, meta interface{}) error {
 		updateInput.IntegrationWorkspaceSid = utils.OptionalString(d, "integration.0.workspace_sid")
 	}
 
-	createResult, err := client.FlexFlow(d.Id()).Update(updateInput)
+	createResult, err := client.FlexFlow(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to update flex flow: %s", err.Error())
 	}
@@ -247,8 +263,10 @@ func resourceFlexFlowUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceFlexFlowDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Flex
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.FlexFlow(d.Id()).Delete(); err != nil {
+	if err := client.FlexFlow(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete flex flow: %s", err.Error())
 	}
 	d.SetId("")

@@ -1,6 +1,7 @@
 package flex
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -15,9 +16,17 @@ func resourceFlexChannel() *schema.Resource {
 		Create: resourceFlexChannelCreate,
 		Read:   resourceFlexChannelRead,
 		Delete: resourceFlexChannelDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -99,6 +108,8 @@ func resourceFlexChannel() *schema.Resource {
 
 func resourceFlexChannelCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Flex
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &channels.CreateChannelInput{
 		ChatFriendlyName:     d.Get("chat_friendly_name").(string),
@@ -113,7 +124,7 @@ func resourceFlexChannelCreate(d *schema.ResourceData, meta interface{}) error {
 		TaskSid:              utils.OptionalString(d, "task_sid"),
 	}
 
-	createResult, err := client.Channels.Create(createInput)
+	createResult, err := client.Channels.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create flex channel: %s", err.Error())
 	}
@@ -124,8 +135,10 @@ func resourceFlexChannelCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceFlexChannelRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Flex
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Channel(d.Id()).Fetch()
+	getResponse, err := client.Channel(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -160,8 +173,10 @@ func resourceFlexChannelRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceFlexChannelDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Flex
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Channel(d.Id()).Delete(); err != nil {
+	if err := client.Channel(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete flex channel: %s", err.Error())
 	}
 	d.SetId("")
