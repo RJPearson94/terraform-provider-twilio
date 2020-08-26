@@ -52,3 +52,12 @@ The following attributes are exported:
 - `date_created` - The date in RFC3339 format that the sample was created
 - `date_updated` - The date in RFC3339 format that the sample was updated
 - `url` - The url of the sample
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the sample
+- `update` - (Defaults to 10 minutes) Used when updating the sample
+- `read` - (Defaults to 5 minutes) Used when retrieving the sample
+- `delete` - (Defaults to 10 minutes) Used when deleting the sample

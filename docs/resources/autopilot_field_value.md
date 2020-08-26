@@ -52,3 +52,11 @@ The following attributes are exported:
 - `date_created` - The date in RFC3339 format that the field value was created
 - `date_updated` - The date in RFC3339 format that the field value was updated
 - `url` - The url of the field value resource
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the field value
+- `read` - (Defaults to 5 minutes) Used when retrieving the field value
+- `delete` - (Defaults to 10 minutes) Used when deleting the field value

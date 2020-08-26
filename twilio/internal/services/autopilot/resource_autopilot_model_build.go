@@ -1,13 +1,13 @@
 package autopilot
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	autopilot "github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1"
 	"github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1/assistant/model_build"
 	"github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1/assistant/model_builds"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -19,9 +19,18 @@ func resourceAutopilotModelBuild() *schema.Resource {
 		Read:   resourceAutopilotModelBuildRead,
 		Update: resourceAutopilotModelBuildUpdate,
 		Delete: resourceAutopilotModelBuildDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -98,13 +107,15 @@ func resourceAutopilotModelBuild() *schema.Resource {
 
 func resourceAutopilotModelBuildCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &model_builds.CreateModelBuildInput{
 		UniqueName:     utils.OptionalString(d, "unique_name"),
 		StatusCallback: utils.OptionalString(d, "status_callback"),
 	}
 
-	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuilds.Create(createInput)
+	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuilds.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create autopilot model build: %s", err.Error())
 	}
@@ -113,7 +124,7 @@ func resourceAutopilotModelBuildCreate(d *schema.ResourceData, meta interface{})
 
 	pollings := d.Get("polling").([]interface{})
 	if len(pollings) == 1 {
-		if err := poll(d, client, pollings[0].(map[string]interface{})); err != nil {
+		if err := poll(d, meta.(*common.TwilioClient), pollings[0].(map[string]interface{})); err != nil {
 			return err
 		}
 	}
@@ -123,8 +134,10 @@ func resourceAutopilotModelBuildCreate(d *schema.ResourceData, meta interface{})
 
 func resourceAutopilotModelBuildRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).Fetch()
+	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -153,12 +166,14 @@ func resourceAutopilotModelBuildRead(d *schema.ResourceData, meta interface{}) e
 
 func resourceAutopilotModelBuildUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &model_build.UpdateModelBuildInput{
 		UniqueName: utils.OptionalString(d, "unique_name"),
 	}
 
-	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).Update(updateInput)
+	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update autopilot model build: %s", err.Error())
 	}
@@ -171,20 +186,25 @@ func resourceAutopilotModelBuildUpdate(d *schema.ResourceData, meta interface{})
 
 func resourceAutopilotModelBuildDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).Delete(); err != nil {
+	if err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete autopilot model build: %s", err.Error())
 	}
 	d.SetId("")
 	return nil
 }
 
-func poll(d *schema.ResourceData, client *autopilot.Autopilot, pollingConfig map[string]interface{}) error {
+func poll(d *schema.ResourceData, client *common.TwilioClient, pollingConfig map[string]interface{}) error {
 	if pollingConfig["enabled"].(bool) {
 		for i := 0; i < pollingConfig["max_attempts"].(int); i++ {
 			log.Printf("[INFO] Build Polling attempt # %v", i+1)
 
-			getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).Fetch()
+			ctx, cancel := context.WithTimeout(client.StopContext, d.Timeout(schema.TimeoutRead))
+			defer cancel()
+
+			getResponse, err := client.Autopilot.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).FetchWithContext(ctx)
 			if err != nil {
 				return fmt.Errorf("[ERROR] Failed to poll autopilot model build: %s", err)
 			}

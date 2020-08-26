@@ -1,6 +1,7 @@
 package autopilot
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -17,9 +18,18 @@ func resourceAutopilotFieldType() *schema.Resource {
 		Read:   resourceAutopilotFieldTypeRead,
 		Update: resourceAutopilotFieldTypeUpdate,
 		Delete: resourceAutopilotFieldTypeDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -61,13 +71,15 @@ func resourceAutopilotFieldType() *schema.Resource {
 
 func resourceAutopilotFieldTypeCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &field_types.CreateFieldTypeInput{
 		UniqueName:   d.Get("unique_name").(string),
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
 	}
 
-	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).FieldTypes.Create(createInput)
+	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).FieldTypes.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create autopilot field type: %s", err.Error())
 	}
@@ -78,8 +90,10 @@ func resourceAutopilotFieldTypeCreate(d *schema.ResourceData, meta interface{}) 
 
 func resourceAutopilotFieldTypeRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Id()).Fetch()
+	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -105,13 +119,15 @@ func resourceAutopilotFieldTypeRead(d *schema.ResourceData, meta interface{}) er
 
 func resourceAutopilotFieldTypeUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &field_type.UpdateFieldTypeInput{
 		UniqueName:   utils.OptionalString(d, "unique_name"),
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
 	}
 
-	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Id()).Update(updateInput)
+	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update autopilot field type: %s", err.Error())
 	}
@@ -122,8 +138,10 @@ func resourceAutopilotFieldTypeUpdate(d *schema.ResourceData, meta interface{}) 
 
 func resourceAutopilotFieldTypeDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Id()).Delete(); err != nil {
+	if err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete autopilot field type: %s", err.Error())
 	}
 	d.SetId("")

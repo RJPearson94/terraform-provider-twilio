@@ -42,3 +42,12 @@ The following attributes are exported:
 - `date_created` - The date in RFC3339 format that the field type was created
 - `date_updated` - The date in RFC3339 format that the field type was updated
 - `url` - The url of the field type resource
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the field type
+- `update` - (Defaults to 10 minutes) Used when updating the field type
+- `read` - (Defaults to 5 minutes) Used when retrieving the field type
+- `delete` - (Defaults to 10 minutes) Used when deleting the field type

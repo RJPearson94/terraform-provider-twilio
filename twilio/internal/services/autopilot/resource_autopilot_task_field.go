@@ -1,6 +1,7 @@
 package autopilot
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -15,9 +16,17 @@ func resourceAutopilotTaskField() *schema.Resource {
 		Create: resourceAutopilotTaskFieldCreate,
 		Read:   resourceAutopilotTaskFieldRead,
 		Delete: resourceAutopilotTaskFieldDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -65,13 +74,15 @@ func resourceAutopilotTaskField() *schema.Resource {
 
 func resourceAutopilotTaskFieldCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &fields.CreateFieldInput{
 		UniqueName: d.Get("unique_name").(string),
 		FieldType:  d.Get("field_type").(string),
 	}
 
-	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Fields.Create(createInput)
+	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Fields.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create autopilot task field: %s", err.Error())
 	}
@@ -82,8 +93,10 @@ func resourceAutopilotTaskFieldCreate(d *schema.ResourceData, meta interface{}) 
 
 func resourceAutopilotTaskFieldRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Field(d.Id()).Fetch()
+	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Field(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -110,8 +123,10 @@ func resourceAutopilotTaskFieldRead(d *schema.ResourceData, meta interface{}) er
 
 func resourceAutopilotTaskFieldDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Field(d.Id()).Delete(); err != nil {
+	if err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Field(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete autopilot task field: %s", err.Error())
 	}
 	d.SetId("")

@@ -1,6 +1,7 @@
 package autopilot
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"time"
@@ -21,9 +22,18 @@ func resourceAutopilotWebhook() *schema.Resource {
 		Read:   resourceAutopilotWebhookRead,
 		Update: resourceAutopilotWebhookUpdate,
 		Delete: resourceAutopilotWebhookDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -81,6 +91,8 @@ func resourceAutopilotWebhook() *schema.Resource {
 
 func resourceAutopilotWebhookCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &webhooks.CreateWebhookInput{
 		UniqueName:    d.Get("unique_name").(string),
@@ -89,7 +101,7 @@ func resourceAutopilotWebhookCreate(d *schema.ResourceData, meta interface{}) er
 		WebhookMethod: utils.OptionalString(d, "webhook_method"),
 	}
 
-	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).Webhooks.Create(createInput)
+	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).Webhooks.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create autopilot webhook: %s", err.Error())
 	}
@@ -100,8 +112,10 @@ func resourceAutopilotWebhookCreate(d *schema.ResourceData, meta interface{}) er
 
 func resourceAutopilotWebhookRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Webhook(d.Id()).Fetch()
+	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Webhook(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -129,6 +143,8 @@ func resourceAutopilotWebhookRead(d *schema.ResourceData, meta interface{}) erro
 
 func resourceAutopilotWebhookUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &webhook.UpdateWebhookInput{
 		UniqueName:    utils.OptionalString(d, "unique_name"),
@@ -137,7 +153,7 @@ func resourceAutopilotWebhookUpdate(d *schema.ResourceData, meta interface{}) er
 		WebhookMethod: utils.OptionalString(d, "webhook_method"),
 	}
 
-	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).Webhook(d.Id()).Update(updateInput)
+	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).Webhook(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update autopilot webhook: %s", err.Error())
 	}
@@ -148,8 +164,10 @@ func resourceAutopilotWebhookUpdate(d *schema.ResourceData, meta interface{}) er
 
 func resourceAutopilotWebhookDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Assistant(d.Get("assistant_sid").(string)).Webhook(d.Id()).Delete(); err != nil {
+	if err := client.Assistant(d.Get("assistant_sid").(string)).Webhook(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete autopilot webhook: %s", err.Error())
 	}
 	d.SetId("")

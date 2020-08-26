@@ -72,3 +72,14 @@ The following attributes are exported:
 - `date_created` - The date in RFC3339 format that the model build was created
 - `date_updated` - The date in RFC3339 format that the model build was updated
 - `url` - The url of the model build resource
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the model build
+- `update` - (Defaults to 10 minutes) Used when updating the model build
+- `read` - (Defaults to 5 minutes) Used when retrieving the model build
+- `delete` - (Defaults to 10 minutes) Used when deleting the model build
+
+!> When polling is enabled, each request is constrained by the read timeout defined above

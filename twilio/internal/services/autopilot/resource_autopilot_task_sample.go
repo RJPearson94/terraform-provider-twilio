@@ -1,6 +1,7 @@
 package autopilot
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -17,9 +18,18 @@ func resourceAutopilotTaskSample() *schema.Resource {
 		Read:   resourceAutopilotTaskSampleRead,
 		Update: resourceAutopilotTaskSampleUpdate,
 		Delete: resourceAutopilotTaskSampleDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -69,6 +79,8 @@ func resourceAutopilotTaskSample() *schema.Resource {
 
 func resourceAutopilotTaskSampleCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &samples.CreateSampleInput{
 		Language:      d.Get("language").(string),
@@ -76,7 +88,7 @@ func resourceAutopilotTaskSampleCreate(d *schema.ResourceData, meta interface{})
 		SourceChannel: utils.OptionalString(d, "source_channel"),
 	}
 
-	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Samples.Create(createInput)
+	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Samples.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create autopilot task sample: %s", err.Error())
 	}
@@ -87,8 +99,10 @@ func resourceAutopilotTaskSampleCreate(d *schema.ResourceData, meta interface{})
 
 func resourceAutopilotTaskSampleRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Sample(d.Id()).Fetch()
+	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Sample(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -116,6 +130,8 @@ func resourceAutopilotTaskSampleRead(d *schema.ResourceData, meta interface{}) e
 
 func resourceAutopilotTaskSampleUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &sample.UpdateSampleInput{
 		Language:      utils.OptionalString(d, "language"),
@@ -123,7 +139,7 @@ func resourceAutopilotTaskSampleUpdate(d *schema.ResourceData, meta interface{})
 		SourceChannel: utils.OptionalString(d, "source_channel"),
 	}
 
-	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Sample(d.Id()).Update(updateInput)
+	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Sample(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update autopilot task sample: %s", err.Error())
 	}
@@ -134,8 +150,10 @@ func resourceAutopilotTaskSampleUpdate(d *schema.ResourceData, meta interface{})
 
 func resourceAutopilotTaskSampleDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Autopilot
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Sample(d.Id()).Delete(); err != nil {
+	if err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Sample(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete autopilot task sample: %s", err.Error())
 	}
 	d.SetId("")
