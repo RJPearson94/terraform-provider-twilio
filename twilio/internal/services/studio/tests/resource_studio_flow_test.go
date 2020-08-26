@@ -22,6 +22,7 @@ func TestAccTwilioStudio_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
+		Providers:         acceptance.TestAccProviders,
 		ProviderFactories: acceptance.TestAccProviderFactories(),
 		CheckDestroy:      testAccCheckTwilioStudioFlowDestroy,
 		Steps: []resource.TestStep{
@@ -44,6 +45,12 @@ func TestAccTwilioStudio_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckNoResourceAttr(stateResourceName, "date_updated"),
 				),
+			},
+			{
+				ResourceName:      stateResourceName,
+				ImportState:       true,
+				ImportStateIdFunc: testAccTwilioStudioFlowImportStateIdFunc(stateResourceName),
+				ImportStateVerify: true,
 			},
 		},
 	})
@@ -156,6 +163,17 @@ func testAccCheckTwilioStudioFlowExists(name string) resource.TestCheckFunc {
 		}
 
 		return nil
+	}
+}
+
+func testAccTwilioStudioFlowImportStateIdFunc(name string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		rs, ok := s.RootModule().Resources[name]
+		if !ok {
+			return "", fmt.Errorf("Not found: %s", name)
+		}
+
+		return fmt.Sprintf("/Flows/%s", rs.Primary.Attributes["sid"]), nil
 	}
 }
 

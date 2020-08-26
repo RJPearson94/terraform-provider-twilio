@@ -59,10 +59,10 @@ The following attributes are exported:
 - `sid` - The SID of the studio flow (Same as the ID)
 - `friendly_name` - The name of the studio flow
 - `definition` - The Flow Definition JSON
-- `status` -  The status of the studio flow
+- `status` - The status of the studio flow
 - `revision` - The revision number of the studio flow
-- `valid` -  Whether the studio flow is valid
-- `validate` -  Whether the studio flow has been validated on creation and on updates
+- `valid` - Whether the studio flow is valid
+- `validate` - Whether the studio flow has been validated on creation and on updates
 - `date_created` - The date in RFC3339 format that the studio flow was created
 - `date_updated` - The date in RFC3339 format that the studio flow was updated
 - `url` - The url of the studio flow
@@ -78,3 +78,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `delete` - (Defaults to 10 minutes) Used when deleting the studio flow
 
 !> When request validation is enabled, the request is constrained by its own create timeout as defined above
+
+## Import
+
+A flow can be imported using the `"/Flows/{sid}"` format, e.g.
+
+```shell
+terraform import twilio_studio_flow.flow /Flows/FWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
