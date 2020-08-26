@@ -1,6 +1,7 @@
 package studio
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -13,6 +14,11 @@ import (
 func dataSourceStudioFlow() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceStudioFlowRead,
+
+		Timeouts: &schema.ResourceTimeout{
+			Read: schema.DefaultTimeout(5 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -68,14 +74,16 @@ func dataSourceStudioFlow() *schema.Resource {
 
 func dataSourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Studio
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
 	sid := d.Get("sid").(string)
-	getResponse, err := client.Flow(sid).Fetch()
+	getResponse, err := client.Flow(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			return fmt.Errorf("[ERROR] Studio flow with sid (%s) was not found", sid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read studio flow: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read studio flow: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

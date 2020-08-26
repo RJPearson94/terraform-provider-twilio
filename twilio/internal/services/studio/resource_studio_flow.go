@@ -1,6 +1,7 @@
 package studio
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -20,9 +21,18 @@ func resourceStudioFlow() *schema.Resource {
 		Read:   resourceStudioFlowRead,
 		Update: resourceStudioFlowUpdate,
 		Delete: resourceStudioFlowDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -89,6 +99,8 @@ func resourceStudioFlow() *schema.Resource {
 
 func resourceStudioFlowCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Studio
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	if err := validateRequest(d, meta); err != nil {
 		return err
@@ -102,9 +114,9 @@ func resourceStudioFlowCreate(d *schema.ResourceData, meta interface{}) error {
 		CommitMessage: utils.OptionalString(d, "commit_message"),
 	}
 
-	createResult, err := client.Flows.Create(createInput)
+	createResult, err := client.Flows.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create studio flow: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create studio flow: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -113,8 +125,10 @@ func resourceStudioFlowCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Studio
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Flow(d.Id()).Fetch()
+	getResponse, err := client.Flow(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -151,6 +165,8 @@ func resourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceStudioFlowUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Studio
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	if err := validateRequest(d, meta); err != nil {
 		return err
@@ -163,7 +179,7 @@ func resourceStudioFlowUpdate(d *schema.ResourceData, meta interface{}) error {
 		CommitMessage: utils.OptionalString(d, "commit_message"),
 	}
 
-	updateResp, err := client.Flow(d.Id()).Update(updateInput)
+	updateResp, err := client.Flow(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to Update Studio Flow: %s", err.Error())
 	}
@@ -174,8 +190,10 @@ func resourceStudioFlowUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceStudioFlowDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Studio
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Flow(d.Id()).Delete(); err != nil {
+	if err := client.Flow(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete studio flow: %s", err.Error())
 	}
 	d.SetId("")
@@ -185,6 +203,8 @@ func resourceStudioFlowDelete(d *schema.ResourceData, meta interface{}) error {
 func validateRequest(d *schema.ResourceData, meta interface{}) error {
 	if d.Get("validate").(bool) {
 		client := meta.(*common.TwilioClient).Studio
+		ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+		defer cancel()
 
 		definitionJSONString, _ := structure.NormalizeJsonString(d.Get("definition").(string))
 		validateInput := &flow_validation.ValidateFlowInput{
@@ -194,9 +214,9 @@ func validateRequest(d *schema.ResourceData, meta interface{}) error {
 			CommitMessage: utils.OptionalString(d, "commit_message"),
 		}
 
-		resp, err := client.FlowValidation.Validate(validateInput)
+		resp, err := client.FlowValidation.ValidateWithContext(ctx, validateInput)
 		if err != nil {
-			return fmt.Errorf("[ERROR] Failed to validate studio flow: %s", err)
+			return fmt.Errorf("[ERROR] Failed to validate studio flow: %s", err.Error())
 		}
 		if !resp.Valid {
 			return fmt.Errorf("[ERROR] The template is invalid")

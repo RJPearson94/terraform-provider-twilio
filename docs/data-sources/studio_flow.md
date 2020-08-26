@@ -5,7 +5,7 @@ subcategory: "Studio"
 
 # twilio_studio_flow Data Source
 
-Use this data source to access information about an existing Studio Flow
+Use this data source to access information about an existing studio flow
 
 !> This resource is in beta
 
@@ -25,20 +25,26 @@ output "definition" {
 
 The following arguments are supported:
 
-- `sid` - The SID of the Studio Flow
+- `sid` - The SID of the studio flow
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-- `id` - The ID of the Studio Flow (Same as the SID)
-- `sid` - The SID of the Studio Flow (Same as the ID)
-- `friendly_name` - The name of the Studio Flow
+- `id` - The ID of the studio flow (Same as the SID)
+- `sid` - The SID of the studio flow (Same as the ID)
+- `friendly_name` - The name of the studio flow
 - `definition` - The Flow Definition JSON
-- `status` -  The status of the Studio Flow
-- `revision` - The revision number of teh Studio Flow
-- `valid` -  Whether the Studio Flow is valid
-- `date_created` - The date in RFC3339 format that the Studio Flow was created
-- `date_updated` - The date in RFC3339 format that the Studio Flow was updated
-- `url` - The url of the Studio Flow
-- `webhook_url` - The webhook url of the Studio Flow
+- `status` -  The status of the studio flow
+- `revision` - The revision number of teh studio flow
+- `valid` -  Whether the studio flow is valid
+- `date_created` - The date in RFC3339 format that the studio flow was created
+- `date_updated` - The date in RFC3339 format that the studio flow was updated
+- `url` - The url of the studio flow
+- `webhook_url` - The webhook url of the studio flow
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `read` - (Defaults to 5 minutes) Used when retrieving the studio flow
