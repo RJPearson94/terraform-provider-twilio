@@ -222,8 +222,8 @@ resource "twilio_taskrouter_workspace" "workspace" {
 func testAccTwilioTaskRouterWorkspace_eventCallback(friendlyName string, eventFilters []string, callbackURL string) string {
 	return fmt.Sprintf(`
 resource "twilio_taskrouter_workspace" "workspace" {
-  friendly_name          = "%s"
-  event_filters     	 = %s
+  friendly_name      = "%s"
+  event_filters      = %s
   event_callback_url = "%s"
 }
 `, friendlyName, `["`+strings.Join(eventFilters[:], `", "`)+`"]`, callbackURL)

@@ -236,9 +236,9 @@ resource "twilio_taskrouter_task_queue" "task_queue" {
 }
 
 resource "twilio_taskrouter_workflow" "workflow" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%s"
-  configuration = <<EOF
+  workspace_sid                    = twilio_taskrouter_workspace.workspace.sid
+  friendly_name                    = "%s"
+  configuration                    = <<EOF
 {
   "task_routing": {
     "filters": [],
@@ -248,7 +248,7 @@ resource "twilio_taskrouter_workflow" "workflow" {
   }
 }
 EOF
-  assignment_callback_url = "%s"
+  assignment_callback_url          = "%s"
   fallback_assignment_callback_url = "%s"
 }
 `, friendlyName, friendlyName, friendlyName, url, fallbackURL)

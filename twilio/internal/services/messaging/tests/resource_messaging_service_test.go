@@ -320,9 +320,9 @@ resource "twilio_messaging_service" "service" {
 func testAccTwilioMessagingService_fallback(friendlyName string, method string, url string) string {
 	return fmt.Sprintf(`
 resource "twilio_messaging_service" "service" {
-  friendly_name = "%s"
+  friendly_name   = "%s"
   fallback_method = "%s"
-  fallback_url = "%s"
+  fallback_url    = "%s"
 }
 `, friendlyName, method, url)
 }
@@ -330,8 +330,8 @@ resource "twilio_messaging_service" "service" {
 func testAccTwilioMessagingService_inbound(friendlyName string, method string, url string) string {
 	return fmt.Sprintf(`
 resource "twilio_messaging_service" "service" {
-  friendly_name = "%s"
-  inbound_method = "%s"
+  friendly_name       = "%s"
+  inbound_method      = "%s"
   inbound_request_url = "%s"
 }
 `, friendlyName, method, url)
@@ -340,7 +340,7 @@ resource "twilio_messaging_service" "service" {
 func testAccTwilioMessagingService_statusCallback(friendlyName string, url string) string {
 	return fmt.Sprintf(`
 resource "twilio_messaging_service" "service" {
-  friendly_name = "%s"
+  friendly_name       = "%s"
   status_callback_url = "%s"
 }
 `, friendlyName, url)

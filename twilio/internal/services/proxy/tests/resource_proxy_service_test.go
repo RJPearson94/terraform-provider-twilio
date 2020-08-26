@@ -233,9 +233,9 @@ resource "twilio_proxy_service" "service" {
 func testAccTwilioProxyService_callbacks(uniqueName string, url string, interceptURL string, outOfSessionURL string) string {
 	return fmt.Sprintf(`
 resource "twilio_proxy_service" "service" {
-  unique_name = "%s"
-  callback_url = "%s"
-  intercept_callback_url = "%s"
+  unique_name                 = "%s"
+  callback_url                = "%s"
+  intercept_callback_url      = "%s"
   out_of_session_callback_url = "%s"
 }
 `, uniqueName, url, interceptURL, outOfSessionURL)
