@@ -70,6 +70,6 @@ func providerConfigure(p *schema.Provider) schema.ConfigureFunc {
 			terraformVersion: terraformVersion,
 		}
 
-		return config.Client()
+		return config.Client(p.StopContext())
 	}
 }

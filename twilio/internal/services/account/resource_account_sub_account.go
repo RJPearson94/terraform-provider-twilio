@@ -1,6 +1,7 @@
 package account
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
@@ -19,9 +20,18 @@ func resourceAccountSubAccount() *schema.Resource {
 		Read:   resourceAccountSubAccountRead,
 		Update: resourceAccountSubAccountUpdate,
 		Delete: resourceAccountSubAccountDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -63,12 +73,14 @@ func resourceAccountSubAccount() *schema.Resource {
 
 func resourceAccountSubAccountCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).API
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &accounts.CreateAccountInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
 	}
 
-	createResult, err := client.Accounts.Create(createInput)
+	createResult, err := client.Accounts.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create sub account: %s", err)
 	}
@@ -79,8 +91,10 @@ func resourceAccountSubAccountCreate(d *schema.ResourceData, meta interface{}) e
 
 func resourceAccountSubAccountRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).API
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Account(d.Id()).Fetch()
+	getResponse, err := client.Account(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -106,13 +120,15 @@ func resourceAccountSubAccountRead(d *schema.ResourceData, meta interface{}) err
 
 func resourceAccountSubAccountUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).API
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &account.UpdateAccountInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
 		Status:       utils.OptionalString(d, "status"),
 	}
 
-	updateResp, err := client.Account(d.Id()).Update(updateInput)
+	updateResp, err := client.Account(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update account: %s", err.Error())
 	}
@@ -123,6 +139,8 @@ func resourceAccountSubAccountUpdate(d *schema.ResourceData, meta interface{}) e
 
 func resourceAccountSubAccountDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).API
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
 	log.Println("[INFO] Accounts can only be closed and will be deleted after 30 days. So updating the account to close it")
 
@@ -130,7 +148,7 @@ func resourceAccountSubAccountDelete(d *schema.ResourceData, meta interface{}) e
 		Status: sdkUtils.String("closed"),
 	}
 
-	if _, err := client.Account(d.Id()).Update(updateInput); err != nil {
+	if _, err := client.Account(d.Id()).UpdateWithContext(ctx, updateInput); err != nil {
 		return fmt.Errorf("Failed to close account: %s", err.Error())
 	}
 

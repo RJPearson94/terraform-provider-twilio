@@ -1,6 +1,7 @@
 package account
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -12,6 +13,11 @@ import (
 func dataSourceAccountDetails() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceAccountDetailsRead,
+
+		Timeouts: &schema.ResourceTimeout{
+			Read: schema.DefaultTimeout(5 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -52,9 +58,11 @@ func dataSourceAccountDetails() *schema.Resource {
 
 func dataSourceAccountDetailsRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).API
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
 	sid := d.Get("sid").(string)
-	getResponse, err := client.Account(sid).Fetch()
+	getResponse, err := client.Account(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			return fmt.Errorf("[ERROR] Account with sid (%s) was not found", sid)

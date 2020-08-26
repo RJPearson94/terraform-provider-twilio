@@ -1,7 +1,9 @@
 package account
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
@@ -11,6 +13,11 @@ import (
 func dataSourceAccountBalance() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceAccountBalanceRead,
+
+		Timeouts: &schema.ResourceTimeout{
+			Read: schema.DefaultTimeout(5 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
 				Type:     schema.TypeString,
@@ -30,9 +37,11 @@ func dataSourceAccountBalance() *schema.Resource {
 
 func dataSourceAccountBalanceRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).API
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
 	sid := d.Get("account_sid").(string)
-	getResponse, err := client.Account(sid).Balance().Fetch()
+	getResponse, err := client.Account(sid).Balance().FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			return fmt.Errorf("[ERROR] Account balance with sid (%s) was not found", sid)

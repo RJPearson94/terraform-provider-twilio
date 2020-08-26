@@ -38,3 +38,9 @@ The following attributes are exported:
 - `auth_token` - The auth token for the account
 - `date_created` - The date in RFC3339 format that the account was created
 - `date_updated` - The date in RFC3339 format that the account was updated
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `read` - (Defaults to 5 minutes) Used when retrieving the account details

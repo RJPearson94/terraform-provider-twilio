@@ -1,6 +1,8 @@
 package twilio
 
 import (
+	"context"
+
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	api "github.com/RJPearson94/twilio-sdk-go/service/api/v2010"
 	autopilot "github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1"
@@ -20,7 +22,7 @@ type Config struct {
 	terraformVersion string
 }
 
-func (config *Config) Client() (interface{}, error) {
+func (config *Config) Client(ctx context.Context) (interface{}, error) {
 	creds, err := credentials.New(credentials.Account{
 		Sid:       config.AccountSid,
 		AuthToken: config.AuthToken,
@@ -32,15 +34,18 @@ func (config *Config) Client() (interface{}, error) {
 	client := &common.TwilioClient{
 		AccountSid:       config.AccountSid,
 		TerraformVersion: config.terraformVersion,
-		API:              api.NewWithCredentials(creds),
-		Autopilot:        autopilot.NewWithCredentials(creds),
-		Chat:             chat.NewWithCredentials(creds),
-		Flex:             flex.NewWithCredentials(creds),
-		Messaging:        messaging.NewWithCredentials(creds),
-		Proxy:            proxy.NewWithCredentials(creds),
-		Serverless:       serverless.NewWithCredentials(creds),
-		Studio:           studio.NewWithCredentials(creds),
-		TaskRouter:       taskrouter.NewWithCredentials(creds),
+
+		StopContext: ctx,
+
+		API:        api.NewWithCredentials(creds),
+		Autopilot:  autopilot.NewWithCredentials(creds),
+		Chat:       chat.NewWithCredentials(creds),
+		Flex:       flex.NewWithCredentials(creds),
+		Messaging:  messaging.NewWithCredentials(creds),
+		Proxy:      proxy.NewWithCredentials(creds),
+		Serverless: serverless.NewWithCredentials(creds),
+		Studio:     studio.NewWithCredentials(creds),
+		TaskRouter: taskrouter.NewWithCredentials(creds),
 	}
 	return client, nil
 }

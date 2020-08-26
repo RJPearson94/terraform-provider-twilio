@@ -35,3 +35,9 @@ The following attributes are exported:
 - `account_sid` - The SID of the account (Same as the ID)
 - `balance` - The balance of the account
 - `currency` - The currency of the account
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `read` - (Defaults to 5 minutes) Used when retrieving the account balance
