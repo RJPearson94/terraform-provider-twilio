@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -42,6 +43,22 @@ func TestAccTwilioChatChannelTriggerWebhook_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelTriggerWebhook_invalidWebhookURL(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	webhookURL := "webhook"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatChannelTriggerWebhook_basic(friendlyName, webhookURL),
+				ExpectError: regexp.MustCompile("config is invalid: expected \"webhook_url\" to have a host, got webhook"),
 			},
 		},
 	})

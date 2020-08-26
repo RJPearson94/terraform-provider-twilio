@@ -65,8 +65,9 @@ func resourceChatChannelWebhook() *schema.Resource {
 				Computed: true,
 			},
 			"webhook_url": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"filters": {
 				Type:     schema.TypeList,

@@ -213,8 +213,9 @@ func resourceChatService() *schema.Resource {
 				Computed: true,
 			},
 			"post_webhook_url": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"pre_webhook_retry_count": {
 				Type:     schema.TypeInt,
@@ -222,8 +223,9 @@ func resourceChatService() *schema.Resource {
 				Computed: true,
 			},
 			"pre_webhook_url": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"webhook_filters": {
 				Type:     schema.TypeList,

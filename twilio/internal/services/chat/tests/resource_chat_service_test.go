@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -45,6 +46,38 @@ func TestAccTwilioChatService_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelWebhook_invalidPostWebhookURL(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	webhookURL := "webhook"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatService_postWebhook(friendlyName, webhookURL),
+				ExpectError: regexp.MustCompile("config is invalid: expected \"post_webhook_url\" to have a host, got webhook"),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelWebhook_invalidPreWebhookURL(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	webhookURL := "webhook"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatService_preWebhook(friendlyName, webhookURL),
+				ExpectError: regexp.MustCompile("config is invalid: expected \"pre_webhook_url\" to have a host, got webhook"),
 			},
 		},
 	})
@@ -271,4 +304,26 @@ resource "twilio_chat_service" "service" {
   }
 }
 `, friendlyName, logEnabled)
+}
+
+func testAccTwilioChatService_postWebhook(friendlyName string, url string) string {
+	return fmt.Sprintf(`
+resource "twilio_chat_service" "service" {
+  friendly_name = "%s"
+
+  post_webhook_retry_count = 1
+  post_webhook_url = "%s"
+}
+`, friendlyName, url)
+}
+
+func testAccTwilioChatService_preWebhook(friendlyName string, url string) string {
+	return fmt.Sprintf(`
+resource "twilio_chat_service" "service" {
+  friendly_name = "%s"
+
+  pre_webhook_retry_count = 1
+  pre_webhook_url = "%s"
+}
+`, friendlyName, url)
 }
