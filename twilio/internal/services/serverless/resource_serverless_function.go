@@ -1,6 +1,7 @@
 package serverless
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -17,9 +18,18 @@ func resourceServerlessFunction() *schema.Resource {
 		Read:   resourceServerlessFunctionRead,
 		Update: resourceServerlessFunctionUpdate,
 		Delete: resourceServerlessFunctionDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -56,14 +66,16 @@ func resourceServerlessFunction() *schema.Resource {
 
 func resourceServerlessFunctionCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &functions.CreateFunctionInput{
 		FriendlyName: d.Get("friendly_name").(string),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).Functions.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).Functions.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless function: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create serverless function: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -72,14 +84,16 @@ func resourceServerlessFunctionCreate(d *schema.ResourceData, meta interface{}) 
 
 func resourceServerlessFunctionRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Function(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Function(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless function: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read serverless function: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -99,12 +113,14 @@ func resourceServerlessFunctionRead(d *schema.ResourceData, meta interface{}) er
 
 func resourceServerlessFunctionUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &function.UpdateFunctionInput{
 		FriendlyName: d.Get("friendly_name").(string),
 	}
 
-	updateResp, err := client.Service(d.Get("service_sid").(string)).Function(d.Id()).Update(updateInput)
+	updateResp, err := client.Service(d.Get("service_sid").(string)).Function(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update serverless function: %s", err.Error())
 	}
@@ -115,8 +131,10 @@ func resourceServerlessFunctionUpdate(d *schema.ResourceData, meta interface{}) 
 
 func resourceServerlessFunctionDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Get("service_sid").(string)).Function(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Get("service_sid").(string)).Function(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete serverless function: %s", err.Error())
 	}
 	d.SetId("")

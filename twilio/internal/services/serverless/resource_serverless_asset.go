@@ -1,6 +1,7 @@
 package serverless
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -17,9 +18,18 @@ func resourceServerlessAsset() *schema.Resource {
 		Read:   resourceServerlessAssetRead,
 		Update: resourceServerlessAssetUpdate,
 		Delete: resourceServerlessAssetDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -56,14 +66,16 @@ func resourceServerlessAsset() *schema.Resource {
 
 func resourceServerlessAssetCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &assets.CreateAssetInput{
 		FriendlyName: d.Get("friendly_name").(string),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).Assets.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).Assets.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless asset: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create serverless asset: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -72,14 +84,16 @@ func resourceServerlessAssetCreate(d *schema.ResourceData, meta interface{}) err
 
 func resourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless asset: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read serverless asset: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -99,12 +113,14 @@ func resourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) error
 
 func resourceServerlessAssetUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &asset.UpdateAssetInput{
 		FriendlyName: d.Get("friendly_name").(string),
 	}
 
-	updateResp, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).Update(updateInput)
+	updateResp, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update serverless asset: %s", err.Error())
 	}
@@ -115,8 +131,10 @@ func resourceServerlessAssetUpdate(d *schema.ResourceData, meta interface{}) err
 
 func resourceServerlessAssetDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete serverless asset: %s", err.Error())
 	}
 	d.SetId("")

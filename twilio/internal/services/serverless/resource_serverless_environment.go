@@ -1,6 +1,7 @@
 package serverless
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -15,9 +16,17 @@ func resourceServerlessEnvironment() *schema.Resource {
 		Create: resourceServerlessEnvironmentCreate,
 		Read:   resourceServerlessEnvironmentRead,
 		Delete: resourceServerlessEnvironmentDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -68,15 +77,17 @@ func resourceServerlessEnvironment() *schema.Resource {
 
 func resourceServerlessEnvironmentCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &environments.CreateEnvironmentInput{
 		UniqueName:   d.Get("unique_name").(string),
 		DomainSuffix: utils.OptionalString(d, "domain_suffix"),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).Environments.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).Environments.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless environment: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create serverless environment: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -85,14 +96,16 @@ func resourceServerlessEnvironmentCreate(d *schema.ResourceData, meta interface{
 
 func resourceServerlessEnvironmentRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Environment(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Environment(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless environment: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read serverless environment: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -115,8 +128,10 @@ func resourceServerlessEnvironmentRead(d *schema.ResourceData, meta interface{})
 
 func resourceServerlessEnvironmentDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Get("service_sid").(string)).Environment(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Get("service_sid").(string)).Environment(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete serverless service: %s", err.Error())
 	}
 	d.SetId("")

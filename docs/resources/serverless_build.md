@@ -102,7 +102,7 @@ The following attributes are exported:
 
 A `asset_version` block supports the following:
 
-- `sid` - The SID of the asset version 
+- `sid` - The SID of the asset version
 - `account_sid` - The Account SID of the asset version is deployed into
 - `service_sid` - The Service SID of the asset version is deployed into
 - `asset_sid` - The Service SID of the asset version is managed under
@@ -114,10 +114,20 @@ A `asset_version` block supports the following:
 
 A `function_version` block supports the following:
 
-- `sid` - The SID of the function version 
+- `sid` - The SID of the function version
 - `account_sid` - The Account SID of the function version is deployed into
 - `service_sid` - The Service SID of the function version is deployed into
 - `function_sid` - The Service SID of the function version is managed under
 - `date_created` - The date in RFC3339 format that the function version was created
 - `path` - The request uri path
 - `visibility` - The visibility of the function
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the build
+- `read` - (Defaults to 5 minutes) Used when retrieving the build
+- `delete` - (Defaults to 10 minutes) Used when deleting the build
+
+!> When polling is enabled, each request is constrained by the read timeout defined above

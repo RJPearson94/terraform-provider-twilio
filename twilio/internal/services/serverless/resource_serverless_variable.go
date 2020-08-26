@@ -1,6 +1,7 @@
 package serverless
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -17,9 +18,18 @@ func resourceServerlessVariable() *schema.Resource {
 		Read:   resourceServerlessVariableRead,
 		Update: resourceServerlessVariableUpdate,
 		Delete: resourceServerlessVariableDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -65,15 +75,17 @@ func resourceServerlessVariable() *schema.Resource {
 
 func resourceServerlessVariableCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &variables.CreateVariableInput{
 		Key:   d.Get("key").(string),
 		Value: d.Get("value").(string),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variables.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variables.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless variable: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create serverless variable: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -82,14 +94,16 @@ func resourceServerlessVariableCreate(d *schema.ResourceData, meta interface{}) 
 
 func resourceServerlessVariableRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variable(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variable(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless variable: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read serverless variable: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -111,13 +125,15 @@ func resourceServerlessVariableRead(d *schema.ResourceData, meta interface{}) er
 
 func resourceServerlessVariableUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &variable.UpdateVariableInput{
 		Key:   utils.OptionalString(d, "key"),
 		Value: utils.OptionalString(d, "value"),
 	}
 
-	updateResp, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variable(d.Id()).Update(updateInput)
+	updateResp, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variable(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update serverless variable: %s", err.Error())
 	}
@@ -128,8 +144,10 @@ func resourceServerlessVariableUpdate(d *schema.ResourceData, meta interface{}) 
 
 func resourceServerlessVariableDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variable(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variable(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete serverless variable: %s", err.Error())
 	}
 	d.SetId("")

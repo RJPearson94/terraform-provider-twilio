@@ -1,6 +1,7 @@
 package serverless
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -8,7 +9,6 @@ import (
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	serverless "github.com/RJPearson94/twilio-sdk-go/service/serverless/v1"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/build"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/builds"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
@@ -21,9 +21,17 @@ func resourceServerlessBuild() *schema.Resource {
 		Read:   resourceServerlessBuildRead,
 		Update: resourceServerlessBuildUpdate,
 		Delete: resourceServerlessBuildDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -167,6 +175,8 @@ func resourceServerlessBuild() *schema.Resource {
 
 func resourceServerlessBuildCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	dependencyArray := make([]builds.CreateDependency, 0)
 	for key, value := range d.Get("dependencies").(map[string]interface{}) {
@@ -187,16 +197,16 @@ func resourceServerlessBuildCreate(d *schema.ResourceData, meta interface{}) err
 		Dependencies:     sdkUtils.String(string(dependencies)),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).Builds.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).Builds.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless build: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create serverless build: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
 
 	pollings := d.Get("polling").([]interface{})
 	if len(pollings) == 1 {
-		if err := poll(d, client, pollings[0].(map[string]interface{})); err != nil {
+		if err := poll(d, meta.(*common.TwilioClient), pollings[0].(map[string]interface{})); err != nil {
 			return err
 		}
 	}
@@ -206,14 +216,16 @@ func resourceServerlessBuildCreate(d *schema.ResourceData, meta interface{}) err
 
 func resourceServerlessBuildRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless build: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read serverless build: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -242,8 +254,10 @@ func resourceServerlessBuildUpdate(d *schema.ResourceData, meta interface{}) err
 
 func resourceServerlessBuildDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete serverless build: %s", err.Error())
 	}
 
@@ -324,14 +338,16 @@ func flatternDependencies(input *[]build.FetchDependency) *[]interface{} {
 	return &results
 }
 
-func poll(d *schema.ResourceData, client *serverless.Serverless, pollingConfig map[string]interface{}) error {
+func poll(d *schema.ResourceData, client *common.TwilioClient, pollingConfig map[string]interface{}) error {
 	if pollingConfig["enabled"].(bool) {
 		for i := 0; i < pollingConfig["max_attempts"].(int); i++ {
 			log.Printf("[INFO] Build Polling attempt # %v", i+1)
+			ctx, cancel := context.WithTimeout(client.StopContext, d.Timeout(schema.TimeoutRead))
+			defer cancel()
 
-			getResponse, err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).Fetch()
+			getResponse, err := client.Serverless.Service(d.Get("service_sid").(string)).Build(d.Id()).FetchWithContext(ctx)
 			if err != nil {
-				return fmt.Errorf("[ERROR] Failed to poll serverless build: %s", err)
+				return fmt.Errorf("[ERROR] Failed to poll serverless build: %s", err.Error())
 			}
 
 			if getResponse.Status == "failed" {

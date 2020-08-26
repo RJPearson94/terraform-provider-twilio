@@ -52,4 +52,13 @@ The following attributes are exported:
 - `value` - The value of the environment variable
 - `date_created` - The date in RFC3339 format that the environment variable was created
 - `date_updated` - The date in RFC3339 format that the environment variable was updated
-- `url` - The url of the environment
+- `url` - The url of the environment variable
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the environment variable
+- `update` - (Defaults to 10 minutes) Used when updating the environment variable
+- `read` - (Defaults to 5 minutes) Used when retrieving the environment variable
+- `delete` - (Defaults to 10 minutes) Used when deleting the environment variable

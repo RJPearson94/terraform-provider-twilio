@@ -1,6 +1,7 @@
 package serverless
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"log"
@@ -21,9 +22,16 @@ func resourceServerlessFunctionVersion() *schema.Resource {
 		Create: resourceServerlessFunctionVersionCreate,
 		Read:   resourceServerlessFunctionVersionRead,
 		Delete: resourceServerlessFunctionVersionDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -101,6 +109,8 @@ func resourceServerlessFunctionVersion() *schema.Resource {
 
 func resourceServerlessFunctionVersionCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	var body io.ReadSeeker
 	var fileName string
@@ -146,9 +156,9 @@ func resourceServerlessFunctionVersionCreate(d *schema.ResourceData, meta interf
 		Visibility: d.Get("visibility").(string),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).Function(d.Get("function_sid").(string)).Versions.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).Function(d.Get("function_sid").(string)).Versions.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless function: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create serverless function: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -157,14 +167,16 @@ func resourceServerlessFunctionVersionCreate(d *schema.ResourceData, meta interf
 
 func resourceServerlessFunctionVersionRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Function(d.Get("function_sid").(string)).Version(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Function(d.Get("function_sid").(string)).Version(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless function version: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read serverless function version: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)

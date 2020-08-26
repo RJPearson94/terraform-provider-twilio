@@ -1,6 +1,7 @@
 package serverless
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
@@ -16,9 +17,17 @@ func resourceServerlessDeployment() *schema.Resource {
 		Create: resourceServerlessDeploymentCreate,
 		Read:   resourceServerlessDeploymentRead,
 		Delete: resourceServerlessDeploymentDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -60,9 +69,9 @@ func resourceServerlessDeployment() *schema.Resource {
 }
 
 func resourceServerlessDeploymentCreate(d *schema.ResourceData, meta interface{}) error {
-	createResult, err := createServerlessDeployment(d, meta, utils.OptionalString(d, "build_sid"))
+	createResult, err := createServerlessDeployment(d, meta, utils.OptionalString(d, "build_sid"), schema.TimeoutCreate)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless deployment: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create serverless deployment: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -71,14 +80,16 @@ func resourceServerlessDeploymentCreate(d *schema.ResourceData, meta interface{}
 
 func resourceServerlessDeploymentRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Deployment(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Deployment(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless deployment: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read serverless deployment: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -100,20 +111,22 @@ func resourceServerlessDeploymentRead(d *schema.ResourceData, meta interface{}) 
 func resourceServerlessDeploymentDelete(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[INFO] Serverless deployments cannot be deleted. So a new deployment will be create without a build sid as this will supersede the current deployment")
 
-	if _, err := createServerlessDeployment(d, meta, nil); err != nil {
-		return fmt.Errorf("[ERROR] Failed to create deployment without build sid: %s", err)
+	if _, err := createServerlessDeployment(d, meta, nil, schema.TimeoutDelete); err != nil {
+		return fmt.Errorf("[ERROR] Failed to create deployment without build sid: %s", err.Error())
 	}
 
 	d.SetId("")
 	return nil
 }
 
-func createServerlessDeployment(d *schema.ResourceData, meta interface{}, sid *string) (*deployments.CreateDeploymentResponse, error) {
+func createServerlessDeployment(d *schema.ResourceData, meta interface{}, sid *string, timeoutKey string) (*deployments.CreateDeploymentResponse, error) {
 	client := meta.(*common.TwilioClient).Serverless
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(timeoutKey))
+	defer cancel()
 
 	createInput := &deployments.CreateDeploymentInput{
 		BuildSid: sid,
 	}
 
-	return client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Deployments.Create(createInput)
+	return client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Deployments.CreateWithContext(ctx, createInput)
 }
