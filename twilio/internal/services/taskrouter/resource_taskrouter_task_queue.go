@@ -1,6 +1,7 @@
 package taskrouter
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -17,9 +18,18 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 		Read:   resourceTaskRouterTaskQueueRead,
 		Update: resourceTaskRouterTaskQueueUpdate,
 		Delete: resourceTaskRouterTaskQueueDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -90,6 +100,8 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 
 func resourceTaskRouterTaskQueueCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &task_queues.CreateTaskQueueInput{
 		FriendlyName:           d.Get("friendly_name").(string),
@@ -100,9 +112,9 @@ func resourceTaskRouterTaskQueueCreate(d *schema.ResourceData, meta interface{})
 		ReservationActivitySid: utils.OptionalString(d, "reservation_activity_sid"),
 	}
 
-	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueues.Create(createInput)
+	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueues.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create task queue: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create task queue: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -111,8 +123,10 @@ func resourceTaskRouterTaskQueueCreate(d *schema.ResourceData, meta interface{})
 
 func resourceTaskRouterTaskQueueRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).Fetch()
+	getResponse, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -146,6 +160,8 @@ func resourceTaskRouterTaskQueueRead(d *schema.ResourceData, meta interface{}) e
 
 func resourceTaskRouterTaskQueueUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &task_queue.UpdateTaskQueueInput{
 		FriendlyName:           utils.OptionalString(d, "friendly_name"),
@@ -156,7 +172,7 @@ func resourceTaskRouterTaskQueueUpdate(d *schema.ResourceData, meta interface{})
 		ReservationActivitySid: utils.OptionalString(d, "reservation_activity_sid"),
 	}
 
-	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).Update(updateInput)
+	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update task queue: %s", err.Error())
 	}
@@ -167,8 +183,10 @@ func resourceTaskRouterTaskQueueUpdate(d *schema.ResourceData, meta interface{})
 
 func resourceTaskRouterTaskQueueDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).Delete(); err != nil {
+	if err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete task queue: %s", err.Error())
 	}
 	d.SetId("")

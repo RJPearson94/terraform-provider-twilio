@@ -1,6 +1,7 @@
 package taskrouter
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -19,9 +20,18 @@ func resourceTaskRouterWorker() *schema.Resource {
 		Read:   resourceTaskRouterWorkerRead,
 		Update: resourceTaskRouterWorkerUpdate,
 		Delete: resourceTaskRouterWorkerDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -82,6 +92,8 @@ func resourceTaskRouterWorker() *schema.Resource {
 
 func resourceTaskRouterWorkerCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &workers.CreateWorkerInput{
 		FriendlyName: d.Get("friendly_name").(string),
@@ -89,9 +101,9 @@ func resourceTaskRouterWorkerCreate(d *schema.ResourceData, meta interface{}) er
 		Attributes:   utils.OptionalJSONString(d, "attributes"),
 	}
 
-	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).Workers.Create(createInput)
+	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).Workers.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create taskrouter worker: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create taskrouter worker: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -100,14 +112,16 @@ func resourceTaskRouterWorkerCreate(d *schema.ResourceData, meta interface{}) er
 
 func resourceTaskRouterWorkerRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Workspace(d.Get("workspace_sid").(string)).Worker(d.Id()).Fetch()
+	getResponse, err := client.Workspace(d.Get("workspace_sid").(string)).Worker(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read taskrouter worker: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read taskrouter worker: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -135,6 +149,8 @@ func resourceTaskRouterWorkerRead(d *schema.ResourceData, meta interface{}) erro
 
 func resourceTaskRouterWorkerUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &worker.UpdateWorkerInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
@@ -142,7 +158,7 @@ func resourceTaskRouterWorkerUpdate(d *schema.ResourceData, meta interface{}) er
 		Attributes:   utils.OptionalJSONString(d, "attributes"),
 	}
 
-	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Worker(d.Id()).Update(updateInput)
+	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Worker(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update taskrouter worker: %s", err.Error())
 	}
@@ -153,8 +169,10 @@ func resourceTaskRouterWorkerUpdate(d *schema.ResourceData, meta interface{}) er
 
 func resourceTaskRouterWorkerDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Workspace(d.Get("workspace_sid").(string)).Worker(d.Id()).Delete(); err != nil {
+	if err := client.Workspace(d.Get("workspace_sid").(string)).Worker(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete taskrouter worker: %s", err.Error())
 	}
 	d.SetId("")

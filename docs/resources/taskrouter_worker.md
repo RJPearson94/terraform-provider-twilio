@@ -36,8 +36,8 @@ The following attributes are exported:
 
 - `id` - The ID of the worker (Same as the SID)
 - `sid` - The SID of the worker (Same as the ID)
-- `account_sid` - The Account SID of the worker is deployed into
-- `workspaceSid` - The Workspace SID to create the worker under
+- `account_sid` - The account SID of the worker is deployed into
+- `workspaceSid` - The workspace SID to create the worker under
 - `friendly_name` - The name of the worker
 - `attributes` - JSON string of worker attributes
 - `activity_sid` - Activity SID to be assigned to the worker
@@ -47,3 +47,12 @@ The following attributes are exported:
 - `date_updated` - The date in RFC3339 format that the worker was updated
 - `date_status_changed` - The date in RFC3339 format that the worker status was changed
 - `url` - The url of the worker
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the worker
+- `update` - (Defaults to 10 minutes) Used when updating the worker
+- `read` - (Defaults to 5 minutes) Used when retrieving the worker
+- `delete` - (Defaults to 10 minutes) Used when deleting the worker

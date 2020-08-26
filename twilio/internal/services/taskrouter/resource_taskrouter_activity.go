@@ -1,6 +1,7 @@
 package taskrouter
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -17,9 +18,18 @@ func resourceTaskRouterActivity() *schema.Resource {
 		Read:   resourceTaskRouterActivityRead,
 		Update: resourceTaskRouterActivityUpdate,
 		Delete: resourceTaskRouterActivityDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -61,15 +71,17 @@ func resourceTaskRouterActivity() *schema.Resource {
 
 func resourceTaskRouterActivityCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &activities.CreateActivityInput{
 		FriendlyName: d.Get("friendly_name").(string),
 		Available:    utils.OptionalBool(d, "available"),
 	}
 
-	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).Activities.Create(createInput)
+	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).Activities.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create taskrouter activity: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create taskrouter activity: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -78,14 +90,16 @@ func resourceTaskRouterActivityCreate(d *schema.ResourceData, meta interface{}) 
 
 func resourceTaskRouterActivityRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).Fetch()
+	getResponse, err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read taskrouter activity: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read taskrouter activity: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -106,12 +120,14 @@ func resourceTaskRouterActivityRead(d *schema.ResourceData, meta interface{}) er
 
 func resourceTaskRouterActivityUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &activity.UpdateActivityInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
 	}
 
-	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).Update(updateInput)
+	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update taskrouter activity: %s", err.Error())
 	}
@@ -122,8 +138,10 @@ func resourceTaskRouterActivityUpdate(d *schema.ResourceData, meta interface{}) 
 
 func resourceTaskRouterActivityDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).Delete(); err != nil {
+	if err := client.Workspace(d.Get("workspace_sid").(string)).Activity(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete taskrouter activity: %s", err.Error())
 	}
 	d.SetId("")

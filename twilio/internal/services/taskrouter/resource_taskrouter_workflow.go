@@ -1,6 +1,7 @@
 package taskrouter
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -19,9 +20,18 @@ func resourceTaskRouterWorkflow() *schema.Resource {
 		Read:   resourceTaskRouterWorkflowRead,
 		Update: resourceTaskRouterWorkflowUpdate,
 		Delete: resourceTaskRouterWorkflowDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -81,20 +91,22 @@ func resourceTaskRouterWorkflow() *schema.Resource {
 
 func resourceTaskRouterWorkflowCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
-	normalizedJSON, _ := structure.NormalizeJsonString(d.Get("configuration").(string))
+	configurationJSONString, _ := structure.NormalizeJsonString(d.Get("configuration").(string))
 
 	createInput := &workflows.CreateWorkflowInput{
 		FriendlyName:                  d.Get("friendly_name").(string),
-		Configuration:                 normalizedJSON,
+		Configuration:                 configurationJSONString,
 		AssignmentCallbackURL:         utils.OptionalString(d, "assignment_callback_url"),
 		FallbackAssignmentCallbackURL: utils.OptionalString(d, "fallback_assignment_callback_url"),
 		TaskReservationTimeout:        utils.OptionalInt(d, "task_reservation_timeout"),
 	}
 
-	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).Workflows.Create(createInput)
+	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).Workflows.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create workflow: %s", err)
+		return fmt.Errorf("[ERROR] Failed to create workflow: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -103,14 +115,16 @@ func resourceTaskRouterWorkflowCreate(d *schema.ResourceData, meta interface{}) 
 
 func resourceTaskRouterWorkflowRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Workspace(d.Get("workspace_sid").(string)).Workflow(d.Id()).Fetch()
+	getResponse, err := client.Workspace(d.Get("workspace_sid").(string)).Workflow(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read workflow: %s", err)
+		return fmt.Errorf("[ERROR] Failed to read workflow: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -135,6 +149,8 @@ func resourceTaskRouterWorkflowRead(d *schema.ResourceData, meta interface{}) er
 
 func resourceTaskRouterWorkflowUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &workflow.UpdateWorkflowInput{
 		FriendlyName:                  utils.OptionalString(d, "friendly_name"),
@@ -144,7 +160,7 @@ func resourceTaskRouterWorkflowUpdate(d *schema.ResourceData, meta interface{}) 
 		TaskReservationTimeout:        utils.OptionalInt(d, "task_reservation_timeout"),
 	}
 
-	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Workflow(d.Id()).Update(updateInput)
+	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).Workflow(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update workflow: %s", err.Error())
 	}
@@ -155,8 +171,10 @@ func resourceTaskRouterWorkflowUpdate(d *schema.ResourceData, meta interface{}) 
 
 func resourceTaskRouterWorkflowDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).TaskRouter
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Workspace(d.Get("workspace_sid").(string)).Workflow(d.Id()).Delete(); err != nil {
+	if err := client.Workspace(d.Get("workspace_sid").(string)).Workflow(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete workflow: %s", err.Error())
 	}
 	d.SetId("")
