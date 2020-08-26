@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -96,6 +97,64 @@ func TestAccTwilioTaskRouterWorkflow_update(t *testing.T) {
 	})
 }
 
+func TestAccTwilioTaskRouterWorkflow_assignmentCallback(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.workflow", workflowResourceName)
+
+	friendlyName := acctest.RandString(10)
+	callbackURL := "https://test.com/callback"
+	fallbackCallbackURL := "https://test.com/fallback-callback"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioTaskRouterWorkflow_assignmentCallback(friendlyName, callbackURL, fallbackCallbackURL),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkflowExists(stateResourceName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttr(stateResourceName, "assignment_callback_url", callbackURL),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_assignment_callback_url", fallbackCallbackURL),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterWorkflow_invalidAssignmentCallbackURL(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	callbackURL := "callback"
+	fallbackCallbackURL := "https://test.com/fallback-callback"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterWorkflow_assignmentCallback(friendlyName, callbackURL, fallbackCallbackURL),
+				ExpectError: regexp.MustCompile("config is invalid: expected \"assignment_callback_url\" to have a host, got callback"),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterWorkflow_invalidAssignmentFallbackCallbackURL(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	callbackURL := "https://test.com/callback"
+	fallbackCallbackURL := "fallback-callback"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterWorkflow_assignmentCallback(friendlyName, callbackURL, fallbackCallbackURL),
+				ExpectError: regexp.MustCompile("config is invalid: expected \"fallback_assignment_callback_url\" to have a host, got fallback-callback"),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioTaskRouterWorkflowDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).TaskRouter
 
@@ -161,4 +220,36 @@ resource "twilio_taskrouter_workflow" "workflow" {
 EOF
 }
 `, friendlyName, friendlyName, friendlyName)
+}
+
+func testAccTwilioTaskRouterWorkflow_assignmentCallback(friendlyName string, url string, fallbackURL string) string {
+	return fmt.Sprintf(`
+resource "twilio_taskrouter_workspace" "workspace" {
+  friendly_name          = "%s"
+  multi_task_enabled     = true
+  prioritize_queue_order = "FIFO"
+}
+
+resource "twilio_taskrouter_task_queue" "task_queue" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%s"
+}
+
+resource "twilio_taskrouter_workflow" "workflow" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%s"
+  configuration = <<EOF
+{
+  "task_routing": {
+    "filters": [],
+    "default_filter": {
+      "queue": "${twilio_taskrouter_task_queue.task_queue.sid}"
+    }
+  }
+}
+EOF
+  assignment_callback_url = "%s"
+  fallback_assignment_callback_url = "%s"
+}
+`, friendlyName, friendlyName, friendlyName, url, fallbackURL)
 }

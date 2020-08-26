@@ -3,6 +3,7 @@ package taskrouter
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -12,6 +13,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
+
+const workspaceEventsSeperator = ","
 
 func resourceTaskRouterWorkspace() *schema.Resource {
 	return &schema.Resource{
@@ -45,16 +48,21 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 				Required: true,
 			},
 			"event_callback_url": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"events_filter": {
-				Type:     schema.TypeString,
+			"event_filters": {
+				Type:     schema.TypeList,
 				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 			},
 			"multi_task_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
+				Computed: true,
 			},
 			"template": {
 				Type:     schema.TypeString,
@@ -63,6 +71,7 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 			"prioritize_queue_order": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"LIFO",
 					"FIFO",
@@ -108,7 +117,7 @@ func resourceTaskRouterWorkspaceCreate(d *schema.ResourceData, meta interface{})
 	createInput := &workspaces.CreateWorkspaceInput{
 		FriendlyName:         d.Get("friendly_name").(string),
 		EventCallbackURL:     utils.OptionalString(d, "event_callback_url"),
-		EventsFilter:         utils.OptionalString(d, "events_filter"),
+		EventsFilter:         utils.OptionalSeperatedString(d, "event_filters", workspaceEventsSeperator),
 		MultiTaskEnabled:     utils.OptionalBool(d, "multi_task_enabled"),
 		Template:             utils.OptionalString(d, "template"),
 		PrioritizeQueueOrder: utils.OptionalString(d, "prioritize_queue_order"),
@@ -141,7 +150,11 @@ func resourceTaskRouterWorkspaceRead(d *schema.ResourceData, meta interface{}) e
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("friendly_name", getResponse.FriendlyName)
 	d.Set("event_callback_url", getResponse.EventCallbackURL)
-	d.Set("events_filter", getResponse.EventsFilter)
+
+	if getResponse.EventsFilter != nil {
+		d.Set("event_filters", strings.Split(*getResponse.EventsFilter, workspaceEventsSeperator))
+	}
+
 	d.Set("default_activity_name", getResponse.DefaultActivityName)
 	d.Set("default_activity_sid", getResponse.DefaultActivitySid)
 	d.Set("multi_task_enabled", getResponse.MultiTaskEnabled)
@@ -172,7 +185,7 @@ func resourceTaskRouterWorkspaceUpdate(d *schema.ResourceData, meta interface{})
 	updateInput := &workspace.UpdateWorkspaceInput{
 		FriendlyName:         utils.OptionalString(d, "friendly_name"),
 		EventCallbackURL:     utils.OptionalString(d, "event_callback_url"),
-		EventsFilter:         utils.OptionalString(d, "events_filter"),
+		EventsFilter:         utils.OptionalSeperatedString(d, "event_filters", workspaceEventsSeperator),
 		MultiTaskEnabled:     utils.OptionalBool(d, "multi_task_enabled"),
 		Template:             utils.OptionalString(d, "template"),
 		PrioritizeQueueOrder: utils.OptionalString(d, "prioritize_queue_order"),

@@ -3,6 +3,7 @@ package tests
 import (
 	"fmt"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -31,7 +32,7 @@ func TestAccTwilioTaskRouterWorkspace_basic(t *testing.T) {
 					testAccCheckTwilioTaskRouterWorkspaceExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "event_callback_url", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "events_filter", ""),
+					resource.TestCheckNoResourceAttr(stateResourceName, "event_filters"),
 					resource.TestCheckResourceAttr(stateResourceName, "multi_task_enabled", "true"),
 					resource.TestCheckNoResourceAttr(stateResourceName, "template"),
 					resource.TestCheckResourceAttr(stateResourceName, "prioritize_queue_order", queueOrder),
@@ -86,7 +87,7 @@ func TestAccTwilioTaskRouterWorkspace_update(t *testing.T) {
 					testAccCheckTwilioTaskRouterWorkspaceExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "event_callback_url", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "events_filter", ""),
+					resource.TestCheckNoResourceAttr(stateResourceName, "event_filters"),
 					resource.TestCheckResourceAttr(stateResourceName, "multi_task_enabled", "true"),
 					resource.TestCheckNoResourceAttr(stateResourceName, "template"),
 					resource.TestCheckResourceAttr(stateResourceName, "prioritize_queue_order", queueOrder),
@@ -108,7 +109,7 @@ func TestAccTwilioTaskRouterWorkspace_update(t *testing.T) {
 					testAccCheckTwilioTaskRouterWorkspaceExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "event_callback_url", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "events_filter", ""),
+					resource.TestCheckNoResourceAttr(stateResourceName, "event_filters"),
 					resource.TestCheckResourceAttr(stateResourceName, "multi_task_enabled", "true"),
 					resource.TestCheckNoResourceAttr(stateResourceName, "template"),
 					resource.TestCheckResourceAttr(stateResourceName, "prioritize_queue_order", newQueueOrder),
@@ -123,6 +124,49 @@ func TestAccTwilioTaskRouterWorkspace_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "timeout_activity_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterWorkspace_eventCallback(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.workspace", workspaceResourceName)
+
+	friendlyName := acctest.RandString(10)
+	eventFilters := []string{"task.created", "task.canceled"}
+	callbackURL := "https://test.com/callback"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioTaskRouterWorkspace_eventCallback(friendlyName, eventFilters, callbackURL),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkspaceExists(stateResourceName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttr(stateResourceName, "event_callback_url", callbackURL),
+					resource.TestCheckResourceAttr(stateResourceName, "event_filters.#", "2"),
+					resource.TestCheckResourceAttr(stateResourceName, "event_filters.0", "task.created"),
+					resource.TestCheckResourceAttr(stateResourceName, "event_filters.1", "task.canceled"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterWorkspace_invalidEventCallbackURL(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	eventFilters := []string{"task.created", "task.canceled"}
+	callbackURL := "callback"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterWorkspace_eventCallback(friendlyName, eventFilters, callbackURL),
+				ExpectError: regexp.MustCompile("config is invalid: expected \"event_callback_url\" to have a host, got callback"),
 			},
 		},
 	})
@@ -173,4 +217,14 @@ resource "twilio_taskrouter_workspace" "workspace" {
   prioritize_queue_order = "%s"
 }
 `, friendlyName, queueOrder)
+}
+
+func testAccTwilioTaskRouterWorkspace_eventCallback(friendlyName string, eventFilters []string, callbackURL string) string {
+	return fmt.Sprintf(`
+resource "twilio_taskrouter_workspace" "workspace" {
+  friendly_name          = "%s"
+  event_filters     	 = %s
+  event_callback_url = "%s"
+}
+`, friendlyName, `["`+strings.Join(eventFilters[:], `", "`)+`"]`, callbackURL)
 }

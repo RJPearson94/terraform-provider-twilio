@@ -24,7 +24,7 @@ The following arguments are supported:
 
 - `friendly_name` - (Mandatory) The name of the workspace
 - `event_callback_url` - (Optional) The event callback URL
-- `events_filter` - (Optional) The event callback filter
+- `event_filters` - (Optional) list of event callback filters
 - `multi_task_enabled` - (Optional) Whether or not multitasking is enabled
 - `template` - (Optional) TaskRouter template to use
 - `prioritize_queue_order` - (Optional) Determine how TaskRouter prioritizes incoming tasks. Options are `LIFO` or `FIFO`
@@ -35,10 +35,10 @@ The following attributes are exported:
 
 - `id` - The ID of the workspace (Same as the SID)
 - `sid` - The SID of the workspace (Same as the ID)
-- `account_sid` - The Account SID of the workspace is deployed into
+- `account_sid` - The account SID of the workspace is deployed into
 - `friendly_name` - The name of the workspace
 - `event_callback_url` - The event callback URL
-- `events_filter` - The event callback filter
+- `event_filters` - The event callback filter
 - `multi_task_enabled` - Whether or not multitasking is enabled
 - `template` - TaskRouter template to use
 - `prioritize_queue_order` - Determine how TaskRouter prioritizes incoming
