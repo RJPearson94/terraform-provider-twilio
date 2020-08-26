@@ -9,6 +9,8 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/flex/v1/channels"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func resourceFlexChannel() *schema.Resource {
@@ -67,9 +69,11 @@ func resourceFlexChannel() *schema.Resource {
 				ForceNew: true,
 			},
 			"pre_engagement_data": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
+				Type:             schema.TypeString,
+				Optional:         true,
+				ForceNew:         true,
+				ValidateFunc:     validation.StringIsJSON,
+				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
 			"target": {
 				Type:     schema.TypeString,
@@ -77,9 +81,11 @@ func resourceFlexChannel() *schema.Resource {
 				ForceNew: true,
 			},
 			"task_attributes": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
+				Type:             schema.TypeString,
+				Optional:         true,
+				ForceNew:         true,
+				ValidateFunc:     validation.StringIsJSON,
+				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
 			"task_sid": {
 				Type:     schema.TypeString,
@@ -118,9 +124,9 @@ func resourceFlexChannelCreate(d *schema.ResourceData, meta interface{}) error {
 		FlexFlowSid:          d.Get("flex_flow_sid").(string),
 		Identity:             d.Get("identity").(string),
 		LongLived:            utils.OptionalBool(d, "long_lived"),
-		PreEngagementData:    utils.OptionalString(d, "pre_engagement_data"),
+		PreEngagementData:    utils.OptionalJSONString(d, "pre_engagement_data"),
 		Target:               utils.OptionalString(d, "target"),
-		TaskAttributes:       utils.OptionalString(d, "task_attributes"),
+		TaskAttributes:       utils.OptionalJSONString(d, "task_attributes"),
 		TaskSid:              utils.OptionalString(d, "task_sid"),
 	}
 
@@ -155,9 +161,19 @@ func resourceFlexChannelRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("flex_flow_sid", getResponse.FlexFlowSid)
 	d.Set("identity", d.Get("identity").(string))
 	d.Set("long_lived", d.Get("long_lived").(bool))
-	d.Set("pre_engagement_data", d.Get("pre_engagement_data"))
+
+	if v, ok := d.GetOk("pre_engagement_data"); ok {
+		preEngagementJSONString, _ := structure.NormalizeJsonString(v.(string))
+		d.Set("pre_engagement_data", preEngagementJSONString)
+	}
+
 	d.Set("target", d.Get("target"))
-	d.Set("task_attributes", d.Get("task_attributes"))
+
+	if v, ok := d.GetOk("task_attributes"); ok {
+		taskAttributesJSONString, _ := structure.NormalizeJsonString(v.(string))
+		d.Set("task_attributes", taskAttributesJSONString)
+	}
+
 	d.Set("task_sid", getResponse.TaskSid)
 	d.Set("user_sid", getResponse.UserSid)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))

@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -42,15 +43,95 @@ func TestAccTwilioFlexChannel_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "chat_unique_name", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "long_lived"),
-					resource.TestCheckResourceAttr(stateResourceName, "pre_engagement_data", ""),
+					resource.TestCheckNoResourceAttr(stateResourceName, "pre_engagement_data"),
 					resource.TestCheckResourceAttr(stateResourceName, "target", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "task_attributes", ""),
+					resource.TestCheckNoResourceAttr(stateResourceName, "task_attributes"),
 					resource.TestCheckResourceAttr(stateResourceName, "task_sid", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "user_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioFlexChannel_preEngagementData(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.channel", resourceFlexChannel)
+
+	testData := acceptance.TestAccData
+	preEngagementData := "{}"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioFlexChannelDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioFlexChannel_preEngagementData(testData, preEngagementData),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioFlexChannelExists(stateResourceName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttr(stateResourceName, "pre_engagement_data", preEngagementData),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelWebhook_invalidPreEngagementData(t *testing.T) {
+	testData := acceptance.TestAccData
+	preEngagementData := "preEngagementData"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioFlexChannelDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioFlexChannel_preEngagementData(testData, preEngagementData),
+				ExpectError: regexp.MustCompile("config is invalid: \"pre_engagement_data\" contains an invalid JSON"),
+			},
+		},
+	})
+}
+
+func TestAccTwilioFlexChannel_taskAttributes(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.channel", resourceFlexChannel)
+
+	testData := acceptance.TestAccData
+	taskAttributes := "{}"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioFlexChannelDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioFlexChannel_taskAttributes(testData, taskAttributes),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioFlexChannelExists(stateResourceName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttr(stateResourceName, "task_attributes", taskAttributes),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelWebhook_invalidTaskAttributes(t *testing.T) {
+	testData := acceptance.TestAccData
+	taskAttributes := "taskAttributes"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioFlexChannelDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioFlexChannel_taskAttributes(testData, taskAttributes),
+				ExpectError: regexp.MustCompile("config is invalid: \"task_attributes\" contains an invalid JSON"),
 			},
 		},
 	})
@@ -112,4 +193,58 @@ resource "twilio_flex_channel" "channel" {
   identity                = "%s"
 }
 `, friendlyName, testData.FlexChannelServiceSid, chatFriendlyName, chatUserFriendlyName, identity)
+}
+
+func testAccTwilioFlexChannel_preEngagementData(testData *acceptance.TestData, preEngagementData string) string {
+	friendlyName := acctest.RandString(10)
+	chatFriendlyName := acctest.RandString(10)
+	chatUserFriendlyName := acctest.RandString(10)
+	identity := acctest.RandString(10)
+
+	return fmt.Sprintf(`
+resource "twilio_flex_flow" "flow" {
+  friendly_name    = "%s"
+  chat_service_sid = "%s"
+  channel_type     = "web"
+  integration_type = "external"
+  integration {
+    url = "https://test.com/external"
+  }
+}
+
+resource "twilio_flex_channel" "channel" {
+  chat_friendly_name      = "%s"
+  chat_user_friendly_name = "%s"
+  flex_flow_sid           = twilio_flex_flow.flow.sid
+  identity                = "%s"
+  pre_engagement_data     = "%s"
+}
+`, friendlyName, testData.FlexChannelServiceSid, chatFriendlyName, chatUserFriendlyName, identity, preEngagementData)
+}
+
+func testAccTwilioFlexChannel_taskAttributes(testData *acceptance.TestData, taskAttributes string) string {
+	friendlyName := acctest.RandString(10)
+	chatFriendlyName := acctest.RandString(10)
+	chatUserFriendlyName := acctest.RandString(10)
+	identity := acctest.RandString(10)
+
+	return fmt.Sprintf(`
+resource "twilio_flex_flow" "flow" {
+  friendly_name    = "%s"
+  chat_service_sid = "%s"
+  channel_type     = "web"
+  integration_type = "external"
+  integration {
+    url = "https://test.com/external"
+  }
+}
+
+resource "twilio_flex_channel" "channel" {
+  chat_friendly_name      = "%s"
+  chat_user_friendly_name = "%s"
+  flex_flow_sid           = twilio_flex_flow.flow.sid
+  identity                = "%s"
+  task_attributes         = "%s"
+}
+`, friendlyName, testData.FlexChannelServiceSid, chatFriendlyName, chatUserFriendlyName, identity, taskAttributes)
 }

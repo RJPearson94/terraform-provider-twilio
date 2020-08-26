@@ -103,8 +103,9 @@ func resourceFlexFlow() *schema.Resource {
 							Computed: true,
 						},
 						"url": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 						"workflow_sid": {
 							Type:     schema.TypeString,

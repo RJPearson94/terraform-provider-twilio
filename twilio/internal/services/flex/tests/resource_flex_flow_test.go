@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -55,6 +56,26 @@ func TestAccTwilioFlexFlow_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelWebhook_invalidIntegrationURL(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	channelType := "web"
+	integrationType := "external"
+	integrationURL := "integrationURL"
+	testData := acceptance.TestAccData
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioFlexFlowDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioFlexFlow_basic(testData, friendlyName, channelType, integrationType, integrationURL),
+				ExpectError: regexp.MustCompile("config is invalid: expected \"integration.0.url\" to have a host, got integrationURL"),
 			},
 		},
 	})
