@@ -10,6 +10,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service"
 	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/services"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func resourceProxyService() *schema.Resource {
@@ -57,8 +58,9 @@ func resourceProxyService() *schema.Resource {
 				Computed: true,
 			},
 			"callback_url": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"geo_match_level": {
 				Type:     schema.TypeString,
@@ -71,12 +73,14 @@ func resourceProxyService() *schema.Resource {
 				Computed: true,
 			},
 			"intercept_callback_url": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"out_of_session_callback_url": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"date_created": {
 				Type:     schema.TypeString,

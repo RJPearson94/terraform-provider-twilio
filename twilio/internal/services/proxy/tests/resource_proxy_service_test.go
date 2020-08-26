@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -102,6 +103,85 @@ func TestAccTwilioProxyService_update(t *testing.T) {
 	})
 }
 
+func TestAccTwilioProxyService_callbacks(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", proxyServiceResourceName)
+
+	uniqueName := acctest.RandString(10)
+	url := "https://test.com/callbackURL"
+	interceptURL := "https://test.com/interceptURL"
+	outOfSessionURL := "https://test.com/outOfSessionURL"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioProxyService_callbacks(uniqueName, url, interceptURL, outOfSessionURL),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioProxyServiceExists(stateResourceName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttr(stateResourceName, "callback_url", url),
+					resource.TestCheckResourceAttr(stateResourceName, "intercept_callback_url", interceptURL),
+					resource.TestCheckResourceAttr(stateResourceName, "out_of_session_callback_url", outOfSessionURL),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioProxyService_invalidCallbackURL(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	url := "callbackURL"
+	interceptURL := "https://test.com/interceptURL"
+	outOfSessionURL := "https://test.com/outOfSessionURL"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioProxyService_callbacks(uniqueName, url, interceptURL, outOfSessionURL),
+				ExpectError: regexp.MustCompile("config is invalid: expected \"callback_url\" to have a host, got callbackURL")},
+		},
+	})
+}
+
+func TestAccTwilioProxyService_invalidInterceptCallbackURL(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	url := "https://test.com/callbackURL"
+	interceptURL := "interceptURL"
+	outOfSessionURL := "https://test.com/outOfSessionURL"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioProxyService_callbacks(uniqueName, url, interceptURL, outOfSessionURL),
+				ExpectError: regexp.MustCompile("config is invalid: expected \"intercept_callback_url\" to have a host, got interceptURL"),
+			},
+		},
+	})
+}
+
+func TestAccTwilioProxyService_invalidOutOfSessionCallbackURL(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	url := "https://test.com/callbackURL"
+	interceptURL := "https://test.com/interceptURL"
+	outOfSessionURL := "outOfSessionURL"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioProxyService_callbacks(uniqueName, url, interceptURL, outOfSessionURL),
+				ExpectError: regexp.MustCompile("config is invalid: expected \"out_of_session_callback_url\" to have a host, got outOfSessionURL"),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioProxyServiceDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Proxy
 
@@ -148,4 +228,15 @@ resource "twilio_proxy_service" "service" {
   unique_name = "%s"
 }
 `, uniqueName)
+}
+
+func testAccTwilioProxyService_callbacks(uniqueName string, url string, interceptURL string, outOfSessionURL string) string {
+	return fmt.Sprintf(`
+resource "twilio_proxy_service" "service" {
+  unique_name = "%s"
+  callback_url = "%s"
+  intercept_callback_url = "%s"
+  out_of_session_callback_url = "%s"
+}
+`, uniqueName, url, interceptURL, outOfSessionURL)
 }
