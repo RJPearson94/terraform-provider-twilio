@@ -34,3 +34,12 @@ The following attributes are exported:
 - `secret` - The API Key Secret
 - `date_created` - The date in RFC3339 format that the API Key was created
 - `date_updated` - The date in RFC3339 format that the API Key was updated
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the API Key
+- `update` - (Defaults to 10 minutes) Used when updating the API Key
+- `read` - (Defaults to 5 minutes) Used when retrieving the API Key
+- `delete` - (Defaults to 10 minutes) Used when deleting the API Key

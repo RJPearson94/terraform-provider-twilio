@@ -1,6 +1,7 @@
 package iam
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -17,9 +18,18 @@ func resourceIamApiKey() *schema.Resource {
 		Read:   resourceApiKeyRead,
 		Update: resourceApiKeyUpdate,
 		Delete: resourceApiKeyDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -53,12 +63,14 @@ func resourceIamApiKey() *schema.Resource {
 
 func resourceApiKeyCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).API
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &keys.CreateKeyInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
 	}
 
-	createResult, err := client.Account(d.Get("account_sid").(string)).Keys.Create(createInput)
+	createResult, err := client.Account(d.Get("account_sid").(string)).Keys.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("Failed to create account api key: %s", err.Error())
 	}
@@ -70,8 +82,10 @@ func resourceApiKeyCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceApiKeyRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).API
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).Fetch()
+	getResponse, err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -94,12 +108,14 @@ func resourceApiKeyRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceApiKeyUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).API
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &key.UpdateKeyInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
 	}
 
-	updateResp, err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).Update(updateInput)
+	updateResp, err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update account api key: %s", err.Error())
 	}
@@ -110,8 +126,10 @@ func resourceApiKeyUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceApiKeyDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).API
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).Delete(); err != nil {
+	if err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete account api key: %s", err.Error())
 	}
 
