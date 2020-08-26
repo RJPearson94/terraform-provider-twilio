@@ -172,3 +172,12 @@ A `removed_from_channel` block supports the following:
 - `enabled` - Whether notifications for a user being removed from a channel are enabled
 - `template` - The template message that is sent when the notification is activated
 - `sound` - The sound played when the notification is activated
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the role
+- `update` - (Defaults to 10 minutes) Used when updating the role
+- `read` - (Defaults to 5 minutes) Used when retrieving the role
+- `delete` - (Defaults to 10 minutes) Used when deleting the role

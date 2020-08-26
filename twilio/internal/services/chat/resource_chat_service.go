@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
@@ -19,9 +20,18 @@ func resourceChatService() *schema.Resource {
 		Read:   resourceChatServiceRead,
 		Update: resourceChatServiceUpdate,
 		Delete: resourceChatServiceDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -264,12 +274,14 @@ func resourceChatService() *schema.Resource {
 
 func resourceChatServiceCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &services.CreateServiceInput{
 		FriendlyName: d.Get("friendly_name").(string),
 	}
 
-	createResult, err := client.Services.Create(createInput)
+	createResult, err := client.Services.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create chat service: %s", err)
 	}
@@ -282,8 +294,10 @@ func resourceChatServiceCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChatServiceRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -323,6 +337,8 @@ func resourceChatServiceRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChatServiceUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &service.UpdateServiceInput{
 		FriendlyName:           utils.OptionalString(d, "friendly_name"),
@@ -373,7 +389,7 @@ func resourceChatServiceUpdate(d *schema.ResourceData, meta interface{}) error {
 		updateInput.MediaCompatibilityMessage = utils.OptionalString(d, "media.0.compatibility_message")
 	}
 
-	updateResp, err := client.Service(d.Id()).Update(updateInput)
+	updateResp, err := client.Service(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update chat service: %s", err.Error())
 	}
@@ -384,8 +400,10 @@ func resourceChatServiceUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChatServiceDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete chat service: %s", err.Error())
 	}
 	d.SetId("")

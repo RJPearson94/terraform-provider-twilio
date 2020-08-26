@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -19,9 +20,18 @@ func resourceChatRole() *schema.Resource {
 		Read:   resourceChatRoleRead,
 		Update: resourceChatRoleUpdate,
 		Delete: resourceChatRoleDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -75,6 +85,8 @@ func resourceChatRole() *schema.Resource {
 
 func resourceChatRoleCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &roles.CreateRoleInput{
 		FriendlyName: d.Get("friendly_name").(string),
@@ -82,7 +94,7 @@ func resourceChatRoleCreate(d *schema.ResourceData, meta interface{}) error {
 		Permission:   utils.ConvertToStringSlice(d.Get("permissions").([]interface{})),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).Roles.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).Roles.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create chat role: %s", err)
 	}
@@ -93,8 +105,10 @@ func resourceChatRoleCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChatRoleRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Role(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Role(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if twilioError, ok := err.(*sdkUtils.TwilioError); ok {
 			// currently programmable chat returns a 403 if the service instance does not exist
@@ -129,12 +143,14 @@ func resourceChatRoleRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChatRoleUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &role.UpdateRoleInput{
 		Permission: utils.ConvertToStringSlice(d.Get("permissions").([]interface{})),
 	}
 
-	updateResp, err := client.Service(d.Get("service_sid").(string)).Role(d.Id()).Update(updateInput)
+	updateResp, err := client.Service(d.Get("service_sid").(string)).Role(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update chat role: %s", err.Error())
 	}
@@ -145,8 +161,10 @@ func resourceChatRoleUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChatRoleDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Get("service_sid").(string)).Role(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Get("service_sid").(string)).Role(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete chat role: %s", err.Error())
 	}
 	d.SetId("")

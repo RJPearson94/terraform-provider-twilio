@@ -48,3 +48,12 @@ The following attributes are exported:
 - `date_created` - The date in RFC3339 format that the role was created
 - `date_updated` - The date in RFC3339 format that the role was updated
 - `url` - The url of the role
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the role
+- `update` - (Defaults to 10 minutes) Used when updating the role
+- `read` - (Defaults to 5 minutes) Used when retrieving the role
+- `delete` - (Defaults to 10 minutes) Used when deleting the role

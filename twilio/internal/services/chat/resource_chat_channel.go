@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -19,9 +20,18 @@ func resourceChatChannel() *schema.Resource {
 		Read:   resourceChatChannelRead,
 		Update: resourceChatChannelUpdate,
 		Delete: resourceChatChannelDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -89,6 +99,8 @@ func resourceChatChannel() *schema.Resource {
 
 func resourceChatChannelCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &channels.CreateChannelInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
@@ -97,7 +109,7 @@ func resourceChatChannelCreate(d *schema.ResourceData, meta interface{}) error {
 		Type:         utils.OptionalString(d, "type"),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).Channels.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).Channels.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create chat channel: %s", err)
 	}
@@ -108,8 +120,10 @@ func resourceChatChannelCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChatChannelRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Channel(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Channel(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if twilioError, ok := err.(*sdkUtils.TwilioError); ok {
 			// currently programmable chat returns a 403 if the service instance does not exist
@@ -148,6 +162,8 @@ func resourceChatChannelRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChatChannelUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &channel.UpdateChannelInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
@@ -155,7 +171,7 @@ func resourceChatChannelUpdate(d *schema.ResourceData, meta interface{}) error {
 		Attributes:   utils.OptionalString(d, "attributes"),
 	}
 
-	updateResp, err := client.Service(d.Get("service_sid").(string)).Channel(d.Id()).Update(updateInput)
+	updateResp, err := client.Service(d.Get("service_sid").(string)).Channel(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update chat channel: %s", err.Error())
 	}
@@ -166,8 +182,10 @@ func resourceChatChannelUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChatChannelDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Get("service_sid").(string)).Channel(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Get("service_sid").(string)).Channel(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete chat channel: %s", err.Error())
 	}
 	d.SetId("")

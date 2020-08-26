@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -18,9 +19,18 @@ func resourceChatChannelStudioWebhook() *schema.Resource {
 		Read:   resourceChatChannelStudioWebhookRead,
 		Update: resourceChatChannelStudioWebhookUpdate,
 		Delete: resourceChatChannelStudioWebhookDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -71,6 +81,8 @@ func resourceChatChannelStudioWebhook() *schema.Resource {
 
 func resourceChatChannelStudioWebhookCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &webhooks.CreateChannelWebhookInput{
 		Type:                    "studio",
@@ -78,7 +90,7 @@ func resourceChatChannelStudioWebhookCreate(d *schema.ResourceData, meta interfa
 		ConfigurationRetryCount: utils.OptionalInt(d, "retry_count"),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhooks.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhooks.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create chat channel webhook: %s", err)
 	}
@@ -89,8 +101,10 @@ func resourceChatChannelStudioWebhookCreate(d *schema.ResourceData, meta interfa
 
 func resourceChatChannelStudioWebhookRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhook(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhook(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if twilioError, ok := err.(*sdkUtils.TwilioError); ok {
 			// currently programmable chat returns a 403 if the service instance does not exist
@@ -126,13 +140,15 @@ func resourceChatChannelStudioWebhookRead(d *schema.ResourceData, meta interface
 
 func resourceChatChannelStudioWebhookUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &webhook.UpdateChannelWebhookInput{
 		ConfigurationFlowSid:    utils.OptionalString(d, "flow_sid"),
 		ConfigurationRetryCount: utils.OptionalInt(d, "retry_count"),
 	}
 
-	updateResp, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhook(d.Id()).Update(updateInput)
+	updateResp, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhook(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update chat channel webhook: %s", err.Error())
 	}
@@ -143,8 +159,10 @@ func resourceChatChannelStudioWebhookUpdate(d *schema.ResourceData, meta interfa
 
 func resourceChatChannelStudioWebhookDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Chat
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhook(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhook(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete chat channel webhook: %s", err.Error())
 	}
 	d.SetId("")
