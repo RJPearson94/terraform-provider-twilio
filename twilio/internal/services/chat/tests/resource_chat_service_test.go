@@ -312,7 +312,7 @@ resource "twilio_chat_service" "service" {
   friendly_name = "%s"
 
   post_webhook_retry_count = 1
-  post_webhook_url = "%s"
+  post_webhook_url         = "%s"
 }
 `, friendlyName, url)
 }
@@ -323,7 +323,7 @@ resource "twilio_chat_service" "service" {
   friendly_name = "%s"
 
   pre_webhook_retry_count = 1
-  pre_webhook_url = "%s"
+  pre_webhook_url         = "%s"
 }
 `, friendlyName, url)
 }
