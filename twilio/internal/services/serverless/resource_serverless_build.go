@@ -320,19 +320,15 @@ func flatternFunctionVersions(input *[]build.FetchFunctionVersion) *[]interface{
 	return &results
 }
 
-func flatternDependencies(input *[]build.FetchDependency) *[]interface{} {
+func flatternDependencies(input *[]build.FetchDependency) *map[string]string {
 	if input == nil {
 		return nil
 	}
 
-	results := make([]interface{}, 0)
+	results := make(map[string]string, len(*input))
 
 	for _, prop := range *input {
-		result := make(map[string]interface{})
-		result["name"] = prop.Name
-		result["version"] = prop.Version
-
-		results = append(results, result)
+		results[prop.Name] = prop.Version
 	}
 
 	return &results
