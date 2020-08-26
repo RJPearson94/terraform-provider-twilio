@@ -64,3 +64,12 @@ A `capabilities` block supports the following:
 - `voice_outbound` - Whether the short code is able to make outbound voice calls
 
 ---
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the short code
+- `update` - (Defaults to 10 minutes) Used when updating the short code
+- `read` - (Defaults to 5 minutes) Used when retrieving the short code
+- `delete` - (Defaults to 10 minutes) Used when deleting the short code

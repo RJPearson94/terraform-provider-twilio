@@ -1,6 +1,7 @@
 package proxy
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
@@ -18,9 +19,18 @@ func resourceProxyShortCode() *schema.Resource {
 		Read:   resourceProxyShortCodeRead,
 		Update: resourceProxyShortCodeUpdate,
 		Delete: resourceProxyShortCodeDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
 				Type:     schema.TypeString,
@@ -127,12 +137,14 @@ func resourceProxyShortCode() *schema.Resource {
 
 func resourceProxyShortCodeCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &short_codes.CreateShortCodeInput{
 		Sid: d.Get("sid").(string),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).ShortCodes.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).ShortCodes.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create proxy short code resource: %s", err.Error())
 	}
@@ -148,8 +160,10 @@ func resourceProxyShortCodeCreate(d *schema.ResourceData, meta interface{}) erro
 
 func resourceProxyShortCodeRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).ShortCode(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).ShortCode(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -178,12 +192,14 @@ func resourceProxyShortCodeRead(d *schema.ResourceData, meta interface{}) error 
 
 func resourceProxyShortCodeUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &short_code.UpdateShortCodeInput{
 		IsReserved: utils.OptionalBool(d, "is_reserved"),
 	}
 
-	updateResp, err := client.Service(d.Get("service_sid").(string)).ShortCode(d.Id()).Update(updateInput)
+	updateResp, err := client.Service(d.Get("service_sid").(string)).ShortCode(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update proxy short code resource: %s", err.Error())
 	}
@@ -194,8 +210,10 @@ func resourceProxyShortCodeUpdate(d *schema.ResourceData, meta interface{}) erro
 
 func resourceProxyShortCodeDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Get("service_sid").(string)).ShortCode(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Get("service_sid").(string)).ShortCode(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete proxy short code resource: %s", err.Error())
 	}
 	d.SetId("")

@@ -1,6 +1,7 @@
 package proxy
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -17,9 +18,18 @@ func resourceProxyService() *schema.Resource {
 		Read:   resourceProxyServiceRead,
 		Update: resourceProxyServiceUpdate,
 		Delete: resourceProxyServiceDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -86,6 +96,8 @@ func resourceProxyService() *schema.Resource {
 
 func resourceProxyServiceCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &services.CreateServiceInput{
 		UniqueName:              d.Get("unique_name").(string),
@@ -98,7 +110,7 @@ func resourceProxyServiceCreate(d *schema.ResourceData, meta interface{}) error 
 		ChatInstanceSid:         utils.OptionalString(d, "chat_instance_sid"),
 	}
 
-	createResult, err := client.Services.Create(createInput)
+	createResult, err := client.Services.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create proxy service: %s", err.Error())
 	}
@@ -109,8 +121,10 @@ func resourceProxyServiceCreate(d *schema.ResourceData, meta interface{}) error 
 
 func resourceProxyServiceRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -143,6 +157,8 @@ func resourceProxyServiceRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceProxyServiceUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &service.UpdateServiceInput{
 		UniqueName:              utils.OptionalString(d, "unique_name"),
@@ -155,7 +171,7 @@ func resourceProxyServiceUpdate(d *schema.ResourceData, meta interface{}) error 
 		ChatInstanceSid:         utils.OptionalString(d, "chat_instance_sid"),
 	}
 
-	updateResp, err := client.Service(d.Id()).Update(updateInput)
+	updateResp, err := client.Service(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update proxy service: %s", err.Error())
 	}
@@ -166,8 +182,10 @@ func resourceProxyServiceUpdate(d *schema.ResourceData, meta interface{}) error 
 
 func resourceProxyServiceDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Proxy
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete proxy service: %s", err.Error())
 	}
 	d.SetId("")
