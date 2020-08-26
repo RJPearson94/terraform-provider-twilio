@@ -14,12 +14,16 @@ type TestData struct {
 	FlexChannelServiceSid string
 }
 
+var TestAccProviders map[string]terraform.ResourceProvider
 var TestAccProviderFactories func() map[string]terraform.ResourceProviderFactory
 var TestAccProvider *schema.Provider
 var TestAccData *TestData
 
 func init() {
 	TestAccProvider = twilio.Provider().(*schema.Provider)
+	TestAccProviders = map[string]terraform.ResourceProvider{
+		"twilio": TestAccProvider,
+	}
 	TestAccProviderFactories = func() map[string]terraform.ResourceProviderFactory {
 		factories := make(map[string]terraform.ResourceProviderFactory, 1)
 		factories["twilio"] = func() (terraform.ResourceProvider, error) {

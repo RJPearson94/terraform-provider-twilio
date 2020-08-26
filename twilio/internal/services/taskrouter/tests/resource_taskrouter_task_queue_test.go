@@ -20,6 +20,7 @@ func TestAccTwilioTaskRouterTaskQueue_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
+		Providers:         acceptance.TestAccProviders,
 		ProviderFactories: acceptance.TestAccProviderFactories(),
 		CheckDestroy:      testAccCheckTwilioTaskRouterTaskQueueDestroy,
 		Steps: []resource.TestStep{
@@ -44,6 +45,12 @@ func TestAccTwilioTaskRouterTaskQueue_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+			{
+				ResourceName:      stateResourceName,
+				ImportState:       true,
+				ImportStateIdFunc: testAccTwilioTaskRouterTaskQueueImportStateIdFunc(stateResourceName),
+				ImportStateVerify: true,
 			},
 		},
 	})
@@ -142,6 +149,17 @@ func testAccCheckTwilioTaskRouterTaskQueueExists(name string) resource.TestCheck
 		}
 
 		return nil
+	}
+}
+
+func testAccTwilioTaskRouterTaskQueueImportStateIdFunc(name string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		rs, ok := s.RootModule().Resources[name]
+		if !ok {
+			return "", fmt.Errorf("Not found: %s", name)
+		}
+
+		return fmt.Sprintf("/Workspaces/%s/TaskQueues/%s", rs.Primary.Attributes["workspace_sid"], rs.Primary.Attributes["sid"]), nil
 	}
 }
 

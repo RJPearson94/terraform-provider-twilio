@@ -56,3 +56,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the worker
 - `read` - (Defaults to 5 minutes) Used when retrieving the worker
 - `delete` - (Defaults to 10 minutes) Used when deleting the worker
+
+## Import
+
+A worker can be imported using the `"/Workspaces/{workspaceSid}/Workers/{sid}"` format, e.g.
+
+```shell
+terraform import twilio_taskrouter_worker.worker /Workspaces/WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Workers/WKXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

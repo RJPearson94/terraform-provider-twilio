@@ -54,3 +54,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the task channel
 - `read` - (Defaults to 5 minutes) Used when retrieving the task channel
 - `delete` - (Defaults to 10 minutes) Used when deleting the task channel
+
+## Import
+
+A task channel can be imported using the `"/Workspaces/{workspaceSid}/TaskChannels/{sid}"` format, e.g.
+
+```shell
+terraform import twilio_taskrouter_task_channel.task_channel /Workspaces/WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/TaskChannels/TCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

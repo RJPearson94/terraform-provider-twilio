@@ -40,7 +40,7 @@ The following attributes are exported:
 - `account_sid` - The account SID of the activity is deployed into
 - `workspaceSid` - The workspace SID to create the activity under.
 - `friendly_name` - The name of the activity
-- `available` -  Whether the activity is available to accept tasks in Task Router
+- `available` - Whether the activity is available to accept tasks in Task Router
 - `date_created` - The date in RFC3339 format that the activity was created
 - `date_updated` - The date in RFC3339 format that the activity was updated
 - `url` - The url of the activity
@@ -53,3 +53,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the activity
 - `read` - (Defaults to 5 minutes) Used when retrieving the activity
 - `delete` - (Defaults to 10 minutes) Used when deleting the activity
+
+## Import
+
+A activity can be imported using the `"/Workspaces/{workspaceSid}/Activities/{sid}"` format, e.g.
+
+```shell
+terraform import twilio_taskrouter_activity.activity /Workspaces/WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Activities/WAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
