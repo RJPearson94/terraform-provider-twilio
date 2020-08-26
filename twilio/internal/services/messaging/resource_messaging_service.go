@@ -64,8 +64,9 @@ func resourceMessagingService() *schema.Resource {
 				Computed: true,
 			},
 			"fallback_url": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"inbound_method": {
 				Type:     schema.TypeString,
@@ -77,8 +78,9 @@ func resourceMessagingService() *schema.Resource {
 				}, false),
 			},
 			"inbound_request_url": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"mms_converter": {
 				Type:     schema.TypeBool,
@@ -90,10 +92,11 @@ func resourceMessagingService() *schema.Resource {
 				Optional: true,
 				Computed: true,
 			},
-			"status_callback": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+			"status_callback_url": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"sticky_sender": {
 				Type:     schema.TypeBool,
@@ -136,7 +139,7 @@ func resourceMessagingServiceCreate(d *schema.ResourceData, meta interface{}) er
 		InboundRequestURL:  utils.OptionalString(d, "inbound_request_url"),
 		MmsConverter:       utils.OptionalBool(d, "mms_converter"),
 		SmartEncoding:      utils.OptionalBool(d, "smart_encoding"),
-		StatusCallback:     utils.OptionalString(d, "status_callback"),
+		StatusCallback:     utils.OptionalString(d, "status_callback_url"),
 		StickySender:       utils.OptionalBool(d, "sticky_sender"),
 		ValidityPeriod:     utils.OptionalInt(d, "validity_period"),
 	}
@@ -175,7 +178,7 @@ func resourceMessagingServiceRead(d *schema.ResourceData, meta interface{}) erro
 	d.Set("mms_converter", getResponse.MmsConverter)
 	d.Set("sid", getResponse.Sid)
 	d.Set("smart_encoding", getResponse.SmartEncoding)
-	d.Set("status_callback", getResponse.StatusCallback)
+	d.Set("status_callback_url", getResponse.StatusCallback)
 	d.Set("sticky_sender", getResponse.StickySender)
 	d.Set("validity_period", getResponse.ValidityPeriod)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
@@ -204,7 +207,7 @@ func resourceMessagingServiceUpdate(d *schema.ResourceData, meta interface{}) er
 		InboundRequestURL:  utils.OptionalString(d, "inbound_request_url"),
 		MmsConverter:       utils.OptionalBool(d, "mms_converter"),
 		SmartEncoding:      utils.OptionalBool(d, "smart_encoding"),
-		StatusCallback:     utils.OptionalString(d, "status_callback"),
+		StatusCallback:     utils.OptionalString(d, "status_callback_url"),
 		StickySender:       utils.OptionalBool(d, "sticky_sender"),
 		ValidityPeriod:     utils.OptionalInt(d, "validity_period"),
 	}
