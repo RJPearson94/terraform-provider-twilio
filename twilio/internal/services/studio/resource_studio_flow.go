@@ -94,10 +94,11 @@ func resourceStudioFlowCreate(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
+	definitionJSONString, _ := structure.NormalizeJsonString(d.Get("definition").(string))
 	createInput := &flows.CreateFlowInput{
 		FriendlyName:  d.Get("friendly_name").(string),
 		Status:        d.Get("status").(string),
-		Definition:    d.Get("definition").(string),
+		Definition:    definitionJSONString,
 		CommitMessage: utils.OptionalString(d, "commit_message"),
 	}
 
@@ -158,7 +159,7 @@ func resourceStudioFlowUpdate(d *schema.ResourceData, meta interface{}) error {
 	updateInput := &flow.UpdateFlowInput{
 		FriendlyName:  utils.OptionalString(d, "friendly_name"),
 		Status:        d.Get("status").(string),
-		Definition:    utils.OptionalString(d, "definition"),
+		Definition:    utils.OptionalJSONString(d, "definition"),
 		CommitMessage: utils.OptionalString(d, "commit_message"),
 	}
 
@@ -185,10 +186,11 @@ func validateRequest(d *schema.ResourceData, meta interface{}) error {
 	if d.Get("validate").(bool) {
 		client := meta.(*common.TwilioClient).Studio
 
+		definitionJSONString, _ := structure.NormalizeJsonString(d.Get("definition").(string))
 		validateInput := &flow_validation.ValidateFlowInput{
 			FriendlyName:  d.Get("friendly_name").(string),
 			Status:        d.Get("status").(string),
-			Definition:    d.Get("definition").(string),
+			Definition:    definitionJSONString,
 			CommitMessage: utils.OptionalString(d, "commit_message"),
 		}
 
