@@ -1,6 +1,7 @@
 package messaging
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -15,9 +16,17 @@ func resourceMessagingPhoneNumber() *schema.Resource {
 		Create: resourceMessagingPhoneNumberCreate,
 		Read:   resourceMessagingPhoneNumberRead,
 		Delete: resourceMessagingPhoneNumberDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
 				Type:     schema.TypeString,
@@ -66,12 +75,14 @@ func resourceMessagingPhoneNumber() *schema.Resource {
 
 func resourceMessagingPhoneNumberCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Messaging
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &phone_numbers.CreatePhoneNumberInput{
 		PhoneNumberSid: d.Get("sid").(string),
 	}
 
-	createResult, err := client.Service(d.Get("service_sid").(string)).PhoneNumbers.Create(createInput)
+	createResult, err := client.Service(d.Get("service_sid").(string)).PhoneNumbers.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create messaging phone number: %s", err)
 	}
@@ -82,8 +93,10 @@ func resourceMessagingPhoneNumberCreate(d *schema.ResourceData, meta interface{}
 
 func resourceMessagingPhoneNumberRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Messaging
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -111,8 +124,10 @@ func resourceMessagingPhoneNumberRead(d *schema.ResourceData, meta interface{}) 
 
 func resourceMessagingPhoneNumberDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Messaging
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete messaging phone number: %s", err.Error())
 	}
 	d.SetId("")

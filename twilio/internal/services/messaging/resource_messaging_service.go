@@ -1,6 +1,7 @@
 package messaging
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -18,9 +19,18 @@ func resourceMessagingService() *schema.Resource {
 		Read:   resourceMessagingServiceRead,
 		Update: resourceMessagingServiceUpdate,
 		Delete: resourceMessagingServiceDelete,
+
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Read:   schema.DefaultTimeout(5 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
+		},
+
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:     schema.TypeString,
@@ -113,6 +123,8 @@ func resourceMessagingService() *schema.Resource {
 
 func resourceMessagingServiceCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Messaging
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 
 	createInput := &services.CreateServiceInput{
 		FriendlyName:       d.Get("friendly_name").(string),
@@ -129,7 +141,7 @@ func resourceMessagingServiceCreate(d *schema.ResourceData, meta interface{}) er
 		ValidityPeriod:     utils.OptionalInt(d, "validity_period"),
 	}
 
-	createResult, err := client.Services.Create(createInput)
+	createResult, err := client.Services.CreateWithContext(ctx, createInput)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to create messaging service: %s", err)
 	}
@@ -140,8 +152,10 @@ func resourceMessagingServiceCreate(d *schema.ResourceData, meta interface{}) er
 
 func resourceMessagingServiceRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Messaging
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
+	defer cancel()
 
-	getResponse, err := client.Service(d.Id()).Fetch()
+	getResponse, err := client.Service(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -177,6 +191,8 @@ func resourceMessagingServiceRead(d *schema.ResourceData, meta interface{}) erro
 
 func resourceMessagingServiceUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Messaging
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 
 	updateInput := &service.UpdateServiceInput{
 		FriendlyName:       utils.OptionalString(d, "friendly_name"),
@@ -193,7 +209,7 @@ func resourceMessagingServiceUpdate(d *schema.ResourceData, meta interface{}) er
 		ValidityPeriod:     utils.OptionalInt(d, "validity_period"),
 	}
 
-	updateResp, err := client.Service(d.Id()).Update(updateInput)
+	updateResp, err := client.Service(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
 		return fmt.Errorf("Failed to update messaging service: %s", err.Error())
 	}
@@ -204,8 +220,10 @@ func resourceMessagingServiceUpdate(d *schema.ResourceData, meta interface{}) er
 
 func resourceMessagingServiceDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.TwilioClient).Messaging
+	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
 
-	if err := client.Service(d.Id()).Delete(); err != nil {
+	if err := client.Service(d.Id()).DeleteWithContext(ctx); err != nil {
 		return fmt.Errorf("Failed to delete messaging service: %s", err.Error())
 	}
 	d.SetId("")

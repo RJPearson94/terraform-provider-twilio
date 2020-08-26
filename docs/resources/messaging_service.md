@@ -56,3 +56,12 @@ The following attributes are exported:
 - `date_created` - The date in RFC3339 format that the service was created
 - `date_updated` - The date in RFC3339 format that the service was updated
 - `url` - The url of the service
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the service
+- `update` - (Defaults to 10 minutes) Used when updating the service
+- `read` - (Defaults to 5 minutes) Used when retrieving the service
+- `delete` - (Defaults to 10 minutes) Used when deleting the service
