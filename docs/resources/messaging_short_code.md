@@ -51,3 +51,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `create` - (Defaults to 10 minutes) Used when creating the short code
 - `read` - (Defaults to 5 minutes) Used when retrieving the short code
 - `delete` - (Defaults to 10 minutes) Used when deleting the short code
+
+## Import
+
+A short code can be imported using the `/Services/{serviceSid}/ShortCodes/{sid}` format, e.g.
+
+```shell
+terraform import twilio_messaging_short_code.short_code /Services/MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/ShortCodes/SCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

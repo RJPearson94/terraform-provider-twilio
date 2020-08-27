@@ -51,3 +51,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `create` - (Defaults to 10 minutes) Used when creating the phone number resource
 - `read` - (Defaults to 5 minutes) Used when retrieving the phone number resource
 - `delete` - (Defaults to 10 minutes) Used when deleting the phone number resource
+
+## Import
+
+A phone number can be imported using the `/Services/{serviceSid}/PhoneNumbers/{sid}` format, e.g.
+
+```shell
+terraform import twilio_messaging_phone_number.phone_number /Services/MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/PhoneNumbers/PNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

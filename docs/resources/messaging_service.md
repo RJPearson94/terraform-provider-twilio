@@ -27,7 +27,7 @@ The following arguments are supported:
 - `fallback_to_long_code` - (Optional) Whether to attempt to use a long code to resent a message when delivery via a short code fails
 - `fallback_url` - (Optional) The URL which will be called when an error occurs fetching or executing the TwiML from the inbound request URL.
 - `inbound_method` - (Optional) The HTTP method to call the inbound request URL. Valid values are `POST` or `GET`
-- `inbound_request_url` - (Optional) The URL which will be called when any inbound message is received for any associated short code or phone number  
+- `inbound_request_url` - (Optional) The URL which will be called when any inbound message is received for any associated short code or phone number
 - `mms_converter` - (Optional) Whether to convert MMS messages to SMS messages and include a URL to the content when the carrier cannot receive MMS messages
 - `smart_encoding` - (Optional) Whether to enable detection and replacement of Unicode characters that are easy to miss
 - `status_callback_url` - (Optional) The URL which will be called when a message delivery status is changed
@@ -47,7 +47,7 @@ The following attributes are exported:
 - `fallback_to_long_code` - Whether to attempt to use a long code to resent a message when delivery via a short code fails
 - `fallback_url` - The URL which will be called when an error occurs fetching or executing the TwiML from the inbound request URL.
 - `inbound_method` - The HTTP method to call the inbound request URL
-- `inbound_request_url` - The URL which will be called when any inbound message is received for any associated short code or phone number  
+- `inbound_request_url` - The URL which will be called when any inbound message is received for any associated short code or phone number
 - `mms_converter` - Whether to convert MMS messages to SMS messages and include a URL to the content when the carrier cannot receive MMS messages
 - `smart_encoding` - Whether to enable detection and replacement of Unicode characters that are easy to miss
 - `status_callback` - The URL which will be called when a message delivery status is changed
@@ -65,3 +65,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the service
 - `read` - (Defaults to 5 minutes) Used when retrieving the service
 - `delete` - (Defaults to 10 minutes) Used when deleting the service
+
+## Import
+
+A service can be imported using the `/Services/{sid}` format, e.g.
+
+```shell
+terraform import twilio_messaging_service.service /Services/MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
