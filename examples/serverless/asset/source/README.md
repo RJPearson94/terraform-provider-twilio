@@ -25,8 +25,7 @@ No input.
 
 ## Outputs
 
-| Name          | Description                            |
-| ------------- | -------------------------------------- |
-| asset         | The Generated Serverless Asset         |
-| asset_version | The Generated Serverless Asset Version |
-| service       | The Generated Serverless Service       |
+| Name    | Description                      |
+| ------- | -------------------------------- |
+| asset   | The Generated Serverless Asset   |
+| service | The Generated Serverless Service |

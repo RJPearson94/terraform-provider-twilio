@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -18,6 +19,7 @@ func TestAccTwilioServerlessAsset_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.asset", assetResourceName)
 	uniqueName := acctest.RandString(10)
 	friendlyName := acctest.RandString(10)
+	visibility := "private"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -26,12 +28,18 @@ func TestAccTwilioServerlessAsset_basic(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioServerlessAssetDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioServerlessAsset_basic(uniqueName, friendlyName),
+				Config: testAccTwilioServerlessAsset_basic(uniqueName, friendlyName, visibility),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessAssetExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+					resource.TestCheckResourceAttr(stateResourceName, "content", "{}"),
+					resource.TestCheckResourceAttr(stateResourceName, "content_type", "application/json"),
+					resource.TestCheckResourceAttr(stateResourceName, "content_file_name", "test.json"),
+					resource.TestCheckResourceAttr(stateResourceName, "path", "/test-asset"),
+					resource.TestCheckResourceAttr(stateResourceName, "visibility", visibility),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "latest_version_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -40,10 +48,28 @@ func TestAccTwilioServerlessAsset_basic(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      stateResourceName,
-				ImportState:       true,
-				ImportStateIdFunc: testAccTwilioServerlessAssetImportStateIdFunc(stateResourceName),
-				ImportStateVerify: true,
+				ResourceName:            stateResourceName,
+				ImportState:             true,
+				ImportStateIdFunc:       testAccTwilioServerlessAssetImportStateIdFunc(stateResourceName),
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"content", "content_file_name", "content_type", "source_hash"},
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessAssetVersion_invalidVisibility(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	friendlyName := acctest.RandString(10)
+	visibility := "test"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessAsset_basic(uniqueName, friendlyName, visibility),
+				ExpectError: regexp.MustCompile("config is invalid: expected visibility to be one of \\[public protected private\\], got test"),
 			},
 		},
 	})
@@ -55,6 +81,8 @@ func TestAccTwilioServerlessAsset_update(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 	friendlyName := acctest.RandString(10)
 	newFriendlyName := acctest.RandString(10)
+	visibility := "private"
+	newVisibility := "protected"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -62,10 +90,15 @@ func TestAccTwilioServerlessAsset_update(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioServerlessAssetDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioServerlessAsset_basic(uniqueName, friendlyName),
+				Config: testAccTwilioServerlessAsset_basic(uniqueName, friendlyName, visibility),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessAssetExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+					resource.TestCheckResourceAttr(stateResourceName, "content", "{}"),
+					resource.TestCheckResourceAttr(stateResourceName, "content_type", "application/json"),
+					resource.TestCheckResourceAttr(stateResourceName, "content_file_name", "test.json"),
+					resource.TestCheckResourceAttr(stateResourceName, "path", "/test-asset"),
+					resource.TestCheckResourceAttr(stateResourceName, "visibility", visibility),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
@@ -76,10 +109,15 @@ func TestAccTwilioServerlessAsset_update(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccTwilioServerlessAsset_basic(uniqueName, newFriendlyName),
+				Config: testAccTwilioServerlessAsset_basic(uniqueName, newFriendlyName, newVisibility),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessAssetExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
+					resource.TestCheckResourceAttr(stateResourceName, "content", "{}"),
+					resource.TestCheckResourceAttr(stateResourceName, "content_type", "application/json"),
+					resource.TestCheckResourceAttr(stateResourceName, "content_file_name", "test.json"),
+					resource.TestCheckResourceAttr(stateResourceName, "path", "/test-asset"),
+					resource.TestCheckResourceAttr(stateResourceName, "visibility", newVisibility),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
@@ -107,6 +145,13 @@ func testAccCheckTwilioServerlessAssetDestroy(s *terraform.State) error {
 			}
 			return fmt.Errorf("Error occurred when retrieving asset information %s", err)
 		}
+
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Asset(rs.Primary.ID).Version(rs.Primary.Attributes["latest_version_sid"]).Fetch(); err != nil {
+			if utils.IsNotFoundError(err) {
+				return nil
+			}
+			return fmt.Errorf("Error occurred when retrieving asset version information %s", err)
+		}
 	}
 
 	return nil
@@ -126,6 +171,10 @@ func testAccCheckTwilioServerlessAssetExists(name string) resource.TestCheckFunc
 			return fmt.Errorf("Error occurred when retrieving asset information %s", err)
 		}
 
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Asset(rs.Primary.ID).Version(rs.Primary.Attributes["latest_version_sid"]).Fetch(); err != nil {
+			return fmt.Errorf("Error occurred when retrieving asset version information %s", err)
+		}
+
 		return nil
 	}
 }
@@ -141,7 +190,7 @@ func testAccTwilioServerlessAssetImportStateIdFunc(name string) resource.ImportS
 	}
 }
 
-func testAccTwilioServerlessAsset_basic(uniqueName string, friendlyName string) string {
+func testAccTwilioServerlessAsset_basic(uniqueName string, friendlyName string, visibility string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
   unique_name   = "service-%s"
@@ -149,8 +198,13 @@ resource "twilio_serverless_service" "service" {
 }
 
 resource "twilio_serverless_asset" "asset" {
-  service_sid   = twilio_serverless_service.service.sid
-  friendly_name = "%s"
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "%s"
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset"
+  visibility        = "%s"
 }
-`, uniqueName, friendlyName)
+`, uniqueName, friendlyName, visibility)
 }

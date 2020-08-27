@@ -9,13 +9,8 @@ resource "twilio_serverless_service" "service" {
 }
 
 resource "twilio_serverless_asset" "asset" {
-  service_sid   = twilio_serverless_service.service.sid
-  friendly_name = "test"
-}
-
-resource "twilio_serverless_asset_version" "asset_version" {
   service_sid       = twilio_serverless_service.service.sid
-  asset_sid         = twilio_serverless_asset.asset.sid
+  friendly_name     = "test"
   content           = "{}"
   content_type      = "application/json"
   content_file_name = "test.json"

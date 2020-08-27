@@ -3,14 +3,23 @@ package serverless
 import (
 	"context"
 	"fmt"
+	"io"
+	"log"
+	"os"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
+	serverless "github.com/RJPearson94/twilio-sdk-go/service/serverless/v1"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/asset"
+	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/asset/versions"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/assets"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/mitchellh/go-homedir"
 )
 
 func resourceServerlessAsset() *schema.Resource {
@@ -62,6 +71,47 @@ func resourceServerlessAsset() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"latest_version_sid": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"source": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ConflictsWith: []string{"content"},
+			},
+			"source_hash": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ConflictsWith: []string{"content"},
+			},
+			"content": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ConflictsWith: []string{"source"},
+			},
+			"content_file_name": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ConflictsWith: []string{"source"},
+			},
+			"content_type": {
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"path": {
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"visibility": {
+				Type:     schema.TypeString,
+				Required: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"public",
+					"protected",
+					"private",
+				}, false),
+			},
 			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -93,6 +143,11 @@ func resourceServerlessAssetCreate(d *schema.ResourceData, meta interface{}) err
 	}
 
 	d.SetId(createResult.Sid)
+
+	if err := createAssetVersion(ctx, d, client); err != nil {
+		return err
+	}
+
 	return resourceServerlessAssetRead(d, meta)
 }
 
@@ -101,7 +156,9 @@ func resourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) error
 	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
 	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).FetchWithContext(ctx)
+	assetClient := client.Service(d.Get("service_sid").(string)).Asset(d.Id())
+
+	getResponse, err := assetClient.FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -122,6 +179,27 @@ func resourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) error
 
 	d.Set("url", getResponse.URL)
 
+	versionsPaginator := assetClient.Versions.NewVersionsPaginatorWithOptions(&versions.VersionsPageOptions{
+		PageSize: sdkUtils.Int(5),
+	})
+	// The twilio api return the latest version as the first element in the array.
+	// So there is no need to loop to retrieve all records
+	versionsPaginator.Next()
+
+	if versionsPaginator.Error() != nil {
+		return fmt.Errorf("[ERROR] Failed to read serverless asset versions: %s", versionsPaginator.Error().Error())
+	}
+
+	if len(versionsPaginator.Versions) > 0 {
+		latestVersion := versionsPaginator.Versions[0]
+
+		d.Set("latest_version_sid", latestVersion.Sid)
+		d.Set("path", latestVersion.Path)
+		d.Set("visibility", latestVersion.Visibility)
+	} else {
+		log.Printf("[INFO] No serverless asset versions found for asset (%s)", getResponse.Sid)
+	}
+
 	return nil
 }
 
@@ -130,16 +208,25 @@ func resourceServerlessAssetUpdate(d *schema.ResourceData, meta interface{}) err
 	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
 	defer cancel()
 
-	updateInput := &asset.UpdateAssetInput{
-		FriendlyName: d.Get("friendly_name").(string),
+	if d.HasChange("friendly_name") {
+		updateInput := &asset.UpdateAssetInput{
+			FriendlyName: d.Get("friendly_name").(string),
+		}
+
+		updateResp, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).UpdateWithContext(ctx, updateInput)
+		if err != nil {
+			return fmt.Errorf("Failed to update serverless asset: %s", err.Error())
+		}
+
+		d.SetId(updateResp.Sid)
 	}
 
-	updateResp, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).UpdateWithContext(ctx, updateInput)
-	if err != nil {
-		return fmt.Errorf("Failed to update serverless asset: %s", err.Error())
+	if d.HasChanges("source", "source_hash", "content", "content_file_name", "content_type", "path", "visibility") {
+		if err := createAssetVersion(ctx, d, client); err != nil {
+			return err
+		}
 	}
 
-	d.SetId(updateResp.Sid)
 	return resourceServerlessAssetRead(d, meta)
 }
 
@@ -152,5 +239,57 @@ func resourceServerlessAssetDelete(d *schema.ResourceData, meta interface{}) err
 		return fmt.Errorf("Failed to delete serverless asset: %s", err.Error())
 	}
 	d.SetId("")
+	return nil
+}
+
+func createAssetVersion(ctx context.Context, d *schema.ResourceData, client *serverless.Serverless) error {
+	var body io.ReadSeeker
+	var fileName string
+	var contentType = d.Get("content_type").(string)
+
+	if value, ok := d.GetOk("content"); ok {
+		body = strings.NewReader(value.(string))
+		fileName = d.Get("content_file_name").(string)
+	}
+
+	if value, ok := d.GetOk("source"); ok {
+		path, err := homedir.Expand(value.(string))
+		if err != nil {
+			return fmt.Errorf("[ERROR] Error expanding homedir: %s", err)
+		}
+		file, err := os.Open(path)
+		if err != nil {
+			return fmt.Errorf("Error opening source: %s", err)
+		}
+
+		body = file
+		fileName = file.Name()
+
+		defer func() {
+			err := file.Close()
+			if err != nil {
+				log.Printf("[WARN] Error closing source: %s", err)
+			}
+		}()
+	}
+
+	if body == nil || fileName == "" || contentType == "" {
+		return fmt.Errorf("[ERROR] body (%v), file name (%v) and content type (%v) are all required", body, fileName, contentType)
+	}
+
+	createInput := &versions.CreateVersionInput{
+		Content: versions.CreateContentDetails{
+			Body:        body,
+			ContentType: contentType,
+			FileName:    fileName,
+		},
+		Path:       d.Get("path").(string),
+		Visibility: d.Get("visibility").(string),
+	}
+
+	if _, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).Versions.CreateWithContext(ctx, createInput); err != nil {
+		return fmt.Errorf("[ERROR] Failed to create serverless asset version: %s", err.Error())
+	}
+
 	return nil
 }

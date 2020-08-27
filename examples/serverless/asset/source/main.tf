@@ -11,14 +11,9 @@ resource "twilio_serverless_service" "service" {
 resource "twilio_serverless_asset" "asset" {
   service_sid   = twilio_serverless_service.service.sid
   friendly_name = "test"
-}
-
-resource "twilio_serverless_asset_version" "asset_version" {
-  service_sid  = twilio_serverless_service.service.sid
-  asset_sid    = twilio_serverless_asset.asset.sid
-  source       = "module.png"
-  source_hash  = filemd5("${path.module}/module.png")
-  content_type = "image/png"
-  path         = "/test-2"
-  visibility   = "private"
+  source        = "module.png"
+  source_hash   = filemd5("${path.module}/module.png")
+  content_type  = "image/png"
+  path          = "/test-2"
+  visibility    = "private"
 }

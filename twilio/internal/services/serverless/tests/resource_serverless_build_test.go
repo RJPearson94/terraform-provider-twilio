@@ -33,7 +33,7 @@ func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "asset_version.#", "0"),
+					resource.TestCheckResourceAttr(stateResourceName, "asset_version.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "function_version.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "dependencies.%", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "dependencies.twilio", version),
@@ -122,10 +122,23 @@ EOF
   visibility        = "private"
 }
 
+resource "twilio_serverless_asset" "asset" {
+	service_sid       = twilio_serverless_service.service.sid
+	friendly_name     = "test"
+	content           = "{}"
+	content_type      = "application/json"
+	content_file_name = "test.json"
+	path              = "/test-asset"
+	visibility        = "private"
+  }
+
 resource "twilio_serverless_build" "build" {
   service_sid = twilio_serverless_service.service.sid
   function_version {
     sid = twilio_serverless_function.function.latest_version_sid
+  }
+  asset_version {
+    sid = twilio_serverless_asset.asset.latest_version_sid
   }
   dependencies = {
     "twilio" : "%s"

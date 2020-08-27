@@ -18,8 +18,13 @@ resource "twilio_serverless_service" "service" {
 }
 
 resource "twilio_serverless_asset" "asset" {
-  service_sid   = twilio_serverless_service.service.sid
-  friendly_name = "test"
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset"
+  visibility        = "private"
 }
 ```
 
@@ -29,6 +34,15 @@ The following arguments are supported:
 
 - `service_sid` - (Mandatory) The Service SID of the asset is managed under. Changing this forces a new resource to be created
 - `friendly_name` - (Mandatory) The name of the asset
+- `content_file_name` - (Optional) The name of the file. Conflicts with source
+- `content` - (Optional) The file contents as string. Conflicts with source
+- `source` - (Optional) The relative path to the asset file. Conflicts with content.
+- `source_hash` - (Optional) A hash of the asset file to trigger deployments. Conflicts with content
+- `content_type` - (Mandatory) The file MIME type
+- `path` - (Mandatory) The request uri path
+- `visibility` - (Mandatory) The visibility of the asset. Options are `public` or `protected` or `private`
+
+**NOTE:** Either source or content need to be specified
 
 ## Attributes Reference
 
@@ -39,6 +53,13 @@ The following attributes are exported:
 - `account_sid` - The Account SID of the asset is deployed into
 - `service_sid` - The Service SID of the asset is managed under
 - `friendly_name` - The name of the asset
+- `content_file_name` - The name of the file
+- `latest_version_sid` - The SID of the latest asset version
+- `source` - The relative path to the asset file
+- `source_hash` - A hash of the asset file to trigger deployments
+- `content_type` - The file MIME type
+- `path` - The request uri path
+- `visibility` - The visibility of the asset
 - `date_created` - The date in RFC3339 format that the asset was created
 - `date_updated` - The date in RFC3339 format that the asset was updated
 - `url` - The url of the asset
@@ -59,3 +80,5 @@ A asset can be imported using the `/Services/{serviceSid}/Assets/{sid}` format, 
 ```shell
 terraform import twilio_serverless_asset.asset /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Assets/ZHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
+
+!> The following arguments "content", "content_file_name", "content_type" and "source_hash" cannot be imported, as the API doesn't return this data
