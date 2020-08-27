@@ -20,6 +20,16 @@ resource "twilio_serverless_service" "service" {
 resource "twilio_serverless_function" "function" {
   service_sid   = twilio_serverless_service.service.sid
   friendly_name = "test"
+
+  content           = <<EOF
+exports.handler = function (context, event, callback) {
+  callback(null, "Hello World");
+};
+EOF
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "private"
 }
 ```
 
@@ -29,6 +39,15 @@ The following arguments are supported:
 
 - `service_sid` - (Mandatory) The Service SID of the function is managed under. Changing this forces a new resource to be created
 - `friendly_name` - (Mandatory) The name of the function
+- `content_file_name` - (Optional) The name of the file
+- `content` - (Optional) The file contents as string
+- `source` - (Optional) The relative path to the function file
+- `source_hash` - (Optional) A hash of the function file to trigger deployments
+- `content_type` - (Mandatory) The file MIME type
+- `path` - (Mandatory) The request uri path
+- `visibility` - (Mandatory) The visibility of the function. Options are `public` or `protected` or `private`
+
+**NOTE:** Either source or content need to be specified
 
 ## Attributes Reference
 
@@ -36,9 +55,16 @@ The following attributes are exported:
 
 - `id` - The ID of the function (Same as the SID)
 - `sid` - The SID of the function (Same as the ID)
-- `account_sid` - The Account SID of the function is deployed into
-- `service_sid` - The Service SID of the function is managed under
+- `account_sid` - The account SID of the function is deployed into
+- `service_sid` - The service SID of the function is managed under
 - `friendly_name` - The name of the function
+- `content_file_name` - The name of the file
+- `latest_version_sid` - The SID of the latest function version
+- `source` - The relative path to the function file
+- `source_hash` - A hash of the function file to trigger deployments
+- `content_type` - The file MIME type
+- `path` - The request uri path
+- `visibility` - The visibility of the function
 - `date_created` - The date in RFC3339 format that the function was created
 - `date_updated` - The date in RFC3339 format that the function was updated
 - `url` - The url of the function
@@ -59,3 +85,5 @@ A function can be imported using the `/Services/{serviceSid}/Functions/{sid}` fo
 ```shell
 terraform import twilio_serverless_function.function /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Functions/ZHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
+
+!> The following arguments "content_file_name", "content_type" and "source_hash" cannot be imported, as the API doesn't return this data

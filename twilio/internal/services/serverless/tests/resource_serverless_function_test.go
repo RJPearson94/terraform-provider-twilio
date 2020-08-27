@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -18,6 +19,7 @@ func TestAccTwilioServerlessFunction_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.function", functionResourceName)
 	uniqueName := acctest.RandString(10)
 	friendlyName := acctest.RandString(10)
+	visibility := "private"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -26,12 +28,18 @@ func TestAccTwilioServerlessFunction_basic(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioServerlessFunctionDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioServerlessFunction_basic(uniqueName, friendlyName),
+				Config: testAccTwilioServerlessFunction_basic(uniqueName, friendlyName, visibility),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessFunctionExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+					resource.TestCheckResourceAttr(stateResourceName, "content", "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="),
+					resource.TestCheckResourceAttr(stateResourceName, "content_type", "application/javascript"),
+					resource.TestCheckResourceAttr(stateResourceName, "content_file_name", "helloWorld.js"),
+					resource.TestCheckResourceAttr(stateResourceName, "path", "/test-function"),
+					resource.TestCheckResourceAttr(stateResourceName, "visibility", visibility),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "latest_version_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -40,10 +48,28 @@ func TestAccTwilioServerlessFunction_basic(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      stateResourceName,
-				ImportState:       true,
-				ImportStateIdFunc: testAccTwilioServerlessFunctionImportStateIdFunc(stateResourceName),
-				ImportStateVerify: true,
+				ResourceName:            stateResourceName,
+				ImportState:             true,
+				ImportStateIdFunc:       testAccTwilioServerlessFunctionImportStateIdFunc(stateResourceName),
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"content_file_name", "content_type", "source_hash"},
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessAssetFunction_invalidVisibility(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	friendlyName := acctest.RandString(10)
+	visibility := "test"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessFunction_basic(uniqueName, friendlyName, visibility),
+				ExpectError: regexp.MustCompile("config is invalid: expected visibility to be one of \\[public protected private\\], got test"),
 			},
 		},
 	})
@@ -55,6 +81,8 @@ func TestAccTwilioServerlessFunction_update(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 	friendlyName := acctest.RandString(10)
 	newFriendlyName := acctest.RandString(10)
+	visibility := "private"
+	newVisibility := "protected"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -62,12 +90,18 @@ func TestAccTwilioServerlessFunction_update(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioServerlessFunctionDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioServerlessFunction_basic(uniqueName, friendlyName),
+				Config: testAccTwilioServerlessFunction_basic(uniqueName, friendlyName, visibility),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessFunctionExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+					resource.TestCheckResourceAttr(stateResourceName, "content", "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="),
+					resource.TestCheckResourceAttr(stateResourceName, "content_type", "application/javascript"),
+					resource.TestCheckResourceAttr(stateResourceName, "content_file_name", "helloWorld.js"),
+					resource.TestCheckResourceAttr(stateResourceName, "path", "/test-function"),
+					resource.TestCheckResourceAttr(stateResourceName, "visibility", visibility),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "latest_version_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -76,12 +110,18 @@ func TestAccTwilioServerlessFunction_update(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccTwilioServerlessFunction_basic(uniqueName, newFriendlyName),
+				Config: testAccTwilioServerlessFunction_basic(uniqueName, newFriendlyName, newVisibility),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessFunctionExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
+					resource.TestCheckResourceAttr(stateResourceName, "content", "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="),
+					resource.TestCheckResourceAttr(stateResourceName, "content_type", "application/javascript"),
+					resource.TestCheckResourceAttr(stateResourceName, "content_file_name", "helloWorld.js"),
+					resource.TestCheckResourceAttr(stateResourceName, "path", "/test-function"),
+					resource.TestCheckResourceAttr(stateResourceName, "visibility", newVisibility),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "latest_version_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -107,6 +147,13 @@ func testAccCheckTwilioServerlessFunctionDestroy(s *terraform.State) error {
 			}
 			return fmt.Errorf("Error occurred when retrieving function information %s", err)
 		}
+
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.ID).Version(rs.Primary.Attributes["latest_version_sid"]).Fetch(); err != nil {
+			if utils.IsNotFoundError(err) {
+				return nil
+			}
+			return fmt.Errorf("Error occurred when retrieving function version information %s", err)
+		}
 	}
 
 	return nil
@@ -126,6 +173,10 @@ func testAccCheckTwilioServerlessFunctionExists(name string) resource.TestCheckF
 			return fmt.Errorf("Error occurred when retrieving function information %s", err)
 		}
 
+		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.ID).Version(rs.Primary.Attributes["latest_version_sid"]).Fetch(); err != nil {
+			return fmt.Errorf("Error occurred when retrieving function version information %s", err)
+		}
+
 		return nil
 	}
 }
@@ -141,7 +192,7 @@ func testAccTwilioServerlessFunctionImportStateIdFunc(name string) resource.Impo
 	}
 }
 
-func testAccTwilioServerlessFunction_basic(uniqueName string, friendlyName string) string {
+func testAccTwilioServerlessFunction_basic(uniqueName string, friendlyName string, visibility string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
   unique_name   = "service-%s"
@@ -149,8 +200,13 @@ resource "twilio_serverless_service" "service" {
 }
 
 resource "twilio_serverless_function" "function" {
-  service_sid   = twilio_serverless_service.service.sid
-  friendly_name = "%s"
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "%s"
+  content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "%s"
 }
-`, uniqueName, friendlyName)
+`, uniqueName, friendlyName, visibility)
 }
