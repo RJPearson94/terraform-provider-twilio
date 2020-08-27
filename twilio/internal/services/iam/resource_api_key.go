@@ -19,10 +19,6 @@ func resourceIamApiKey() *schema.Resource {
 		Update: resourceApiKeyUpdate,
 		Delete: resourceApiKeyDelete,
 
-		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
-		},
-
 		Timeouts: &schema.ResourceTimeout{
 			Create: schema.DefaultTimeout(10 * time.Minute),
 			Read:   schema.DefaultTimeout(5 * time.Minute),

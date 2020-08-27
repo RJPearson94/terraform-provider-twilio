@@ -43,3 +43,7 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the API Key
 - `read` - (Defaults to 5 minutes) Used when retrieving the API Key
 - `delete` - (Defaults to 10 minutes) Used when deleting the API Key
+
+## Import
+
+Not supported
