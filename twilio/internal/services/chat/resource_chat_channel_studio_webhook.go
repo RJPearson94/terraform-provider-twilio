@@ -3,6 +3,7 @@ package chat
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -21,7 +22,21 @@ func resourceChatChannelStudioWebhook() *schema.Resource {
 		Delete: resourceChatChannelStudioWebhookDelete,
 
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+				format := "/Services/(.*)/Channels/(.*)/Webhooks/(.*)"
+				regex := regexp.MustCompile(format)
+				match := regex.FindStringSubmatch(d.Id())
+
+				if len(match) != 4 {
+					return nil, fmt.Errorf("The imported ID (%s) does not match the format (%s)", d.Id(), format)
+				}
+
+				d.Set("service_sid", match[1])
+				d.Set("channel_sid", match[2])
+				d.Set("sid", match[3])
+				d.SetId(match[3])
+				return []*schema.ResourceData{d}, nil
+			},
 		},
 
 		Timeouts: &schema.ResourceTimeout{

@@ -45,7 +45,7 @@ A `limits` block supports the following:
 A `media` block supports the following:
 
 - `compatibility_message` - (Optional) The placeholder message for media messages which has no text
-  
+
 ---
 
 A `notifications` block supports the following:
@@ -129,7 +129,7 @@ A `media` block supports the following:
 
 - `compatibility_message` - The placeholder message for media messages which has no text
 - `size_limit_mb` - The media file size limit in Mb
-  
+
 ---
 
 A `notifications` block supports the following:
@@ -181,3 +181,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the role
 - `read` - (Defaults to 5 minutes) Used when retrieving the role
 - `delete` - (Defaults to 10 minutes) Used when deleting the role
+
+## Import
+
+A service can be imported using the `/Services/{serviceSid}` format, e.g.
+
+```shell
+terraform import twilio_chat_service.service /Services/ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

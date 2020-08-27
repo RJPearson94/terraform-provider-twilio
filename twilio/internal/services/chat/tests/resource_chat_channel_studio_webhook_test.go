@@ -21,6 +21,7 @@ func TestAccTwilioChatChannelStudioWebhook_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
+		Providers:         acceptance.TestAccProviders,
 		ProviderFactories: acceptance.TestAccProviderFactories(),
 		CheckDestroy:      testAccCheckTwilioChatChannelStudioWebhookDestroy,
 		Steps: []resource.TestStep{
@@ -39,6 +40,12 @@ func TestAccTwilioChatChannelStudioWebhook_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+			{
+				ResourceName:      stateResourceName,
+				ImportState:       true,
+				ImportStateIdFunc: testAccTwilioChatChannelStudioWebhookImportStateIdFunc(stateResourceName),
+				ImportStateVerify: true,
 			},
 		},
 	})
@@ -128,6 +135,17 @@ func testAccCheckTwilioChatChannelStudioWebhookExists(name string) resource.Test
 		}
 
 		return nil
+	}
+}
+
+func testAccTwilioChatChannelStudioWebhookImportStateIdFunc(name string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		rs, ok := s.RootModule().Resources[name]
+		if !ok {
+			return "", fmt.Errorf("Not found: %s", name)
+		}
+
+		return fmt.Sprintf("/Services/%s/Channels/%s/Webhooks/%s", rs.Primary.Attributes["service_sid"], rs.Primary.Attributes["channel_sid"], rs.Primary.Attributes["sid"]), nil
 	}
 }
 

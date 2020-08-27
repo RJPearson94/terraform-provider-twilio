@@ -27,6 +27,7 @@ func TestAccTwilioChatRole_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
+		Providers:         acceptance.TestAccProviders,
 		ProviderFactories: acceptance.TestAccProviderFactories(),
 		CheckDestroy:      testAccCheckTwilioChatRoleDestroy,
 		Steps: []resource.TestStep{
@@ -47,6 +48,12 @@ func TestAccTwilioChatRole_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+			{
+				ResourceName:      stateResourceName,
+				ImportState:       true,
+				ImportStateIdFunc: testAccTwilioChatRoleImportStateIdFunc(stateResourceName),
+				ImportStateVerify: true,
 			},
 		},
 	})
@@ -166,6 +173,17 @@ func testAccCheckTwilioChatRoleExists(name string) resource.TestCheckFunc {
 		}
 
 		return nil
+	}
+}
+
+func testAccTwilioChatRoleImportStateIdFunc(name string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		rs, ok := s.RootModule().Resources[name]
+		if !ok {
+			return "", fmt.Errorf("Not found: %s", name)
+		}
+
+		return fmt.Sprintf("/Services/%s/Roles/%s", rs.Primary.Attributes["service_sid"], rs.Primary.Attributes["sid"]), nil
 	}
 }
 

@@ -33,7 +33,7 @@ The following arguments are supported:
 - `service_sid` - (Mandatory) The Service SID associated with the channel webhook. Changing this forces a new resource to be created
 - `channel_sid` - (Mandatory) The Channel SID associated with the channel webhook. Changing this forces a new resource to be created
 - `flow_sid` - (Mandatory) The SID for the Studio Flow which will be called
-- `retry_count` - (Optional)  The number of attempt to retry a failed webhook call
+- `retry_count` - (Optional) The number of attempt to retry a failed webhook call
 
 ## Attributes Reference
 
@@ -59,3 +59,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the channel webhook
 - `read` - (Defaults to 5 minutes) Used when retrieving the channel webhook
 - `delete` - (Defaults to 10 minutes) Used when deleting the channel webhook
+
+## Import
+
+A channel webhook can be imported using the `/Services/{serviceSid}/Channels/{channelSid}/Webhooks/{sid}` format, e.g.
+
+```shell
+terraform import twilio_chat_channel_studio_webhook.webhook /Services/ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Channels/CHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Webhooks/WHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
