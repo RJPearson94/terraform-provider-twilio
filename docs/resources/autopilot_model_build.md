@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_model_build Resource
 
-Manages a Autopilot Model Build
+Manages a Autopilot model build
 
 ## Example Usage
 
@@ -83,3 +83,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `delete` - (Defaults to 10 minutes) Used when deleting the model build
 
 !> When polling is enabled, each request is constrained by the read timeout defined above
+
+## Import
+
+A model build can be imported using the `/Assistants/{assistantSid}/ModelBuilds/{sid}` format, e.g.
+
+```shell
+terraform import twilio_autopilot_model_build.model_build /Assistants/UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/ModelBuilds/UGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

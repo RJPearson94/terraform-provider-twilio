@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_field_type Resource
 
-Manages a Autopilot Field Type
+Manages a Autopilot field type
 
 ## Example Usage
 
@@ -51,3 +51,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the field type
 - `read` - (Defaults to 5 minutes) Used when retrieving the field type
 - `delete` - (Defaults to 10 minutes) Used when deleting the field type
+
+## Import
+
+A field type can be imported using the `/Assistants/{assistantSid}/FieldTypes/{sid}` format, e.g.
+
+```shell
+terraform import twilio_autopilot_field_type.field_type /Assistants/UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/FieldTypes/UBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

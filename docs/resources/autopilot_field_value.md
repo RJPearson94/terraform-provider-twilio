@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_field_value Resource
 
-Manages a Autopilot Field Value
+Manages a Autopilot field value
 
 ## Example Usage
 
@@ -60,3 +60,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `create` - (Defaults to 10 minutes) Used when creating the field value
 - `read` - (Defaults to 5 minutes) Used when retrieving the field value
 - `delete` - (Defaults to 10 minutes) Used when deleting the field value
+
+## Import
+
+A field value can be imported using the `/Assistants/{assistantSid}/FieldTypes/{fieldTypeSid}/FieldValues/{sid}` format, e.g.
+
+```shell
+terraform import twilio_autopilot_field_value.field_value /Assistants/UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/FieldTypes/UBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/FieldValues/UCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

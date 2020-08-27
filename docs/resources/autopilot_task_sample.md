@@ -61,3 +61,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the sample
 - `read` - (Defaults to 5 minutes) Used when retrieving the sample
 - `delete` - (Defaults to 10 minutes) Used when deleting the sample
+
+## Import
+
+A task sample can be imported using the `/Assistants/{assistantSid}/Tasks/{taskSid}/Samples/{sid}` format, e.g.
+
+```shell
+terraform import twilio_autopilot_task_sample.task_sample /Assistants/UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Tasks/UDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Samples/UFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

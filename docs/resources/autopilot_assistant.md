@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_assistant Resource
 
-Manages a Autopilot Assistant
+Manages a Autopilot assistant
 
 ## Example Usage
 
@@ -18,7 +18,7 @@ resource "twilio_autopilot_assistant" "assistant" {
   "assistant_initiation": "",
   "fallback": "http://localhost/fallback"
  }
-}  
+}
 EOF
 
   stylesheet    = <<EOF
@@ -41,7 +41,7 @@ The following arguments are supported:
 - `unique_name` - (Optional) The unique name of the assistant
 - `log_queries` - (Optional) Whether or not queries are recorded/ logged
 - `development_stage` - (Optional) The stage description for the assistant. Valid values are `in-development` or `in-production`.
-- `callback_url` - (Optional)  The URL the assistant will call back to when an event is fired
+- `callback_url` - (Optional) The URL the assistant will call back to when an event is fired
 - `callback_events` - (Optional) A list of callback events strings which trigger the callback webhook
 - `defaults` - (Optional) JSON string of an Autopilot defaults
 - `stylesheet` - (Optional) JSON string of an Autopilot stylesheet
@@ -75,3 +75,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the assistant
 - `read` - (Defaults to 5 minutes) Used when retrieving the assistant
 - `delete` - (Defaults to 10 minutes) Used when deleting the assistant
+
+## Import
+
+A assistant can be imported using the `/Assistants/{sid}` format, e.g.
+
+```shell
+terraform import twilio_autopilot_assistant.assistant /Assistants/UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

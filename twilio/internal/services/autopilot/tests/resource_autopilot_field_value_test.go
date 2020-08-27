@@ -22,6 +22,7 @@ func TestAccTwilioAutopilotFieldValue_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
+		Providers:         acceptance.TestAccProviders,
 		ProviderFactories: acceptance.TestAccProviderFactories(),
 		CheckDestroy:      testAccCheckTwilioAutopilotFieldValueDestroy,
 		Steps: []resource.TestStep{
@@ -41,6 +42,12 @@ func TestAccTwilioAutopilotFieldValue_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+			{
+				ResourceName:      stateResourceName,
+				ImportState:       true,
+				ImportStateIdFunc: testAccTwilioAutopilotFieldValueImportStateIdFunc(stateResourceName),
+				ImportStateVerify: true,
 			},
 		},
 	})
@@ -80,6 +87,17 @@ func testAccCheckTwilioAutopilotFieldValueExists(name string) resource.TestCheck
 		}
 
 		return nil
+	}
+}
+
+func testAccTwilioAutopilotFieldValueImportStateIdFunc(name string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		rs, ok := s.RootModule().Resources[name]
+		if !ok {
+			return "", fmt.Errorf("Not found: %s", name)
+		}
+
+		return fmt.Sprintf("/Assistants/%s/FieldTypes/%s/FieldValues/%s", rs.Primary.Attributes["assistant_sid"], rs.Primary.Attributes["field_type_sid"], rs.Primary.Attributes["sid"]), nil
 	}
 }
 

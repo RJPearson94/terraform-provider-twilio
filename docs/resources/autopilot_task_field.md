@@ -58,3 +58,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `create` - (Defaults to 10 minutes) Used when creating the field
 - `read` - (Defaults to 5 minutes) Used when retrieving the field
 - `delete` - (Defaults to 10 minutes) Used when deleting the field
+
+## Import
+
+A task field can be imported using the `/Assistants/{assistantSid}/Tasks/{taskSid}/Fields/{sid}` format, e.g.
+
+```shell
+terraform import twilio_autopilot_task_field.task_field /Assistants/UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Tasks/UDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Fields/UEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

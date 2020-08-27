@@ -58,3 +58,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the webhook
 - `read` - (Defaults to 5 minutes) Used when retrieving the webhook
 - `delete` - (Defaults to 10 minutes) Used when deleting the webhook
+
+## Import
+
+A webhook can be imported using the `/Assistants/{assistantSid}/Webhooks/{sid}}` format, e.g.
+
+```shell
+terraform import twilio_autopilot_webhook.webhook /Assistants/UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Webhooks/UMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
