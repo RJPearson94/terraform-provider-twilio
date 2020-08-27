@@ -13,6 +13,7 @@ crash.log
 
 # Artefact
 terraform-provider-twilio
+dist
 
 # Binaries for programs and plugins
 *.exe
