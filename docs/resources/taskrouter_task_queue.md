@@ -66,7 +66,7 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 ## Import
 
-A task queue can be imported using the `"/Workspaces/{workspaceSid}/TaskQueues/{sid}"` format, e.g.
+A task queue can be imported using the `/Workspaces/{workspaceSid}/TaskQueues/{sid}` format, e.g.
 
 ```shell
 terraform import twilio_taskrouter_task_queue.task_queue /Workspaces/WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/TaskQueues/WQXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

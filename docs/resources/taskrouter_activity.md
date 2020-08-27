@@ -56,7 +56,7 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 ## Import
 
-A activity can be imported using the `"/Workspaces/{workspaceSid}/Activities/{sid}"` format, e.g.
+A activity can be imported using the `/Workspaces/{workspaceSid}/Activities/{sid}` format, e.g.
 
 ```shell
 terraform import twilio_taskrouter_activity.activity /Workspaces/WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Activities/WAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

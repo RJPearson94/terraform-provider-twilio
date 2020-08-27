@@ -81,7 +81,7 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 ## Import
 
-A flow can be imported using the `"/Flows/{sid}"` format, e.g.
+A flow can be imported using the `/Flows/{sid}` format, e.g.
 
 ```shell
 terraform import twilio_studio_flow.flow /Flows/FWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

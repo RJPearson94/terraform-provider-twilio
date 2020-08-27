@@ -57,7 +57,7 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 ## Import
 
-A task channel can be imported using the `"/Workspaces/{workspaceSid}/TaskChannels/{sid}"` format, e.g.
+A task channel can be imported using the `/Workspaces/{workspaceSid}/TaskChannels/{sid}` format, e.g.
 
 ```shell
 terraform import twilio_taskrouter_task_channel.task_channel /Workspaces/WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/TaskChannels/TCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

@@ -59,7 +59,7 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 ## Import
 
-A worker can be imported using the `"/Workspaces/{workspaceSid}/Workers/{sid}"` format, e.g.
+A worker can be imported using the `/Workspaces/{workspaceSid}/Workers/{sid}` format, e.g.
 
 ```shell
 terraform import twilio_taskrouter_worker.worker /Workspaces/WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Workers/WKXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
