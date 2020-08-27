@@ -20,6 +20,7 @@ func TestAccTwilioAccountSubAccount_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
+		Providers:         acceptance.TestAccProviders,
 		ProviderFactories: acceptance.TestAccProviderFactories(),
 		CheckDestroy:      testAccCheckTwilioAccountSubAccountDestroy,
 		Steps: []resource.TestStep{
@@ -37,6 +38,12 @@ func TestAccTwilioAccountSubAccount_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 				),
+			},
+			{
+				ResourceName:      stateResourceName,
+				ImportState:       true,
+				ImportStateIdFunc: testAccTwilioAccountSubAccountImportStateIdFunc(stateResourceName),
+				ImportStateVerify: true,
 			},
 		},
 	})
@@ -120,6 +127,17 @@ func testAccCheckTwilioAccountSubAccountExists(name string) resource.TestCheckFu
 		}
 
 		return nil
+	}
+}
+
+func testAccTwilioAccountSubAccountImportStateIdFunc(name string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		rs, ok := s.RootModule().Resources[name]
+		if !ok {
+			return "", fmt.Errorf("Not found: %s", name)
+		}
+
+		return fmt.Sprintf("/Accounts/%s", rs.Primary.Attributes["sid"]), nil
 	}
 }
 
