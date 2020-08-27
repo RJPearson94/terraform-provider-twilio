@@ -91,3 +91,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `create` - (Defaults to 10 minutes) Used when creating the deployment
 - `read` - (Defaults to 5 minutes) Used when retrieving the deployment
 - `delete` - (Defaults to 10 minutes) Used when deleting the deployment
+
+## Import
+
+A deployment can be imported using the `/Services/{serviceSid}/Environments/{environmentSid}/Deployments/{sid}` format, e.g.
+
+```shell
+terraform import twilio_serverless_deployment.deployment /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Environments/ZEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Deployments/ZDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

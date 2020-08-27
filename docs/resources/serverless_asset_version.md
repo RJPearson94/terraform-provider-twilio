@@ -47,7 +47,7 @@ The following arguments are supported:
 - `path` - (Mandatory) The request uri path. Changing this forces a new resource to be created
 - `visibility` - (Mandatory) The visibility of the asset. Options are `public` or `protected` or `private`. Changing this forces a new resource to be created
 
-*NOTE:* Either source or content need to be specified
+**NOTE:** Either source or content need to be specified
 
 ## Attributes Reference
 
@@ -74,3 +74,13 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 - `create` - (Defaults to 10 minutes) Used when creating the asset version
 - `read` - (Defaults to 5 minutes) Used when retrieving the asset version
+
+## Import
+
+A asset version can be imported using the `/Services/{serviceSid}/Assets/{assetSid}/Versions/{sid}` format, e.g.
+
+```shell
+terraform import twilio_serverless_asset_version.asset_version /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Assets/ZHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Versions/ZNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+!> The following arguments "content", "content_file_name", "content_type" and "source_hash" cannot be imported, as the API doesn't return this data

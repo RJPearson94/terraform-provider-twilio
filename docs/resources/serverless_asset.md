@@ -51,3 +51,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the asset
 - `read` - (Defaults to 5 minutes) Used when retrieving the asset
 - `delete` - (Defaults to 10 minutes) Used when deleting the asset
+
+## Import
+
+A asset can be imported using the `/Services/{serviceSid}/Assets/{sid}` format, e.g.
+
+```shell
+terraform import twilio_serverless_asset.asset /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Assets/ZHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

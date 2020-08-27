@@ -23,6 +23,7 @@ func TestAccTwilioServerlessAssetVersion_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
+		Providers:         acceptance.TestAccProviders,
 		ProviderFactories: acceptance.TestAccProviderFactories(),
 		CheckDestroy:      testAccCheckTwilioServerlessAssetVersionDestroy,
 		Steps: []resource.TestStep{
@@ -42,6 +43,13 @@ func TestAccTwilioServerlessAssetVersion_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+			{
+				ResourceName:            stateResourceName,
+				ImportState:             true,
+				ImportStateIdFunc:       testAccTwilioServerlessAssetVersionImportStateIdFunc(stateResourceName),
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"content", "content_file_name", "content_type", "source_hash"},
 			},
 		},
 	})
@@ -100,6 +108,17 @@ func testAccCheckTwilioServerlessAssetVersionExists(name string) resource.TestCh
 		}
 
 		return nil
+	}
+}
+
+func testAccTwilioServerlessAssetVersionImportStateIdFunc(name string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		rs, ok := s.RootModule().Resources[name]
+		if !ok {
+			return "", fmt.Errorf("Not found: %s", name)
+		}
+
+		return fmt.Sprintf("/Services/%s/Assets/%s/Versions/%s", rs.Primary.Attributes["service_sid"], rs.Primary.Attributes["asset_sid"], rs.Primary.Attributes["sid"]), nil
 	}
 }
 

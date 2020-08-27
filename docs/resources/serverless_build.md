@@ -131,3 +131,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `delete` - (Defaults to 10 minutes) Used when deleting the build
 
 !> When polling is enabled, each request is constrained by the read timeout defined above
+
+## Import
+
+A build can be imported using the `/Services/{serviceSid}/Builds/{sid}` format, e.g.
+
+```shell
+terraform import twilio_serverless_build.build /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Builds/ZBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

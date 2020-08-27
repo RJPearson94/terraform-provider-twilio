@@ -50,3 +50,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the service
 - `read` - (Defaults to 5 minutes) Used when retrieving the service
 - `delete` - (Defaults to 10 minutes) Used when deleting the service
+
+## Import
+
+A service can be imported using the `/Services/{sid}` format, e.g.
+
+```shell
+terraform import twilio_serverless_service.service /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

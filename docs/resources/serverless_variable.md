@@ -62,3 +62,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the environment variable
 - `read` - (Defaults to 5 minutes) Used when retrieving the environment variable
 - `delete` - (Defaults to 10 minutes) Used when deleting the environment variable
+
+## Import
+
+A variable can be imported using the `/Services/{serviceSid}/Environments/{environmentSid}/Variables/{sid}` format, e.g.
+
+```shell
+terraform import twilio_serverless_variable.variable /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Environments/ZEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Variables/ZVXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

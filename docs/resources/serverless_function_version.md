@@ -51,7 +51,7 @@ The following arguments are supported:
 - `path` - (Mandatory) The request uri path. Changing this forces a new resource to be created
 - `visibility` - (Mandatory) The visibility of the function. Options are `public` or `protected` or `private`. Changing this forces a new resource to be created
 
-*NOTE:* Either source or content need to be specified
+**NOTE:** Either source or content need to be specified
 
 ## Attributes Reference
 
@@ -78,3 +78,13 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 - `create` - (Defaults to 10 minutes) Used when creating the function version
 - `read` - (Defaults to 5 minutes) Used when retrieving the function version
+
+## Import
+
+A function version can be imported using the `/Services/{serviceSid}/Functions/{functionSid}/Versions/{sid}` format, e.g.
+
+```shell
+terraform import twilio_serverless_function_version.function_version /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Functions/ZHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Versions/ZNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+!> The following arguments "content_file_name", "content_type" and "source_hash" cannot be imported, as the API doesn't return this data

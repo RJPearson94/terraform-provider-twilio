@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -24,7 +25,21 @@ func resourceServerlessFunctionVersion() *schema.Resource {
 		Delete: resourceServerlessFunctionVersionDelete,
 
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+				format := "/Services/(.*)/Functions/(.*)/Versions/(.*)"
+				regex := regexp.MustCompile(format)
+				match := regex.FindStringSubmatch(d.Id())
+
+				if len(match) != 4 {
+					return nil, fmt.Errorf("The imported ID (%s) does not match the format (%s)", d.Id(), format)
+				}
+
+				d.Set("service_sid", match[1])
+				d.Set("function_sid", match[2])
+				d.Set("sid", match[3])
+				d.SetId(match[3])
+				return []*schema.ResourceData{d}, nil
+			},
 		},
 
 		Timeouts: &schema.ResourceTimeout{
@@ -170,7 +185,9 @@ func resourceServerlessFunctionVersionRead(d *schema.ResourceData, meta interfac
 	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
 	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Function(d.Get("function_sid").(string)).Version(d.Id()).FetchWithContext(ctx)
+	functionVersionClient := client.Service(d.Get("service_sid").(string)).Function(d.Get("function_sid").(string)).Version(d.Id())
+
+	getResponse, err := functionVersionClient.FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -179,13 +196,22 @@ func resourceServerlessFunctionVersionRead(d *schema.ResourceData, meta interfac
 		return fmt.Errorf("[ERROR] Failed to read serverless function version: %s", err.Error())
 	}
 
+	contentGetResponse, contentErr := functionVersionClient.Content().FetchWithContext(ctx)
+	if contentErr != nil {
+		if utils.IsNotFoundError(contentErr) {
+			d.SetId("")
+			return nil
+		}
+		return fmt.Errorf("[ERROR] Failed to read serverless function version content: %s", err.Error())
+	}
+
 	d.Set("sid", getResponse.Sid)
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("service_sid", getResponse.ServiceSid)
 	d.Set("function_sid", getResponse.FunctionSid)
 	d.Set("content_type", d.Get("content_type").(string))
 	d.Set("file_name", d.Get("content_file_name").(string))
-	d.Set("content", d.Get("content").(string))
+	d.Set("content", contentGetResponse.Content)
 	d.Set("source_hash", d.Get("source_hash").(string))
 	d.Set("path", getResponse.Path)
 	d.Set("visibility", getResponse.Visibility)

@@ -20,6 +20,7 @@ func TestAccTwilioServerlessDeployment_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
+		Providers:         acceptance.TestAccProviders,
 		ProviderFactories: acceptance.TestAccProviderFactories(),
 		CheckDestroy:      testAccCheckTwilioServerlessDeploymentDestroy,
 		Steps: []resource.TestStep{
@@ -37,6 +38,12 @@ func TestAccTwilioServerlessDeployment_basic(t *testing.T) {
 					resource.TestCheckNoResourceAttr(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+			{
+				ResourceName:      stateResourceName,
+				ImportState:       true,
+				ImportStateIdFunc: testAccTwilioServerlessDeploymentImportStateIdFunc(stateResourceName),
+				ImportStateVerify: true,
 			},
 		},
 	})
@@ -76,6 +83,17 @@ func testAccCheckTwilioServerlessDeploymentExists(name string) resource.TestChec
 		}
 
 		return nil
+	}
+}
+
+func testAccTwilioServerlessDeploymentImportStateIdFunc(name string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		rs, ok := s.RootModule().Resources[name]
+		if !ok {
+			return "", fmt.Errorf("Not found: %s", name)
+		}
+
+		return fmt.Sprintf("/Services/%s/Environments/%s/Deployments/%s", rs.Primary.Attributes["service_sid"], rs.Primary.Attributes["environment_sid"], rs.Primary.Attributes["sid"]), nil
 	}
 }
 

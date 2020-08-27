@@ -3,6 +3,7 @@ package serverless
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -20,7 +21,19 @@ func resourceServerlessService() *schema.Resource {
 		Delete: resourceServerlessServiceDelete,
 
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+				format := "/Services/(.*)"
+				regex := regexp.MustCompile(format)
+				match := regex.FindStringSubmatch(d.Id())
+
+				if len(match) != 2 {
+					return nil, fmt.Errorf("The imported ID (%s) does not match the format (%s)", d.Id(), format)
+				}
+
+				d.Set("sid", match[1])
+				d.SetId(match[1])
+				return []*schema.ResourceData{d}, nil
+			},
 		},
 
 		Timeouts: &schema.ResourceTimeout{

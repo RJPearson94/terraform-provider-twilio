@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -24,7 +25,21 @@ func resourceServerlessAssetVersion() *schema.Resource {
 		Delete: resourceServerlessAssetVersionDelete,
 
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+				format := "/Services/(.*)/Assets/(.*)/Versions/(.*)"
+				regex := regexp.MustCompile(format)
+				match := regex.FindStringSubmatch(d.Id())
+
+				if len(match) != 4 {
+					return nil, fmt.Errorf("The imported ID (%s) does not match the format (%s)", d.Id(), format)
+				}
+
+				d.Set("service_sid", match[1])
+				d.Set("asset_sid", match[2])
+				d.Set("sid", match[3])
+				d.SetId(match[3])
+				return []*schema.ResourceData{d}, nil
+			},
 		},
 
 		Timeouts: &schema.ResourceTimeout{
