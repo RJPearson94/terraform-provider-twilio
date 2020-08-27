@@ -19,6 +19,15 @@ jobs:
         with:
           go-version: 1.14
 
+      - name: Granting private modules access
+        run: git config --global url."https://${{ secrets.GO_MODULES_TOKEN }}:x-oauth-basic@github.com/RJPearson94".insteadOf "https://github.com/RJPearson94"
+
+      - name: Install tools
+        run: make tools
+
+      - name: Download Dependencies
+        run: make download
+
       - name: Import GPG key
         id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v2
