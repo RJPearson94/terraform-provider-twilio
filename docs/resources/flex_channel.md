@@ -72,3 +72,13 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `create` - (Defaults to 10 minutes) Used when creating the channel
 - `read` - (Defaults to 5 minutes) Used when retrieving the channel
 - `delete` - (Defaults to 10 minutes) Used when deleting the channel
+
+## Import
+
+A channel can be imported using the `/Channels/{sid}` format, e.g.
+
+```shell
+terraform import twilio_flex_channel.channel /Channels/CHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+!> The following arguments "chat_friendly_name", "chat_unique_name", "chat_user_friendly_name", "long_lived" and "identity" cannot be imported, as the API doesn't return this data

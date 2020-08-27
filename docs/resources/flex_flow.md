@@ -96,3 +96,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the flow
 - `read` - (Defaults to 5 minutes) Used when retrieving the flow
 - `delete` - (Defaults to 10 minutes) Used when deleting the flow
+
+## Import
+
+A flow can be imported using the `/FlexFlows/{sid}` format, e.g.
+
+```shell
+terraform import twilio_flex_flow.flow /FlexFlows/FOXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

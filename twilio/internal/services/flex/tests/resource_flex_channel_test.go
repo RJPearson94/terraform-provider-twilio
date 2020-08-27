@@ -27,6 +27,7 @@ func TestAccTwilioFlexChannel_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
+		Providers:         acceptance.TestAccProviders,
 		ProviderFactories: acceptance.TestAccProviderFactories(),
 		CheckDestroy:      testAccCheckTwilioFlexChannelDestroy,
 		Steps: []resource.TestStep{
@@ -52,6 +53,13 @@ func TestAccTwilioFlexChannel_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+			{
+				ResourceName:            stateResourceName,
+				ImportState:             true,
+				ImportStateIdFunc:       testAccTwilioFlexChannelImportStateIdFunc(stateResourceName),
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"chat_friendly_name", "chat_unique_name", "chat_user_friendly_name", "long_lived", "identity"},
 			},
 		},
 	})
@@ -171,6 +179,17 @@ func testAccCheckTwilioFlexChannelExists(name string) resource.TestCheckFunc {
 		}
 
 		return nil
+	}
+}
+
+func testAccTwilioFlexChannelImportStateIdFunc(name string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		rs, ok := s.RootModule().Resources[name]
+		if !ok {
+			return "", fmt.Errorf("Not found: %s", name)
+		}
+
+		return fmt.Sprintf("/Channels/%s", rs.Primary.Attributes["sid"]), nil
 	}
 }
 
