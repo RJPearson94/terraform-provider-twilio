@@ -50,14 +50,14 @@ The following attributes are exported:
 A `capabilities` block supports the following:
 
 - `fax_inbound` - Whether the short code is able to accept inbound faxes
-- `fax_outbound` -  Whether the short code is able to send outbound faxes
+- `fax_outbound` - Whether the short code is able to send outbound faxes
 - `mms_inbound` - Whether the short code is able to accept inbound MMS's
-- `mms_outbound` -  Whether the short code is able to send outbound MMS's
+- `mms_outbound` - Whether the short code is able to send outbound MMS's
 - `restriction_fax_domestic` - Whether the short code is restricted to domestic faxes
 - `restriction_mms_domestic` - Whether the short code is restricted to domestic MMS'
 - `restriction_sms_domestic` - Whether the short code is restricted to domestic SMS's
 - `restriction_voice_domestic` - Whether the short code is restricted to domestic voice calls
-- `sip_trunking` -  Whether the short code supports SIP trunking
+- `sip_trunking` - Whether the short code supports SIP trunking
 - `sms_inbound` - Whether the short code is able to accept inbound SMS's
 - `sms_outbound` - Whether the short code is able to send outbound SMS's
 - `voice_inbound` - Whether the short code is able to accept inbound voice calls
@@ -73,3 +73,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the short code
 - `read` - (Defaults to 5 minutes) Used when retrieving the short code
 - `delete` - (Defaults to 10 minutes) Used when deleting the short code
+
+## Import
+
+A short code can be imported using the `/Services/{serviceSid}/ShortCodes/{sid}` format, e.g.
+
+```shell
+terraform import twilio_proxy_short_code.short_code /Services/KSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/ShortCodes/SCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```

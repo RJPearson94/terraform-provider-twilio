@@ -14,6 +14,62 @@ import (
 
 var proxyPhoneNumberResourceName = "twilio_proxy_phone_number"
 
+// Tests have to run sequentially as a phone number cannot be associated with more than 1 proxy service at a given time
+
+func TestAccTwilioProxyPhoneNumber_basic(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.phone_number", proxyPhoneNumberResourceName)
+
+	testData := acceptance.TestAccData
+	uniqueName := acctest.RandString(10)
+	isReserved := true
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		Providers:         acceptance.TestAccProviders,
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioProxyPhoneNumberDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioProxyPhoneNumber_basic(testData, uniqueName, isReserved),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioProxyPhoneNumberExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "sid", testData.PhoneNumberSid),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
+					resource.TestCheckResourceAttr(stateResourceName, "is_reserved", "true"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "phone_number"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "friendly_name"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "iso_country"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "in_use"),
+					resource.TestCheckResourceAttr(stateResourceName, "capabilities.#", "1"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.fax_inbound"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.fax_outbound"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.mms_inbound"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.mms_outbound"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.restriction_fax_domestic"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.restriction_mms_domestic"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.restriction_sms_domestic"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.restriction_voice_domestic"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.sip_trunking"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.sms_inbound"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.sms_outbound"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.voice_inbound"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.0.voice_outbound"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				ResourceName:      stateResourceName,
+				ImportState:       true,
+				ImportStateIdFunc: testAccTwilioProxyPhoneNumberImportStateIdFunc(stateResourceName),
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
 func TestAccTwilioProxyPhoneNumber_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.phone_number", proxyPhoneNumberResourceName)
 
@@ -22,7 +78,7 @@ func TestAccTwilioProxyPhoneNumber_update(t *testing.T) {
 	isReserved := true
 	newIsReserved := false
 
-	resource.ParallelTest(t, resource.TestCase{
+	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories(),
 		CheckDestroy:      testAccCheckTwilioProxyPhoneNumberDestroy,
@@ -130,6 +186,17 @@ func testAccCheckTwilioProxyPhoneNumberExists(name string) resource.TestCheckFun
 		}
 
 		return nil
+	}
+}
+
+func testAccTwilioProxyPhoneNumberImportStateIdFunc(name string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		rs, ok := s.RootModule().Resources[name]
+		if !ok {
+			return "", fmt.Errorf("Not found: %s", name)
+		}
+
+		return fmt.Sprintf("/Services/%s/PhoneNumbers/%s", rs.Primary.Attributes["service_sid"], rs.Primary.Attributes["sid"]), nil
 	}
 }
 

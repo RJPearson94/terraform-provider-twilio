@@ -53,14 +53,14 @@ The following attributes are exported:
 A `capabilities` block supports the following:
 
 - `fax_inbound` - Whether the phone number is able to accept inbound faxes
-- `fax_outbound` -  Whether the phone number is able to send outbound faxes
+- `fax_outbound` - Whether the phone number is able to send outbound faxes
 - `mms_inbound` - Whether the phone number is able to accept inbound MMS's
-- `mms_outbound` -  Whether the phone number is able to send outbound MMS's
+- `mms_outbound` - Whether the phone number is able to send outbound MMS's
 - `restriction_fax_domestic` - Whether the phone number is restricted to domestic faxes
 - `restriction_mms_domestic` - Whether the phone number is restricted to domestic MMS's
 - `restriction_sms_domestic` - Whether the phone number is restricted to domestic SMS's
 - `restriction_voice_domestic` - Whether the phone number is restricted to domestic voice calls
-- `sip_trunking` -  Whether the phone number supports SIP trunking
+- `sip_trunking` - Whether the phone number supports SIP trunking
 - `sms_inbound` - Whether the phone number is able to accept inbound SMS's
 - `sms_outbound` - Whether the phone number is able to send outbound SMS's
 - `voice_inbound` - Whether the phone number is able to accept inbound voice calls
@@ -76,3 +76,11 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 - `update` - (Defaults to 10 minutes) Used when updating the phone number
 - `read` - (Defaults to 5 minutes) Used when retrieving the phone number
 - `delete` - (Defaults to 10 minutes) Used when deleting the phone number
+
+## Import
+
+A phone number can be imported using the `/Services/{serviceSid}/PhoneNumbers/{sid}` format, e.g.
+
+```shell
+terraform import twilio_proxy_phone_number.phone_number /Services/KSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/PhoneNumbers/PNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
