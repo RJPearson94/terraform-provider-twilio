@@ -9,13 +9,8 @@ resource "twilio_serverless_service" "service" {
 }
 
 resource "twilio_serverless_function" "function" {
-  service_sid   = twilio_serverless_service.service.sid
-  friendly_name = "test"
-}
-
-resource "twilio_serverless_function_version" "function_version" {
   service_sid       = twilio_serverless_service.service.sid
-  function_sid      = twilio_serverless_function.function.sid
+  friendly_name     = "test"
   content           = <<EOF
 exports.handler = function (context, event, callback) {
   callback(null, "Hello World");
@@ -30,28 +25,23 @@ EOF
 resource "twilio_serverless_asset" "asset" {
   service_sid   = twilio_serverless_service.service.sid
   friendly_name = "test"
-}
-
-resource "twilio_serverless_asset_version" "asset_version" {
-  service_sid  = twilio_serverless_service.service.sid
-  asset_sid    = twilio_serverless_asset.asset.sid
-  source       = "module.png"
-  source_hash  = filemd5("${path.module}/module.png")
-  content_type = "image/png"
-  path         = "/test-asset"
-  visibility   = "public"
+  source        = "module.png"
+  source_hash   = filemd5("${path.module}/module.png")
+  content_type  = "image/png"
+  path          = "/test-asset"
+  visibility    = "public"
 }
 
 resource "twilio_serverless_build" "build" {
-  service_sid           = twilio_serverless_service.service.sid
-  
+  service_sid = twilio_serverless_service.service.sid
+
   function_version {
-		sid = twilio_serverless_function_version.function_version.sid
-	}
+    sid = twilio_serverless_function.function.latest_version_sid
+  }
 
   asset_version {
-		sid = twilio_serverless_asset_version.asset_version.sid
-	}
+    sid = twilio_serverless_asset.asset.latest_version_sid
+  }
 
   dependencies = {
     "twilio" : "3.6.3"

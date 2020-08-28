@@ -58,6 +58,29 @@ func TestAccTwilioServerlessFunction_basic(t *testing.T) {
 	})
 }
 
+func TestAccTwilioServerlessFunction_multipleFunctions(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.function", functionResourceName)
+	stateResourceName2 := fmt.Sprintf("%s.function2", functionResourceName)
+	uniqueName := acctest.RandString(10)
+	friendlyName := acctest.RandString(10)
+	visibility := "private"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessFunctionDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessFunction_multipleFunctions(uniqueName, friendlyName, visibility),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessFunctionExists(stateResourceName),
+					testAccCheckTwilioServerlessFunctionExists(stateResourceName2),
+				),
+			},
+		},
+	})
+}
+
 func TestAccTwilioServerlessAssetFunction_invalidVisibility(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 	friendlyName := acctest.RandString(10)
@@ -209,4 +232,33 @@ resource "twilio_serverless_function" "function" {
   visibility        = "%s"
 }
 `, uniqueName, friendlyName, visibility)
+}
+
+func testAccTwilioServerlessFunction_multipleFunctions(uniqueName string, friendlyName string, visibility string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "service-%s"
+  friendly_name = "test"
+}
+
+resource "twilio_serverless_function" "function" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "%s"
+  content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "%s"
+}
+
+resource "twilio_serverless_function" "function2" {
+	service_sid       = twilio_serverless_service.service.sid
+	friendly_name     = "%s-2"
+	content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
+	content_type      = "application/javascript"
+	content_file_name = "helloWorld.js"
+	path              = "/test-function-2"
+	visibility        = "%s"
+  }
+`, uniqueName, friendlyName, visibility, friendlyName, visibility)
 }

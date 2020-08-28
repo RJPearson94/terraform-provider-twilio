@@ -26,9 +26,8 @@ No input.
 
 ## Outputs
 
-| Name             | Description                               |
-| ---------------- | ----------------------------------------- |
-| build            | The Generated Serverless Build            |
-| function         | The Generated Serverless Function         |
-| function_version | The Generated Serverless Function Version |
-| service          | The Generated Serverless Service          |
+| Name     | Description                       |
+| -------- | --------------------------------- |
+| build    | The Generated Serverless Build    |
+| function | The Generated Serverless Function |
+| service  | The Generated Serverless Service  |

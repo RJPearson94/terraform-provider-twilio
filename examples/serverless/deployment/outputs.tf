@@ -8,20 +8,10 @@ output "function" {
   value       = twilio_serverless_function.function
 }
 
-output "function_version" {
-  description = "The Generated Serverless Function Version"
-  value       = twilio_serverless_function_version.function_version
-}
-
-output "asset" {
-  description = "The Generated Serverless Asset"
-  value       = twilio_serverless_asset.asset
-}
-
-output "asset_version" {
-  description = "The Generated Serverless Asset Version"
-  value       = twilio_serverless_asset_version.asset_version
-}
+# output "asset" {
+#   description = "The Generated Serverless Asset"
+#   value       = twilio_serverless_asset.asset
+# }
 
 output "build" {
   description = "The Generated Serverless Build"

@@ -14,6 +14,6 @@ resource "twilio_serverless_asset" "asset" {
   source        = "module.png"
   source_hash   = filemd5("${path.module}/module.png")
   content_type  = "image/png"
-  path          = "/test-2"
+  path          = "/test"
   visibility    = "private"
 }

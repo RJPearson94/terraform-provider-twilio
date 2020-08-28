@@ -3,12 +3,14 @@ package serverless
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
+	"os"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/serverless/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	serverless "github.com/RJPearson94/twilio-sdk-go/service/serverless/v1"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/asset"
@@ -17,6 +19,7 @@ import (
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/mitchellh/go-homedir"
 )
 
 func resourceServerlessAsset() *schema.Resource {
@@ -240,16 +243,45 @@ func resourceServerlessAssetDelete(d *schema.ResourceData, meta interface{}) err
 }
 
 func createAssetVersion(ctx context.Context, d *schema.ResourceData, client *serverless.Serverless) error {
-	versionContent, err := helper.ReadVersionContent(d)
-	if err != nil {
-		return err
+	var body io.ReadSeeker
+	var fileName string
+	var contentType = d.Get("content_type").(string)
+
+	if value, ok := d.GetOk("content"); ok {
+		body = strings.NewReader(value.(string))
+		fileName = d.Get("content_file_name").(string)
+	}
+
+	if value, ok := d.GetOk("source"); ok {
+		path, err := homedir.Expand(value.(string))
+		if err != nil {
+			return fmt.Errorf("[ERROR] Error expanding homedir: %s", err)
+		}
+		file, err := os.Open(path)
+		if err != nil {
+			return fmt.Errorf("Error opening source: %s", err)
+		}
+
+		body = file
+		fileName = file.Name()
+
+		defer func() {
+			err := file.Close()
+			if err != nil {
+				log.Printf("[WARN] Error closing source: %s", err)
+			}
+		}()
+	}
+
+	if body == nil || fileName == "" || contentType == "" {
+		return fmt.Errorf("[ERROR] body (%v), file name (%v) and content type (%v) are all required", body, fileName, contentType)
 	}
 
 	createInput := &versions.CreateVersionInput{
 		Content: versions.CreateContentDetails{
-			Body:        versionContent.Body,
-			ContentType: versionContent.ContentType,
-			FileName:    versionContent.FileName,
+			Body:        body,
+			ContentType: contentType,
+			FileName:    fileName,
 		},
 		Path:       d.Get("path").(string),
 		Visibility: d.Get("visibility").(string),

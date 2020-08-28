@@ -30,13 +30,11 @@ No input.
 
 ## Outputs
 
-| Name             | Description                               |
-| ---------------- | ----------------------------------------- |
-| asset            | The Generated Serverless Asset            |
-| asset_version    | The Generated Serverless Asset Version    |
-| build            | The Generated Serverless Build            |
-| deployment       | The Generated Serverless Deployment       |
-| environment      | The Generated Serverless Environment      |
-| function         | The Generated Serverless Function         |
-| function_version | The Generated Serverless Function Version |
-| service          | The Generated Serverless Service          |
+| Name        | Description                          |
+| ----------- | ------------------------------------ |
+| asset       | The Generated Serverless Asset       |
+| build       | The Generated Serverless Build       |
+| deployment  | The Generated Serverless Deployment  |
+| environment | The Generated Serverless Environment |
+| function    | The Generated Serverless Function    |
+| service     | The Generated Serverless Service     |

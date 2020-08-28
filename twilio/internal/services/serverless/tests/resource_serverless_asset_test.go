@@ -58,6 +58,29 @@ func TestAccTwilioServerlessAsset_basic(t *testing.T) {
 	})
 }
 
+func TestAccTwilioServerlessAsset_multipleAssets(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.asset", assetResourceName)
+	stateResourceName2 := fmt.Sprintf("%s.asset2", assetResourceName)
+	uniqueName := acctest.RandString(10)
+	friendlyName := acctest.RandString(10)
+	visibility := "private"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioServerlessAssetDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessAsset_multipleAssets(uniqueName, friendlyName, visibility),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessAssetExists(stateResourceName),
+					testAccCheckTwilioServerlessAssetExists(stateResourceName2),
+				),
+			},
+		},
+	})
+}
+
 func TestAccTwilioServerlessAssetVersion_invalidVisibility(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 	friendlyName := acctest.RandString(10)
@@ -207,4 +230,33 @@ resource "twilio_serverless_asset" "asset" {
   visibility        = "%s"
 }
 `, uniqueName, friendlyName, visibility)
+}
+
+func testAccTwilioServerlessAsset_multipleAssets(uniqueName string, friendlyName string, visibility string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "service-%s"
+  friendly_name = "test"
+}
+
+resource "twilio_serverless_asset" "asset" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "%s"
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset"
+  visibility        = "%s"
+}
+
+resource "twilio_serverless_asset" "asset2" {
+	service_sid       = twilio_serverless_service.service.sid
+	friendly_name     = "%s-2"
+	content           = "{}"
+	content_type      = "application/json"
+	content_file_name = "test.json"
+	path              = "/test-asset-2"
+	visibility        = "%s"
+}
+`, uniqueName, friendlyName, visibility, friendlyName, visibility)
 }

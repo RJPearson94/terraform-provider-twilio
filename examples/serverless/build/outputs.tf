@@ -8,11 +8,6 @@ output "function" {
   value       = twilio_serverless_function.function
 }
 
-output "function_version" {
-  description = "The Generated Serverless Function Version"
-  value       = twilio_serverless_function_version.function_version
-}
-
 output "build" {
   description = "The Generated Serverless Build"
   value       = twilio_serverless_build.build
