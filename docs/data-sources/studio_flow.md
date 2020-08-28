@@ -27,7 +27,7 @@ output "definition" {
 
 The following arguments are supported:
 
-- `sid` - The SID of the studio flow
+- `sid` - (Mandatory) The SID of the studio flow
 
 ## Attributes Reference
 
