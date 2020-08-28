@@ -24,13 +24,25 @@ func Provider() terraform.ResourceProvider {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("TWILIO_ACCOUNT_SID", nil),
-				Description: "The Account Sid which should be used.",
+				Description: "The Account SID which should be used.",
 			},
 			"auth_token": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("TWILIO_AUTH_TOKEN", nil),
 				Description: "The Auth Token which should be used.",
+			},
+			"api_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("TWILIO_API_KEY", nil),
+				Description: "The API Key which should be used.",
+			},
+			"api_secret": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("TWILIO_API_SECRET", nil),
+				Description: "The API Key secret which should be used.",
 			},
 		},
 
@@ -67,6 +79,8 @@ func providerConfigure(p *schema.Provider) schema.ConfigureFunc {
 		config := Config{
 			AccountSid:       d.Get("account_sid").(string),
 			AuthToken:        d.Get("auth_token").(string),
+			APIKey:           d.Get("api_key").(string),
+			APISecret:        d.Get("api_secret").(string),
 			terraformVersion: terraformVersion,
 		}
 

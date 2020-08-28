@@ -19,14 +19,14 @@ import (
 type Config struct {
 	AccountSid       string
 	AuthToken        string
+	APIKey           string
+	APISecret        string
 	terraformVersion string
 }
 
 func (config *Config) Client(ctx context.Context) (interface{}, error) {
-	creds, err := credentials.New(credentials.Account{
-		Sid:       config.AccountSid,
-		AuthToken: config.AuthToken,
-	})
+
+	creds, err := credentials.New(getCredentials(config))
 	if err != nil {
 		return nil, err
 	}
@@ -48,4 +48,18 @@ func (config *Config) Client(ctx context.Context) (interface{}, error) {
 		TaskRouter: taskrouter.NewWithCredentials(creds),
 	}
 	return client, nil
+}
+
+func getCredentials(config *Config) credentials.TwilioCredentials {
+	if config.APIKey != "" && config.APISecret != "" {
+		return credentials.APIKey{
+			Account: config.AccountSid,
+			Sid:     config.APIKey,
+			Value:   config.APISecret,
+		}
+	}
+	return credentials.Account{
+		Sid:       config.AccountSid,
+		AuthToken: config.AuthToken,
+	}
 }
