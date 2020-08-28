@@ -1,13 +1,15 @@
 ---
-page_title: "Twilio Serverless Asset"
+page_title: "Twilio Serverless Variable"
 subcategory: "Serverless"
 ---
 
 # twilio_serverless_variable Resource
 
-Manages a Serverless Environment Variable
+Manages a Serverless environment variable. See the [API docs](https://www.twilio.com/docs/runtime/functions-assets-api/api/variable) for more information
 
-!> This resource is in beta
+For more information on Serverless (also known as Runtime), see the product [page](https://www.twilio.com/runtime)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 

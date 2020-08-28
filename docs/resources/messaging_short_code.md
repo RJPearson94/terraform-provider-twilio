@@ -1,13 +1,15 @@
 ---
-page_title: "Twilio Messaging Short Code"
-subcategory: "Messaging"
+page_title: "Twilio Programmable Messaging Short Code"
+subcategory: "Programmable Messaging"
 ---
 
 # twilio_messaging_short_code Resource
 
-Manages a messaging short code resource
+Manages a Programmable Messaging short code resource. See the [API docs](https://www.twilio.com/docs/sms/services/api/shortcode-resource) for more information
 
-!> This resource is in beta
+For more information on Programmable Messaging, see the product [page](https://www.twilio.com/messaging)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 

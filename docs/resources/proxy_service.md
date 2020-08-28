@@ -5,7 +5,11 @@ subcategory: "Proxy"
 
 # twilio_proxy_service Resource
 
-Manages a Proxy service
+Manages a Proxy service. See the [API docs](https://www.twilio.com/docs/proxy/api/service) for more information
+
+For more information on Proxy, see the product [page](https://www.twilio.com/docs/proxy)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 

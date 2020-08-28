@@ -1,13 +1,15 @@
 ---
-page_title: "Twilio Messaging Phone Number"
-subcategory: "Messaging"
+page_title: "Twilio Programmable Messaging Phone Number"
+subcategory: "Programmable Messaging"
 ---
 
 # twilio_messaging_phone_number Resource
 
-Manages a messaging phone number resource
+Manages a Programmable Messaging phone number resource. See the [API docs](https://www.twilio.com/docs/sms/services/api/phonenumber-resource) for more information
 
-!> This resource is in beta
+For more information on Programmable Messaging, see the product [page](https://www.twilio.com/messaging)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 

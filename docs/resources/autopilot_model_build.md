@@ -5,7 +5,9 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_model_build Resource
 
-Manages a Autopilot model build
+Manages a Autopilot model build. See the [API docs](https://www.twilio.com/docs/autopilot/api/model-build) for more information
+
+For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
 ## Example Usage
 

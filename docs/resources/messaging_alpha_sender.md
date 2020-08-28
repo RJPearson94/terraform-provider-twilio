@@ -1,13 +1,15 @@
 ---
-page_title: "Twilio Messaging Alpha Sender"
-subcategory: "Messaging"
+page_title: "Twilio Programmable Messaging Alpha Sender"
+subcategory: "Programmable Messaging"
 ---
 
 # twilio_messaging_alpha_sender Resource
 
-Manages a messaging alphanumeric sender resource
+Manages a Programmable Messaging alphanumeric sender resource. See the [API docs](https://www.twilio.com/docs/sms/services/api/alphasender-resource) for more information
 
-!> This resource is in beta
+For more information on Programmable Messaging, see the product [page](https://www.twilio.com/messaging)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 

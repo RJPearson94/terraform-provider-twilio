@@ -5,7 +5,9 @@ subcategory: "IAM"
 
 # twilio_iam_api_key Resource
 
-Manages a API Key for a Twilio Account
+Manages a API Key for a Twilio Account. See the [API docs](https://www.twilio.com/docs/iam/keys/api-key-resource) for more information
+
+!> Only Standard API Keys can be created via the API. If you require a Master API Key then you will need to be create this manually in the Twilio console
 
 ## Example Usage
 

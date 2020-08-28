@@ -1,13 +1,15 @@
 ---
-page_title: "Twilio Serverless Resource"
+page_title: "Twilio Serverless Environment"
 subcategory: "Serverless"
 ---
 
-# twilio_serverless_service Resource
+# twilio_serverless_environment Resource
 
-Manages a Serverless service
+Manages a Serverless environment. See the [API docs](https://www.twilio.com/docs/runtime/functions-assets-api/api/environment) for more information
 
-!> This resource is in beta
+For more information on Serverless (also known as Runtime), see the product [page](https://www.twilio.com/runtime)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 

@@ -5,7 +5,9 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_assistant Resource
 
-Manages a Autopilot assistant
+Manages a Autopilot assistant. See the [API docs](https://www.twilio.com/docs/autopilot/api/assistant) for more information
+
+For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
 ## Example Usage
 

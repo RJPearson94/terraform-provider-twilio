@@ -5,7 +5,9 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_field_value Resource
 
-Manages a Autopilot field value
+Manages a Autopilot field value. See the [API docs](https://www.twilio.com/docs/autopilot/api/field-value) for more information
+
+For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
 ## Example Usage
 

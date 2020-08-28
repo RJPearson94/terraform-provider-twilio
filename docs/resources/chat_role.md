@@ -5,7 +5,9 @@ subcategory: "Programmable Chat"
 
 # twilio_chat_role Resource
 
-Manages a Chat Role
+Manages a Programmable Chat role. See the [API docs](https://www.twilio.com/docs/chat/rest/role-resource) for more information
+
+For more information on Programmable Chat, see the product [page](https://www.twilio.com/chat)
 
 ## Example Usage
 

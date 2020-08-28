@@ -5,9 +5,9 @@ subcategory: "Account"
 
 # twilio_account_balance Data Source
 
-Use this data source to access balance information for an existing account.
+Use this data source to access balance information for an existing account. See the [API docs](https://www.twilio.com/docs/iam/api/account) for more information
 
-!> This balance can only be retrieved for parent/ owner accounts
+~> This balance can only be retrieved for parent/ owner accounts
 
 ## Example Usage
 

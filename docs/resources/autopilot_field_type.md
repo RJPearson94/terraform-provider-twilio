@@ -5,7 +5,9 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_field_type Resource
 
-Manages a Autopilot field type
+Manages a Autopilot field type. See the [API docs](https://www.twilio.com/docs/autopilot/api/field-type) for more information
+
+For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
 ## Example Usage
 

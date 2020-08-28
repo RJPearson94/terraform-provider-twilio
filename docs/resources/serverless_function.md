@@ -5,9 +5,11 @@ subcategory: "Serverless"
 
 # twilio_serverless_function Resource
 
-Manages a Serverless function
+Manages a versioned Serverless function. See the [API docs](https://www.twilio.com/docs/runtime/functions-assets-api/api/function) for more information
 
-!> This resource is in beta
+For more information on Serverless (also known as Runtime), see the product [page](https://www.twilio.com/runtime)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 

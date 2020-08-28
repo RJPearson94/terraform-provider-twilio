@@ -5,7 +5,11 @@ subcategory: "Proxy"
 
 # twilio_proxy_phone_number Resource
 
-Manages a proxy phone number
+Manages a Proxy phone number. See the [API docs](https://www.twilio.com/docs/proxy/api/phone-number) for more information
+
+For more information on Proxy, see the product [page](https://www.twilio.com/docs/proxy)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 

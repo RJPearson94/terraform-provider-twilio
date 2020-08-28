@@ -5,7 +5,9 @@ subcategory: "Flex"
 
 # twilio_flex_channel Resource
 
-Manages a flex channel
+Manages a Twilio Flex channel
+
+For more information on Twilio Flex, see the product [page](https://www.twilio.com/flex)
 
 ## Example Usage
 

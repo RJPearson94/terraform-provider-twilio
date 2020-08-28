@@ -5,7 +5,7 @@ subcategory: "Account"
 
 # twilio_account_details Data Source
 
-Use this data source to access information about an existing account
+Use this data source to access information about an existing account. See the [API docs](https://www.twilio.com/docs/iam/api/account) for more information
 
 ## Example Usage
 

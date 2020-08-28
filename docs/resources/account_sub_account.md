@@ -5,7 +5,9 @@ subcategory: "Account"
 
 # twilio_account_sub_account Resource
 
-Manages a Twilio Sub Account
+Manages a Twilio sub account. See the [API docs](https://www.twilio.com/docs/iam/api/account) for more information
+
+~> Currently only sub accounts can be created via the API. Parent accounts have to be created via the Twilio console
 
 ## Example Usage
 

@@ -1,13 +1,15 @@
 ---
-page_title: "Twilio Serverless Resource"
+page_title: "Twilio Serverless Deployment"
 subcategory: "Serverless"
 ---
 
 # twilio_serverless_deployment Resource
 
-Manages a Serverless deployment
+Manages a Serverless deployment. See the [API docs](https://www.twilio.com/docs/runtime/functions-assets-api/api/deployment) for more information
 
-!> This resource is in beta
+For more information on Serverless (also known as Runtime), see the product [page](https://www.twilio.com/runtime)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 
@@ -20,11 +22,7 @@ resource "twilio_serverless_service" "service" {
 resource "twilio_serverless_function" "function" {
   service_sid   = twilio_serverless_service.service.sid
   friendly_name = "test"
-}
 
-resource "twilio_serverless_function_version" "function_version" {
-  service_sid       = twilio_serverless_service.service.sid
-  function_sid      = twilio_serverless_function.function.sid
   content           = <<EOF
 exports.handler = function (context, event, callback) {
   callback(null, "Hello World");
@@ -33,13 +31,13 @@ EOF
   content_type      = "application/javascript"
   content_file_name = "helloWorld.js"
   path              = "/test-function"
-  visibility        = "public"
+  visibility        = "private"
 }
 
 resource "twilio_serverless_build" "build" {
   service_sid           = twilio_serverless_service.service.sid
   function_version {
-    sid = twilio_serverless_function_version.function_version.sid
+    sid = twilio_serverless_function.function.latest_version_sid
   }
   dependencies = {
     "twilio" : "3.6.3"

@@ -5,7 +5,9 @@ subcategory: "TaskRouter"
 
 # twilio_taskrouter_activity Resource
 
-Manages a TaskRouter activity
+Manages a TaskRouter activity. See the [API docs](https://www.twilio.com/docs/taskrouter/api/activity) for more information
+
+For more information on TaskRouter, see the product [page](https://www.twilio.com/taskrouter)
 
 ## Example Usage
 

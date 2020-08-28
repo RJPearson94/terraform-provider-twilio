@@ -5,7 +5,9 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_task_sample Resource
 
-Manages a Autopilot Task Sample
+Manages a Autopilot task sample. See the [API docs](https://www.twilio.com/docs/autopilot/api/task-sample) for more information
+
+For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
 ## Example Usage
 

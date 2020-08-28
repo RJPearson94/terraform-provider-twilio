@@ -5,7 +5,9 @@ subcategory: "TaskRouter"
 
 # twilio_taskrouter_workspace Resource
 
-Manages a TaskRouter workspace
+Manages a TaskRouter workspace. See the [API docs](https://www.twilio.com/docs/taskrouter/api/workspace) for more information
+
+For more information on TaskRouter, see the product [page](https://www.twilio.com/taskrouter)
 
 ## Example Usage
 

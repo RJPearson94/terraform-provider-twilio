@@ -5,7 +5,9 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_task Resource
 
-Manages a Autopilot Task
+Manages a Autopilot task. See the [API docs](https://www.twilio.com/docs/autopilot/api/task) for more information
+
+For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
 ## Example Usage
 
@@ -38,8 +40,8 @@ The following arguments are supported:
 - `assistant_sid` - (Mandatory) The SID of the assistant to attach the task to. Changing this forces a new resource to be created
 - `unique_name` - (Mandatory) The unique name of the task
 - `friendly_name` - (Optional) The friendly name of the task
-- `actions_url` - (Optional) The url to retrieve the actions json. Conflicts with actions.
-- `actions` - (Optional) JSON string of an Autopilot task. Conflicts with actions_url.
+- `actions_url` - (Optional) The url to retrieve the actions json. Conflicts with `actions`.
+- `actions` - (Optional) JSON string of an Autopilot task. Conflicts with `actions_url`.
 
 ## Attributes Reference
 

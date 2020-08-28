@@ -5,7 +5,9 @@ subcategory: "TaskRouter"
 
 # twilio_taskrouter_task_queue Resource
 
-Manages a TaskRouter task queue
+Manages a TaskRouter task queue. See the [API docs](https://www.twilio.com/docs/taskrouter/api/task-queue) for more information
+
+For more information on TaskRouter, see the product [page](https://www.twilio.com/taskrouter)
 
 ## Example Usage
 

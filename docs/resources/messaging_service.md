@@ -1,13 +1,15 @@
 ---
-page_title: "Twilio Messaging Service"
-subcategory: "Messaging"
+page_title: "Twilio Programmable Messaging Service"
+subcategory: "Programmable Messaging"
 ---
 
 # twilio_messaging_service Resource
 
-Manages a messaging service
+Manages a Programmable Messaging service. See the [API docs](https://www.twilio.com/docs/sms/services/api) for more information
 
-!> This resource is in beta
+For more information on Programmable Messaging, see the product [page](https://www.twilio.com/messaging)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 

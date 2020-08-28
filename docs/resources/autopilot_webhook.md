@@ -5,7 +5,9 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_webhook Resource
 
-Manages a Autopilot Webhook
+Manages a Autopilot webhook. See the [API docs](https://www.twilio.com/docs/autopilot/api/event-webhooks) for more information
+
+For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
 ## Example Usage
 

@@ -5,7 +5,9 @@ subcategory: "TaskRouter"
 
 # twilio_taskrouter_task_channel Resource
 
-Manages a TaskRouter Task Channel
+Manages a TaskRouter task channel. See the [API docs](https://www.twilio.com/docs/taskrouter/api/task-channel) for more information
+
+For more information on TaskRouter, see the product [page](https://www.twilio.com/taskrouter)
 
 ## Example Usage
 

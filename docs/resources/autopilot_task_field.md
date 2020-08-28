@@ -5,7 +5,9 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_task_field Resource
 
-Manages a Autopilot Task Field
+Manages a Autopilot task field. See the [API docs](https://www.twilio.com/docs/autopilot/api/task-field) for more information
+
+For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
 ## Example Usage
 

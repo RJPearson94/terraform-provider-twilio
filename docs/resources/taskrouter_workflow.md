@@ -5,7 +5,9 @@ subcategory: "TaskRouter"
 
 # twilio_taskrouter_workflow Resource
 
-Manages a TaskRouter workflow
+Manages a TaskRouter workflow. See the [API docs](https://www.twilio.com/docs/taskrouter/api/workflow) for more information
+
+For more information on TaskRouter, see the product [page](https://www.twilio.com/taskrouter)
 
 ## Example Usage
 

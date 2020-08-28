@@ -5,7 +5,9 @@ subcategory: "TaskRouter"
 
 # twilio_taskrouter_worker Resource
 
-Manages a TaskRouter worker
+Manages a TaskRouter worker. See the [API docs](https://www.twilio.com/docs/taskrouter/api/worker) for more information
+
+For more information on TaskRouter, see the product [page](https://www.twilio.com/taskrouter)
 
 ## Example Usage
 

@@ -5,7 +5,9 @@ subcategory: "Programmable Chat"
 
 # twilio_chat_channel Resource
 
-Manages a chat channel
+Manages a Programmable Chat channel. See the [API docs](https://www.twilio.com/docs/chat/rest/channel-resource) for more information
+
+For more information on Programmable Chat, see the product [page](https://www.twilio.com/chat)
 
 ## Example Usage
 

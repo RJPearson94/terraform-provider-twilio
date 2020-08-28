@@ -5,7 +5,11 @@ subcategory: "Proxy"
 
 # twilio_proxy_short_code Resource
 
-Manages a proxy short code
+Manages a Proxy short code. See the [API docs](https://www.twilio.com/docs/proxy/api/short-code) for more information
+
+For more information on Proxy, see the product [page](https://www.twilio.com/docs/proxy)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 

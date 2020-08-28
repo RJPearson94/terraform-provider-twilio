@@ -7,6 +7,8 @@ subcategory: "Flex"
 
 Manages a flex flow
 
+For more information on Twilio Flex, see the product [page](https://www.twilio.com/flex)
+
 ## Example Usage
 
 ```hcl

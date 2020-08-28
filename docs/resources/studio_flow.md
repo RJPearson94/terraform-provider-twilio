@@ -5,9 +5,11 @@ subcategory: "Studio"
 
 # twilio_studio_flow Resource
 
-Manages a studio flow
+Manages a Studio flow. See the [API docs](https://www.twilio.com/docs/studio/rest-api/v2/flow) for more information
 
-!> This resource is in beta
+For more information on Studio, see the product [page](https://www.twilio.com/studio)
+
+!> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
 
