@@ -250,13 +250,13 @@ resource "twilio_serverless_asset" "asset" {
 }
 
 resource "twilio_serverless_asset" "asset2" {
-	service_sid       = twilio_serverless_service.service.sid
-	friendly_name     = "%s-2"
-	content           = "{}"
-	content_type      = "application/json"
-	content_file_name = "test.json"
-	path              = "/test-asset-2"
-	visibility        = "%s"
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "%s-2"
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset-2"
+  visibility        = "%s"
 }
 `, uniqueName, friendlyName, visibility, friendlyName, visibility)
 }

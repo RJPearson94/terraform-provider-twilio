@@ -123,14 +123,14 @@ EOF
 }
 
 resource "twilio_serverless_asset" "asset" {
-	service_sid       = twilio_serverless_service.service.sid
-	friendly_name     = "test"
-	content           = "{}"
-	content_type      = "application/json"
-	content_file_name = "test.json"
-	path              = "/test-asset"
-	visibility        = "private"
-  }
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset"
+  visibility        = "private"
+}
 
 resource "twilio_serverless_build" "build" {
   service_sid = twilio_serverless_service.service.sid
