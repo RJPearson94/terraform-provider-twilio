@@ -30,6 +30,7 @@ func TestAccTwilioMessagingService_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioMessagingServiceExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "area_code_geomatch"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "fallback_method"),

@@ -19,7 +19,7 @@ func TestAccTwilioMessagingPhoneNumber_basic(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 	testData := acceptance.TestAccData
 
-	resource.ParallelTest(t, resource.TestCase{
+	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		Providers:         acceptance.TestAccProviders,
 		ProviderFactories: acceptance.TestAccProviderFactories(),
@@ -30,12 +30,12 @@ func TestAccTwilioMessagingPhoneNumber_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioMessagingPhoneNumberExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "sid", testData.PhoneNumberSid),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "capabilities.#"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "country_code"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "phone_number"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
