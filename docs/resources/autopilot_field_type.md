@@ -37,7 +37,7 @@ The following attributes are exported:
 
 - `id` - The ID of the field type (Same as the SID)
 - `sid` - The SID of the field type (Same as the ID)
-- `account_sid` - The Account SID associated with the field type
+- `account_sid` - The account SID associated with the field type
 - `assistant_sid` - The SID of the assistant to attach the field type to
 - `unique_name` - The unique name of the field type
 - `friendly_name` - The friendly name of the field type

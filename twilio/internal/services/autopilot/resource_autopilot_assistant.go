@@ -2,7 +2,6 @@ package autopilot
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"regexp"
 	"strings"
@@ -199,17 +198,21 @@ func resourceAutopilotAssistantRead(d *schema.ResourceData, meta interface{}) er
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to read autopilot assistant defaults: %s", err.Error())
 	}
-	if err := marshalJSONData(d, "defaults", getDefaultsResponse.Data); err != nil {
-		return err
+	defaultsJSONString, err := structure.FlattenJsonToString(getDefaultsResponse.Data)
+	if err != nil {
+		return fmt.Errorf("[ERROR] Unable to flatten defaults json to string: %s", err.Error())
 	}
+	d.Set("defaults", defaultsJSONString)
 
 	getStyleSheetResponse, err := client.Assistant(d.Id()).StyleSheet().FetchWithContext(ctx)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to read autopilot assistant stylesheet: %s", err.Error())
 	}
-	if err := marshalJSONData(d, "stylesheet", getStyleSheetResponse.Data); err != nil {
-		return err
+	styleSheetJSONString, err := structure.FlattenJsonToString(getStyleSheetResponse.Data)
+	if err != nil {
+		return fmt.Errorf("[ERROR] Unable to flatten stylesheet json to string: %s", err.Error())
 	}
+	d.Set("stylesheet", styleSheetJSONString)
 
 	return nil
 }
@@ -248,16 +251,5 @@ func resourceAutopilotAssistantDelete(d *schema.ResourceData, meta interface{}) 
 		return fmt.Errorf("Failed to delete autopilot assistant: %s", err.Error())
 	}
 	d.SetId("")
-	return nil
-}
-
-func marshalJSONData(d *schema.ResourceData, id string, data interface{}) error {
-	if data != nil {
-		jsonByteArray, err := json.Marshal(data)
-		if err != nil {
-			return fmt.Errorf("[ERROR] Failed to marshal %s data to string: %s", id, err.Error())
-		}
-		d.Set(id, string(jsonByteArray))
-	}
 	return nil
 }

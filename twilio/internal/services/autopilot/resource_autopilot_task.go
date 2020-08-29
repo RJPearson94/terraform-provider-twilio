@@ -2,7 +2,6 @@ package autopilot
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"regexp"
 	"time"
@@ -150,15 +149,15 @@ func resourceAutopilotTaskRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.Set("url", getResponse.URL)
 
-	getActionsResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Id()).Actions().Fetch()
+	getActionsResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Id()).Actions().FetchWithContext(ctx)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to read autopilot task actions: %s", err.Error())
 	}
-	getActionsResponseDataByteArray, err := json.Marshal(getActionsResponse.Data)
+	actionsJSONString, err := structure.FlattenJsonToString(getActionsResponse.Data)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to marshal actions data to string: %s", err.Error())
+		return fmt.Errorf("[ERROR] Unable to flatten actions json to string: %s", err.Error())
 	}
-	d.Set("actions", string(getActionsResponseDataByteArray))
+	d.Set("actions", actionsJSONString)
 
 	return nil
 }

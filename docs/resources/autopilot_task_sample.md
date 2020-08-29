@@ -45,7 +45,7 @@ The following attributes are exported:
 
 - `id` - The ID of the sample (Same as the SID)
 - `sid` - The SID of the sample (Same as the ID)
-- `account_sid` - The Account SID associated with the sample
+- `account_sid` - The account SID associated with the sample
 - `assistant_sid` - The SID of the assistant to attach the task to
 - `task_sid` - The SID of the task to attach the sample to
 - `language` - The language of the sample

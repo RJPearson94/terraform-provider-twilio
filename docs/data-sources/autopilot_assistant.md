@@ -3,35 +3,21 @@ page_title: "Twilio Autopilot Assistant"
 subcategory: "Autopilot"
 ---
 
-# twilio_autopilot_assistant Resource
+# twilio_autopilot_assistant Data Source
 
-Manages a Autopilot assistant. See the [API docs](https://www.twilio.com/docs/autopilot/api/assistant) for more information
+Use this data source to access information about an existing Autopilot assistant. See the [API docs](https://www.twilio.com/docs/autopilot/api/assistant) for more information
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
 ## Example Usage
 
 ```hcl
-resource "twilio_autopilot_assistant" "assistant" {
-  friendly_name = "twilio-test"
-  defaults      = <<EOF
-{
- "defaults": {
-  "assistant_initiation": "",
-  "fallback": "http://localhost/fallback"
- }
+data "twilio_autopilot_assistant" "assistant" {
+  sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
-EOF
 
-  stylesheet    = <<EOF
-{
- "style_sheet": {
-  "voice": {
-   "say_voice": "Polly.Matthew"
-  }
- }
-}
-EOF
+output "assistant" {
+  value = data.twilio_autopilot_assistant.assistant
 }
 ```
 
@@ -39,14 +25,7 @@ EOF
 
 The following arguments are supported:
 
-- `friendly_name` - (Optional) The friendly name of the assistant
-- `unique_name` - (Optional) The unique name of the assistant
-- `log_queries` - (Optional) Whether or not queries are recorded/ logged
-- `development_stage` - (Optional) The stage description for the assistant. Valid values are `in-development` or `in-production`.
-- `callback_url` - (Optional) The URL the assistant will call back to when an event is fired
-- `callback_events` - (Optional) A list of callback events strings which trigger the callback webhook
-- `defaults` - (Optional) JSON string of an Autopilot defaults
-- `stylesheet` - (Optional) JSON string of an Autopilot stylesheet
+- `sid` - (Mandatory) The SID of the assistant
 
 ## Attributes Reference
 
@@ -73,15 +52,4 @@ The following attributes are exported:
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `create` - (Defaults to 10 minutes) Used when creating the assistant
-- `update` - (Defaults to 10 minutes) Used when updating the assistant
 - `read` - (Defaults to 5 minutes) Used when retrieving the assistant
-- `delete` - (Defaults to 10 minutes) Used when deleting the assistant
-
-## Import
-
-A assistant can be imported using the `/Assistants/{sid}` format, e.g.
-
-```shell
-terraform import twilio_autopilot_assistant.assistant /Assistants/UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```

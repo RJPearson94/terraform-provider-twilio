@@ -65,12 +65,12 @@ The following attributes are exported:
 
 - `id` - The ID of the model build (Same as the SID)
 - `sid` - The SID of the model build (Same as the ID)
-- `account_sid` - The Account SID associated with the model build
+- `account_sid` - The account SID associated with the model build
 - `unique_name` - The unique name of the model build
 - `status_callback` - The callback url to post build statuses to
-- `status` - The current build status
-- `error_code` - The error code of the build if the status is failed
-- `build_duration` - The duration of the build (in seconds)
+- `status` - The current model build status
+- `error_code` - The error code of the model build if the status is failed
+- `build_duration` - The duration of the model build (in seconds)
 - `date_created` - The date in RFC3339 format that the model build was created
 - `date_updated` - The date in RFC3339 format that the model build was updated
 - `url` - The url of the model build resource

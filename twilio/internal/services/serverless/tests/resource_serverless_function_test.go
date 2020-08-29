@@ -252,13 +252,13 @@ resource "twilio_serverless_function" "function" {
 }
 
 resource "twilio_serverless_function" "function2" {
-	service_sid       = twilio_serverless_service.service.sid
-	friendly_name     = "%s-2"
-	content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
-	content_type      = "application/javascript"
-	content_file_name = "helloWorld.js"
-	path              = "/test-function-2"
-	visibility        = "%s"
-  }
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "%s-2"
+  content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function-2"
+  visibility        = "%s"
+}
 `, uniqueName, friendlyName, visibility, friendlyName, visibility)
 }

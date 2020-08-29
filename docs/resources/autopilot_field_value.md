@@ -45,7 +45,7 @@ The following attributes are exported:
 
 - `id` - The ID of the field value (Same as the SID)
 - `sid` - The SID of the field value (Same as the ID)
-- `account_sid` - The Account SID associated with the field value
+- `account_sid` - The account SID associated with the field value
 - `assistant_sid` - The SID of the assistant to attach the field value to
 - `field_type_sid` - The SID of the field type to attach the field value to
 - `language` - The field value language

@@ -17,3 +17,7 @@ resource "twilio_autopilot_task" "task" {
 }
 EOF
 }
+
+data "twilio_autopilot_tasks" "tasks" {
+  assistant_sid = twilio_autopilot_task.task.assistant_sid
+}
