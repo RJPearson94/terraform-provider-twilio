@@ -43,6 +43,7 @@ FEATURES
 - **New Resource:** `twilio_chat_channel_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/chat_channel_webhook.md)
 - **New Resource:** `twilio_chat_channel_studio_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/chat_channel_studio_webhook.md)
 - **New Resource:** `twilio_chat_channel_trigger_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/chat_channel_trigger_webhook.md)
+- **New Data Source:** `twilio_flex_flow` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/flex_flow.md)
 - **New Resource:** `twilio_flex_channel` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/flex_channel.md)
 - **New Resource:** `twilio_flex_flow` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/flex_flow.md)
 - **New Resource:** `twilio_iam_api_key` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/iam_api_key.md)

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/flex/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/flex/v1/flex_flow"
 	"github.com/RJPearson94/twilio-sdk-go/service/flex/v1/flex_flows"
@@ -223,7 +224,7 @@ func resourceFlexFlowRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("contact_identity", getResponse.ContactIdentity)
 	d.Set("enabled", getResponse.Enabled)
 	d.Set("friendly_name", getResponse.FriendlyName)
-	d.Set("integration", flatternIntegration(getResponse.Integration))
+	d.Set("integration", helper.FlattenIntegration(getResponse.Integration))
 	d.Set("integration_type", getResponse.IntegrationType)
 	d.Set("janitor_enabled", getResponse.JanitorEnabled)
 	d.Set("long_lived", getResponse.LongLived)
@@ -285,25 +286,4 @@ func resourceFlexFlowDelete(d *schema.ResourceData, meta interface{}) error {
 	}
 	d.SetId("")
 	return nil
-}
-
-func flatternIntegration(integration *flex_flow.FetchFlexFlowResponseIntegration) *[]interface{} {
-	if integration == nil {
-		return nil
-	}
-
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["channel"] = integration.Channel
-	result["creation_on_message"] = integration.CreationOnMessage
-	result["flow_sid"] = integration.FlowSid
-	result["priority"] = integration.Priority
-	result["retry_count"] = integration.RetryCount
-	result["timeout"] = integration.Timeout
-	result["url"] = integration.URL
-	result["workspace_sid"] = integration.WorkspaceSid
-
-	results = append(results, result)
-	return &results
 }
