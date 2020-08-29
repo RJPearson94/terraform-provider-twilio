@@ -94,7 +94,7 @@ func dataSourceAutopilotFieldValuesRead(d *schema.ResourceData, meta interface{}
 	d.Set("assistant_sid", assistantSid)
 	d.Set("field_type_sid", fieldTypeSid)
 
-	values := make([]interface{}, len(paginator.FieldValues)-1)
+	values := make([]interface{}, 0)
 
 	for _, value := range paginator.FieldValues {
 		d.Set("account_sid", value.AccountSid)

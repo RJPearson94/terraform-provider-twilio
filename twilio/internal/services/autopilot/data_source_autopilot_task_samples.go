@@ -94,7 +94,7 @@ func dataSourceAutopilotTaskSamplesRead(d *schema.ResourceData, meta interface{}
 	d.Set("assistant_sid", assistantSid)
 	d.Set("task_sid", taskSid)
 
-	samples := make([]interface{}, len(paginator.Samples)-1)
+	samples := make([]interface{}, 0)
 
 	for _, sample := range paginator.Samples {
 		d.Set("account_sid", sample.AccountSid)

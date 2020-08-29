@@ -92,7 +92,7 @@ func dataSourceAutopilotModelBuildsRead(d *schema.ResourceData, meta interface{}
 	d.SetId(assistantSid)
 	d.Set("assistant_sid", assistantSid)
 
-	modelBuilds := make([]interface{}, len(paginator.ModelBuilds)-1)
+	modelBuilds := make([]interface{}, 0)
 
 	for _, modelBuild := range paginator.ModelBuilds {
 		d.Set("account_sid", modelBuild.AccountSid)

@@ -96,7 +96,7 @@ func dataSourceAutopilotWebhooksRead(d *schema.ResourceData, meta interface{}) e
 	d.SetId(assistantSid)
 	d.Set("assistant_sid", assistantSid)
 
-	webhooks := make([]interface{}, len(paginator.Webhooks)-1)
+	webhooks := make([]interface{}, 0)
 
 	for _, webhook := range paginator.Webhooks {
 		d.Set("account_sid", webhook.AccountSid)

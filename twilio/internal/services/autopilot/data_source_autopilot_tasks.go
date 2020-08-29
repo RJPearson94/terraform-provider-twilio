@@ -93,7 +93,7 @@ func dataSourceAutopilotTasksRead(d *schema.ResourceData, meta interface{}) erro
 	d.SetId(assistantSid)
 	d.Set("assistant_sid", assistantSid)
 
-	tasks := make([]interface{}, len(paginator.Tasks)-1)
+	tasks := make([]interface{}, 0)
 
 	for _, task := range paginator.Tasks {
 		d.Set("account_sid", task.AccountSid)

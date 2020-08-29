@@ -90,7 +90,7 @@ func dataSourceAutopilotTaskFieldsRead(d *schema.ResourceData, meta interface{})
 	d.Set("assistant_sid", assistantSid)
 	d.Set("task_sid", taskSid)
 
-	fields := make([]interface{}, len(paginator.Fields)-1)
+	fields := make([]interface{}, 0)
 
 	for _, field := range paginator.Fields {
 		d.Set("account_sid", field.AccountSid)
