@@ -21,7 +21,7 @@ resource "twilio_chat_service" "service" {
 
 The following arguments are supported:
 
-- `friendly_name` - (Mandatory) The Friendly Name of the Chat Service
+- `friendly_name` - (Mandatory) The friendly name of the service
 - `limits` - (Optional) A `limits` block as documented below.
 - `media` - (Optional) A `media` block as documented below.
 - `notifications` - (Optional) A `notifications` block as documented below.
@@ -97,11 +97,11 @@ The following attributes are exported:
 
 - `id` - The ID of the service (Same as the SID)
 - `sid` - The SID of the service (Same as the ID)
-- `account_sid` - The Account SID associated with the service
+- `account_sid` - The account SID associated with the service
 - `default_channel_creator_role_sid` - The Role SID that is associated with a user when they join a new channel
 - `default_channel_role_sid` - The Role SID that is associated with a user when they are added to a channel
 - `default_service_role_sid` - The Role SID that is associated with a user when they are added to the service
-- `friendly_name` - The Friendly Name of the Chat Service
+- `friendly_name` - The friendly name of the service
 - `limits` - A `limits` block as documented below.
 - `media` - A `media` block as documented below.
 - `notifications` - A `notifications` block as documented below.
@@ -111,8 +111,8 @@ The following attributes are exported:
 - `pre_webhook_url` - The webhook url
 - `webhook_filters` - The events which trigger the webhook
 - `webhook_method` - The HTTP method to trigger the webhook
-- `reachability_enabled` - Whether the Reachability Indicator (for Programmable Chat) is enabled
-- `read_status_enabled` - Whether the Message Consumption Horizon (for Programmable Chat) is enabled
+- `reachability_enabled` - Whether the reachability indicator (for Programmable Chat) is enabled
+- `read_status_enabled` - Whether the message consumption horizon (for Programmable Chat) is enabled
 - `typing_indicator_timeout` - How many seconds should the service wait after receiving a `started typing` event before assuming a user is no longer typing
 - `date_created` - The date in RFC3339 format that the service was created
 - `date_updated` - The date in RFC3339 format that the service was updated

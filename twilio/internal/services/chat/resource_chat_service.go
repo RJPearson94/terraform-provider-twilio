@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/chat/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/chat/v2/service"
 	"github.com/RJPearson94/twilio-sdk-go/service/chat/v2/services"
@@ -327,9 +328,9 @@ func resourceChatServiceRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("default_channel_creator_role_sid", getResponse.DefaultChannelCreatorRoleSid)
 	d.Set("default_channel_role_sid", getResponse.DefaultChannelRoleSid)
 	d.Set("default_service_role_sid", getResponse.DefaultServiceRoleSid)
-	d.Set("limits", flatternLimits(getResponse.Limits))
-	d.Set("media", flatternMedia(getResponse.Media))
-	d.Set("notifications", flatternNotifications(getResponse.Notifications))
+	d.Set("limits", helper.FlattenLimits(getResponse.Limits))
+	d.Set("media", helper.FlattenMedia(getResponse.Media))
+	d.Set("notifications", helper.FlattenNotifications(getResponse.Notifications))
 	d.Set("post_webhook_retry_count", getResponse.PostWebhookRetryCount)
 	d.Set("post_webhook_url", getResponse.PostWebhookURL)
 	d.Set("pre_webhook_retry_count", getResponse.PreWebhookRetryCount)
@@ -423,77 +424,4 @@ func resourceChatServiceDelete(d *schema.ResourceData, meta interface{}) error {
 	}
 	d.SetId("")
 	return nil
-}
-
-func flatternNotifications(input map[string]interface{}) *[]interface{} {
-	if input == nil {
-		return nil
-	}
-
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["added_to_channel"] = flatternChannelUserModification(input["added_to_channel"].(map[string]interface{}))
-	result["invited_to_channel"] = flatternChannelUserModification(input["invited_to_channel"].(map[string]interface{}))
-	result["removed_from_channel"] = flatternChannelUserModification(input["removed_from_channel"].(map[string]interface{}))
-	result["new_message"] = flatternNewMesage(input["new_message"].(map[string]interface{}))
-	result["log_enabled"] = input["log_enabled"]
-	results = append(results, result)
-
-	return &results
-}
-
-func flatternChannelUserModification(input map[string]interface{}) *[]interface{} {
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["enabled"] = input["enabled"]
-	result["template"] = input["template"]
-	result["sound"] = input["sound"]
-
-	results = append(results, result)
-	return &results
-}
-
-func flatternNewMesage(input map[string]interface{}) *[]interface{} {
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["enabled"] = input["enabled"]
-	result["template"] = input["template"]
-	result["sound"] = input["sound"]
-	result["badge_count_enabled"] = input["badge_count_enabled"]
-
-	results = append(results, result)
-	return &results
-}
-
-func flatternLimits(input map[string]interface{}) *[]interface{} {
-	if input == nil {
-		return nil
-	}
-
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["user_channels"] = input["user_channels"]
-	result["channel_members"] = input["channel_members"]
-
-	results = append(results, result)
-	return &results
-}
-
-func flatternMedia(input map[string]interface{}) *[]interface{} {
-	if input == nil {
-		return nil
-	}
-
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["compatibility_message"] = input["compatibility_message"]
-	result["size_limit_mb"] = input["size_limit_mb"]
-
-	results = append(results, result)
-	return &results
 }

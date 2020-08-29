@@ -43,11 +43,11 @@ The following attributes are exported:
 
 - `id` - The ID of the channel webhook (Same as the SID)
 - `sid` - The SID of the channel webhook (Same as the ID)
-- `account_sid` - The Account SID associated with the channel webhook
-- `service_sid` - The Service SID associated with the channel webhook
-- `channel_sid` - The Channel SID associated with the channel webhook
+- `account_sid` - The account SID associated with the channel webhook
+- `service_sid` - The service SID associated with the channel webhook
+- `channel_sid` - The channel SID associated with the channel webhook
 - `type` - The type of webhook. The value will be studio
-- `flow_sid` - (Mandatory) The SID for the Studio Flow which will be called
+- `flow_sid` - The SID for the studio flow which will be called
 - `retry_count` - The number of attempt to retry a failed webhook call
 - `date_created` - The date in RFC3339 format that the channel webhook was created
 - `date_updated` - The date in RFC3339 format that the channel webhook was updated

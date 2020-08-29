@@ -33,8 +33,8 @@ resource "twilio_chat_channel_trigger_webhook" "trigger_webhook" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The Service SID associated with the channel webhook. Changing this forces a new resource to be created
-- `channel_sid` - (Mandatory) The Channel SID associated with the channel webhook. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The service SID associated with the channel webhook. Changing this forces a new resource to be created
+- `channel_sid` - (Mandatory) The channel SID associated with the channel webhook. Changing this forces a new resource to be created
 - `method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`
 - `webhook_url` - (Mandatory) The webhook url
 - `triggers` - (Mandatory) The keywords which trigger the webhook
@@ -46,9 +46,9 @@ The following attributes are exported:
 
 - `id` - The ID of the channel webhook (Same as the SID)
 - `sid` - The SID of the channel webhook (Same as the ID)
-- `account_sid` - The Account SID associated with the channel webhook
-- `service_sid` - The Service SID associated with the channel webhook
-- `channel_sid` - The Channel SID associated with the channel webhook
+- `account_sid` - The account SID associated with the channel webhook
+- `service_sid` - The service SID associated with the channel webhook
+- `channel_sid` - The channel SID associated with the channel webhook
 - `type` - The type of webhook. The value will be trigger
 - `method` - The HTTP method to trigger the webhook
 - `webhook_url` - The webhook url

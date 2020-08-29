@@ -143,11 +143,7 @@ func resourceChatChannelTriggerWebhookRead(d *schema.ResourceData, meta interfac
 	if err != nil {
 		if twilioError, ok := err.(*sdkUtils.TwilioError); ok {
 			// currently programmable chat returns a 403 if the service instance does not exist
-			if twilioError.Status == 403 && twilioError.Message == "Service instance not found" {
-				d.SetId("")
-				return nil
-			}
-			if twilioError.IsNotFoundError() {
+			if (twilioError.Status == 403 && twilioError.Message == "Service instance not found") || twilioError.IsNotFoundError() {
 				d.SetId("")
 				return nil
 			}

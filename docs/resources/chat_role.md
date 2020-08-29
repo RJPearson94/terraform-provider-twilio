@@ -31,7 +31,7 @@ resource "twilio_chat_role" "role" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The Service SID associated with the role. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The service SID associated with the role. Changing this forces a new resource to be created
 - `friendly_name` - (Mandatory) The friendly name of the role. Changing this forces a new resource to be created
 - `type` - (Mandatory) The type of role. Valid values are `channel` or `deployment`. Changing this forces a new resource to be created
 - `permissions` - (Mandatory) The list of permissions the role has
@@ -42,8 +42,8 @@ The following attributes are exported:
 
 - `id` - The ID of the role (Same as the SID)
 - `sid` - The SID of the role (Same as the ID)
-- `account_sid` - The Account SID associated with the role
-- `service_sid` - The Service SID associated with the role
+- `account_sid` - The account SID associated with the role
+- `service_sid` - The service SID associated with the role
 - `friendly_name` - The friendly name of the role
 - `type` - The type of role
 - `permissions` - The list of permissions the role has

@@ -3,22 +3,22 @@ page_title: "Twilio Programmable Chat Channel"
 subcategory: "Programmable Chat"
 ---
 
-# twilio_chat_channel Resource
+# twilio_chat_channel Data Source
 
-Manages a Programmable Chat channel. See the [API docs](https://www.twilio.com/docs/chat/rest/channel-resource) for more information
+Use this data source to access information about an existing Programmable Chat channel. See the [API docs](https://www.twilio.com/docs/chat/rest/channel-resource) for more information
 
 For more information on Programmable Chat, see the product [page](https://www.twilio.com/chat)
 
 ## Example Usage
 
 ```hcl
-resource "twilio_chat_service" "service" {
-  unique_name   = "twilio-test"
+data "twilio_chat_channel" "channel" {
+  service_sid = "ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid = "CHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
-resource "twilio_chat_channel" "channel" {
-  service_sid   = twilio_chat_service.service.sid
-  friendly_name = "twilio-test-channel"
+output "channel" {
+  value = data.twilio_chat_channel.channel
 }
 ```
 
@@ -26,11 +26,8 @@ resource "twilio_chat_channel" "channel" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The Service SID associated with the channel. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The friendly name of the channel
-- `unique_name` - (Optional) The unique name of the channel
-- `attributes` - (Optional) JSON string of channel attributes
-- `type` - (Optional) The type of channel. Valid values are `public` or `private`. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The SID of the service the channel is associated with
+- `sid` - (Mandatory) The SID of the channel
 
 ## Attributes Reference
 
@@ -55,15 +52,4 @@ The following attributes are exported:
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `create` - (Defaults to 10 minutes) Used when creating the channel
-- `update` - (Defaults to 10 minutes) Used when updating the channel
 - `read` - (Defaults to 5 minutes) Used when retrieving the channel
-- `delete` - (Defaults to 10 minutes) Used when deleting the channel
-
-## Import
-
-A channel can be imported using the `/Services/{serviceSid}/Channels/{sid}` format, e.g.
-
-```shell
-terraform import twilio_chat_channel.channel /Services/ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Channels/CHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```

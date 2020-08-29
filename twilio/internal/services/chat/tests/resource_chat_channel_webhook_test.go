@@ -34,6 +34,7 @@ func TestAccTwilioChatChannelWebhook_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "webhook_url", webhookURL),
 					resource.TestCheckResourceAttr(stateResourceName, "filters.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "filters.0", "onMessageSent"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
