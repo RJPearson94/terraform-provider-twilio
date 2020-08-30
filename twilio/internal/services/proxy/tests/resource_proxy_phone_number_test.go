@@ -34,6 +34,7 @@ func TestAccTwilioProxyPhoneNumber_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioProxyPhoneNumberExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "sid", testData.PhoneNumberSid),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "is_reserved", "true"),

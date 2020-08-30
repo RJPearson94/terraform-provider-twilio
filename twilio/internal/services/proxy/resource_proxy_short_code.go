@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/proxy/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service/short_code"
 	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service/short_codes"
@@ -192,7 +193,7 @@ func resourceProxyShortCodeRead(d *schema.ResourceData, meta interface{}) error 
 	d.Set("short_code", getResponse.ShortCode)
 	d.Set("iso_country", getResponse.IsoCountry)
 	d.Set("is_reserved", getResponse.IsReserved)
-	d.Set("capabilities", flatternShortCodeCapabilities(getResponse.Capabilities))
+	d.Set("capabilities", helper.FlattenShortCodeCapabilities(getResponse.Capabilities))
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {
@@ -232,30 +233,4 @@ func resourceProxyShortCodeDelete(d *schema.ResourceData, meta interface{}) erro
 	}
 	d.SetId("")
 	return nil
-}
-
-func flatternShortCodeCapabilities(capabilities *short_code.FetchShortCodeResponseCapabilities) *[]interface{} {
-	if capabilities == nil {
-		return nil
-	}
-
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["fax_inbound"] = capabilities.FaxInbound
-	result["fax_outbound"] = capabilities.FaxOutbound
-	result["mms_inbound"] = capabilities.MmsInbound
-	result["mms_outbound"] = capabilities.MmsOutbound
-	result["restriction_fax_domestic"] = capabilities.RestrictionFaxDomestic
-	result["restriction_mms_domestic"] = capabilities.RestrictionMmsDomestic
-	result["restriction_sms_domestic"] = capabilities.RestrictionSmsDomestic
-	result["restriction_voice_domestic"] = capabilities.RestrictionVoiceDomestic
-	result["sip_trunking"] = capabilities.SipTrunking
-	result["sms_inbound"] = capabilities.SmsInbound
-	result["sms_outbound"] = capabilities.SmsOutbound
-	result["voice_inbound"] = capabilities.VoiceInbound
-	result["voice_outbound"] = capabilities.VoiceOutbound
-
-	results = append(results, result)
-	return &results
 }

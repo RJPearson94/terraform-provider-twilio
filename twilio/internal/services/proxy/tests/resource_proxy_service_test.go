@@ -30,6 +30,7 @@ func TestAccTwilioProxyService_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioProxyServiceExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "chat_instance_sid", ""),

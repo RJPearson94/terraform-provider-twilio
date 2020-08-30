@@ -1,11 +1,11 @@
 ---
-page_title: "Twilio Proxy Phone Number"
+page_title: "Twilio Proxy Phone Numbers"
 subcategory: "Proxy"
 ---
 
-# twilio_proxy_phone_number Resource
+# twilio_proxy_phone_numbers Data Source
 
-Manages a Proxy phone number. See the [API docs](https://www.twilio.com/docs/proxy/api/phone-number) for more information
+Use this data source to access information about the phone numbers associated with an existing Proxy service. See the [API docs](https://www.twilio.com/docs/proxy/api/phone-number) for more information
 
 For more information on Proxy, see the product [page](https://www.twilio.com/docs/proxy)
 
@@ -14,14 +14,12 @@ For more information on Proxy, see the product [page](https://www.twilio.com/doc
 ## Example Usage
 
 ```hcl
-resource "twilio_proxy_service" "service" {
-  unique_name = "Test Proxy Service"
+data "twilio_proxy_phone_numbers" "phone_numbers" {
+  service_sid = "KSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
-resource "twilio_proxy_phone_number" "phone_number" {
-  service_sid = twilio_proxy_service.service.sid
-  sid         = "PNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  is_reserved = true
+output "phone_numbers" {
+  value = data.twilio_proxy_phone_numbers.phone_numbers
 }
 ```
 
@@ -29,19 +27,22 @@ resource "twilio_proxy_phone_number" "phone_number" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The SID of a Twilio proxy service. Changing this forces a new resource to be created
-- `sid` - (Optional) The SID of a Twilio phone number to associate with the proxy. Changing this forces a new resource to be created. Conflicts with `phone_number`
-- `phone_number` - (Optional) The phone number to associate with the proxy. Changing this forces a new resource to be created. Conflicts with `sid`
-- `is_reserved` - (Optional) Whether the phone number is reserved
+- `service_sid` - (Mandatory) The SID of the service the phone numbers are associated with
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-- `id` - The ID of the proxy phone number resource (Same as the SID)
-- `sid` - The SID of a Twilio phone number to associate with the proxy (Same as the ID)
-- `account_sid` - The Account SID of the phone number resource is deployed into
-- `service_sid` - The SID of a Twilio proxy service
+- `id` - The ID of the resource (Same as the service SID)
+- `service_sid` - The SID of the proxy service the phone numbers are associated with
+- `account_sid` - The account SID associated with the phone number
+- `phone_numbers` - A list of `phone_number` blocks as documented below
+
+---
+
+A `phone_number` block supports the following:
+
+- `sid` - The SID of the Twilio phone number to associated with the proxy service
 - `is_reserved` - Whether the phone number is reserved
 - `phone_number` - The phone number to associate with the proxy
 - `friendly_name` - The friendly name of the phone number
@@ -74,15 +75,4 @@ A `capabilities` block supports the following:
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `create` - (Defaults to 10 minutes) Used when creating the phone number
-- `update` - (Defaults to 10 minutes) Used when updating the phone number
-- `read` - (Defaults to 5 minutes) Used when retrieving the phone number
-- `delete` - (Defaults to 10 minutes) Used when deleting the phone number
-
-## Import
-
-A phone number can be imported using the `/Services/{serviceSid}/PhoneNumbers/{sid}` format, e.g.
-
-```shell
-terraform import twilio_proxy_phone_number.phone_number /Services/KSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/PhoneNumbers/PNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```
+- `read` - (Defaults to 10 minutes) Used when retrieving phone numbers

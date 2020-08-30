@@ -1,11 +1,11 @@
 ---
-page_title: "Twilio Proxy Short Code"
+page_title: "Twilio Proxy Short Codes"
 subcategory: "Proxy"
 ---
 
-# twilio_proxy_short_code Resource
+# twilio_proxy_short_codes Data Source
 
-Manages a Proxy short code. See the [API docs](https://www.twilio.com/docs/proxy/api/short-code) for more information
+Use this data source to access information about the short codes associated with an existing Proxy service. See the [API docs](https://www.twilio.com/docs/proxy/api/short-code) for more information
 
 For more information on Proxy, see the product [page](https://www.twilio.com/docs/proxy)
 
@@ -14,14 +14,12 @@ For more information on Proxy, see the product [page](https://www.twilio.com/doc
 ## Example Usage
 
 ```hcl
-resource "twilio_proxy_service" "service" {
-  unique_name = "Test Proxy Service"
+data "twilio_proxy_short_codes" "short_codes" {
+  service_sid  = "KSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
-resource "twilio_proxy_short_code" "short_code" {
-  service_sid = twilio_proxy_service.service.sid
-  sid         = "SCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  is_reserved = true
+output "short_codes" {
+  value = data.twilio_proxy_short_codes.short_codes
 }
 ```
 
@@ -29,18 +27,22 @@ resource "twilio_proxy_short_code" "short_code" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The SID of a Twilio proxy service. Changing this forces a new resource to be created
-- `sid` - (Optional) The SID of a Twilio short code to associate with the proxy. Changing this forces a new resource to be created
-- `is_reserved` - (Optional) Whether the short code is reserved
+- `service_sid` - (Mandatory) The SID of the service the short codes are associated with
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-- `id` - The ID of the proxy short code resource (Same as the SID)
-- `sid` - The SID of a Twilio short code to associate with the proxy (Same as the ID)
-- `account_sid` - The account SID of the short code resource is deployed into
-- `service_sid` - The SID of a Twilio proxy service
+- `id` - The ID of the resource (Same as the service SID)
+- `service_sid` - The SID of the proxy service the short codes are associated with
+- `account_sid` - The account SID associated with the short code
+- `short_codes` - A list of `short_code` blocks as documented below
+
+---
+
+A `short_code` block supports the following:
+
+- `sid` - The SID of the Twilio short code to associated with the proxy service
 - `is_reserved` - Whether the short code is reserved
 - `short_code` - The short code associated with the SID
 - `iso_country` - The ISO country associated with the SID
@@ -71,15 +73,4 @@ A `capabilities` block supports the following:
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `create` - (Defaults to 10 minutes) Used when creating the short code
-- `update` - (Defaults to 10 minutes) Used when updating the short code
-- `read` - (Defaults to 5 minutes) Used when retrieving the short code
-- `delete` - (Defaults to 10 minutes) Used when deleting the short code
-
-## Import
-
-A short code can be imported using the `/Services/{serviceSid}/ShortCodes/{sid}` format, e.g.
-
-```shell
-terraform import twilio_proxy_short_code.short_code /Services/KSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/ShortCodes/SCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```
+- `read` - (Defaults to 10 minutes) Used when retrieving short codes

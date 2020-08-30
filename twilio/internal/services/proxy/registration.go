@@ -11,7 +11,13 @@ func (r Registration) Name() string {
 
 // SupportedDataSources returns the supported Data Sources supported by this Service
 func (r Registration) SupportedDataSources() map[string]*schema.Resource {
-	return map[string]*schema.Resource{}
+	return map[string]*schema.Resource{
+		"twilio_proxy_service":       dataSourceProxyService(),
+		"twilio_proxy_phone_number":  dataSourceProxyPhoneNumber(),
+		"twilio_proxy_phone_numbers": dataSourceProxyPhoneNumbers(),
+		"twilio_proxy_short_code":    dataSourceProxyShortCode(),
+		"twilio_proxy_short_codes":   dataSourceProxyShortCodes(),
+	}
 }
 
 // SupportedResources returns the supported Resources supported by this Service
