@@ -37,7 +37,7 @@ EOF
 }
 
 resource "twilio_serverless_build" "build" {
-  service_sid           = twilio_serverless_service.service.sid
+  service_sid = twilio_serverless_service.service.sid
   function_version {
     sid = twilio_serverless_function.function.latest_version_sid
   }

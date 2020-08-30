@@ -13,9 +13,9 @@ For more information on Autopilot, see the product [page](https://www.twilio.com
 
 ```hcl
 data "twilio_autopilot_field_value" "field_value" {
-  assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  assistant_sid  = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   field_type_sid = "UBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  sid = "UCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid            = "UCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "field_value" {

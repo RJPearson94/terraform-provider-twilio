@@ -15,8 +15,8 @@ For more information on Programmable Messaging, see the product [page](https://w
 
 ```hcl
 data "twilio_messaging_alpha_sender" "alpha_sender" {
-  service_sid  = "MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  sid = "AIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  service_sid = "MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid         = "AIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "alpha_sender" {

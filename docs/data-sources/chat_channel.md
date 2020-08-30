@@ -14,7 +14,7 @@ For more information on Programmable Chat, see the product [page](https://www.tw
 ```hcl
 data "twilio_chat_channel" "channel" {
   service_sid = "ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  sid = "CHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid         = "CHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "channel" {

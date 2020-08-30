@@ -15,8 +15,8 @@ For more information on Proxy, see the product [page](https://www.twilio.com/doc
 
 ```hcl
 data "twilio_proxy_short_code" "short_code" {
-  service_sid  = "KSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  sid = "SCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  service_sid = "KSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid         = "SCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "short_code" {

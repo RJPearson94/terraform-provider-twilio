@@ -17,7 +17,7 @@ For more information on Programmable Chat, see the product [page](https://www.tw
 data "twilio_chat_channel_webhook" "webhook" {
   service_sid = "ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   channel_sid = "CHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  sid = "WHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid         = "WHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "webhook" {

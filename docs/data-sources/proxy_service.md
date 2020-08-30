@@ -15,7 +15,7 @@ For more information on Proxy, see the product [page](https://www.twilio.com/doc
 
 ```hcl
 data "twilio_proxy_service" "service" {
-  sid         = "KSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid = "KSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "service" {

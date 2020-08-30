@@ -39,7 +39,7 @@ resource "twilio_studio_flow" "flow" {
   ]
 }
 EOF
-  validate = true
+  validate      = true
 }
 ```
 

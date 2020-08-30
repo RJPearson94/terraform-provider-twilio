@@ -26,8 +26,8 @@ Usage:
 ```hcl
 provider "aws" {
   account_sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  api_key = "SKXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  api_secret = "api-secret"
+  api_key     = "SKXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  api_secret  = "api-secret"
 }
 ```
 
@@ -40,7 +40,7 @@ Usage:
 ```hcl
 provider "aws" {
   account_sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  auth_token = "my-auth-token"
+  auth_token  = "my-auth-token"
 }
 ```
 

@@ -14,7 +14,7 @@ For more information on Programmable Chat, see the product [page](https://www.tw
 ```hcl
 data "twilio_chat_role" "role" {
   service_sid = "ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  sid = "RLXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid         = "RLXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "role" {

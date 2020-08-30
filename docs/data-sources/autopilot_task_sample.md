@@ -14,8 +14,8 @@ For more information on Autopilot, see the product [page](https://www.twilio.com
 ```hcl
 data "twilio_autopilot_task_sample" "task_sample" {
   assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  task_sid = "UDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  sid = "UEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  task_sid      = "UDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid           = "UEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "task_sample" {

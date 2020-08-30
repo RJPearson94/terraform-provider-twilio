@@ -14,7 +14,7 @@ For more information on Autopilot, see the product [page](https://www.twilio.com
 ```hcl
 data "twilio_autopilot_model_build" "model_build" {
   assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  sid = "UGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid           = "UGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "model_build" {

@@ -15,7 +15,7 @@ For more information on Programmable Messaging, see the product [page](https://w
 
 ```hcl
 data "twilio_messaging_service" "service" {
-  sid         = "MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid = "MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "service" {

@@ -20,8 +20,8 @@ resource "twilio_serverless_service" "service" {
 }
 
 resource "twilio_serverless_environment" "environment" {
-  service_sid   = twilio_serverless_service.service.sid
-  unique_name   = "test"
+  service_sid = twilio_serverless_service.service.sid
+  unique_name = "test"
 }
 
 resource "twilio_serverless_variable" "variable" {

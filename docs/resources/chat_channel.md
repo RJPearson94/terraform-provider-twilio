@@ -13,7 +13,7 @@ For more information on Programmable Chat, see the product [page](https://www.tw
 
 ```hcl
 resource "twilio_chat_service" "service" {
-  unique_name   = "twilio-test"
+  unique_name = "twilio-test"
 }
 
 resource "twilio_chat_channel" "channel" {

@@ -23,7 +23,7 @@ resource "twilio_autopilot_assistant" "assistant" {
 }
 EOF
 
-  stylesheet    = <<EOF
+  stylesheet = <<EOF
 {
  "style_sheet": {
   "voice": {

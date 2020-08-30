@@ -15,7 +15,7 @@ For more information on Programmable Messaging, see the product [page](https://w
 
 ```hcl
 data "twilio_messaging_short_codes" "short_codes" {
-  service_sid  = "MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  service_sid = "MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "short_codes" {

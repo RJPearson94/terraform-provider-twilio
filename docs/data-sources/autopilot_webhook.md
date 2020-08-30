@@ -14,7 +14,7 @@ For more information on Autopilot, see the product [page](https://www.twilio.com
 ```hcl
 data "twilio_autopilot_webhook" "webhook" {
   assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  sid = "UMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid           = "UMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "webhook" {
