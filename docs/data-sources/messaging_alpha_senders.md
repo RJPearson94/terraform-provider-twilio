@@ -5,7 +5,7 @@ subcategory: "Programmable Messaging"
 
 # twilio_messaging_alpha_senders Data Source
 
-Use this data source to access information about an existing Programmable Messaging alphanumeric sender. See the [API docs](https://www.twilio.com/docs/sms/services/api/alphasender-resource) for more information
+Use this data source to access information about the alphanumeric senders associated with an existing Programmable Messaging service. See the [API docs](https://www.twilio.com/docs/sms/services/api/alphasender-resource) for more information
 
 For more information on Programmable Messaging, see the product [page](https://www.twilio.com/messaging)
 
@@ -14,13 +14,12 @@ For more information on Programmable Messaging, see the product [page](https://w
 ## Example Usage
 
 ```hcl
-data "twilio_messaging_alpha_sender" "alpha_sender" {
+data "twilio_messaging_alpha_senders" "alpha_senders" {
   service_sid = "MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  sid         = "AIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
-output "alpha_sender" {
-  value = data.twilio_messaging_alpha_sender.alpha_sender
+output "alpha_senders" {
+  value = data.twilio_messaging_alpha_senders.alpha_senders
 }
 ```
 
@@ -28,8 +27,7 @@ output "alpha_sender" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The SID of the service the alpha sender is associated with
-- `sid` - (Mandatory) The SID of the alpha sender
+- `service_sid` - (Mandatory) The SID of the service the alpha senders are associated with
 
 ## Attributes Reference
 
@@ -37,7 +35,7 @@ The following attributes are exported:
 
 - `id` - The ID of the resource (Same as the service SID)
 - `service_sid` - The SID of the messaging service the alpha senders are associated with
-- `account_sid` - The account SID associated with the alpha sender
+- `account_sid` - The account SID associated with the alpha senders
 - `alpha_senders` - A list of `alpha_sender` blocks as documented below
 
 ---
