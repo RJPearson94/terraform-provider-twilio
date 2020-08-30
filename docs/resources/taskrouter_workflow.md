@@ -43,6 +43,7 @@ EOF
 
 The following arguments are supported:
 
+- `workspace_sid` - (Mandatory) The workspace SID to create the workflow under
 - `friendly_name` - (Mandatory) The name of the workflow
 - `configuration` - (Mandatory) JSON string of workflow configuration
 - `assignment_callback_url` - (Optional) Assignment callback URL
@@ -56,7 +57,7 @@ The following attributes are exported:
 - `id` - The ID of the workflow (Same as the SID)
 - `sid` - The SID of the workflow (Same as the ID)
 - `account_sid` - The account SID of the workflow is deployed into
-- `workspaceSid` - The workspace SID to create the workflow under
+- `workspace_sid` - The workspace SID to create the workflow under
 - `friendly_name` - The name of the workflow
 - `configuration` - JSON string of workflow configuration
 - `assignment_callback_url` - Assignment callback URL
@@ -65,7 +66,7 @@ The following attributes are exported:
 - `document_content_type` - The MIME type of the document
 - `date_created` - The date in RFC3339 format that the workflow was created
 - `date_updated` - The date in RFC3339 format that the workflow was updated
-- `url` - The url of the workflow
+- `url` - The URL of the workflow
 
 ## Timeouts
 

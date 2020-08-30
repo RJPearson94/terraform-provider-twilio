@@ -3,24 +3,22 @@ page_title: "Twilio TaskRouter Worker"
 subcategory: "TaskRouter"
 ---
 
-# twilio_taskrouter_worker Resource
+# twilio_taskrouter_worker Data Source
 
-Manages a TaskRouter worker. See the [API docs](https://www.twilio.com/docs/taskrouter/api/worker) for more information
+Use this data source to access information about an existing TaskRouter worker. See the [API docs](https://www.twilio.com/docs/taskrouter/api/worker) for more information
 
 For more information on TaskRouter, see the product [page](https://www.twilio.com/taskrouter)
 
 ## Example Usage
 
 ```hcl
-resource "twilio_taskrouter_workspace" "workspace" {
-  friendly_name          = "Test Workspace"
-  multi_task_enabled     = true
-  prioritize_queue_order = "FIFO"
+data "twilio_taskrouter_worker" "worker" {
+  workspace_sid = "WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid           = "WKXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
-resource "twilio_taskrouter_worker" "worker" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "Test Worker"
+output "worker" {
+  value = data.twilio_taskrouter_worker.worker
 }
 ```
 
@@ -28,10 +26,8 @@ resource "twilio_taskrouter_worker" "worker" {
 
 The following arguments are supported:
 
-- `workspace_sid` - (Mandatory) The workspace SID to create the worker under
-- `friendly_name` - (Mandatory) The name of the worker
-- `attributes` - (Optional) JSON string of worker attributes
-- `activity_sid` - (Optional) Activity SID to be assigned to the worker
+- `workspace_sid` - (Mandatory) The SID of the workspace the worker is associated with
+- `sid` - (Mandatory) The SID of the worker
 
 ## Attributes Reference
 
@@ -55,15 +51,4 @@ The following attributes are exported:
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `create` - (Defaults to 10 minutes) Used when creating the worker
-- `update` - (Defaults to 10 minutes) Used when updating the worker
 - `read` - (Defaults to 5 minutes) Used when retrieving the worker
-- `delete` - (Defaults to 10 minutes) Used when deleting the worker
-
-## Import
-
-A worker can be imported using the `/Workspaces/{workspaceSid}/Workers/{sid}` format, e.g.
-
-```shell
-terraform import twilio_taskrouter_worker.worker /Workspaces/WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Workers/WKXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```

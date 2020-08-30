@@ -5,18 +5,19 @@ subcategory: "TaskRouter"
 
 # twilio_taskrouter_workspace Resource
 
-Manages a TaskRouter workspace. See the [API docs](https://www.twilio.com/docs/taskrouter/api/workspace) for more information
+Use this data source to access information about an existing TaskRouter workspace. See the [API docs](https://www.twilio.com/docs/taskrouter/api/workspace) for more information
 
 For more information on TaskRouter, see the product [page](https://www.twilio.com/taskrouter)
 
 ## Example Usage
 
 ```hcl
-resource "twilio_taskrouter_workspace" "workspace" {
-  friendly_name          = "Test Workspace"
-  multi_task_enabled     = true
-  prioritize_queue_order = "FIFO"
-  template               = "FIFO"
+data "twilio_taskrouter_workspace" "workspace" {
+  sid = "WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+
+output "workspace" {
+  value = data.twilio_taskrouter_workspace.workspace
 }
 ```
 
@@ -24,12 +25,7 @@ resource "twilio_taskrouter_workspace" "workspace" {
 
 The following arguments are supported:
 
-- `friendly_name` - (Mandatory) The name of the workspace
-- `event_callback_url` - (Optional) The event callback URL
-- `event_filters` - (Optional) list of event callback filters
-- `multi_task_enabled` - (Optional) Whether or not multitasking is enabled
-- `template` - (Optional) TaskRouter template to use
-- `prioritize_queue_order` - (Optional) Determine how TaskRouter prioritizes incoming tasks. Options are `LIFO` or `FIFO`
+- `sid` - (Mandatory) The SID of the workspace
 
 ## Attributes Reference
 
@@ -50,21 +46,10 @@ The following attributes are exported:
 - `timeout_activity_sid` - SID of timeout activity
 - `date_created` - The date in RFC3339 format that the workspace was created
 - `date_updated` - The date in RFC3339 format that the workspace was updated
-- `url` - The URL of the workspace
+- `url` - The url of the workspace
 
 ## Timeouts
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `create` - (Defaults to 10 minutes) Used when creating the workspace
-- `update` - (Defaults to 10 minutes) Used when updating the workspace
 - `read` - (Defaults to 5 minutes) Used when retrieving the workspace
-- `delete` - (Defaults to 10 minutes) Used when deleting the workspace
-
-## Import
-
-A workspace can be imported using the `/Workspaces/{sid}` format, e.g.
-
-```shell
-terraform import twilio_taskrouter_workspace.workspace /Workspaces/WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```

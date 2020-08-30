@@ -103,7 +103,7 @@ func testAccCheckTwilioTaskRouterTaskChannelDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).TaskRouter
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != ActivityResourceName {
+		if rs.Type != taskChannelResourceName {
 			continue
 		}
 

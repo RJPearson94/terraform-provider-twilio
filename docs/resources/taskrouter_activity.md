@@ -30,7 +30,7 @@ resource "twilio_taskrouter_activity" "activity" {
 The following arguments are supported:
 
 - `friendly_name` - (Mandatory) The name of the activity
-- `workspaceSid` - (Mandatory) The workspace SID to create the activity under. Changing this forces a new resource to be created
+- `workspace_sid` - (Mandatory) The workspace SID to create the activity under. Changing this forces a new resource to be created
 - `available` - (Optional) Whether the activity is available to accept tasks in TaskRouter. Changing this forces a new resource to be created
 
 ## Attributes Reference
@@ -40,12 +40,12 @@ The following attributes are exported:
 - `id` - The ID of the activity (Same as the SID)
 - `sid` - The SID of the activity (Same as the ID)
 - `account_sid` - The account SID of the activity is deployed into
-- `workspaceSid` - The workspace SID to create the activity under.
+- `workspace_sid` - The workspace SID to create the activity under.
 - `friendly_name` - The name of the activity
 - `available` - Whether the activity is available to accept tasks in Task Router
 - `date_created` - The date in RFC3339 format that the activity was created
 - `date_updated` - The date in RFC3339 format that the activity was updated
-- `url` - The url of the activity
+- `url` - The URL of the activity
 
 ## Timeouts
 

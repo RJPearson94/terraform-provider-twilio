@@ -12,10 +12,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
-var ActivityResourceName = "twilio_taskrouter_activity"
+var activityResourceName = "twilio_taskrouter_activity"
 
 func TestAccTwilioTaskRouterActivity_basic(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.activity", ActivityResourceName)
+	stateResourceName := fmt.Sprintf("%s.activity", activityResourceName)
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -50,7 +50,7 @@ func TestAccTwilioTaskRouterActivity_basic(t *testing.T) {
 }
 
 func TestAccTwilioTaskRouterActivity_update(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.activity", ActivityResourceName)
+	stateResourceName := fmt.Sprintf("%s.activity", activityResourceName)
 
 	friendlyName := acctest.RandString(10)
 	newFriendlyName := acctest.RandString(10)
@@ -98,7 +98,7 @@ func testAccCheckTwilioTaskRouterActivityDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).TaskRouter
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != ActivityResourceName {
+		if rs.Type != activityResourceName {
 			continue
 		}
 
