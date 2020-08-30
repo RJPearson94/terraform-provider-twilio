@@ -51,8 +51,8 @@ resource "twilio_messaging_phone_number" "phone_number" {
 }
 
 data "twilio_messaging_phone_number" "phone_number" {
-	service_sid = twilio_messaging_phone_number.phone_number.service_sid
-	sid = twilio_messaging_phone_number.phone_number.sid
-  }
+  service_sid = twilio_messaging_phone_number.phone_number.service_sid
+  sid         = twilio_messaging_phone_number.phone_number.sid
+}
 `, friendlyName, testData.PhoneNumberSid)
 }

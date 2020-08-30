@@ -52,7 +52,7 @@ resource "twilio_messaging_phone_number" "phone_number" {
 }
 
 data "twilio_messaging_phone_numbers" "phone_numbers" {
-	service_sid = twilio_messaging_phone_number.phone_number.service_sid
-  }
+  service_sid = twilio_messaging_phone_number.phone_number.service_sid
+}
 `, friendlyName, testData.PhoneNumberSid)
 }

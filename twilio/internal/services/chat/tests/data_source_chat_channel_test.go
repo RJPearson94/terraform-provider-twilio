@@ -56,8 +56,8 @@ resource "twilio_chat_channel" "channel" {
 }
 
 data "twilio_chat_channel" "channel" {
-	service_sid = twilio_chat_channel.channel.service_sid
-	sid = twilio_chat_channel.channel.sid
+  service_sid = twilio_chat_channel.channel.service_sid
+  sid         = twilio_chat_channel.channel.sid
 }
 `, friendlyName, friendlyName, channelType)
 }

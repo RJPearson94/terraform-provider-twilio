@@ -55,7 +55,7 @@ resource "twilio_messaging_service" "service" {
 }
 
 data "twilio_messaging_service" "service" {
-	sid = twilio_messaging_service.service.sid
-  }
+  sid = twilio_messaging_service.service.sid
+}
 `, friendlyName)
 }

@@ -52,7 +52,7 @@ resource "twilio_chat_service" "service" {
 }
 
 data "twilio_chat_service" "service" {
-	sid = twilio_chat_service.service.sid
+  sid = twilio_chat_service.service.sid
 }
 `, friendlyName)
 }

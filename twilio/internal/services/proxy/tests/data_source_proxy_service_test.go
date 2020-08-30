@@ -50,7 +50,7 @@ resource "twilio_proxy_service" "service" {
 }
 
 data "twilio_proxy_service" "service" {
-	sid = twilio_proxy_service.service.sid
-  }
+  sid = twilio_proxy_service.service.sid
+}
 `, uniqueName)
 }

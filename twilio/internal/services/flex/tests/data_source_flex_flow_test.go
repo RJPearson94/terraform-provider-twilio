@@ -68,7 +68,7 @@ resource "twilio_flex_flow" "flow" {
 }
 
 data "twilio_flex_flow" "flow" {
-	sid = twilio_flex_flow.flow.sid
+  sid = twilio_flex_flow.flow.sid
 }
 `, friendlyName, testData.FlexChannelServiceSid, channelType, integrationType, integrationURL)
 }

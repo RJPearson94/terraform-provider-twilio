@@ -61,7 +61,7 @@ resource "twilio_chat_role" "role" {
 }
 
 data "twilio_chat_roles" "roles" {
-	service_sid   = twilio_chat_role.role.service_sid
-  }
+  service_sid = twilio_chat_role.role.service_sid
+}
 `, friendlyName, friendlyName, roleType, `["`+strings.Join(permissions, `","`)+`"]`)
 }

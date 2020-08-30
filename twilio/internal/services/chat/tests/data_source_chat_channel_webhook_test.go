@@ -66,9 +66,9 @@ resource "twilio_chat_channel_webhook" "webhook" {
 }
 
 data "twilio_chat_channel_webhook" "webhook" {
-	service_sid = twilio_chat_channel_webhook.webhook.service_sid
-	channel_sid = twilio_chat_channel_webhook.webhook.channel_sid
-	sid = twilio_chat_channel_webhook.webhook.sid
-  }
+  service_sid = twilio_chat_channel_webhook.webhook.service_sid
+  channel_sid = twilio_chat_channel_webhook.webhook.channel_sid
+  sid         = twilio_chat_channel_webhook.webhook.sid
+}
 `, friendlyName, friendlyName, webhookUrl)
 }
