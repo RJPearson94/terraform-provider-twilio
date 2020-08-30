@@ -3,9 +3,9 @@ page_title: "Twilio Serverless Service"
 subcategory: "Serverless"
 ---
 
-# twilio_serverless_service Resource
+# twilio_serverless_service Data Source
 
-Manages a Serverless service. See the [API docs](https://www.twilio.com/docs/runtime/functions-assets-api/api/service) for more information
+Use this data source to access information about an existing Serverless service. See the [API docs](https://www.twilio.com/docs/runtime/functions-assets-api/api/service) for more information
 
 For more information on Serverless (also known as Runtime), see the product [page](https://www.twilio.com/runtime)
 
@@ -14,9 +14,8 @@ For more information on Serverless (also known as Runtime), see the product [pag
 ## Example Usage
 
 ```hcl
-resource "twilio_serverless_service" "service" {
-  unique_name   = "twilio-test"
-  friendly_name = "twilio-test"
+data "twilio_serverless_build" "build" {
+  sid = "ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 ```
 
@@ -24,10 +23,7 @@ resource "twilio_serverless_service" "service" {
 
 The following arguments are supported:
 
-- `unique_name` - (Mandatory) The unique name of the service
-- `friendly_name` - (Mandatory) The name of the service
-- `include_credentials` - (Optional) Whether or not credentials are included in the service runtime
-- `ui_editable` - (Optional) Whether or not the service is editable in the console
+- `sid` - (Mandatory) The SID of the service
 
 ## Attributes Reference
 
@@ -48,15 +44,4 @@ The following attributes are exported:
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `create` - (Defaults to 10 minutes) Used when creating the service
-- `update` - (Defaults to 10 minutes) Used when updating the service
 - `read` - (Defaults to 5 minutes) Used when retrieving the service
-- `delete` - (Defaults to 10 minutes) Used when deleting the service
-
-## Import
-
-A service can be imported using the `/Services/{sid}` format, e.g.
-
-```shell
-terraform import twilio_serverless_service.service /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```

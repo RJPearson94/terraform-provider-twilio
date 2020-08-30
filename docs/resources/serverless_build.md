@@ -55,7 +55,7 @@ resource "twilio_serverless_build" "build" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The Service SID associated with the build. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The service SID associated with the build. Changing this forces a new resource to be created
 - `asset_version` - (Optional) A `asset_version` block as documented below. Changing this forces a new resource to be created
 - `function_version` - (Optional) A `function_version` block as documented below. Changing this forces a new resource to be created
 - `dependencies` - (Optional) Map of dependencies to be included in the build. Changing this forces a new resource to be created
@@ -87,26 +87,26 @@ The following attributes are exported:
 
 - `id` - The ID of the build (Same as the SID)
 - `sid` - The SID of the build (Same as the ID)
-- `account_sid` - The Account SID associated with the build
-- `service_sid` - The Service SID associated with the build
+- `account_sid` - The account SID associated with the build
+- `service_sid` - The service SID associated with the build
 - `asset_version` - A `asset_version` block as documented below.
 - `function_version` - A `function_version` block as documented below.
 - `dependencies` - Map of dependencies to be included in the build
 - `status` - The current status of the build job
 - `date_created` - The date in RFC3339 format that the build was created
 - `date_updated` - The date in RFC3339 format that the build was updated
-- `url` - The url of the build
+- `url` - The URL of the build
 
 ---
 
 A `asset_version` block supports the following:
 
 - `sid` - The SID of the asset version
-- `account_sid` - The Account SID of the asset version is deployed into
-- `service_sid` - The Service SID of the asset version is deployed into
-- `asset_sid` - The Service SID of the asset version is managed under
+- `account_sid` - The account SID of the asset version is deployed into
+- `service_sid` - The service SID of the asset version is deployed into
+- `asset_sid` - The asset SID of the version is managed under
 - `date_created` - The date in RFC3339 format that the asset version was created
-- `path` - The request uri path
+- `path` - The request URI path
 - `visibility` - The visibility of the asset
 
 ---
@@ -114,11 +114,11 @@ A `asset_version` block supports the following:
 A `function_version` block supports the following:
 
 - `sid` - The SID of the function version
-- `account_sid` - The Account SID of the function version is deployed into
-- `service_sid` - The Service SID of the function version is deployed into
-- `function_sid` - The Service SID of the function version is managed under
+- `account_sid` - The account SID of the function version is deployed into
+- `service_sid` - The service SID of the function version is deployed into
+- `function_sid` - The function SID of the version is managed under
 - `date_created` - The date in RFC3339 format that the function version was created
-- `path` - The request uri path
+- `path` - The request URI path
 - `visibility` - The visibility of the function
 
 ## Timeouts

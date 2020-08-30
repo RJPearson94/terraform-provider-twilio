@@ -3,9 +3,9 @@ page_title: "Twilio Serverless Environment"
 subcategory: "Serverless"
 ---
 
-# twilio_serverless_environment Resource
+# twilio_serverless_environment Data Source
 
-Manages a Serverless environment. See the [API docs](https://www.twilio.com/docs/runtime/functions-assets-api/api/environment) for more information
+Use this data source to access information about an existing Serverless environment. See the [API docs](https://www.twilio.com/docs/runtime/functions-assets-api/api/environment) for more information
 
 For more information on Serverless (also known as Runtime), see the product [page](https://www.twilio.com/runtime)
 
@@ -14,14 +14,13 @@ For more information on Serverless (also known as Runtime), see the product [pag
 ## Example Usage
 
 ```hcl
-resource "twilio_serverless_service" "service" {
-  unique_name   = "test"
-  friendly_name = "test"
+data "twilio_serverless_environment" "environment" {
+  service_sid = "ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid         = "ZEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
-resource "twilio_serverless_environment" "environment" {
-  service_sid = twilio_serverless_service.service.sid
-  unique_name = "test"
+output "environment" {
+  value = data.twilio_serverless_environment.environment
 }
 ```
 
@@ -29,9 +28,8 @@ resource "twilio_serverless_environment" "environment" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The service SID of the environment is managed under. Changing this forces a new resource to be created
-- `unique_name` - (Mandatory) The unique name of the environment
-- `domain_suffix` - (Optional) The domain suffix of the environment
+- `service_sid` - (Mandatory) The SID of the service the environment is associated with
+- `sid` - (Mandatory) The SID of the environment
 
 ## Attributes Reference
 
@@ -53,14 +51,4 @@ The following attributes are exported:
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `create` - (Defaults to 10 minutes) Used when creating the environment
 - `read` - (Defaults to 5 minutes) Used when retrieving the environment
-- `delete` - (Defaults to 10 minutes) Used when deleting the environment
-
-## Import
-
-A environment can be imported using the `/Services/{serviceSid}/Environments/{sid}` format, e.g.
-
-```shell
-terraform import twilio_serverless_environment.environment /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Environments/ZEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```

@@ -34,7 +34,7 @@ resource "twilio_serverless_asset" "asset" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The Service SID of the asset is managed under. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The service SID of the asset is managed under. Changing this forces a new resource to be created
 - `friendly_name` - (Mandatory) The name of the asset
 - `content_file_name` - (Optional) The name of the file. Conflicts with source
 - `content` - (Optional) The file contents as string. Conflicts with source
@@ -52,8 +52,8 @@ The following attributes are exported:
 
 - `id` - The ID of the asset (Same as the SID)
 - `sid` - The SID of the asset (Same as the ID)
-- `account_sid` - The Account SID of the asset is deployed into
-- `service_sid` - The Service SID of the asset is managed under
+- `account_sid` - The account SID of the asset is deployed into
+- `service_sid` - The service SID of the asset is managed under
 - `friendly_name` - The name of the asset
 - `content_file_name` - The name of the file
 - `latest_version_sid` - The SID of the latest asset version

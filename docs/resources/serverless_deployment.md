@@ -64,7 +64,7 @@ resource "twilio_serverless_deployment" "deployment" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The Service SID associated with the deployment. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The service SID associated with the deployment. Changing this forces a new resource to be created
 - `environment_sid` - (Mandatory) The Environment SID associated with the deployment. Changing this forces a new resource to be created
 - `build_sid` - (Optional) The Build SID to be deployed to the environment. Changing this forces a new resource to be created
 
@@ -74,8 +74,8 @@ The following attributes are exported:
 
 - `id` - The ID of the deployment (Same as the SID)
 - `sid` - The SID of the deployment (Same as the ID)
-- `account_sid` - The Account SID associated with the deployment
-- `service_sid` - The Service SID associated with the deployment
+- `account_sid` - The account SID associated with the deployment
+- `service_sid` - The service SID associated with the deployment
 - `environment_sid` - The Environment SID associated with the deployment
 - `build_sid` - The Build SID to be deployed to the environment
 - `date_created` - The date in RFC3339 format that the deployment was created

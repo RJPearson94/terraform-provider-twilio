@@ -36,7 +36,7 @@ resource "twilio_serverless_variable" "variable" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The Service SID of the environment variable is deployed into. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The service SID of the environment variable is deployed into. Changing this forces a new resource to be created
 - `environment_sid` - (Mandatory) The Environment SID of the environment variable is managed under. Changing this forces a new resource to be created
 - `key` - (Mandatory) The key of the environment variable
 - `value` - (Mandatory) The value of the environment variable
@@ -47,14 +47,14 @@ The following attributes are exported:
 
 - `id` - The ID of the environment variable (Same as the SID)
 - `sid` - The SID of the environment variable (Same as the ID)
-- `account_sid` - The Account SID of the environment variable is deployed into
-- `service_sid` - The Service SID of the environment variable is deployed into
-- `environment_sid` - The Environment SID of the environment variable is managed under
+- `account_sid` - The account SID of the environment variable is deployed into
+- `service_sid` - The service SID of the environment variable is deployed into
+- `environment_sid` - The environment SID of the environment variable is managed under
 - `key` - The key of the environment variable
 - `value` - The value of the environment variable
 - `date_created` - The date in RFC3339 format that the environment variable was created
 - `date_updated` - The date in RFC3339 format that the environment variable was updated
-- `url` - The url of the environment variable
+- `url` - The URL of the environment variable
 
 ## Timeouts
 

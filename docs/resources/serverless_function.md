@@ -39,7 +39,7 @@ EOF
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The Service SID of the function is managed under. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The service SID of the function is managed under. Changing this forces a new resource to be created
 - `friendly_name` - (Mandatory) The name of the function
 - `content_file_name` - (Optional) The name of the file
 - `content` - (Optional) The file contents as string
@@ -65,11 +65,11 @@ The following attributes are exported:
 - `source` - The relative path to the function file
 - `source_hash` - A hash of the function file to trigger deployments
 - `content_type` - The file MIME type
-- `path` - The request uri path
+- `path` - The request URI path
 - `visibility` - The visibility of the function
 - `date_created` - The date in RFC3339 format that the function was created
 - `date_updated` - The date in RFC3339 format that the function was updated
-- `url` - The url of the function
+- `url` - The URL of the function
 
 ## Timeouts
 

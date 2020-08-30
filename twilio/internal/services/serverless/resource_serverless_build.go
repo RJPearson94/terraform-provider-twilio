@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/serverless/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/build"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/builds"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -245,9 +245,9 @@ func resourceServerlessBuildRead(d *schema.ResourceData, meta interface{}) error
 	d.Set("sid", getResponse.Sid)
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("service_sid", getResponse.ServiceSid)
-	d.Set("asset_version", flatternAssetVersions(getResponse.AssetVersions))
-	d.Set("function_version", flatternFunctionVersions(getResponse.FunctionVersions))
-	d.Set("dependencies", flatternDependencies(getResponse.Dependencies))
+	d.Set("asset_version", helper.FlattenAssetVersions(getResponse.AssetVersions))
+	d.Set("function_version", helper.FlattenFunctionVersions(getResponse.FunctionVersions))
+	d.Set("dependencies", helper.FlattenDependencies(getResponse.Dependencies))
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {
@@ -286,66 +286,6 @@ func expandVersionSids(input []interface{}) *[]string {
 		versionSids = append(versionSids, versionMap["sid"].(string))
 	}
 	return &versionSids
-}
-
-func flatternAssetVersions(input *[]build.FetchAssetVersion) *[]interface{} {
-	if input == nil {
-		return nil
-	}
-
-	results := make([]interface{}, 0)
-
-	for _, prop := range *input {
-		result := make(map[string]interface{})
-		result["sid"] = prop.Sid
-		result["account_sid"] = prop.AccountSid
-		result["service_sid"] = prop.ServiceSid
-		result["asset_sid"] = prop.AssetSid
-		result["date_created"] = prop.DateCreated.Format(time.RFC3339)
-		result["path"] = prop.Path
-		result["visibility"] = prop.Visibility
-
-		results = append(results, result)
-	}
-
-	return &results
-}
-
-func flatternFunctionVersions(input *[]build.FetchFunctionVersion) *[]interface{} {
-	if input == nil {
-		return nil
-	}
-
-	results := make([]interface{}, 0)
-
-	for _, prop := range *input {
-		result := make(map[string]interface{})
-		result["sid"] = prop.Sid
-		result["account_sid"] = prop.AccountSid
-		result["service_sid"] = prop.ServiceSid
-		result["function_sid"] = prop.FunctionSid
-		result["date_created"] = prop.DateCreated.Format(time.RFC3339)
-		result["path"] = prop.Path
-		result["visibility"] = prop.Visibility
-
-		results = append(results, result)
-	}
-
-	return &results
-}
-
-func flatternDependencies(input *[]build.FetchDependency) *map[string]string {
-	if input == nil {
-		return nil
-	}
-
-	results := make(map[string]string, len(*input))
-
-	for _, prop := range *input {
-		results[prop.Name] = prop.Version
-	}
-
-	return &results
 }
 
 func poll(d *schema.ResourceData, client *common.TwilioClient, pollingConfig map[string]interface{}) error {
