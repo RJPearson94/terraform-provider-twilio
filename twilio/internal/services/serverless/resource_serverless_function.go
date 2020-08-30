@@ -88,6 +88,7 @@ func resourceServerlessFunction() *schema.Resource {
 			"content": {
 				Type:          schema.TypeString,
 				Optional:      true,
+				Computed:      true,
 				ConflictsWith: []string{"source"},
 			},
 			"content_file_name": {
