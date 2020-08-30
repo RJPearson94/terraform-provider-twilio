@@ -13,12 +13,14 @@ func (r Registration) Name() string {
 func (r Registration) SupportedDataSources() map[string]*schema.Resource {
 	return map[string]*schema.Resource{
 		"twilio_chat_channel":          dataSourceChatChannel(),
+		"twilio_chat_channel_webhook":  dataSourceChatChannelWebhook(),
+		"twilio_chat_channel_webhooks": dataSourceChatChannelWebhooks(),
 		"twilio_chat_channels":         dataSourceChatChannels(),
 		"twilio_chat_role":             dataSourceChatRole(),
 		"twilio_chat_roles":            dataSourceChatRoles(),
 		"twilio_chat_service":          dataSourceChatService(),
-		"twilio_chat_channel_webhook":  dataSourceChatChannelWebhook(),
-		"twilio_chat_channel_webhooks": dataSourceChatChannelWebhooks(),
+		"twilio_chat_user":             dataSourceChatUser(),
+		"twilio_chat_users":            dataSourceChatUsers(),
 	}
 }
 
@@ -31,5 +33,6 @@ func (r Registration) SupportedResources() map[string]*schema.Resource {
 		"twilio_chat_channel_trigger_webhook": resourceChatChannelTriggerWebhook(),
 		"twilio_chat_role":                    resourceChatRole(),
 		"twilio_chat_service":                 resourceChatService(),
+		"twilio_chat_user":                    resourceChatUser(),
 	}
 }
