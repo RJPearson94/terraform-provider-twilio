@@ -42,7 +42,7 @@ The following attributes are exported:
 - `build_duration` - The duration of the model build (in seconds)
 - `date_created` - The date in RFC3339 format that the model build was created
 - `date_updated` - The date in RFC3339 format that the model build was updated
-- `url` - The url of the model build resource
+- `url` - The URL of the model build resource
 
 ## Timeouts
 

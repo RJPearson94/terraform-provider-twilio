@@ -44,7 +44,7 @@ The following attributes are exported:
 - `field_type` - The type of field
 - `date_created` - The date in RFC3339 format that the field was created
 - `date_updated` - The date in RFC3339 format that the field was updated
-- `url` - The url of the field
+- `url` - The URL of the field
 
 ## Timeouts
 

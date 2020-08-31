@@ -5,7 +5,7 @@ subcategory: "Programmable Messaging"
 
 # twilio_messaging_short_codes Resource
 
-Use this data source to access information about the short codes associated with an existing Programmable Messaging service. See the [API docs](https://www.twilio.com/docs/sms/services/api/shortcode-resource) for more information
+Use this data source to access information about the short codes associated with an existing Programmable Messaging service. See the [API docs](https://www.twilio.com/docs/sms/services/api/short code-resource) for more information
 
 For more information on Programmable Messaging, see the product [page](https://www.twilio.com/messaging)
 
@@ -42,13 +42,13 @@ The following attributes are exported:
 
 A `short_code` block supports the following:
 
-- `sid` - The SID of the Twilio short code to associated with the messaging service
+- `sid` - The SID of the Twilio short code associated with the messaging service
 - `capabilities` - The capabilities that are enabled for the short code
 - `country_code` - The country code of the short code
 - `short_code` - The short code
 - `date_created` - The date in RFC3339 format that the messaging short code resource was created
 - `date_updated` - The date in RFC3339 format that the messaging short code resource was updated
-- `url` - The url of the messaging short code resource
+- `url` - The URL of the messaging short code resource
 
 ## Timeouts
 

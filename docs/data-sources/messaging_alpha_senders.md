@@ -40,14 +40,14 @@ The following attributes are exported:
 
 ---
 
-A `alpha_sender` block supports the following:
+An `alpha_sender` block supports the following:
 
 - `sid` - The SID of the alpha sender resource
 - `capabilities` - The capabilities that are enabled for the alpha sender
-- `alpha_sender` - The alpha sender name to associated with the messaging service
+- `alpha_sender` - The alpha sender name associated with the messaging service
 - `date_created` - The date in RFC3339 format that the messaging alpha sender resource was created
 - `date_updated` - The date in RFC3339 format that the messaging alpha sender resource was updated
-- `url` - The url of the messaging alpha sender resource
+- `url` - The URL of the messaging alpha sender resource
 
 ## Timeouts
 

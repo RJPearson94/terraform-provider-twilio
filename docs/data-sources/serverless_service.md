@@ -38,7 +38,7 @@ The following attributes are exported:
 - `ui_editable` - Whether or not the service is editable in the console
 - `date_created` - The date in RFC3339 format that the service was created
 - `date_updated` - The date in RFC3339 format that the service was updated
-- `url` - The url of the service
+- `url` - The URL of the service
 
 ## Timeouts
 

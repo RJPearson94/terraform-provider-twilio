@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_webhook Resource
 
-Manages a Autopilot webhook. See the [API docs](https://www.twilio.com/docs/autopilot/api/event-webhooks) for more information
+Manages an Autopilot webhook. See the [API docs](https://www.twilio.com/docs/autopilot/api/event-webhooks) for more information
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
@@ -30,9 +30,9 @@ resource "twilio_autopilot_webhook" "webhook" {
 
 The following arguments are supported:
 
-- `assistant_sid` - (Mandatory) The SID of the assistant to attach the webhook to. Changing this forces a new resource to be created
+- `assistant_sid` - (Mandatory) The SID of the assistant to associate the webhook with. Changing this forces a new resource to be created
 - `unique_name` - (Mandatory) The unique name of the webhook
-- `webhook_url` - (Mandatory) The webhook url
+- `webhook_url` - (Mandatory) The webhook URL
 - `events` - (Mandatory) A list of webhook events strings which trigger the webhook
 - `webhook_method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`
 
@@ -45,12 +45,12 @@ The following attributes are exported:
 - `account_sid` - The account SID associated with the webhook
 - `assistant_sid` - The SID of the assistant to attach the webhook to
 - `unique_name` - The unique name of the webhook
-- `webhook_url` - The webhook url
+- `webhook_url` - The webhook URL
 - `events` - A list of webhook events strings which trigger the webhook
 - `webhook_method` - The HTTP method to trigger the webhook
 - `date_created` - The date in RFC3339 format that the webhook was created
 - `date_updated` - The date in RFC3339 format that the webhook was updated
-- `url` - The url of the webhook resource
+- `url` - The URL of the webhook resource
 
 ## Timeouts
 

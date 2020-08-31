@@ -5,7 +5,7 @@ subcategory: "Flex"
 
 # twilio_flex_flow Resource
 
-Manages a flex flow
+Manages a flex-flow
 
 For more information on Twilio Flex, see the product [page](https://www.twilio.com/flex)
 
@@ -29,7 +29,7 @@ resource "twilio_flex_flow" "flow" {
 The following arguments are supported:
 
 - `channel_type` - (Mandatory) The type of channel which is integrated with the flow. Valid values are `web`, `sms`, `facebook`, `whatsapp`, `line` or `custom`
-- `chat_service_sid` - (Mandatory) The chat service SID associated with the flow
+- `chat_service_sid` - (Mandatory) The chat service SID to associate with the flow
 - `friendly_name` - (Mandatory) The friendly name of the flow
 - `contact_identity` - (Optional) The contact identity for the channel
 - `enabled` - (Optional) Whether the flow is active
@@ -40,16 +40,16 @@ The following arguments are supported:
 
 ---
 
-A `integration` block supports the following:
+An `integration` block supports the following:
 
 - `channel` - (Optional) The channel to send new tasks too
 - `creation_on_message` - (Optional) Whether to create a task when the first message arrives
 - `flow_sid` - (Optional) The SID of the flow
 - `priority` - (Optional) The priority assigned to any new task that is received
-- `retry_count` - (Optional) The number of times a webhook request should be retried if initial request fails
+- `retry_count` - (Optional) The number of times a webhook request should be retried if the initial request fails
 - `timeout` - (Optional) The timeout set for any new task that is received
 - `url` - (Optional) The webhook URL
-- `workflowSid` - (Optional) The SID of the workflow to send tasks to
+- `workflow_sid` - (Optional) The SID of the workflow to send tasks to
 - `workspace_sid` - (Optional) The SID of the workspace to send tasks to
 
 ---
@@ -66,26 +66,26 @@ The following attributes are exported:
 - `friendly_name` - The friendly name of the flow
 - `contact_identity` - The contact identity for the channel
 - `enabled` - Whether the flow is active
-- `integration_type` - he type of integration with the flow
+- `integration_type` - The type of integration with the flow
 - `janitor_enabled` - Clean up chat channels and proxy sessions when the task is completed
 - `long_lived` - Whether to reuse the same channel for any future interactions with the customer
 - `integration` - A `integration` block as documented below
 - `date_created` - The date in RFC3339 format that the flow was created
 - `date_updated` - The date in RFC3339 format that the flow was updated
-- `url` - The url of the flow
+- `url` - The URL of the flow
 
 ---
 
-A `integration` block supports the following:
+An `integration` block supports the following:
 
 - `channel` - The channel to send new tasks too
 - `creation_on_message` - Whether to create a task when the first message arrives
 - `flow_sid` - The SID of the flow
 - `priority` - The priority assigned to any new task that is received
-- `retry_count` - The number of times a webhook request should be retried if initial request fails
+- `retry_count` - The number of times a webhook request should be retried if the initial request fails
 - `timeout` - The timeout set for any new task that is received
 - `url` - The webhook URL
-- `workflowSid` - The SID of the workflow to send tasks to
+- `workflow_sid` - The SID of the workflow to send tasks to
 - `workspace_sid` - The SID of the workspace to send tasks to
 
 ---

@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_task_field Resource
 
-Manages a Autopilot task field. See the [API docs](https://www.twilio.com/docs/autopilot/api/task-field) for more information
+Manages an Autopilot task field. See the [API docs](https://www.twilio.com/docs/autopilot/api/task-field) for more information
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
@@ -33,8 +33,8 @@ resource "twilio_autopilot_task_field" "task_field" {
 
 The following arguments are supported:
 
-- `assistant_sid` - (Mandatory) The SID of the assistant to attach the task field to. Changing this forces a new resource to be created
-- `task_sid` - (Mandatory) The SID of the task to attach the field to. Changing this forces a new resource to be created
+- `assistant_sid` - (Mandatory) The SID of the assistant to associate the task field with. Changing this forces a new resource to be created
+- `task_sid` - (Mandatory) The SID of the task to associate the task field with. Changing this forces a new resource to be created
 - `unique_name` - (Mandatory) The unique name of the field. Changing this forces a new resource to be created
 - `field_type` - (Mandatory) The type of field
 
@@ -51,7 +51,7 @@ The following attributes are exported:
 - `field_type` - The type of field
 - `date_created` - The date in RFC3339 format that the field was created
 - `date_updated` - The date in RFC3339 format that the field was updated
-- `url` - The url of the field
+- `url` - The URL of the field
 
 ## Timeouts
 

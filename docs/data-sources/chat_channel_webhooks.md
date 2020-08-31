@@ -50,18 +50,18 @@ A `webhook` block supports the following:
 - `configuration` - The `configuration` block as documented below
 - `date_created` - The date in RFC3339 format that the channel webhook was created
 - `date_updated` - The date in RFC3339 format that the channel webhook was updated
-- `url` - The url of the channel webhook
+- `url` - The URL of the channel webhook
 
 ---
 
 A `configuration` block supports the following:
 
 - `method` - The HTTP method to trigger the channel webhook
-- `webhook_url` - The webhook url
+- `webhook_url` - The webhook URL
 - `filters` - The filter conditions that trigger the channel webhook
-- `retry_count` - The number of attempt to retry a failed channel webhook call
+- `retry_count` - The number of attempts to retry a failed channel webhook call
 - `flow_sid` - The SID for the studio flow which will be called
-- `retry_count` - The number of attempt to retry a failed channel webhook call
+- `retry_count` - The number of attempts to retry a failed channel webhook call
 - `triggers` - The keywords which trigger the channel webhook
 
 ## Timeouts

@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_field_type Resource
 
-Manages a Autopilot field type. See the [API docs](https://www.twilio.com/docs/autopilot/api/field-type) for more information
+Manages an Autopilot field type. See the [API docs](https://www.twilio.com/docs/autopilot/api/field-type) for more information
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
@@ -27,7 +27,7 @@ resource "twilio_autopilot_field_type" "field_type" {
 
 The following arguments are supported:
 
-- `assistant_sid` - (Mandatory) The SID of the assistant to attach the field type to. Changing this forces a new resource to be created
+- `assistant_sid` - (Mandatory) The SID of the assistant to associate the field type with. Changing this forces a new resource to be created
 - `unique_name` - (Mandatory) The unique name of the field type. Changing this forces a new resource to be created
 - `friendly_name` - (Optional) The friendly name of the field type
 
@@ -43,7 +43,7 @@ The following attributes are exported:
 - `friendly_name` - The friendly name of the field type
 - `date_created` - The date in RFC3339 format that the field type was created
 - `date_updated` - The date in RFC3339 format that the field type was updated
-- `url` - The url of the field type resource
+- `url` - The URL of the field type resource
 
 ## Timeouts
 

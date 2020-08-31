@@ -48,7 +48,7 @@ A `function` block supports the following:
 - `latest_version_sid` - The SID of the latest function version
 - `source` - The relative path to the function file
 - `source_hash` - A hash of the function file to trigger deployments
-- `content_type` - The file MIME type
+- `content_type` - The file MIME-type
 - `path` - The request URI path
 - `visibility` - The visibility of the function
 - `date_created` - The date in RFC3339 format that the function was created

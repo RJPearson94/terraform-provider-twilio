@@ -43,11 +43,11 @@ A `task` block supports the following:
 - `sid` - The SID of the task
 - `unique_name` - The unique name of the task
 - `friendly_name` - The friendly name of the task
-- `actions_url` - The url to retrieve the actions json
+- `actions_url` - The URL to retrieve the actions JSON
 - `actions` - JSON string of an Autopilot task
 - `date_created` - The date in RFC3339 format that the task was created
 - `date_updated` - The date in RFC3339 format that the task was updated
-- `url` - The url of the task resource
+- `url` - The URL of the task resource
 
 ## Timeouts
 

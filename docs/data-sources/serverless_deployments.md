@@ -49,7 +49,7 @@ A `deployment` block supports the following:
 - `build_sid` - The build SID to be deployed to the environment
 - `date_created` - The date in RFC3339 format that the deployment was created
 - `date_updated` - The date in RFC3339 format that the deployment was updated
-- `url` - The url of the deployment
+- `url` - The URL of the deployment
 
 ## Timeouts
 

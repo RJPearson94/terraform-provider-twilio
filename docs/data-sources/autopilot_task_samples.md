@@ -49,7 +49,7 @@ A `sample` block supports the following:
 - `source_channel` - The channel the sample was captured on
 - `date_created` - The date in RFC3339 format that the sample was created
 - `date_updated` - The date in RFC3339 format that the sample was updated
-- `url` - The url of the sample
+- `url` - The URL of the sample
 
 ## Timeouts
 

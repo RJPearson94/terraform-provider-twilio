@@ -5,9 +5,9 @@ subcategory: "Account"
 
 # twilio_account_sub_account Resource
 
-Manages a Twilio sub account. See the [API docs](https://www.twilio.com/docs/iam/api/account) for more information
+Manages a Twilio sub-account. See the [API docs](https://www.twilio.com/docs/iam/api/account) for more information
 
-~> Currently only sub accounts can be created via the API. Parent accounts have to be created via the Twilio console
+~> Currently only sub-accounts can be created via the API. Parent accounts have to be created via the Twilio console
 
 ## Example Usage
 
@@ -49,7 +49,7 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 ## Import
 
-A account can be imported using the `/Accounts/{sid}` format, e.g.
+An account can be imported using the `/Accounts/{sid}` format, e.g.
 
 ```shell
 terraform import twilio_account_sub_account.sub_account /Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

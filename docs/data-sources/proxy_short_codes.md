@@ -42,32 +42,32 @@ The following attributes are exported:
 
 A `short_code` block supports the following:
 
-- `sid` - The SID of the Twilio short code to associated with the proxy service
+- `sid` - The SID of the Twilio short code associated with the proxy service
 - `is_reserved` - Whether the short code is reserved
 - `short_code` - The short code associated with the SID
 - `iso_country` - The ISO country associated with the SID
 - `capabilities` - A `capabilities` block as documented below.
 - `date_created` - The date in RFC3339 format that the proxy short code resource was created
 - `date_updated` - The date in RFC3339 format that the proxy short code resource was updated
-- `url` - The url of the proxy short code resource
+- `url` - The URL of the proxy short code resource
 
 ---
 
 A `capabilities` block supports the following:
 
-- `fax_inbound` - Whether the short code is able to accept inbound faxes
-- `fax_outbound` - Whether the short code is able to send outbound faxes
-- `mms_inbound` - Whether the short code is able to accept inbound MMS's
-- `mms_outbound` - Whether the short code is able to send outbound MMS's
+- `fax_inbound` - Whether the short code can accept inbound faxes
+- `fax_outbound` - Whether the short code can send outbound faxes
+- `mms_inbound` - Whether the short code can accept inbound MMS's
+- `mms_outbound` - Whether the short code can send outbound MMS's
 - `restriction_fax_domestic` - Whether the short code is restricted to domestic faxes
 - `restriction_mms_domestic` - Whether the short code is restricted to domestic MMS'
 - `restriction_sms_domestic` - Whether the short code is restricted to domestic SMS's
 - `restriction_voice_domestic` - Whether the short code is restricted to domestic voice calls
 - `sip_trunking` - Whether the short code supports SIP trunking
-- `sms_inbound` - Whether the short code is able to accept inbound SMS's
-- `sms_outbound` - Whether the short code is able to send outbound SMS's
-- `voice_inbound` - Whether the short code is able to accept inbound voice calls
-- `voice_outbound` - Whether the short code is able to make outbound voice calls
+- `sms_inbound` - Whether the short code can accept inbound SMS's
+- `sms_outbound` - Whether the short code can send outbound SMS's
+- `voice_inbound` - Whether the short code can accept inbound voice calls
+- `voice_outbound` - Whether the short code can make outbound voice calls
 
 ## Timeouts
 

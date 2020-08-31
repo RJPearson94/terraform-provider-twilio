@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_task_sample Resource
 
-Manages a Autopilot task sample. See the [API docs](https://www.twilio.com/docs/autopilot/api/task-sample) for more information
+Manages an Autopilot task sample. See the [API docs](https://www.twilio.com/docs/autopilot/api/task-sample) for more information
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
@@ -33,8 +33,8 @@ resource "twilio_autopilot_task_sample" "task_sample" {
 
 The following arguments are supported:
 
-- `assistant_sid` - (Mandatory) The SID of the assistant to attach the task sample to. Changing this forces a new resource to be created
-- `task_sid` - (Mandatory) The SID of the task to attach the sample to. Changing this forces a new resource to be created
+- `assistant_sid` - (Mandatory) The SID of the assistant to associate the sample with. Changing this forces a new resource to be created
+- `task_sid` - (Mandatory) The SID of the task to associate the sample with. Changing this forces a new resource to be created
 - `language` - (Mandatory) The language of the sample
 - `tagged_text` - (Mandatory) The labelled/ tagged sample text
 - `source_channel` - (Optional) The channel the sample was captured on
@@ -46,14 +46,14 @@ The following attributes are exported:
 - `id` - The ID of the sample (Same as the SID)
 - `sid` - The SID of the sample (Same as the ID)
 - `account_sid` - The account SID associated with the sample
-- `assistant_sid` - The SID of the assistant to attach the task to
+- `assistant_sid` - The SID of the assistant to attach the sample to
 - `task_sid` - The SID of the task to attach the sample to
 - `language` - The language of the sample
 - `tagged_text` - The labelled/ tagged sample text
 - `source_channel` - The channel the sample was captured on
 - `date_created` - The date in RFC3339 format that the sample was created
 - `date_updated` - The date in RFC3339 format that the sample was updated
-- `url` - The url of the sample
+- `url` - The URL of the sample
 
 ## Timeouts
 

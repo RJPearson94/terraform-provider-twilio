@@ -34,14 +34,14 @@ resource "twilio_serverless_asset" "asset" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The service SID of the asset is managed under. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The serverless service SID to associate the asset with. Changing this forces a new resource to be created
 - `friendly_name` - (Mandatory) The name of the asset
-- `content_file_name` - (Optional) The name of the file. Conflicts with source
-- `content` - (Optional) The file contents as string. Conflicts with source
-- `source` - (Optional) The relative path to the asset file. Conflicts with content.
-- `source_hash` - (Optional) A hash of the asset file to trigger deployments. Conflicts with content
-- `content_type` - (Mandatory) The file MIME type
-- `path` - (Mandatory) The request uri path
+- `content_file_name` - (Optional) The name of the file. Conflicts with `source`
+- `content` - (Optional) The file contents as string. Conflicts with `source`
+- `source` - (Optional) The relative path to the asset file. Conflicts with `content`
+- `source_hash` - (Optional) A hash of the asset file to trigger deployments. Conflicts with `content`
+- `content_type` - (Mandatory) The file MIME-type
+- `path` - (Mandatory) The request URI path
 - `visibility` - (Mandatory) The visibility of the asset. Options are `public` or `protected` or `private`
 
 **NOTE:** Either source or content need to be specified
@@ -59,12 +59,12 @@ The following attributes are exported:
 - `latest_version_sid` - The SID of the latest asset version
 - `source` - The relative path to the asset file
 - `source_hash` - A hash of the asset file to trigger deployments
-- `content_type` - The file MIME type
-- `path` - The request uri path
+- `content_type` - The file MIME-type
+- `path` - The request URI path
 - `visibility` - The visibility of the asset
 - `date_created` - The date in RFC3339 format that the asset was created
 - `date_updated` - The date in RFC3339 format that the asset was updated
-- `url` - The url of the asset
+- `url` - The URL of the asset
 
 ## Timeouts
 

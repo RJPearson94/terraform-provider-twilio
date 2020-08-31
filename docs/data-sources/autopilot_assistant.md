@@ -46,7 +46,7 @@ The following attributes are exported:
 - `stylesheet` - JSON string of an Autopilot stylesheet
 - `date_created` - The date in RFC3339 format that the assistant was created
 - `date_updated` - The date in RFC3339 format that the assistant was updated
-- `url` - The url of the assistant
+- `url` - The URL of the assistant
 
 ## Timeouts
 

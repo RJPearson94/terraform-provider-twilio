@@ -49,7 +49,7 @@ The following attributes are exported:
 
 ---
 
-A `asset_version` block supports the following:
+An `asset_version` block supports the following:
 
 - `sid` - The SID of the asset version
 - `account_sid` - The account SID of the asset version is deployed into

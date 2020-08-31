@@ -27,26 +27,26 @@ output "definition" {
 
 The following arguments are supported:
 
-- `sid` - (Mandatory) The SID of the studio flow
+- `sid` - (Mandatory) The SID of the Studio flow
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-- `id` - The ID of the studio flow (Same as the SID)
-- `sid` - The SID of the studio flow (Same as the ID)
-- `friendly_name` - The name of the studio flow
-- `definition` - The Flow Definition JSON
-- `status` - The status of the studio flow
-- `revision` - The revision number of teh studio flow
-- `valid` - Whether the studio flow is valid
-- `date_created` - The date in RFC3339 format that the studio flow was created
-- `date_updated` - The date in RFC3339 format that the studio flow was updated
-- `url` - The url of the studio flow
-- `webhook_url` - The webhook url of the studio flow
+- `id` - The ID of the Studio flow (Same as the SID)
+- `sid` - The SID of the Studio flow (Same as the ID)
+- `friendly_name` - The name of the Studio flow
+- `definition` - The flow definition JSON
+- `status` - The status of the Studio flow
+- `revision` - The revision number of the Studio flow
+- `valid` - Whether the Studio flow is valid
+- `date_created` - The date in RFC3339 format that the Studio flow was created
+- `date_updated` - The date in RFC3339 format that the Studio flow was updated
+- `url` - The URL of the Studio flow
+- `webhook_url` - The webhook URL of the Studio flow
 
 ## Timeouts
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the studio flow
+- `read` - (Defaults to 5 minutes) Used when retrieving the Studio flow

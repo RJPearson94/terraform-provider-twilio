@@ -42,12 +42,12 @@ A `webhook` block supports the following:
 
 - `sid` - The SID of the webhook (Same as the ID)
 - `unique_name` - The unique name of the webhook
-- `webhook_url` - The webhook url
+- `webhook_url` - The webhook URL
 - `events` - A list of webhook events strings which trigger the webhook
 - `webhook_method` - The HTTP method to trigger the webhook
 - `date_created` - The date in RFC3339 format that the webhook was created
 - `date_updated` - The date in RFC3339 format that the webhook was updated
-- `url` - The url of the webhook resource
+- `url` - The URL of the webhook resource
 
 ## Timeouts
 

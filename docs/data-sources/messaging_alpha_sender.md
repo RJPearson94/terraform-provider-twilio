@@ -40,10 +40,10 @@ The following attributes are exported:
 - `service_sid` - The messaging service SID associated with the alpha sender
 - `account_sid` - The account SID associated with the alpha sender
 - `capabilities` - The capabilities that are enabled for the alpha sender
-- `alpha_sender` - The alpha sender name to associated with the messaging service
+- `alpha_sender` - The alpha sender name associated with the messaging service
 - `date_created` - The date in RFC3339 format that the messaging alpha sender resource was created
 - `date_updated` - The date in RFC3339 format that the messaging alpha sender resource was updated
-- `url` - The url of the messaging alpha sender resource
+- `url` - The URL of the messaging alpha sender resource
 
 ## Timeouts
 

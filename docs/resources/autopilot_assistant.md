@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_assistant Resource
 
-Manages a Autopilot assistant. See the [API docs](https://www.twilio.com/docs/autopilot/api/assistant) for more information
+Manages an Autopilot assistant. See the [API docs](https://www.twilio.com/docs/autopilot/api/assistant) for more information
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
@@ -67,7 +67,7 @@ The following attributes are exported:
 - `stylesheet` - JSON string of an Autopilot stylesheet
 - `date_created` - The date in RFC3339 format that the assistant was created
 - `date_updated` - The date in RFC3339 format that the assistant was updated
-- `url` - The url of the assistant
+- `url` - The URL of the assistant
 
 ## Timeouts
 
@@ -80,7 +80,7 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 ## Import
 
-A assistant can be imported using the `/Assistants/{sid}` format, e.g.
+An assistant can be imported using the `/Assistants/{sid}` format, e.g.
 
 ```shell
 terraform import twilio_autopilot_assistant.assistant /Assistants/UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

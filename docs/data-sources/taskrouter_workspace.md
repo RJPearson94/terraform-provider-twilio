@@ -46,7 +46,7 @@ The following attributes are exported:
 - `timeout_activity_sid` - SID of timeout activity
 - `date_created` - The date in RFC3339 format that the workspace was created
 - `date_updated` - The date in RFC3339 format that the workspace was updated
-- `url` - The url of the workspace
+- `url` - The URL of the workspace
 
 ## Timeouts
 

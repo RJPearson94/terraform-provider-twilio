@@ -49,7 +49,7 @@ A `field_value` block supports the following:
 - `synonym_of` - The word which this field value is a synonym of
 - `date_created` - The date in RFC3339 format that the field value was created
 - `date_updated` - The date in RFC3339 format that the field value was updated
-- `url` - The url of the field value resource
+- `url` - The URL of the field value resource
 
 ## Timeouts
 

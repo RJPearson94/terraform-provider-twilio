@@ -38,14 +38,14 @@ The following attributes are exported:
 - `id` - The ID of the sample (Same as the SID)
 - `sid` - The SID of the sample (Same as the ID)
 - `account_sid` - The account SID associated with the sample
-- `assistant_sid` - The SID of the assistant to attach the task to
+- `assistant_sid` - The SID of the assistant to attach the sample to
 - `task_sid` - The SID of the task to attach the sample to
 - `language` - The language of the sample
 - `tagged_text` - The labelled/ tagged sample text
 - `source_channel` - The channel the sample was captured on
 - `date_created` - The date in RFC3339 format that the sample was created
 - `date_updated` - The date in RFC3339 format that the sample was updated
-- `url` - The url of the sample
+- `url` - The URL of the sample
 
 ## Timeouts
 

@@ -46,7 +46,7 @@ The following attributes are exported:
 - `role_sid` - The SID of the role associated with the user
 - `date_created` - The date in RFC3339 format that the user was created
 - `date_updated` - The date in RFC3339 format that the user was updated
-- `url` - The url of the user
+- `url` - The URL of the user
 
 ## Timeouts
 

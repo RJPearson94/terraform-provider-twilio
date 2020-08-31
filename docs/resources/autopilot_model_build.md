@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_model_build Resource
 
-Manages a Autopilot model build. See the [API docs](https://www.twilio.com/docs/autopilot/api/model-build) for more information
+Manages an Autopilot model build. See the [API docs](https://www.twilio.com/docs/autopilot/api/model-build) for more information
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
@@ -46,16 +46,16 @@ resource "twilio_autopilot_model_build" "model_build" {
 
 The following arguments are supported:
 
-- `assistant_sid` - (Mandatory) The SID of the assistant to attach the model build to. Changing this forces a new resource to be created
+- `assistant_sid` - (Mandatory) The SID of the assistant to associate the model build with. Changing this forces a new resource to be created
 - `unique_name` - (Mandatory) The unique name of the model build
-- `status_callback` - (Optional) The callback url to post build statuses to. Changing this forces a new resource to be created
+- `status_callback` - (Optional) The callback URL to post build statuses to. Changing this forces a new resource to be created
 - `polling` - (Optional) A `polling` block as documented below.
 
 ---
 
 A `polling` block supports the following:
 
-- `enabled` - (Required) Enable or or disable polling of the build.
+- `enabled` - (Required) Enable or disable polling of the build.
 - `max_attempts` - (Optional) The maximum number of polling attempts. Default is 24
 - `delay_in_ms` - (Optional) The time in milliseconds to wait between polling attempts. Default is 5000ms
 
@@ -67,13 +67,13 @@ The following attributes are exported:
 - `sid` - The SID of the model build (Same as the ID)
 - `account_sid` - The account SID associated with the model build
 - `unique_name` - The unique name of the model build
-- `status_callback` - The callback url to post build statuses to
+- `status_callback` - The callback URL to post build statuses to
 - `status` - The current model build status
 - `error_code` - The error code of the model build if the status is failed
 - `build_duration` - The duration of the model build (in seconds)
 - `date_created` - The date in RFC3339 format that the model build was created
 - `date_updated` - The date in RFC3339 format that the model build was updated
-- `url` - The url of the model build resource
+- `url` - The URL of the model build resource
 
 ## Timeouts
 

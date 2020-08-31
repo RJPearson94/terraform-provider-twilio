@@ -29,7 +29,7 @@ resource "twilio_serverless_environment" "environment" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The service SID of the environment is managed under. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The serverless service SID to associate the environment with. Changing this forces a new resource to be created
 - `unique_name` - (Mandatory) The unique name of the environment
 - `domain_suffix` - (Optional) The domain suffix of the environment
 
@@ -47,7 +47,7 @@ The following attributes are exported:
 - `domain_name` - The domain name of the environment
 - `date_created` - The date in RFC3339 format that the environment was created
 - `date_updated` - The date in RFC3339 format that the environment was updated
-- `url` - The url of the environment
+- `url` - The URL of the environment
 
 ## Timeouts
 

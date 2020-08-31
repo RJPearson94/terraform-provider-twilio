@@ -39,14 +39,14 @@ EOF
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The service SID of the function is managed under. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The serverless service SID to associate the function with. Changing this forces a new resource to be created
 - `friendly_name` - (Mandatory) The name of the function
-- `content_file_name` - (Optional) The name of the file
-- `content` - (Optional) The file contents as string
-- `source` - (Optional) The relative path to the function file
-- `source_hash` - (Optional) A hash of the function file to trigger deployments
-- `content_type` - (Mandatory) The file MIME type
-- `path` - (Mandatory) The request uri path
+- `content_file_name` - (Optional) The name of the file. Conflicts with `source`
+- `content` - (Optional) The file contents as string. Conflicts with `source`
+- `source` - (Optional) The relative path to the function file. Conflicts with `content`
+- `source_hash` - (Optional) A hash of the function file to trigger deployments. Conflicts with `content`
+- `content_type` - (Mandatory) The file MIME-type
+- `path` - (Mandatory) The request URI path
 - `visibility` - (Mandatory) The visibility of the function. Options are `public` or `protected` or `private`
 
 **NOTE:** Either source or content need to be specified
@@ -64,7 +64,7 @@ The following attributes are exported:
 - `latest_version_sid` - The SID of the latest function version
 - `source` - The relative path to the function file
 - `source_hash` - A hash of the function file to trigger deployments
-- `content_type` - The file MIME type
+- `content_type` - The file MIME-type
 - `path` - The request URI path
 - `visibility` - The visibility of the function
 - `date_created` - The date in RFC3339 format that the function was created

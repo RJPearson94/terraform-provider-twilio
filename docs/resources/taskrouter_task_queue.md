@@ -29,7 +29,7 @@ resource "twilio_taskrouter_task_queue" "task_queue" {
 The following arguments are supported:
 
 - `friendly_name` - (Mandatory) The name of the task queue
-- `workspace_sid` - (Mandatory) The workspace SID to create the task queue under. Changing this forces a new resource to be created
+- `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the task queue with. Changing this forces a new resource to be created
 - `assignment_activity_sid` - (Optional) The assignment activity SID for the task queue
 - `max_reserved_workers` - (Optional) The max number of workers to create a reservation for
 - `target_workers` - (Optional) Worker selection criteria for any tasks that enter the task queue

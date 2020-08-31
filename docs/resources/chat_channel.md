@@ -26,7 +26,7 @@ resource "twilio_chat_channel" "channel" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The Service SID associated with the channel. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The Service SID to associate the channel with. Changing this forces a new resource to be created
 - `friendly_name` - (Optional) The friendly name of the channel
 - `unique_name` - (Optional) The unique name of the channel
 - `attributes` - (Optional) JSON string of channel attributes
@@ -45,11 +45,11 @@ The following attributes are exported:
 - `attributes` - JSON string of channel attributes
 - `type` - The type of channel
 - `created_by` - Who created the chat channel
-- `members_count` - The number of members currently associated with the channel
-- `messages_count` - The number of message currently associated with the channel
+- `members_count` - The number of members that are associated with the channel
+- `messages_count` - The number of messages that are associated with the channel
 - `date_created` - The date in RFC3339 format that the channel was created
 - `date_updated` - The date in RFC3339 format that the channel was updated
-- `url` - The url of the channel
+- `url` - The URL of the channel
 
 ## Timeouts
 

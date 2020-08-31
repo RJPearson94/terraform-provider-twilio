@@ -55,7 +55,7 @@ resource "twilio_serverless_build" "build" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The service SID associated with the build. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The serverless service SID to associate the build with. Changing this forces a new resource to be created
 - `asset_version` - (Optional) A `asset_version` block as documented below. Changing this forces a new resource to be created
 - `function_version` - (Optional) A `function_version` block as documented below. Changing this forces a new resource to be created
 - `dependencies` - (Optional) Map of dependencies to be included in the build. Changing this forces a new resource to be created
@@ -63,7 +63,7 @@ The following arguments are supported:
 
 ---
 
-A `asset_version` block supports the following:
+An `asset_version` block supports the following:
 
 - `sid` - (Required) The SID of the asset version
 
@@ -77,7 +77,7 @@ A `function_version` block supports the following:
 
 A `polling` block supports the following:
 
-- `enabled` - (Required) Enable or or disable polling of the build.
+- `enabled` - (Required) Enable or disable polling of the build.
 - `max_attempts` - (Optional) The maximum number of polling attempts. Default is 30
 - `delay_in_ms` - (Optional) The time in milliseconds to wait between polling attempts.Default is 1000ms
 
@@ -99,7 +99,7 @@ The following attributes are exported:
 
 ---
 
-A `asset_version` block supports the following:
+An `asset_version` block supports the following:
 
 - `sid` - The SID of the asset version
 - `account_sid` - The account SID of the asset version is deployed into

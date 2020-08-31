@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_field_value Resource
 
-Manages a Autopilot field value. See the [API docs](https://www.twilio.com/docs/autopilot/api/field-value) for more information
+Manages an Autopilot field value. See the [API docs](https://www.twilio.com/docs/autopilot/api/field-value) for more information
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
@@ -33,8 +33,8 @@ resource "twilio_autopilot_field_value" "field_value" {
 
 The following arguments are supported:
 
-- `assistant_sid` - (Mandatory) The SID of the assistant to attach the field value to. Changing this forces a new resource to be created
-- `field_type_sid` - (Mandatory) The SID of the field type to attach the field value to. Changing this forces a new resource to be created
+- `assistant_sid` - (Mandatory) The SID of the assistant to associate the field value with. Changing this forces a new resource to be created
+- `field_type_sid` - (Mandatory) The SID of the field type to associate the field value with. Changing this forces a new resource to be created
 - `language` - (Mandatory) The field value language. Changing this forces a new resource to be created
 - `value` - (Mandatory) The field value. Changing this forces a new resource to be created
 - `synonym_of` - (Optional) The word which this field value is a synonym of. Changing this forces a new resource to be created
@@ -53,7 +53,7 @@ The following attributes are exported:
 - `synonym_of` - The word which this field value is a synonym of
 - `date_created` - The date in RFC3339 format that the field value was created
 - `date_updated` - The date in RFC3339 format that the field value was updated
-- `url` - The url of the field value resource
+- `url` - The URL of the field value resource
 
 ## Timeouts
 

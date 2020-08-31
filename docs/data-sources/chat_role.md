@@ -42,7 +42,7 @@ The following attributes are exported:
 - `permissions` - The list of permissions the role has
 - `date_created` - The date in RFC3339 format that the role was created
 - `date_updated` - The date in RFC3339 format that the role was updated
-- `url` - The url of the role
+- `url` - The URL of the role
 
 ## Timeouts
 

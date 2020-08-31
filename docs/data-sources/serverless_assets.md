@@ -40,7 +40,7 @@ The following attributes are exported:
 
 ---
 
-A `asset` block supports the following:
+An `asset` block supports the following:
 
 - `sid` - The SID of the asset
 - `friendly_name` - The name of the asset
@@ -48,12 +48,12 @@ A `asset` block supports the following:
 - `latest_version_sid` - The SID of the latest asset version
 - `source` - The relative path to the asset file
 - `source_hash` - A hash of the asset file to trigger deployments
-- `content_type` - The file MIME type
-- `path` - The request uri path
+- `content_type` - The file MIME-type
+- `path` - The request URI path
 - `visibility` - The visibility of the asset
 - `date_created` - The date in RFC3339 format that the asset was created
 - `date_updated` - The date in RFC3339 format that the asset was updated
-- `url` - The url of the asset
+- `url` - The URL of the asset
 
 ## Timeouts
 

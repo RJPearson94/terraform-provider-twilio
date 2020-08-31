@@ -28,8 +28,8 @@ resource "twilio_messaging_alpha_sender" "alpha_sender" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The messaging service SID associated with the alpha sender. Changing this forces a new resource to be created
-- `alpha_sender` - (Mandatory) The alpha sender name to associated with the messaging service. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The messaging service SID to associate the alpha sender with. Changing this forces a new resource to be created
+- `alpha_sender` - (Mandatory) The alpha sender name to associate with the messaging service. Changing this forces a new resource to be created
 
 ## Attributes Reference
 
@@ -40,10 +40,10 @@ The following attributes are exported:
 - `service_sid` - The messaging service SID associated with the alpha sender
 - `account_sid` - The account SID associated with the alpha sender
 - `capabilities` - The capabilities that are enabled for the alpha sender
-- `alpha_sender` - The alpha sender name to associated with the messaging service
+- `alpha_sender` - The alpha sender name associated with the messaging service
 - `date_created` - The date in RFC3339 format that the messaging alpha sender resource was created
 - `date_updated` - The date in RFC3339 format that the messaging alpha sender resource was updated
-- `url` - The url of the messaging alpha sender resource
+- `url` - The URL of the messaging alpha sender resource
 
 ## Timeouts
 

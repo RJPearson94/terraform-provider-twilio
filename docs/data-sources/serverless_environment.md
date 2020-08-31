@@ -45,7 +45,7 @@ The following attributes are exported:
 - `domain_name` - The domain name of the environment
 - `date_created` - The date in RFC3339 format that the environment was created
 - `date_updated` - The date in RFC3339 format that the environment was updated
-- `url` - The url of the environment
+- `url` - The URL of the environment
 
 ## Timeouts
 

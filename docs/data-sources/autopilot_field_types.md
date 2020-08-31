@@ -45,7 +45,7 @@ A `field_type` block supports the following:
 - `friendly_name` - The friendly name of the field type
 - `date_created` - The date in RFC3339 format that the field type was created
 - `date_updated` - The date in RFC3339 format that the field type was updated
-- `url` - The url of the field type resource
+- `url` - The URL of the field type resource
 
 ## Timeouts
 

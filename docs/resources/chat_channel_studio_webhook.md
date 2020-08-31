@@ -32,10 +32,10 @@ resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The Service SID associated with the channel webhook. Changing this forces a new resource to be created
-- `channel_sid` - (Mandatory) The Channel SID associated with the channel webhook. Changing this forces a new resource to be created
-- `flow_sid` - (Mandatory) The SID for the Studio Flow which will be called
-- `retry_count` - (Optional) The number of attempt to retry a failed webhook call
+- `service_sid` - (Mandatory) The Service SID to associate the channel webhook with. Changing this forces a new resource to be created
+- `channel_sid` - (Mandatory) The Channel SID to associate the channel webhook with. Changing this forces a new resource to be created
+- `flow_sid` - (Mandatory) The SID for the Studio flow which will be called
+- `retry_count` - (Optional) The number of attempts to retry a failed webhook call
 
 ## Attributes Reference
 
@@ -46,12 +46,12 @@ The following attributes are exported:
 - `account_sid` - The account SID associated with the channel webhook
 - `service_sid` - The service SID associated with the channel webhook
 - `channel_sid` - The channel SID associated with the channel webhook
-- `type` - The type of webhook. The value will be studio
+- `type` - The type of webhook. The value will be `studio`
 - `flow_sid` - The SID for the studio flow which will be called
-- `retry_count` - The number of attempt to retry a failed webhook call
+- `retry_count` - The number of attempts to retry a failed webhook call
 - `date_created` - The date in RFC3339 format that the channel webhook was created
 - `date_updated` - The date in RFC3339 format that the channel webhook was updated
-- `url` - The url of the channel webhook
+- `url` - The URL of the channel webhook
 
 ## Timeouts
 

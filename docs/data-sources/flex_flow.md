@@ -25,7 +25,7 @@ output "flow" {
 
 The following arguments are supported:
 
-- `sid` - (Mandatory) The SID of the flex flow
+- `sid` - (Mandatory) The SID of the flex-flow
 
 ## Attributes Reference
 
@@ -39,29 +39,27 @@ The following attributes are exported:
 - `friendly_name` - The friendly name of the flow
 - `contact_identity` - The contact identity for the channel
 - `enabled` - Whether the flow is active
-- `integration_type` - he type of integration with the flow
+- `integration_type` - The type of integration with the flow
 - `janitor_enabled` - Clean up chat channels and proxy sessions when the task is completed
 - `long_lived` - Whether to reuse the same channel for any future interactions with the customer
 - `integration` - A `integration` block as documented below
 - `date_created` - The date in RFC3339 format that the flow was created
 - `date_updated` - The date in RFC3339 format that the flow was updated
-- `url` - The url of the flow
+- `url` - The URL of the flow
 
 ---
 
-A `integration` block supports the following:
+An `integration` block supports the following:
 
 - `channel` - The channel to send new tasks too
 - `creation_on_message` - Whether to create a task when the first message arrives
 - `flow_sid` - The SID of the flow
 - `priority` - The priority assigned to any new task that is received
-- `retry_count` - The number of times a webhook request should be retried if initial request fails
+- `retry_count` - The number of times a webhook request should be retried if the initial request fails
 - `timeout` - The timeout set for any new task that is received
 - `url` - The webhook URL
-- `workflowSid` - The SID of the workflow to send tasks to
+- `workflow_sid` - The SID of the workflow to send tasks to
 - `workspace_sid` - The SID of the workspace to send tasks to
-
----
 
 ## Timeouts
 

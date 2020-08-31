@@ -13,7 +13,7 @@ For more information on TaskRouter, see the product [page](https://www.twilio.co
 
 ```hcl
 resource "twilio_taskrouter_workspace" "workspace" {
-  friendly_name          = "%s"
+  friendly_name          = "twilio-test"
   multi_task_enabled     = true
   prioritize_queue_order = "FIFO"
 }
@@ -43,7 +43,7 @@ EOF
 
 The following arguments are supported:
 
-- `workspace_sid` - (Mandatory) The workspace SID to create the workflow under
+- `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the workflow with. Changing this forces a new resource to be created
 - `friendly_name` - (Mandatory) The name of the workflow
 - `configuration` - (Mandatory) JSON string of workflow configuration
 - `assignment_callback_url` - (Optional) Assignment callback URL

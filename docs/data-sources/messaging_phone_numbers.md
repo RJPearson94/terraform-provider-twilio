@@ -42,13 +42,13 @@ The following attributes are exported:
 
 A `phone_number` block supports the following:
 
-- `sid` - The SID of the Twilio phone number to associated with the messaging service
+- `sid` - The SID of the Twilio phone number associated with the messaging service
 - `capabilities` - The capabilities that are enabled for the phone number
 - `country_code` - The country code of the phone number
 - `phone_number` - The phone number
 - `date_created` - The date in RFC3339 format that the messaging phone number resource was created
 - `date_updated` - The date in RFC3339 format that the messaging phone number resource was updated
-- `url` - The url of the messaging phone number resource
+- `url` - The URL of the messaging phone number resource
 
 ## Timeouts
 

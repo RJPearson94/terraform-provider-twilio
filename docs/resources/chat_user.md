@@ -26,11 +26,11 @@ resource "twilio_chat_user" "user" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The service SID associated with the user. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The service SID to associate the user with. Changing this forces a new resource to be created
 - `identity` - (Mandatory) The identity of the user. Changing this forces a new resource to be created
 - `attributes` - (Optional) JSON string of user attributes
 - `friendly_name` - (Optional) The friendly name of the user
-- `role_sid` - (Optional) The SID of the role associated with the user
+- `role_sid` - (Optional) The SID of the role to associate with the user
 
 ## Attributes Reference
 
@@ -49,7 +49,7 @@ The following attributes are exported:
 - `role_sid` - The SID of the role associated with the user
 - `date_created` - The date in RFC3339 format that the user was created
 - `date_updated` - The date in RFC3339 format that the user was updated
-- `url` - The url of the user
+- `url` - The URL of the user
 
 ## Timeouts
 

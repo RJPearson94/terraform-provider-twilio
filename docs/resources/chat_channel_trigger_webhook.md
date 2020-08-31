@@ -33,12 +33,12 @@ resource "twilio_chat_channel_trigger_webhook" "trigger_webhook" {
 
 The following arguments are supported:
 
-- `service_sid` - (Mandatory) The service SID associated with the channel webhook. Changing this forces a new resource to be created
-- `channel_sid` - (Mandatory) The channel SID associated with the channel webhook. Changing this forces a new resource to be created
+- `service_sid` - (Mandatory) The service SID to associate the channel webhook with. Changing this forces a new resource to be created
+- `channel_sid` - (Mandatory) The channel SID to associate the channel webhook with. Changing this forces a new resource to be created
 - `method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`
-- `webhook_url` - (Mandatory) The webhook url
+- `webhook_url` - (Mandatory) The webhook URL
 - `triggers` - (Mandatory) The keywords which trigger the webhook
-- `retry_count` - (Optional) The number of attempt to retry a failed webhook call
+- `retry_count` - (Optional) The number of attempts to retry a failed webhook call
 
 ## Attributes Reference
 
@@ -49,14 +49,14 @@ The following attributes are exported:
 - `account_sid` - The account SID associated with the channel webhook
 - `service_sid` - The service SID associated with the channel webhook
 - `channel_sid` - The channel SID associated with the channel webhook
-- `type` - The type of webhook. The value will be trigger
+- `type` - The type of webhook. The value will be `trigger`
 - `method` - The HTTP method to trigger the webhook
-- `webhook_url` - The webhook url
+- `webhook_url` - The webhook URL
 - `triggers` - The keywords which trigger the webhook
-- `retry_count` - The number of attempt to retry a failed webhook call
+- `retry_count` - The number of attempts to retry a failed webhook call
 - `date_created` - The date in RFC3339 format that the channel webhook was created
 - `date_updated` - The date in RFC3339 format that the channel webhook was updated
-- `url` - The url of the channel webhook
+- `url` - The URL of the channel webhook
 
 ## Timeouts
 

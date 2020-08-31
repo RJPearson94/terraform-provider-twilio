@@ -5,7 +5,7 @@ subcategory: "Autopilot"
 
 # twilio_autopilot_task Resource
 
-Manages a Autopilot task. See the [API docs](https://www.twilio.com/docs/autopilot/api/task) for more information
+Manages an Autopilot task. See the [API docs](https://www.twilio.com/docs/autopilot/api/task) for more information
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
@@ -37,10 +37,10 @@ EOF
 
 The following arguments are supported:
 
-- `assistant_sid` - (Mandatory) The SID of the assistant to attach the task to. Changing this forces a new resource to be created
+- `assistant_sid` - (Mandatory) The SID of the assistant to associate the task with. Changing this forces a new resource to be created
 - `unique_name` - (Mandatory) The unique name of the task
 - `friendly_name` - (Optional) The friendly name of the task
-- `actions_url` - (Optional) The url to retrieve the actions json. Conflicts with `actions`.
+- `actions_url` - (Optional) The URL to retrieve the actions JSON. Conflicts with `actions`.
 - `actions` - (Optional) JSON string of an Autopilot task. Conflicts with `actions_url`.
 
 ## Attributes Reference
@@ -53,11 +53,11 @@ The following attributes are exported:
 - `assistant_sid` - The SID of the assistant to attach the task to
 - `unique_name` - The unique name of the task
 - `friendly_name` - The friendly name of the task
-- `actions_url` - The url to retrieve the actions json
+- `actions_url` - The URL to retrieve the actions JSON
 - `actions` - JSON string of an Autopilot task
 - `date_created` - The date in RFC3339 format that the task was created
 - `date_updated` - The date in RFC3339 format that the task was updated
-- `url` - The url of the task resource
+- `url` - The URL of the task resource
 
 ## Timeouts
 

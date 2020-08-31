@@ -31,8 +31,8 @@ The following arguments are supported:
 - `pre_webhook_url` - (Optional) The webhook url
 - `webhook_filters` - (Optional) The events which trigger the webhook
 - `webhook_method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`
-- `reachability_enabled` - (Optional) Whether the Reachability Indicator (for Programmable Chat) is enabled
-- `read_status_enabled` - (Optional) Whether the Message Consumption Horizon (for Programmable Chat) is enabled
+- `reachability_enabled` - (Optional) Whether the reachability indicator (for Programmable Chat) is enabled
+- `read_status_enabled` - (Optional) Whether the message consumption horizon (for Programmable Chat) is enabled
 - `typing_indicator_timeout` - (Optional) How many seconds should the service wait after receiving a `started typing` event before assuming a user is no longer typing
 
 ---
@@ -69,7 +69,7 @@ A `new_message` block supports the following:
 
 ---
 
-A `added_to_channel` block supports the following:
+An `added_to_channel` block supports the following:
 
 - `enabled` - (Optional) Whether notifications for a user being added to a channel are enabled
 - `template` - (Optional) The template message that is sent when the notification is activated
@@ -77,7 +77,7 @@ A `added_to_channel` block supports the following:
 
 ---
 
-A `invited_to_channel` block supports the following:
+An `invited_to_channel` block supports the following:
 
 - `enabled` - (Optional) Whether notifications for a user being invited to a channel are enabled
 - `template` - (Optional) The template message that is sent when the notification is activated
@@ -105,10 +105,10 @@ The following attributes are exported:
 - `limits` - A `limits` block as documented below.
 - `media` - A `media` block as documented below.
 - `notifications` - A `notifications` block as documented below.
-- `post_webhook_retry_count` - The number of attempt to retry a failed webhook call
-- `post_webhook_url` - The webhook url
-- `pre_webhook_retry_count` - The number of attempt to retry a failed webhook call
-- `pre_webhook_url` - The webhook url
+- `post_webhook_retry_count` - The number of attempts to retry a failed webhook call
+- `post_webhook_url` - The webhook URL
+- `pre_webhook_retry_count` - The number of attempts to retry a failed webhook call
+- `pre_webhook_url` - The webhook URL
 - `webhook_filters` - The events which trigger the webhook
 - `webhook_method` - The HTTP method to trigger the webhook
 - `reachability_enabled` - Whether the reachability indicator (for Programmable Chat) is enabled
@@ -116,7 +116,7 @@ The following attributes are exported:
 - `typing_indicator_timeout` - How many seconds should the service wait after receiving a `started typing` event before assuming a user is no longer typing
 - `date_created` - The date in RFC3339 format that the service was created
 - `date_updated` - The date in RFC3339 format that the service was updated
-- `url` - The url of the service
+- `url` - The URL of the service
 
 ---
 
@@ -153,7 +153,7 @@ A `new_message` block supports the following:
 
 ---
 
-A `added_to_channel` block supports the following:
+An `added_to_channel` block supports the following:
 
 - `enabled` - Whether notifications for a user being added to a channel are enabled
 - `template` - The template message that is sent when the notification is activated
@@ -161,7 +161,7 @@ A `added_to_channel` block supports the following:
 
 ---
 
-A `invited_to_channel` block supports the following:
+An `invited_to_channel` block supports the following:
 
 - `enabled` - Whether notifications for a user being invited to a channel are enabled
 - `template` - The template message that is sent when the notification is activated

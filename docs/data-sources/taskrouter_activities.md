@@ -38,7 +38,7 @@ The following attributes are exported:
 
 ---
 
-A `activity` block supports the following:
+An `activity` block supports the following:
 
 - `sid` - The SID of the activity
 - `friendly_name` - The name of the activity

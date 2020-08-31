@@ -42,8 +42,8 @@ The following attributes are exported:
 - `account_sid` - The account SID of the environment variable is deployed into
 - `service_sid` - The service SID of the environment variable is deployed into
 - `environment_sid` - The environment SID of the environment variable is managed under
-- `key` - The key of the environment variable
-- `value` - The value of the environment variable
+- `key` - The environment variable key
+- `value` - The environment variable value
 - `date_created` - The date in RFC3339 format that the environment variable was created
 - `date_updated` - The date in RFC3339 format that the environment variable was updated
 - `url` - The URL of the environment variable
