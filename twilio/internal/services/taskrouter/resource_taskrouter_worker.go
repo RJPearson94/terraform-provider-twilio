@@ -72,9 +72,9 @@ func resourceTaskRouterWorker() *schema.Resource {
 			"attributes": {
 				Type:             schema.TypeString,
 				Optional:         true,
+				Computed:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
-				Default:          "{}",
 			},
 			"activity_name": {
 				Type:     schema.TypeString,

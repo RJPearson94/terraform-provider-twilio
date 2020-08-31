@@ -29,7 +29,7 @@ func TestAccTwilioTaskRouterWorker_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioTaskRouterWorkerExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "attributes", "{}"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
@@ -69,7 +69,7 @@ func TestAccTwilioTaskRouterWorker_update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioTaskRouterWorkerExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "attributes", "{}"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
@@ -88,7 +88,7 @@ func TestAccTwilioTaskRouterWorker_update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioTaskRouterWorkerExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "attributes", "{}"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
