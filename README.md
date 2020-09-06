@@ -10,6 +10,7 @@ The Terraform Twilio provider is a plugin for [Terraform](https://www.terraform.
 ## Getting Started
 
 - [Using Provider](./docs/index.md)
+- [Terraform Registry](https://registry.terraform.io/providers/RJPearson94/twilio/latest)
 - [Developing the Provider](./development.md)
 
 **NOTE:** The default branch for this project is called `main`
