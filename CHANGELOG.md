@@ -1,4 +1,4 @@
-## v0.1.0 (unreleased)
+## v0.1.0 (2020-09-06)
 
 Add first release of the Twilio Terraform provider. The list of supported resources and data sources can be seen in the features section below.
 
