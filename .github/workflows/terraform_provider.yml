@@ -27,9 +27,6 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
-      - name: Granting private modules access
-        run: git config --global url."https://${{ secrets.GO_MODULES_TOKEN }}:x-oauth-basic@github.com/RJPearson94".insteadOf "https://github.com/RJPearson94"
-
       - name: Install tools
         run: make tools
 
