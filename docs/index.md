@@ -2,6 +2,8 @@
 
 The Twilio provider is used to interact with the many resources supported by Twilio. The provider needs to be configured with your Twilio credentials before it can be used.
 
+> ⚠️ **Disclaimer**: This project is not an official Twilio project and is not supported or endorsed by Twilio in any way. It is maintained in [my](https://github.com/RJPearson94) free time.
+
 ## Authentication
 
 The Twilio provider offers a various way of providing credentials for authentication. The following methods are supported, in precedence order:

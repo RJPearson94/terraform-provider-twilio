@@ -1,5 +1,8 @@
 # Terraform Provider for Twilio
 
+![Terraform Provider Checks](https://github.com/RJPearson94/terraform-provider-twilio/workflows/Terraform%20Provider%20Checks/badge.svg)
+[![Terraform Registry](https://img.shields.io/badge/registry-twilio-green?logo=terraform&style=flat)](https://registry.terraform.io/providers/RJPearson94/twilio/latest)
+
 The Terraform Twilio provider is a plugin for [Terraform](https://www.terraform.io/) that allows for the lifecycle management of supported Twilio resources.
 
 > ⚠️ **Disclaimer**: This project is not an official Twilio project and is not supported or endorsed by Twilio in any way. It is maintained in [my](https://github.com/RJPearson94) free time.
