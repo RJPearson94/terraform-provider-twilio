@@ -1,3 +1,7 @@
+## v0.1.1 (2020-09-06)
+
+Update Documentation with Terraform Registry Information and disclaimer of terraform docs
+
 ## v0.1.0 (2020-09-06)
 
 Add first release of the Twilio Terraform provider. The list of supported resources and data sources can be seen in the features section below.
