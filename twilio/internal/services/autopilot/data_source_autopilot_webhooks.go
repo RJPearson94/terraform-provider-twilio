@@ -2,18 +2,18 @@ package autopilot
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceAutopilotWebhooks() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAutopilotWebhooksRead,
+		ReadContext: dataSourceAutopilotWebhooksRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -75,10 +75,8 @@ func dataSourceAutopilotWebhooks() *schema.Resource {
 	}
 }
 
-func dataSourceAutopilotWebhooksRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceAutopilotWebhooksRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	assistantSid := d.Get("assistant_sid").(string)
 	paginator := client.Assistant(assistantSid).Webhooks.NewWebhooksPaginator()
@@ -88,9 +86,9 @@ func dataSourceAutopilotWebhooksRead(d *schema.ResourceData, meta interface{}) e
 	err := paginator.Error()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] No webhooks were found for assistant with sid (%s)", assistantSid)
+			return diag.Errorf("No webhooks were found for assistant with sid (%s)", assistantSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to list autopilot webhooks: %s", err.Error())
+		return diag.Errorf("Failed to list autopilot webhooks: %s", err.Error())
 	}
 
 	d.SetId(assistantSid)

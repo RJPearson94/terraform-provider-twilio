@@ -11,17 +11,18 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flow"
 	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flow_validation"
 	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flows"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceStudioFlow() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceStudioFlowCreate,
-		Read:   resourceStudioFlowRead,
-		Update: resourceStudioFlowUpdate,
-		Delete: resourceStudioFlowDelete,
+		CreateContext: resourceStudioFlowCreate,
+		ReadContext:   resourceStudioFlowRead,
+		UpdateContext: resourceStudioFlowUpdate,
+		DeleteContext: resourceStudioFlowDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -110,12 +111,10 @@ func resourceStudioFlow() *schema.Resource {
 	}
 }
 
-func resourceStudioFlowCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceStudioFlowCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Studio
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
-	if err := validateRequest(d, meta); err != nil {
+	if err := validateRequest(ctx, d, meta); err != nil {
 		return err
 	}
 
@@ -129,17 +128,15 @@ func resourceStudioFlowCreate(d *schema.ResourceData, meta interface{}) error {
 
 	createResult, err := client.Flows.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create studio flow: %s", err.Error())
+		return diag.Errorf("Failed to create studio flow: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceStudioFlowRead(d, meta)
+	return resourceStudioFlowRead(ctx, d, meta)
 }
 
-func resourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
+func resourceStudioFlowRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Studio
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Flow(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -147,7 +144,7 @@ func resourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read studio flow: %s", err)
+		return diag.Errorf("Failed to read studio flow: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -156,7 +153,7 @@ func resourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 
 	json, err := structure.FlattenJsonToString(getResponse.Definition)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Unable to flattern definition json to string")
+		return diag.Errorf("Unable to flattern definition json to string")
 	}
 	d.Set("definition", json)
 	d.Set("status", getResponse.Status)
@@ -176,12 +173,10 @@ func resourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceStudioFlowUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceStudioFlowUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Studio
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
-	if err := validateRequest(d, meta); err != nil {
+	if err := validateRequest(ctx, d, meta); err != nil {
 		return err
 	}
 
@@ -194,30 +189,26 @@ func resourceStudioFlowUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	updateResp, err := client.Flow(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to Update Studio Flow: %s", err.Error())
+		return diag.Errorf("Failed to Update Studio Flow: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceStudioFlowRead(d, meta)
+	return resourceStudioFlowRead(ctx, d, meta)
 }
 
-func resourceStudioFlowDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceStudioFlowDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Studio
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Flow(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete studio flow: %s", err.Error())
+		return diag.Errorf("Failed to delete studio flow: %s", err.Error())
 	}
 	d.SetId("")
 	return nil
 }
 
-func validateRequest(d *schema.ResourceData, meta interface{}) error {
+func validateRequest(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	if d.Get("validate").(bool) {
 		client := meta.(*common.TwilioClient).Studio
-		ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-		defer cancel()
 
 		definitionJSONString, _ := structure.NormalizeJsonString(d.Get("definition").(string))
 		validateInput := &flow_validation.ValidateFlowInput{
@@ -229,10 +220,10 @@ func validateRequest(d *schema.ResourceData, meta interface{}) error {
 
 		resp, err := client.FlowValidation.ValidateWithContext(ctx, validateInput)
 		if err != nil {
-			return fmt.Errorf("[ERROR] Failed to validate studio flow: %s", err.Error())
+			return diag.Errorf("Failed to validate studio flow: %s", err.Error())
 		}
 		if !resp.Valid {
-			return fmt.Errorf("[ERROR] The template is invalid")
+			return diag.Errorf("The template is invalid")
 		}
 	}
 	return nil

@@ -11,17 +11,18 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/chat/v2/service/user"
 	"github.com/RJPearson94/twilio-sdk-go/service/chat/v2/service/users"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceChatUser() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceChatUserCreate,
-		Read:   resourceChatUserRead,
-		Update: resourceChatUserUpdate,
-		Delete: resourceChatUserDelete,
+		CreateContext: resourceChatUserCreate,
+		ReadContext:   resourceChatUserRead,
+		UpdateContext: resourceChatUserUpdate,
+		DeleteContext: resourceChatUserDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -110,10 +111,8 @@ func resourceChatUser() *schema.Resource {
 	}
 }
 
-func resourceChatUserCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceChatUserCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &users.CreateUserInput{
 		Attributes:   utils.OptionalJSONString(d, "attributes"),
@@ -124,17 +123,15 @@ func resourceChatUserCreate(d *schema.ResourceData, meta interface{}) error {
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Users.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create chat user: %s", err)
+		return diag.Errorf("Failed to create chat user: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceChatUserRead(d, meta)
+	return resourceChatUserRead(ctx, d, meta)
 }
 
-func resourceChatUserRead(d *schema.ResourceData, meta interface{}) error {
+func resourceChatUserRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Get("service_sid").(string)).User(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -145,7 +142,7 @@ func resourceChatUserRead(d *schema.ResourceData, meta interface{}) error {
 				return nil
 			}
 		}
-		return fmt.Errorf("[ERROR] Failed to read chat user: %s", err)
+		return diag.Errorf("Failed to read chat user: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -169,10 +166,8 @@ func resourceChatUserRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceChatUserUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceChatUserUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &user.UpdateUserInput{
 		Attributes:   utils.OptionalJSONString(d, "attributes"),
@@ -182,20 +177,18 @@ func resourceChatUserUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	updateResp, err := client.Service(d.Get("service_sid").(string)).User(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update chat user: %s", err.Error())
+		return diag.Errorf("Failed to update chat user: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceChatUserRead(d, meta)
+	return resourceChatUserRead(ctx, d, meta)
 }
 
-func resourceChatUserDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceChatUserDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Get("service_sid").(string)).User(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete chat user: %s", err.Error())
+		return diag.Errorf("Failed to delete chat user: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

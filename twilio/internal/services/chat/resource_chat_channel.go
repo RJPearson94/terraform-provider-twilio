@@ -11,16 +11,17 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/chat/v2/service/channel"
 	"github.com/RJPearson94/twilio-sdk-go/service/chat/v2/service/channels"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceChatChannel() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceChatChannelCreate,
-		Read:   resourceChatChannelRead,
-		Update: resourceChatChannelUpdate,
-		Delete: resourceChatChannelDelete,
+		CreateContext: resourceChatChannelCreate,
+		ReadContext:   resourceChatChannelRead,
+		UpdateContext: resourceChatChannelUpdate,
+		DeleteContext: resourceChatChannelDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -111,10 +112,8 @@ func resourceChatChannel() *schema.Resource {
 	}
 }
 
-func resourceChatChannelCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceChatChannelCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &channels.CreateChannelInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
@@ -125,17 +124,15 @@ func resourceChatChannelCreate(d *schema.ResourceData, meta interface{}) error {
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Channels.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create chat channel: %s", err)
+		return diag.Errorf("Failed to create chat channel: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceChatChannelRead(d, meta)
+	return resourceChatChannelRead(ctx, d, meta)
 }
 
-func resourceChatChannelRead(d *schema.ResourceData, meta interface{}) error {
+func resourceChatChannelRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Get("service_sid").(string)).Channel(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -146,7 +143,7 @@ func resourceChatChannelRead(d *schema.ResourceData, meta interface{}) error {
 				return nil
 			}
 		}
-		return fmt.Errorf("[ERROR] Failed to read chat channel: %s", err)
+		return diag.Errorf("Failed to read chat channel: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -170,10 +167,8 @@ func resourceChatChannelRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceChatChannelUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceChatChannelUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &channel.UpdateChannelInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
@@ -183,20 +178,18 @@ func resourceChatChannelUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	updateResp, err := client.Service(d.Get("service_sid").(string)).Channel(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update chat channel: %s", err.Error())
+		return diag.Errorf("Failed to update chat channel: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceChatChannelRead(d, meta)
+	return resourceChatChannelRead(ctx, d, meta)
 }
 
-func resourceChatChannelDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceChatChannelDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Get("service_sid").(string)).Channel(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete chat channel: %s", err.Error())
+		return diag.Errorf("Failed to delete chat channel: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

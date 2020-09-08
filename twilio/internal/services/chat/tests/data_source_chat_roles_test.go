@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
 var rolesDataSourceName = "twilio_chat_roles"
@@ -24,12 +24,11 @@ func TestAccDataSourceTwilioChatRoles_basic(t *testing.T) {
 	// Twilio creates some default roles when the channel is created so cant guarantee the order
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceTwilioChatRoles_basic(friendlyName, roleType, permissions),
 				Check: resource.ComposeTestCheckFunc(
-
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "service_sid"),

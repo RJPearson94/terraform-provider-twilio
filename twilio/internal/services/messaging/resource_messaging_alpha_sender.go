@@ -9,14 +9,15 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/messaging/v1/service/alpha_senders"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceMessagingAlphaSender() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMessagingAlphaSenderCreate,
-		Read:   resourceMessagingAlphaSenderRead,
-		Delete: resourceMessagingAlphaSenderDelete,
+		CreateContext: resourceMessagingAlphaSenderCreate,
+		ReadContext:   resourceMessagingAlphaSenderRead,
+		DeleteContext: resourceMessagingAlphaSenderDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -83,10 +84,8 @@ func resourceMessagingAlphaSender() *schema.Resource {
 	}
 }
 
-func resourceMessagingAlphaSenderCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingAlphaSenderCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &alpha_senders.CreateAlphaSenderInput{
 		AlphaSender: d.Get("alpha_sender").(string),
@@ -94,17 +93,15 @@ func resourceMessagingAlphaSenderCreate(d *schema.ResourceData, meta interface{}
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).AlphaSenders.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create messaging alpha sender: %s", err)
+		return diag.Errorf("Failed to create messaging alpha sender: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceMessagingAlphaSenderRead(d, meta)
+	return resourceMessagingAlphaSenderRead(ctx, d, meta)
 }
 
-func resourceMessagingAlphaSenderRead(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingAlphaSenderRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Get("service_sid").(string)).AlphaSender(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -112,7 +109,7 @@ func resourceMessagingAlphaSenderRead(d *schema.ResourceData, meta interface{}) 
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read messaging alpha sender: %s", err)
+		return diag.Errorf("Failed to read messaging alpha sender: %s", err.Error())
 	}
 
 	d.Set("account_sid", getResponse.AccountSid)
@@ -131,13 +128,11 @@ func resourceMessagingAlphaSenderRead(d *schema.ResourceData, meta interface{}) 
 	return nil
 }
 
-func resourceMessagingAlphaSenderDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingAlphaSenderDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Get("service_sid").(string)).AlphaSender(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete messaging alpha sender: %s", err.Error())
+		return diag.Errorf("Failed to delete messaging alpha sender: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

@@ -7,9 +7,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var userResourceName = "twilio_chat_user"
@@ -21,8 +21,7 @@ func TestAccTwilioChatUser_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioChatUserDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -64,8 +63,7 @@ func TestAccTwilioChatUser_friendlyName(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioChatUserDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -119,8 +117,7 @@ func TestAccTwilioChatUser_role(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioChatUserDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -162,7 +159,7 @@ func testAccCheckTwilioChatUserDestroy(s *terraform.State) error {
 					return nil
 				}
 			}
-			return fmt.Errorf("Error occurred when retrieving user information %s", err)
+			return fmt.Errorf("Error occurred when retrieving user information %s", err.Error())
 		}
 	}
 
@@ -180,7 +177,7 @@ func testAccCheckTwilioChatUserExists(name string) resource.TestCheckFunc {
 		}
 
 		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).User(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving user information %s", err)
+			return fmt.Errorf("Error occurred when retrieving user information %s", err.Error())
 		}
 
 		return nil

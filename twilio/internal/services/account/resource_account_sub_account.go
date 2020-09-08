@@ -7,20 +7,22 @@ import (
 	"regexp"
 	"time"
 
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/accounts"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceAccountSubAccount() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceAccountSubAccountCreate,
-		Read:   resourceAccountSubAccountRead,
-		Update: resourceAccountSubAccountUpdate,
-		Delete: resourceAccountSubAccountDelete,
+		CreateContext: resourceAccountSubAccountCreate,
+		ReadContext:   resourceAccountSubAccountRead,
+		UpdateContext: resourceAccountSubAccountUpdate,
+		DeleteContext: resourceAccountSubAccountDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -84,10 +86,8 @@ func resourceAccountSubAccount() *schema.Resource {
 	}
 }
 
-func resourceAccountSubAccountCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceAccountSubAccountCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &accounts.CreateAccountInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
@@ -95,17 +95,15 @@ func resourceAccountSubAccountCreate(d *schema.ResourceData, meta interface{}) e
 
 	createResult, err := client.Accounts.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create sub account: %s", err)
+		return diag.Errorf("Failed to create sub account: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceAccountSubAccountRead(d, meta)
+	return resourceAccountSubAccountRead(ctx, d, meta)
 }
 
-func resourceAccountSubAccountRead(d *schema.ResourceData, meta interface{}) error {
+func resourceAccountSubAccountRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Account(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -113,7 +111,7 @@ func resourceAccountSubAccountRead(d *schema.ResourceData, meta interface{}) err
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read account: %s", err)
+		return diag.Errorf("Failed to read account: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -131,10 +129,8 @@ func resourceAccountSubAccountRead(d *schema.ResourceData, meta interface{}) err
 	return nil
 }
 
-func resourceAccountSubAccountUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceAccountSubAccountUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &account.UpdateAccountInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
@@ -143,17 +139,15 @@ func resourceAccountSubAccountUpdate(d *schema.ResourceData, meta interface{}) e
 
 	updateResp, err := client.Account(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update account: %s", err.Error())
+		return diag.Errorf("Failed to update account: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceAccountSubAccountRead(d, meta)
+	return resourceAccountSubAccountRead(ctx, d, meta)
 }
 
-func resourceAccountSubAccountDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceAccountSubAccountDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	log.Println("[INFO] Accounts can only be closed and will be deleted after 30 days. So updating the account to close it")
 
@@ -162,7 +156,7 @@ func resourceAccountSubAccountDelete(d *schema.ResourceData, meta interface{}) e
 	}
 
 	if _, err := client.Account(d.Id()).UpdateWithContext(ctx, updateInput); err != nil {
-		return fmt.Errorf("Failed to close account: %s", err.Error())
+		return diag.Errorf("Failed to close account: %s", err.Error())
 	}
 
 	d.SetId("")

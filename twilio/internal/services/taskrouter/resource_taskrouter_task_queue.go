@@ -10,15 +10,16 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_queue"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_queues"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceTaskRouterTaskQueue() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceTaskRouterTaskQueueCreate,
-		Read:   resourceTaskRouterTaskQueueRead,
-		Update: resourceTaskRouterTaskQueueUpdate,
-		Delete: resourceTaskRouterTaskQueueDelete,
+		CreateContext: resourceTaskRouterTaskQueueCreate,
+		ReadContext:   resourceTaskRouterTaskQueueRead,
+		UpdateContext: resourceTaskRouterTaskQueueUpdate,
+		DeleteContext: resourceTaskRouterTaskQueueDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -112,10 +113,8 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 	}
 }
 
-func resourceTaskRouterTaskQueueCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterTaskQueueCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &task_queues.CreateTaskQueueInput{
 		FriendlyName:           d.Get("friendly_name").(string),
@@ -128,17 +127,15 @@ func resourceTaskRouterTaskQueueCreate(d *schema.ResourceData, meta interface{})
 
 	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueues.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create task queue: %s", err.Error())
+		return diag.Errorf("Failed to create task queue: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceTaskRouterTaskQueueRead(d, meta)
+	return resourceTaskRouterTaskQueueRead(ctx, d, meta)
 }
 
-func resourceTaskRouterTaskQueueRead(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterTaskQueueRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -146,7 +143,7 @@ func resourceTaskRouterTaskQueueRead(d *schema.ResourceData, meta interface{}) e
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read task queue: %s", err)
+		return diag.Errorf("Failed to read task queue: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -172,10 +169,8 @@ func resourceTaskRouterTaskQueueRead(d *schema.ResourceData, meta interface{}) e
 	return nil
 }
 
-func resourceTaskRouterTaskQueueUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterTaskQueueUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &task_queue.UpdateTaskQueueInput{
 		FriendlyName:           utils.OptionalString(d, "friendly_name"),
@@ -188,20 +183,18 @@ func resourceTaskRouterTaskQueueUpdate(d *schema.ResourceData, meta interface{})
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update task queue: %s", err.Error())
+		return diag.Errorf("Failed to update task queue: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceTaskRouterTaskQueueRead(d, meta)
+	return resourceTaskRouterTaskQueueRead(ctx, d, meta)
 }
 
-func resourceTaskRouterTaskQueueDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterTaskQueueDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete task queue: %s", err.Error())
+		return diag.Errorf("Failed to delete task queue: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

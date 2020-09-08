@@ -1,5 +1,8 @@
-TEST?=$$(go list ./...)
+TEST?=$$(go list ./... | grep -v 'vendor' | grep -v 'examples')
 PKG_NAME=twilio
+TEST_COUNT?=1
+ACCTEST_TIMEOUT?=60m
+ACCTEST_PARALLELISM?=1
 
 default: build
 
@@ -14,7 +17,9 @@ test: fmt generate
 	go test $(TESTARGS) -timeout=30s -parallel=4 $(TEST)
 
 testacc: fmt
-	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 10m
+	# terraform is currently creating paths which are too long, so creating a temp directory to get around this issue
+	mkdir -p temp
+	TF_ACC_TEMP_DIR="$(CURDIR)/temp" TF_ACC=1 go test $(TEST) -v -count $(TEST_COUNT) -parallel $(ACCTEST_PARALLELISM) $(TESTARGS) -timeout $(ACCTEST_TIMEOUT)
 
 fmt:
 	@echo "==> Fixing source code with goimports (uses gofmt under the hood)..."

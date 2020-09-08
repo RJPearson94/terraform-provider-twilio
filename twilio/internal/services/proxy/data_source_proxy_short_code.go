@@ -2,18 +2,18 @@ package proxy
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/proxy/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceProxyShortCode() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceProxyShortCodeRead,
+		ReadContext: dataSourceProxyShortCodeRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -120,19 +120,17 @@ func dataSourceProxyShortCode() *schema.Resource {
 	}
 }
 
-func dataSourceProxyShortCodeRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceProxyShortCodeRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	serviceSid := d.Get("service_sid").(string)
 	sid := d.Get("sid").(string)
 	getResponse, err := client.Service(serviceSid).ShortCode(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Short code with sid (%s) was not found for proxy service with sid (%s)", sid, serviceSid)
+			return diag.Errorf("Short code with sid (%s) was not found for proxy service with sid (%s)", sid, serviceSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read proxy short code resource: %s", err.Error())
+		return diag.Errorf("Failed to read proxy short code resource: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

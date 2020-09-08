@@ -2,16 +2,16 @@ package voice
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceVoiceQueues() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceVoiceQueuesRead,
+		ReadContext: dataSourceVoiceQueuesRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -62,10 +62,8 @@ func dataSourceVoiceQueues() *schema.Resource {
 	}
 }
 
-func dataSourceVoiceQueuesRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceVoiceQueuesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	accountSid := d.Get("account_sid").(string)
 	paginator := client.Account(accountSid).Queues.NewQueuesPaginator()
@@ -75,7 +73,7 @@ func dataSourceVoiceQueuesRead(d *schema.ResourceData, meta interface{}) error {
 	err := paginator.Error()
 	if err != nil {
 		// If the account sid is incorrect a 401 is returned, a this is a generic error this will not be handled here and an error will be returned
-		return fmt.Errorf("[ERROR] Failed to list queues: %s", err.Error())
+		return diag.Errorf("Failed to list queues: %s", err.Error())
 	}
 
 	d.SetId(accountSid)

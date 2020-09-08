@@ -2,18 +2,18 @@ package studio
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
 func dataSourceStudioFlow() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceStudioFlowRead,
+		ReadContext: dataSourceStudioFlowRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -72,18 +72,16 @@ func dataSourceStudioFlow() *schema.Resource {
 	}
 }
 
-func dataSourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceStudioFlowRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Studio
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	sid := d.Get("sid").(string)
 	getResponse, err := client.Flow(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Studio flow with sid (%s) was not found", sid)
+			return diag.Errorf("Studio flow with sid (%s) was not found", sid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read studio flow: %s", err.Error())
+		return diag.Errorf("Failed to read studio flow: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)
@@ -93,7 +91,7 @@ func dataSourceStudioFlowRead(d *schema.ResourceData, meta interface{}) error {
 
 	json, err := structure.FlattenJsonToString(getResponse.Definition)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Unable to flattern definition json to string")
+		return diag.Errorf("Unable to flattern definition json to string")
 	}
 	d.Set("definition", json)
 	d.Set("status", getResponse.Status)

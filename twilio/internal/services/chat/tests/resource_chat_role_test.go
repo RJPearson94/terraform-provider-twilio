@@ -9,9 +9,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var roleResourceName = "twilio_chat_role"
@@ -27,8 +27,7 @@ func TestAccTwilioChatRole_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioChatRoleDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -69,7 +68,7 @@ func TestAccTwilioChatRole_invalidType(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioChatRoleDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -94,7 +93,7 @@ func TestAccTwilioChatRole_update(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioChatRoleDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -151,7 +150,7 @@ func testAccCheckTwilioChatRoleDestroy(s *terraform.State) error {
 					return nil
 				}
 			}
-			return fmt.Errorf("Error occurred when retrieving role information %s", err)
+			return fmt.Errorf("Error occurred when retrieving role information %s", err.Error())
 		}
 	}
 
@@ -169,7 +168,7 @@ func testAccCheckTwilioChatRoleExists(name string) resource.TestCheckFunc {
 		}
 
 		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Role(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving role information %s", err)
+			return fmt.Errorf("Error occurred when retrieving role information %s", err.Error())
 		}
 
 		return nil

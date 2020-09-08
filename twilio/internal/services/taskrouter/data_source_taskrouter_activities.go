@@ -2,17 +2,17 @@ package taskrouter
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceTaskRouterActivities() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceTaskRouterActivitiesRead,
+		ReadContext: dataSourceTaskRouterActivitiesRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -63,10 +63,8 @@ func dataSourceTaskRouterActivities() *schema.Resource {
 	}
 }
 
-func dataSourceTaskRouterActivitiesRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceTaskRouterActivitiesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	workspaceSid := d.Get("workspace_sid").(string)
 	paginator := client.Workspace(workspaceSid).Activities.NewActivitiesPaginator()
@@ -76,9 +74,9 @@ func dataSourceTaskRouterActivitiesRead(d *schema.ResourceData, meta interface{}
 	err := paginator.Error()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] No activities were found for taskrouter workspace with sid (%s)", workspaceSid)
+			return diag.Errorf("No activities were found for taskrouter workspace with sid (%s)", workspaceSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read taskrouter activity: %s", err.Error())
+		return diag.Errorf("Failed to read taskrouter activity: %s", err.Error())
 	}
 
 	d.SetId(workspaceSid)

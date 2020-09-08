@@ -7,9 +7,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var taskQueueResourceName = "twilio_taskrouter_task_queue"
@@ -20,8 +20,7 @@ func TestAccTwilioTaskRouterTaskQueue_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioTaskRouterTaskQueueDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -46,12 +45,6 @@ func TestAccTwilioTaskRouterTaskQueue_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
-			{
-				ResourceName:      stateResourceName,
-				ImportState:       true,
-				ImportStateIdFunc: testAccTwilioTaskRouterTaskQueueImportStateIdFunc(stateResourceName),
-				ImportStateVerify: true,
-			},
 		},
 	})
 }
@@ -64,7 +57,7 @@ func TestAccTwilioTaskRouterTaskQueue_update(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioTaskRouterTaskQueueDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -127,7 +120,7 @@ func testAccCheckTwilioTaskRouterTaskQueueDestroy(s *terraform.State) error {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
-			return fmt.Errorf("Error occurred when retrieving task queue information %s", err)
+			return fmt.Errorf("Error occurred when retrieving task queue information %s", err.Error())
 		}
 	}
 
@@ -145,7 +138,7 @@ func testAccCheckTwilioTaskRouterTaskQueueExists(name string) resource.TestCheck
 		}
 
 		if _, err := client.Workspace(rs.Primary.Attributes["workspace_sid"]).TaskQueue(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving task queue information %s", err)
+			return fmt.Errorf("Error occurred when retrieving task queue information %s", err.Error())
 		}
 
 		return nil

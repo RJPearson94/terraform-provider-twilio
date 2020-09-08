@@ -8,9 +8,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var taskResourceName = "twilio_autopilot_task"
@@ -21,8 +21,7 @@ func TestAccTwilioAutopilotTask_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -58,7 +57,7 @@ func TestAccTwilioAutopilotTask_actions(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -88,7 +87,7 @@ func TestAccTwilioAutopilotTask_updateActions(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -136,7 +135,7 @@ func TestAccTwilioAutopilotTask_actionsURL(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -168,7 +167,7 @@ func TestAccTwilioAutopilotTask_updateActionsURL(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -216,7 +215,7 @@ func TestAccTwilioAutopilotTask_changeActionsToUseURL(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -264,7 +263,7 @@ func TestAccTwilioAutopilotTask_changeActionsURLToActionsJSON(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -311,7 +310,7 @@ func TestAccTwilioAutopilotTask_invalidActionURL(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -329,7 +328,7 @@ func TestAccTwilioAutopilotTask_update(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -382,7 +381,7 @@ func testAccCheckTwilioAutopilotTaskDestroy(s *terraform.State) error {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
-			return fmt.Errorf("Error occurred when retrieving task information %s", err)
+			return fmt.Errorf("Error occurred when retrieving task information %s", err.Error())
 		}
 	}
 
@@ -400,7 +399,7 @@ func testAccCheckTwilioAutopilotTaskExists(name string) resource.TestCheckFunc {
 		}
 
 		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).Task(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving task information %s", err)
+			return fmt.Errorf("Error occurred when retrieving task information %s", err.Error())
 		}
 
 		return nil

@@ -2,17 +2,17 @@ package chat
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceChatChannelMember() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceChatChannelMemberRead,
+		ReadContext: dataSourceChatChannelMemberRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -71,10 +71,8 @@ func dataSourceChatChannelMember() *schema.Resource {
 	}
 }
 
-func dataSourceChatChannelMemberRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceChatChannelMemberRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	serviceSid := d.Get("service_sid").(string)
 	channelSid := d.Get("channel_sid").(string)
@@ -84,10 +82,10 @@ func dataSourceChatChannelMemberRead(d *schema.ResourceData, meta interface{}) e
 		if twilioError, ok := err.(*sdkUtils.TwilioError); ok {
 			// currently programmable chat returns a 403 if the service instance does not exist
 			if (twilioError.Status == 403 && twilioError.Message == "Service instance not found") || twilioError.IsNotFoundError() {
-				return fmt.Errorf("[ERROR] Channel member with sid (%s) was not found for chat service with sid (%s) and channel with sid (%s)", sid, serviceSid, channelSid)
+				return diag.Errorf("Channel member with sid (%s) was not found for chat service with sid (%s) and channel with sid (%s)", sid, serviceSid, channelSid)
 			}
 		}
-		return fmt.Errorf("[ERROR] Failed to read chat channel member: %s", err)
+		return diag.Errorf("Failed to read chat channel member: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

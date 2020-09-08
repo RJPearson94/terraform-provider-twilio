@@ -2,17 +2,17 @@ package voice
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceVoiceQueue() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceVoiceQueueRead,
+		ReadContext: dataSourceVoiceQueueRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -55,20 +55,18 @@ func dataSourceVoiceQueue() *schema.Resource {
 	}
 }
 
-func dataSourceVoiceQueueRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceVoiceQueueRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	accountSid := d.Get("account_sid").(string)
 	sid := d.Get("sid").(string)
 	getResponse, err := client.Account(accountSid).Queue(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Queue with sid (%s) was not found in account (%s)", sid, accountSid)
+			return diag.Errorf("Queue with sid (%s) was not found in account (%s)", sid, accountSid)
 		}
 		// If the account sid is incorrect a 401 is returned, a this is a generic error this will not be handled here and an error will be returned
-		return fmt.Errorf("[ERROR] Failed to read queue: %s", err.Error())
+		return diag.Errorf("Failed to read queue: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

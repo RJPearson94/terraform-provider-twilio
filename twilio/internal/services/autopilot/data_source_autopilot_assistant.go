@@ -2,19 +2,19 @@ package autopilot
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
 func dataSourceAutopilotAssistant() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAutopilotAssistantRead,
+		ReadContext: dataSourceAutopilotAssistantRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -88,18 +88,16 @@ func dataSourceAutopilotAssistant() *schema.Resource {
 	}
 }
 
-func dataSourceAutopilotAssistantRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceAutopilotAssistantRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	sid := d.Get("sid").(string)
 	getResponse, err := client.Assistant(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Assistant with sid (%s) was not found", sid)
+			return diag.Errorf("Assistant with sid (%s) was not found", sid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read autopilot assistant: %s", err.Error())
+		return diag.Errorf("Failed to read autopilot assistant: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)
@@ -127,21 +125,21 @@ func dataSourceAutopilotAssistantRead(d *schema.ResourceData, meta interface{}) 
 
 	getDefaultsResponse, err := client.Assistant(d.Id()).Defaults().FetchWithContext(ctx)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to read autopilot assistant defaults: %s", err.Error())
+		return diag.Errorf("Failed to read autopilot assistant defaults: %s", err.Error())
 	}
 	defaultsJSON, err := structure.FlattenJsonToString(getDefaultsResponse.Data)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Unable to flatten defaults json to string: %s", err.Error())
+		return diag.Errorf("Unable to flatten defaults json to string: %s", err.Error())
 	}
 	d.Set("defaults", defaultsJSON)
 
 	getStyleSheetResponse, err := client.Assistant(d.Id()).StyleSheet().FetchWithContext(ctx)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to read autopilot assistant stylesheet: %s", err.Error())
+		return diag.Errorf("Failed to read autopilot assistant stylesheet: %s", err.Error())
 	}
 	styleSheetJSON, err := structure.FlattenJsonToString(getStyleSheetResponse.Data)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Unable to flatten stylesheet json to string: %s", err.Error())
+		return diag.Errorf("Unable to flatten stylesheet json to string: %s", err.Error())
 	}
 	d.Set("stylesheet", styleSheetJSON)
 

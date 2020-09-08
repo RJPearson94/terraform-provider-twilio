@@ -10,15 +10,16 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/services"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceServerlessService() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceServerlessServiceCreate,
-		Read:   resourceServerlessServiceRead,
-		Update: resourceServerlessServiceUpdate,
-		Delete: resourceServerlessServiceDelete,
+		CreateContext: resourceServerlessServiceCreate,
+		ReadContext:   resourceServerlessServiceRead,
+		UpdateContext: resourceServerlessServiceUpdate,
+		DeleteContext: resourceServerlessServiceDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -87,10 +88,8 @@ func resourceServerlessService() *schema.Resource {
 	}
 }
 
-func resourceServerlessServiceCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessServiceCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &services.CreateServiceInput{
 		UniqueName:         d.Get("unique_name").(string),
@@ -101,17 +100,15 @@ func resourceServerlessServiceCreate(d *schema.ResourceData, meta interface{}) e
 
 	createResult, err := client.Services.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless service: %s", err.Error())
+		return diag.Errorf("Failed to create serverless service: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceServerlessServiceRead(d, meta)
+	return resourceServerlessServiceRead(ctx, d, meta)
 }
 
-func resourceServerlessServiceRead(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessServiceRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -119,7 +116,7 @@ func resourceServerlessServiceRead(d *schema.ResourceData, meta interface{}) err
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless service: %s", err.Error())
+		return diag.Errorf("Failed to read serverless service: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -139,10 +136,8 @@ func resourceServerlessServiceRead(d *schema.ResourceData, meta interface{}) err
 	return nil
 }
 
-func resourceServerlessServiceUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessServiceUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &service.UpdateServiceInput{
 		FriendlyName:       utils.OptionalString(d, "friendly_name"),
@@ -152,20 +147,18 @@ func resourceServerlessServiceUpdate(d *schema.ResourceData, meta interface{}) e
 
 	updateResp, err := client.Service(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update serverless service: %s", err.Error())
+		return diag.Errorf("Failed to update serverless service: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceServerlessServiceRead(d, meta)
+	return resourceServerlessServiceRead(ctx, d, meta)
 }
 
-func resourceServerlessServiceDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessServiceDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete serverless service: %s", err.Error())
+		return diag.Errorf("Failed to delete serverless service: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

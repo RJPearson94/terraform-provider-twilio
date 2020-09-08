@@ -2,17 +2,17 @@ package messaging
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceMessagingAlphaSender() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMessagingAlphaSenderRead,
+		ReadContext: dataSourceMessagingAlphaSenderRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -58,19 +58,17 @@ func dataSourceMessagingAlphaSender() *schema.Resource {
 	}
 }
 
-func dataSourceMessagingAlphaSenderRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceMessagingAlphaSenderRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	serviceSid := d.Get("service_sid").(string)
 	sid := d.Get("sid").(string)
 	getResponse, err := client.Service(serviceSid).AlphaSender(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Alpha sender with sid (%s) was not found for messaging service with sid (%s)", sid, serviceSid)
+			return diag.Errorf("Alpha sender with sid (%s) was not found for messaging service with sid (%s)", sid, serviceSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read messaging alpha sender: %s", err)
+		return diag.Errorf("Failed to read messaging alpha sender: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

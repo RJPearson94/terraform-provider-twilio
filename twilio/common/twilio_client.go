@@ -1,8 +1,6 @@
 package common
 
 import (
-	"context"
-
 	api "github.com/RJPearson94/twilio-sdk-go/service/api/v2010"
 	autopilot "github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1"
 	chat "github.com/RJPearson94/twilio-sdk-go/service/chat/v2"
@@ -17,8 +15,6 @@ import (
 type TwilioClient struct {
 	AccountSid       string
 	TerraformVersion string
-
-	StopContext context.Context
 
 	API        *api.V2010
 	Autopilot  *autopilot.Autopilot

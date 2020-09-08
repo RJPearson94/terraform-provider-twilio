@@ -2,17 +2,17 @@ package autopilot
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceAutopilotTaskSample() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAutopilotTaskSampleRead,
+		ReadContext: dataSourceAutopilotTaskSampleRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -63,10 +63,8 @@ func dataSourceAutopilotTaskSample() *schema.Resource {
 	}
 }
 
-func dataSourceAutopilotTaskSampleRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceAutopilotTaskSampleRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	assistantSid := d.Get("assistant_sid").(string)
 	taskSid := d.Get("task_sid").(string)
@@ -75,9 +73,9 @@ func dataSourceAutopilotTaskSampleRead(d *schema.ResourceData, meta interface{})
 
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Task sample with sid (%s) was not found for assistant with sid (%s) and task with sid (%s)", sid, assistantSid, taskSid)
+			return diag.Errorf("Task sample with sid (%s) was not found for assistant with sid (%s) and task with sid (%s)", sid, assistantSid, taskSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read autopilot task sample: %s", err.Error())
+		return diag.Errorf("Failed to read autopilot task sample: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

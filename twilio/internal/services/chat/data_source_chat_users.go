@@ -2,17 +2,17 @@ package chat
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceChatUsers() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceChatUsersRead,
+		ReadContext: dataSourceChatUsersRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -83,10 +83,8 @@ func dataSourceChatUsers() *schema.Resource {
 	}
 }
 
-func dataSourceChatUsersRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceChatUsersRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	serviceSid := d.Get("service_sid").(string)
 	paginator := client.Service(serviceSid).Users.NewUsersPaginator()
@@ -98,10 +96,10 @@ func dataSourceChatUsersRead(d *schema.ResourceData, meta interface{}) error {
 		if twilioError, ok := err.(*sdkUtils.TwilioError); ok {
 			// currently programmable chat returns a 403 if the service instance does not exist
 			if (twilioError.Status == 403 && twilioError.Message == "Service instance not found") || twilioError.IsNotFoundError() {
-				return fmt.Errorf("[ERROR] No users were found for chat service with sid (%s)", serviceSid)
+				return diag.Errorf("No users were found for chat service with sid (%s)", serviceSid)
 			}
 		}
-		return fmt.Errorf("[ERROR] Failed to list chat users: %s", err)
+		return diag.Errorf("Failed to list chat users: %s", err.Error())
 	}
 
 	d.SetId(serviceSid)

@@ -7,9 +7,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var variableResourceName = "twilio_serverless_variable"
@@ -22,8 +22,7 @@ func TestAccTwilioServerlessVariable_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioServerlessVariableDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -62,7 +61,7 @@ func TestAccTwilioServerlessVariableKey_update(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioServerlessServiceDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -111,7 +110,7 @@ func TestAccTwilioServerlessVariableValue_update(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioServerlessServiceDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -162,7 +161,7 @@ func testAccCheckTwilioServerlessVariableDestroy(s *terraform.State) error {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
-			return fmt.Errorf("Error occurred when retrieving variable information %s", err)
+			return fmt.Errorf("Error occurred when retrieving variable information %s", err.Error())
 		}
 	}
 
@@ -180,7 +179,7 @@ func testAccCheckTwilioServerlessVariableExists(name string) resource.TestCheckF
 		}
 
 		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Environment(rs.Primary.Attributes["environment_sid"]).Variable(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving variable information %s", err)
+			return fmt.Errorf("Error occurred when retrieving variable information %s", err.Error())
 		}
 
 		return nil

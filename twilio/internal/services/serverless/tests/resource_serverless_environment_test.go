@@ -7,9 +7,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var environmentResourceName = "twilio_serverless_environment"
@@ -20,8 +20,7 @@ func TestAccTwilioServerlessEnvironment_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioServerlessEnvironmentDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -62,7 +61,7 @@ func testAccCheckTwilioServerlessEnvironmentDestroy(s *terraform.State) error {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
-			return fmt.Errorf("Error occurred when retrieving environment information %s", err)
+			return fmt.Errorf("Error occurred when retrieving environment information %s", err.Error())
 		}
 	}
 
@@ -80,7 +79,7 @@ func testAccCheckTwilioServerlessEnvironmentExists(name string) resource.TestChe
 		}
 
 		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Environment(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving environment information %s", err)
+			return fmt.Errorf("Error occurred when retrieving environment information %s", err.Error())
 		}
 
 		return nil

@@ -6,9 +6,10 @@ import (
 )
 
 func PreCheck(t *testing.T) {
+	InitialiseProviders()
+
 	variables := []string{
 		"TWILIO_ACCOUNT_SID",
-		"TWILIO_AUTH_TOKEN",
 		"TWILIO_PHONE_NUMBER_SID",
 		"TWILIO_FLEX_CHANNEL_SERVICE_SID",
 		"TWILIO_CUSTOMER_NAME",

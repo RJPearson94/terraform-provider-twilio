@@ -2,17 +2,17 @@ package serverless
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceServerlessVariables() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceServerlessVariablesRead,
+		ReadContext: dataSourceServerlessVariablesRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -67,10 +67,8 @@ func dataSourceServerlessVariables() *schema.Resource {
 	}
 }
 
-func dataSourceServerlessVariablesRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceServerlessVariablesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	serviceSid := d.Get("service_sid").(string)
 	environmentSid := d.Get("environment_sid").(string)
@@ -81,9 +79,9 @@ func dataSourceServerlessVariablesRead(d *schema.ResourceData, meta interface{})
 	err := paginator.Error()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] No variables were found for serverless service with sid (%s) and environment with sid (%s)", serviceSid, environmentSid)
+			return diag.Errorf("No variables were found for serverless service with sid (%s) and environment with sid (%s)", serviceSid, environmentSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless variable: %s", err.Error())
+		return diag.Errorf("Failed to read serverless variable: %s", err.Error())
 	}
 
 	d.SetId(serviceSid + "/" + environmentSid)

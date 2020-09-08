@@ -2,18 +2,18 @@ package proxy
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service/phone_numbers"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceProxyPhoneNumbers() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceProxyPhoneNumbersRead,
+		ReadContext: dataSourceProxyPhoneNumbersRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -136,10 +136,8 @@ func dataSourceProxyPhoneNumbers() *schema.Resource {
 	}
 }
 
-func dataSourceProxyPhoneNumbersRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceProxyPhoneNumbersRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	serviceSid := d.Get("service_sid").(string)
 	paginator := client.Service(serviceSid).PhoneNumbers.NewPhoneNumbersPaginator()
@@ -149,9 +147,9 @@ func dataSourceProxyPhoneNumbersRead(d *schema.ResourceData, meta interface{}) e
 	err := paginator.Error()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] No phone numbers were found for proxy service with sid (%s)", serviceSid)
+			return diag.Errorf("No phone numbers were found for proxy service with sid (%s)", serviceSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to list proxy phone numbers resource: %s", err.Error())
+		return diag.Errorf("Failed to list proxy phone numbers resource: %s", err.Error())
 	}
 
 	d.SetId(serviceSid)

@@ -17,18 +17,19 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/asset/versions"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/assets"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"github.com/mitchellh/go-homedir"
 )
 
 func resourceServerlessAsset() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceServerlessAssetCreate,
-		Read:   resourceServerlessAssetRead,
-		Update: resourceServerlessAssetUpdate,
-		Delete: resourceServerlessAssetDelete,
+		CreateContext: resourceServerlessAssetCreate,
+		ReadContext:   resourceServerlessAssetRead,
+		UpdateContext: resourceServerlessAssetUpdate,
+		DeleteContext: resourceServerlessAssetDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -128,7 +129,7 @@ func resourceServerlessAsset() *schema.Resource {
 		},
 
 		CustomizeDiff: customdiff.All(
-			customdiff.ComputedIf("latest_version_sid", func(d *schema.ResourceDiff, meta interface{}) bool {
+			customdiff.ComputedIf("latest_version_sid", func(_ context.Context, d *schema.ResourceDiff, meta interface{}) bool {
 				for _, key := range []string{"source", "source_hash", "content", "content_file_name", "content_type", "path", "visibility"} {
 					if d.HasChange(key) {
 						return true
@@ -140,10 +141,8 @@ func resourceServerlessAsset() *schema.Resource {
 	}
 }
 
-func resourceServerlessAssetCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessAssetCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &assets.CreateAssetInput{
 		FriendlyName: d.Get("friendly_name").(string),
@@ -151,7 +150,7 @@ func resourceServerlessAssetCreate(d *schema.ResourceData, meta interface{}) err
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Assets.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless asset: %s", err.Error())
+		return diag.Errorf("Failed to create serverless asset: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
@@ -160,13 +159,11 @@ func resourceServerlessAssetCreate(d *schema.ResourceData, meta interface{}) err
 		return err
 	}
 
-	return resourceServerlessAssetRead(d, meta)
+	return resourceServerlessAssetRead(ctx, d, meta)
 }
 
-func resourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessAssetRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	assetClient := client.Service(d.Get("service_sid").(string)).Asset(d.Id())
 
@@ -176,7 +173,7 @@ func resourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) error
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless asset: %s", err.Error())
+		return diag.Errorf("Failed to read serverless asset: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -199,7 +196,7 @@ func resourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) error
 	versionsPaginator.Next()
 
 	if versionsPaginator.Error() != nil {
-		return fmt.Errorf("[ERROR] Failed to read serverless asset versions: %s", versionsPaginator.Error().Error())
+		return diag.Errorf("Failed to read serverless asset versions: %s", versionsPaginator.Error().Error())
 	}
 
 	if len(versionsPaginator.Versions) > 0 {
@@ -215,10 +212,8 @@ func resourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) error
 	return nil
 }
 
-func resourceServerlessAssetUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessAssetUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	if d.HasChange("friendly_name") {
 		updateInput := &asset.UpdateAssetInput{
@@ -227,7 +222,7 @@ func resourceServerlessAssetUpdate(d *schema.ResourceData, meta interface{}) err
 
 		updateResp, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).UpdateWithContext(ctx, updateInput)
 		if err != nil {
-			return fmt.Errorf("Failed to update serverless asset: %s", err.Error())
+			return diag.Errorf("Failed to update serverless asset: %s", err.Error())
 		}
 
 		d.SetId(updateResp.Sid)
@@ -239,22 +234,20 @@ func resourceServerlessAssetUpdate(d *schema.ResourceData, meta interface{}) err
 		}
 	}
 
-	return resourceServerlessAssetRead(d, meta)
+	return resourceServerlessAssetRead(ctx, d, meta)
 }
 
-func resourceServerlessAssetDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessAssetDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete serverless asset: %s", err.Error())
+		return diag.Errorf("Failed to delete serverless asset: %s", err.Error())
 	}
 	d.SetId("")
 	return nil
 }
 
-func createAssetVersion(ctx context.Context, d *schema.ResourceData, client *serverless.Serverless) error {
+func createAssetVersion(ctx context.Context, d *schema.ResourceData, client *serverless.Serverless) diag.Diagnostics {
 	var body io.ReadSeeker
 	var fileName string
 	var contentType = d.Get("content_type").(string)
@@ -267,11 +260,11 @@ func createAssetVersion(ctx context.Context, d *schema.ResourceData, client *ser
 	if value, ok := d.GetOk("source"); ok {
 		path, err := homedir.Expand(value.(string))
 		if err != nil {
-			return fmt.Errorf("[ERROR] Error expanding homedir: %s", err)
+			return diag.Errorf("Error expanding homedir: %s", err.Error())
 		}
 		file, err := os.Open(path)
 		if err != nil {
-			return fmt.Errorf("Error opening source: %s", err)
+			return diag.Errorf("Error opening source: %s", err.Error())
 		}
 
 		body = file
@@ -280,13 +273,13 @@ func createAssetVersion(ctx context.Context, d *schema.ResourceData, client *ser
 		defer func() {
 			err := file.Close()
 			if err != nil {
-				log.Printf("[WARN] Error closing source: %s", err)
+				log.Printf("[WARN] Error closing source: %s", err.Error())
 			}
 		}()
 	}
 
 	if body == nil || fileName == "" || contentType == "" {
-		return fmt.Errorf("[ERROR] body (%v), file name (%v) and content type (%v) are all required", body, fileName, contentType)
+		return diag.Errorf("body (%v), file name (%v) and content type (%v) are all required", body, fileName, contentType)
 	}
 
 	createInput := &versions.CreateVersionInput{
@@ -300,7 +293,7 @@ func createAssetVersion(ctx context.Context, d *schema.ResourceData, client *ser
 	}
 
 	if _, err := client.Service(d.Get("service_sid").(string)).Asset(d.Id()).Versions.CreateWithContext(ctx, createInput); err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless asset version: %s", err.Error())
+		return diag.Errorf("Failed to create serverless asset version: %s", err.Error())
 	}
 
 	return nil

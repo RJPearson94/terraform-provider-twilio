@@ -1,8 +1,6 @@
 package twilio
 
 import (
-	"context"
-
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	api "github.com/RJPearson94/twilio-sdk-go/service/api/v2010"
 	autopilot "github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1"
@@ -14,6 +12,7 @@ import (
 	studio "github.com/RJPearson94/twilio-sdk-go/service/studio/v2"
 	taskrouter "github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1"
 	"github.com/RJPearson94/twilio-sdk-go/session/credentials"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 )
 
 type Config struct {
@@ -24,18 +23,16 @@ type Config struct {
 	terraformVersion string
 }
 
-func (config *Config) Client(ctx context.Context) (interface{}, error) {
+func (config *Config) Client() (interface{}, diag.Diagnostics) {
 
 	creds, err := credentials.New(getCredentials(config))
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 
 	client := &common.TwilioClient{
 		AccountSid:       config.AccountSid,
 		TerraformVersion: config.terraformVersion,
-
-		StopContext: ctx,
 
 		API:        api.NewWithCredentials(creds),
 		Autopilot:  autopilot.NewWithCredentials(creds),

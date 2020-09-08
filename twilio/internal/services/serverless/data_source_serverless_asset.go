@@ -2,7 +2,6 @@ package serverless
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -10,12 +9,13 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/asset/versions"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceServerlessAsset() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceServerlessAssetRead,
+		ReadContext: dataSourceServerlessAssetRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -66,10 +66,8 @@ func dataSourceServerlessAsset() *schema.Resource {
 	}
 }
 
-func dataSourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceServerlessAssetRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	serviceSid := d.Get("service_sid").(string)
 	sid := d.Get("sid").(string)
@@ -78,9 +76,9 @@ func dataSourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) err
 	getResponse, err := assetClient.FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Asset with sid (%s) was not found for serverless service with sid (%s)", sid, serviceSid)
+			return diag.Errorf("Asset with sid (%s) was not found for serverless service with sid (%s)", sid, serviceSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless asset: %s", err.Error())
+		return diag.Errorf("Failed to read serverless asset: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)
@@ -104,7 +102,7 @@ func dataSourceServerlessAssetRead(d *schema.ResourceData, meta interface{}) err
 	versionsPaginator.Next()
 
 	if versionsPaginator.Error() != nil {
-		return fmt.Errorf("[ERROR] Failed to read serverless asset versions: %s", versionsPaginator.Error().Error())
+		return diag.Errorf("Failed to read serverless asset versions: %s", versionsPaginator.Error().Error())
 	}
 
 	if len(versionsPaginator.Versions) > 0 {

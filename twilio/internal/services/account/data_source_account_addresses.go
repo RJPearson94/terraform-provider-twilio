@@ -2,16 +2,16 @@ package account
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceAccountAddresses() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAccountAddressesRead,
+		ReadContext: dataSourceAccountAddressesRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -90,10 +90,8 @@ func dataSourceAccountAddresses() *schema.Resource {
 	}
 }
 
-func dataSourceAccountAddressesRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceAccountAddressesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	accountSid := d.Get("account_sid").(string)
 	paginator := client.Account(accountSid).Addresses.NewAddressesPaginator()
@@ -103,7 +101,7 @@ func dataSourceAccountAddressesRead(d *schema.ResourceData, meta interface{}) er
 	err := paginator.Error()
 	if err != nil {
 		// If the account sid is incorrect a 401 is returned, a this is a generic error this will not be handled here and an error will be returned
-		return fmt.Errorf("[ERROR] Failed to list addresses: %s", err.Error())
+		return diag.Errorf("Failed to list addresses: %s", err.Error())
 	}
 
 	d.SetId(accountSid)

@@ -7,9 +7,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var buildResourceName = "twilio_serverless_build"
@@ -21,8 +21,7 @@ func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioServerlessBuildDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -44,10 +43,11 @@ func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      stateResourceName,
-				ImportState:       true,
-				ImportStateIdFunc: testAccTwilioServerlessBuildImportStateIdFunc(stateResourceName),
-				ImportStateVerify: true,
+				ResourceName:            stateResourceName,
+				ImportState:             true,
+				ImportStateIdFunc:       testAccTwilioServerlessBuildImportStateIdFunc(stateResourceName),
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"polling"},
 			},
 		},
 	})
@@ -65,7 +65,7 @@ func testAccCheckTwilioServerlessBuildDestroy(s *terraform.State) error {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
-			return fmt.Errorf("Error occurred when retrieving build information %s", err)
+			return fmt.Errorf("Error occurred when retrieving build information %s", err.Error())
 		}
 	}
 
@@ -83,7 +83,7 @@ func testAccCheckTwilioServerlessBuildExists(name string) resource.TestCheckFunc
 		}
 
 		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Build(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving build information %s", err)
+			return fmt.Errorf("Error occurred when retrieving build information %s", err.Error())
 		}
 
 		return nil
@@ -142,6 +142,9 @@ resource "twilio_serverless_build" "build" {
   }
   dependencies = {
     "twilio" : "%s"
+  }
+  polling {
+    enabled = true
   }
 }
 `, uniqueName, twilioVersion)

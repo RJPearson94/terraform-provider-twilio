@@ -2,18 +2,18 @@ package flex
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/flex/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceFlexFlow() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceFlexFlowRead,
+		ReadContext: dataSourceFlexFlowRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -120,18 +120,16 @@ func dataSourceFlexFlow() *schema.Resource {
 	}
 }
 
-func dataSourceFlexFlowRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceFlexFlowRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Flex
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	sid := d.Get("sid").(string)
 	getResponse, err := client.FlexFlow(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Flex flow with sid (%s) was not found", sid)
+			return diag.Errorf("Flex flow with sid (%s) was not found", sid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read flex channel: %s", err.Error())
+		return diag.Errorf("Failed to read flex channel: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

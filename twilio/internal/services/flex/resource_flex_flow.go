@@ -11,16 +11,17 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/flex/v1/flex_flow"
 	"github.com/RJPearson94/twilio-sdk-go/service/flex/v1/flex_flows"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceFlexFlow() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceFlexFlowCreate,
-		Read:   resourceFlexFlowRead,
-		Update: resourceFlexFlowUpdate,
-		Delete: resourceFlexFlowDelete,
+		CreateContext: resourceFlexFlowCreate,
+		ReadContext:   resourceFlexFlowRead,
+		UpdateContext: resourceFlexFlowUpdate,
+		DeleteContext: resourceFlexFlowDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -166,10 +167,8 @@ func resourceFlexFlow() *schema.Resource {
 	}
 }
 
-func resourceFlexFlowCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceFlexFlowCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Flex
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &flex_flows.CreateFlexFlowInput{
 		ChannelType:     d.Get("channel_type").(string),
@@ -196,17 +195,15 @@ func resourceFlexFlowCreate(d *schema.ResourceData, meta interface{}) error {
 
 	createResult, err := client.FlexFlows.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create flex flow: %s", err.Error())
+		return diag.Errorf("Failed to create flex flow: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceFlexFlowRead(d, meta)
+	return resourceFlexFlowRead(ctx, d, meta)
 }
 
-func resourceFlexFlowRead(d *schema.ResourceData, meta interface{}) error {
+func resourceFlexFlowRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Flex
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.FlexFlow(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -214,7 +211,7 @@ func resourceFlexFlowRead(d *schema.ResourceData, meta interface{}) error {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read flex channel: %s", err.Error())
+		return diag.Errorf("Failed to read flex channel: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -239,10 +236,8 @@ func resourceFlexFlowRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceFlexFlowUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceFlexFlowUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Flex
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &flex_flow.UpdateFlexFlowInput{
 		ChannelType:     utils.OptionalString(d, "channel_type"),
@@ -269,20 +264,18 @@ func resourceFlexFlowUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	createResult, err := client.FlexFlow(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to update flex flow: %s", err.Error())
+		return diag.Errorf("Failed to update flex flow: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceFlexFlowRead(d, meta)
+	return resourceFlexFlowRead(ctx, d, meta)
 }
 
-func resourceFlexFlowDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceFlexFlowDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Flex
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.FlexFlow(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete flex flow: %s", err.Error())
+		return diag.Errorf("Failed to delete flex flow: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

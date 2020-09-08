@@ -2,18 +2,18 @@ package proxy
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service/short_codes"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceProxyShortCodes() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceProxyShortCodesRead,
+		ReadContext: dataSourceProxyShortCodesRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -128,10 +128,8 @@ func dataSourceProxyShortCodes() *schema.Resource {
 	}
 }
 
-func dataSourceProxyShortCodesRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceProxyShortCodesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	serviceSid := d.Get("service_sid").(string)
 	paginator := client.Service(serviceSid).ShortCodes.NewShortCodesPaginator()
@@ -141,9 +139,9 @@ func dataSourceProxyShortCodesRead(d *schema.ResourceData, meta interface{}) err
 	err := paginator.Error()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] No short codes were found for proxy service with sid (%s)", serviceSid)
+			return diag.Errorf("No short codes were found for proxy service with sid (%s)", serviceSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to list proxy short codes resource: %s", err.Error())
+		return diag.Errorf("Failed to list proxy short codes resource: %s", err.Error())
 	}
 
 	d.SetId(serviceSid)

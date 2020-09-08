@@ -11,15 +11,16 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service/phone_number"
 	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service/phone_numbers"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceProxyPhoneNumber() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceProxyPhoneNumberCreate,
-		Read:   resourceProxyPhoneNumberRead,
-		Update: resourceProxyPhoneNumberUpdate,
-		Delete: resourceProxyPhoneNumberDelete,
+		CreateContext: resourceProxyPhoneNumberCreate,
+		ReadContext:   resourceProxyPhoneNumberRead,
+		UpdateContext: resourceProxyPhoneNumberUpdate,
+		DeleteContext: resourceProxyPhoneNumberDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -161,10 +162,8 @@ func resourceProxyPhoneNumber() *schema.Resource {
 	}
 }
 
-func resourceProxyPhoneNumberCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyPhoneNumberCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &phone_numbers.CreatePhoneNumberInput{
 		Sid:         utils.OptionalString(d, "sid"),
@@ -174,17 +173,15 @@ func resourceProxyPhoneNumberCreate(d *schema.ResourceData, meta interface{}) er
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).PhoneNumbers.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create proxy phone number resource: %s", err.Error())
+		return diag.Errorf("Failed to create proxy phone number resource: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceProxyPhoneNumberRead(d, meta)
+	return resourceProxyPhoneNumberRead(ctx, d, meta)
 }
 
-func resourceProxyPhoneNumberRead(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyPhoneNumberRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -192,7 +189,7 @@ func resourceProxyPhoneNumberRead(d *schema.ResourceData, meta interface{}) erro
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read proxy phone number resource: %s", err.Error())
+		return diag.Errorf("Failed to read proxy phone number resource: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -215,10 +212,8 @@ func resourceProxyPhoneNumberRead(d *schema.ResourceData, meta interface{}) erro
 	return nil
 }
 
-func resourceProxyPhoneNumberUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyPhoneNumberUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &phone_number.UpdatePhoneNumberInput{
 		IsReserved: utils.OptionalBool(d, "is_reserved"),
@@ -226,20 +221,18 @@ func resourceProxyPhoneNumberUpdate(d *schema.ResourceData, meta interface{}) er
 
 	updateResp, err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update proxy phone number resource: %s", err.Error())
+		return diag.Errorf("Failed to update proxy phone number resource: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceProxyPhoneNumberRead(d, meta)
+	return resourceProxyPhoneNumberRead(ctx, d, meta)
 }
 
-func resourceProxyPhoneNumberDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyPhoneNumberDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete proxy phone number resource: %s", err.Error())
+		return diag.Errorf("Failed to delete proxy phone number resource: %s", err.Error())
 	}
 	d.SetId("")
 	return nil
