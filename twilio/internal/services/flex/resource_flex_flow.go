@@ -46,15 +46,15 @@ func resourceFlexFlow() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"channel_type": {
+			"channel_type": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 				ValidateFunc: validation.StringInSlice([]string{
@@ -66,73 +66,73 @@ func resourceFlexFlow() *schema.Resource {
 					"custom",
 				}, false),
 			},
-			"chat_service_sid": {
+			"chat_service_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"contact_identity": {
+			"contact_identity": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"enabled": {
+			"enabled": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
-			"friendly_name": {
+			"friendly_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"integration": {
+			"integration": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"channel": {
+						"channel": &schema.Schema{
 							Type:     schema.TypeString,
 							Optional: true,
 						},
-						"creation_on_message": {
+						"creation_on_message": &schema.Schema{
 							Type:     schema.TypeBool,
 							Optional: true,
 						},
-						"flow_sid": {
+						"flow_sid": &schema.Schema{
 							Type:     schema.TypeString,
 							Optional: true,
 						},
-						"priority": {
+						"priority": &schema.Schema{
 							Type:     schema.TypeInt,
 							Optional: true,
 							Computed: true,
 						},
-						"retry_count": {
+						"retry_count": &schema.Schema{
 							Type:     schema.TypeInt,
 							Optional: true,
 							Computed: true,
 						},
-						"timeout": {
+						"timeout": &schema.Schema{
 							Type:     schema.TypeInt,
 							Optional: true,
 							Computed: true,
 						},
-						"url": {
+						"url": &schema.Schema{
 							Type:         schema.TypeString,
 							Optional:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
-						"workflow_sid": {
+						"workflow_sid": &schema.Schema{
 							Type:     schema.TypeString,
 							Optional: true,
 						},
-						"workspace_sid": {
+						"workspace_sid": &schema.Schema{
 							Type:     schema.TypeString,
 							Optional: true,
 						},
 					},
 				},
 			},
-			"integration_type": {
+			"integration_type": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
@@ -142,23 +142,23 @@ func resourceFlexFlow() *schema.Resource {
 					"task",
 				}, false),
 			},
-			"janitor_enabled": {
+			"janitor_enabled": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"long_lived": {
+			"long_lived": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

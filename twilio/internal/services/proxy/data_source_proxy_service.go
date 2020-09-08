@@ -19,59 +19,59 @@ func dataSourceProxyService() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"chat_instance_sid": {
+			"chat_instance_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"chat_service_sid": {
+			"chat_service_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"unique_name": {
+			"unique_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"default_ttl": {
+			"default_ttl": &schema.Schema{
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"callback_url": {
+			"callback_url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"geo_match_level": {
+			"geo_match_level": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"number_selection_behavior": {
+			"number_selection_behavior": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"intercept_callback_url": {
+			"intercept_callback_url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"out_of_session_callback_url": {
+			"out_of_session_callback_url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

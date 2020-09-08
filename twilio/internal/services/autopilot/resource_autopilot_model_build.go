@@ -46,56 +46,56 @@ func resourceAutopilotModelBuild() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"assistant_sid": {
+			"assistant_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"unique_name": {
+			"unique_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"status_callback": {
+			"status_callback": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				ForceNew: true,
 			},
-			"build_duration": {
+			"build_duration": &schema.Schema{
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"status": {
+			"status": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"error_code": {
+			"error_code": &schema.Schema{
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"polling": {
+			"polling": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"enabled": {
+						"enabled": &schema.Schema{
 							Type:     schema.TypeBool,
 							Required: true,
 						},
-						"max_attempts": {
+						"max_attempts": &schema.Schema{
 							Type:     schema.TypeInt,
 							Optional: true,
 							Default:  24,
 						},
-						"delay_in_ms": {
+						"delay_in_ms": &schema.Schema{
 							Type:     schema.TypeInt,
 							Optional: true,
 							Default:  5000,
@@ -103,15 +103,15 @@ func resourceAutopilotModelBuild() *schema.Resource {
 					},
 				},
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

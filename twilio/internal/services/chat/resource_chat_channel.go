@@ -47,33 +47,33 @@ func resourceChatChannel() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"service_sid": {
+			"service_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"friendly_name": {
+			"friendly_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"unique_name": {
+			"unique_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"attributes": {
+			"attributes": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"type": {
+			"type": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
@@ -83,27 +83,27 @@ func resourceChatChannel() *schema.Resource {
 				}, false),
 				ForceNew: true,
 			},
-			"created_by": {
+			"created_by": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"members_count": {
+			"members_count": &schema.Schema{
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"messages_count": {
+			"messages_count": &schema.Schema{
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

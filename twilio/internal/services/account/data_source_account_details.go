@@ -19,36 +19,36 @@ func dataSourceAccountDetails() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"owner_account_sid": {
+			"owner_account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": {
+			"friendly_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"auth_token": {
+			"auth_token": &schema.Schema{
 				Type:      schema.TypeString,
 				Computed:  true,
 				Sensitive: true,
 			},
-			"status": {
+			"status": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"type": {
+			"type": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

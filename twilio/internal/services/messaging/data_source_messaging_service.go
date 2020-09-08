@@ -19,71 +19,71 @@ func dataSourceMessagingService() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": {
+			"friendly_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"area_code_geomatch": {
+			"area_code_geomatch": &schema.Schema{
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"fallback_method": {
+			"fallback_method": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"fallback_to_long_code": {
+			"fallback_to_long_code": &schema.Schema{
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"fallback_url": {
+			"fallback_url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"inbound_method": {
+			"inbound_method": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"inbound_request_url": {
+			"inbound_request_url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"mms_converter": {
+			"mms_converter": &schema.Schema{
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"smart_encoding": {
+			"smart_encoding": &schema.Schema{
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"status_callback_url": {
+			"status_callback_url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"sticky_sender": {
+			"sticky_sender": &schema.Schema{
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"validity_period": {
+			"validity_period": &schema.Schema{
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

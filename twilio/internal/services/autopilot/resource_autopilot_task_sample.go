@@ -46,45 +46,45 @@ func resourceAutopilotTaskSample() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"assistant_sid": {
+			"assistant_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"task_sid": {
+			"task_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"language": {
+			"language": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"tagged_text": {
+			"tagged_text": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"source_channel": {
+			"source_channel": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

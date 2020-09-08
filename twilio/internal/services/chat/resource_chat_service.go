@@ -47,43 +47,43 @@ func resourceChatService() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": {
+			"friendly_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"default_channel_creator_role_sid": {
+			"default_channel_creator_role_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"default_channel_role_sid": {
+			"default_channel_role_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"default_service_role_sid": {
+			"default_service_role_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"limits": {
+			"limits": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
 				Computed: true,
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"channel_members": {
+						"channel_members": &schema.Schema{
 							Type:     schema.TypeInt,
 							Optional: true,
 							Computed: true,
 						},
-						"user_channels": {
+						"user_channels": &schema.Schema{
 							Type:     schema.TypeInt,
 							Optional: true,
 							Computed: true,
@@ -91,57 +91,57 @@ func resourceChatService() *schema.Resource {
 					},
 				},
 			},
-			"media": {
+			"media": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
 				Computed: true,
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"compatibility_message": {
+						"compatibility_message": &schema.Schema{
 							Type:     schema.TypeString,
 							Optional: true,
 							Computed: true,
 						},
-						"size_limit_mb": {
+						"size_limit_mb": &schema.Schema{
 							Type:     schema.TypeInt,
 							Computed: true,
 						},
 					},
 				},
 			},
-			"notifications": {
+			"notifications": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
 				Computed: true,
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"log_enabled": {
+						"log_enabled": &schema.Schema{
 							Type:     schema.TypeBool,
 							Optional: true,
 							Computed: true,
 						},
-						"new_message": {
+						"new_message": &schema.Schema{
 							Type:     schema.TypeList,
 							Optional: true,
 							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"enabled": {
+									"enabled": &schema.Schema{
 										Type:     schema.TypeBool,
 										Optional: true,
 										Computed: true,
 									},
-									"template": {
+									"template": &schema.Schema{
 										Type:     schema.TypeString,
 										Optional: true,
 									},
-									"sound": {
+									"sound": &schema.Schema{
 										Type:     schema.TypeString,
 										Optional: true,
 									},
-									"badge_count_enabled": {
+									"badge_count_enabled": &schema.Schema{
 										Type:     schema.TypeBool,
 										Optional: true,
 										Computed: true,
@@ -149,69 +149,69 @@ func resourceChatService() *schema.Resource {
 								},
 							},
 						},
-						"added_to_channel": {
+						"added_to_channel": &schema.Schema{
 							Type:     schema.TypeList,
 							Optional: true,
 							Computed: true,
 							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"enabled": {
+									"enabled": &schema.Schema{
 										Type:     schema.TypeBool,
 										Optional: true,
 										Computed: true,
 									},
-									"template": {
+									"template": &schema.Schema{
 										Type:     schema.TypeString,
 										Optional: true,
 									},
-									"sound": {
+									"sound": &schema.Schema{
 										Type:     schema.TypeString,
 										Optional: true,
 									},
 								},
 							},
 						},
-						"removed_from_channel": {
+						"removed_from_channel": &schema.Schema{
 							Type:     schema.TypeList,
 							Optional: true,
 							Computed: true,
 							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"enabled": {
+									"enabled": &schema.Schema{
 										Type:     schema.TypeBool,
 										Optional: true,
 										Computed: true,
 									},
-									"template": {
+									"template": &schema.Schema{
 										Type:     schema.TypeString,
 										Optional: true,
 									},
-									"sound": {
+									"sound": &schema.Schema{
 										Type:     schema.TypeString,
 										Optional: true,
 									},
 								},
 							},
 						},
-						"invited_to_channel": {
+						"invited_to_channel": &schema.Schema{
 							Type:     schema.TypeList,
 							Optional: true,
 							Computed: true,
 							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"enabled": {
+									"enabled": &schema.Schema{
 										Type:     schema.TypeBool,
 										Optional: true,
 										Computed: true,
 									},
-									"template": {
+									"template": &schema.Schema{
 										Type:     schema.TypeString,
 										Optional: true,
 									},
-									"sound": {
+									"sound": &schema.Schema{
 										Type:     schema.TypeString,
 										Optional: true,
 									},
@@ -221,34 +221,34 @@ func resourceChatService() *schema.Resource {
 					},
 				},
 			},
-			"post_webhook_retry_count": {
+			"post_webhook_retry_count": &schema.Schema{
 				Type:     schema.TypeInt,
 				Optional: true,
 				Computed: true,
 			},
-			"post_webhook_url": {
+			"post_webhook_url": &schema.Schema{
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"pre_webhook_retry_count": {
+			"pre_webhook_retry_count": &schema.Schema{
 				Type:     schema.TypeInt,
 				Optional: true,
 				Computed: true,
 			},
-			"pre_webhook_url": {
+			"pre_webhook_url": &schema.Schema{
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"webhook_filters": {
+			"webhook_filters": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
-			"webhook_method": {
+			"webhook_method": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
@@ -257,30 +257,30 @@ func resourceChatService() *schema.Resource {
 					"GET",
 				}, false),
 			},
-			"reachability_enabled": {
+			"reachability_enabled": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
-			"read_status_enabled": {
+			"read_status_enabled": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
-			"typing_indicator_timeout": {
+			"typing_indicator_timeout": &schema.Schema{
 				Type:     schema.TypeInt,
 				Optional: true,
 				Computed: true,
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

@@ -19,40 +19,40 @@ func dataSourceServerlessDeployments() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"service_sid": {
+			"service_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"environment_sid": {
+			"environment_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"deployments": {
+			"deployments": &schema.Schema{
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"sid": {
+						"sid": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"build_sid": {
+						"build_sid": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"date_created": {
+						"date_created": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"date_updated": {
+						"date_updated": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"url": {
+						"url": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},

@@ -45,66 +45,66 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"workspace_sid": {
+			"workspace_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"friendly_name": {
+			"friendly_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"event_callback_url": {
+			"event_callback_url": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"assignment_activity_name": {
+			"assignment_activity_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"assignment_activity_sid": {
+			"assignment_activity_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"reservation_activity_name": {
+			"reservation_activity_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"reservation_activity_sid": {
+			"reservation_activity_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"max_reserved_workers": {
+			"max_reserved_workers": &schema.Schema{
 				Type:     schema.TypeInt,
 				Optional: true,
 				Computed: true,
 			},
-			"target_workers": {
+			"target_workers": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"task_order": {
+			"task_order": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

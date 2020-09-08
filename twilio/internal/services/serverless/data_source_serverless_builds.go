@@ -20,115 +20,115 @@ func dataSourceServerlessBuilds() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"service_sid": {
+			"service_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"builds": {
+			"builds": &schema.Schema{
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"sid": {
+						"sid": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"asset_versions": {
+						"asset_versions": &schema.Schema{
 							Type:     schema.TypeList,
 							Computed: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"sid": {
+									"sid": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"account_sid": {
+									"account_sid": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"service_sid": {
+									"service_sid": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"asset_sid": {
+									"asset_sid": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"date_created": {
+									"date_created": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"path": {
+									"path": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"visibility": {
+									"visibility": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
 								},
 							},
 						},
-						"function_versions": {
+						"function_versions": &schema.Schema{
 							Type:     schema.TypeList,
 							Computed: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"sid": {
+									"sid": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"account_sid": {
+									"account_sid": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"service_sid": {
+									"service_sid": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"function_sid": {
+									"function_sid": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"date_created": {
+									"date_created": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"path": {
+									"path": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"visibility": {
+									"visibility": &schema.Schema{
 										Type:     schema.TypeString,
 										Computed: true,
 									},
 								},
 							},
 						},
-						"dependencies": {
+						"dependencies": &schema.Schema{
 							Type:     schema.TypeMap,
 							Computed: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
 						},
-						"status": {
+						"status": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"date_created": {
+						"date_created": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"date_updated": {
+						"date_updated": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"url": {
+						"url": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},

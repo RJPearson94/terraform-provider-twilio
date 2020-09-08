@@ -19,48 +19,48 @@ func dataSourceAutopilotTaskSamples() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"assistant_sid": {
+			"assistant_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"task_sid": {
+			"task_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"samples": {
+			"samples": &schema.Schema{
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"sid": {
+						"sid": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"language": {
+						"language": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"tagged_text": {
+						"tagged_text": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"source_channel": {
+						"source_channel": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"date_created": {
+						"date_created": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"date_updated": {
+						"date_updated": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"url": {
+						"url": &schema.Schema{
 							Type:     schema.TypeString,
 							Computed: true,
 						},

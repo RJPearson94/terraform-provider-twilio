@@ -21,66 +21,66 @@ func dataSourceAutopilotAssistant() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"latest_model_build_sid": {
+			"latest_model_build_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": {
+			"friendly_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"unique_name": {
+			"unique_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"callback_events": {
+			"callback_events": &schema.Schema{
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
-			"callback_url": {
+			"callback_url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"log_queries": {
+			"log_queries": &schema.Schema{
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"development_stage": {
+			"development_stage": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"needs_model_build": {
+			"needs_model_build": &schema.Schema{
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"defaults": {
+			"defaults": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"stylesheet": {
+			"stylesheet": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

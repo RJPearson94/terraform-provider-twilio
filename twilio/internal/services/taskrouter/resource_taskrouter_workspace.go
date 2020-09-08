@@ -48,40 +48,40 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": {
+			"friendly_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"event_callback_url": {
+			"event_callback_url": &schema.Schema{
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"event_filters": {
+			"event_filters": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
-			"multi_task_enabled": {
+			"multi_task_enabled": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
-			"template": {
+			"template": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"prioritize_queue_order": {
+			"prioritize_queue_order": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
@@ -90,31 +90,31 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 					"FIFO",
 				}, false),
 			},
-			"default_activity_name": {
+			"default_activity_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"default_activity_sid": {
+			"default_activity_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"timeout_activity_name": {
+			"timeout_activity_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"timeout_activity_sid": {
+			"timeout_activity_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

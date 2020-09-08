@@ -19,55 +19,55 @@ func dataSourceChatUser() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": {
+			"sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"service_sid": {
+			"service_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": {
+			"account_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": {
+			"friendly_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"attributes": {
+			"attributes": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"identity": {
+			"identity": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"is_notifiable": {
+			"is_notifiable": &schema.Schema{
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"is_online": {
+			"is_online": &schema.Schema{
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"joined_channels_count": {
+			"joined_channels_count": &schema.Schema{
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"role_sid": {
+			"role_sid": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": {
+			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": {
+			"date_updated": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},
