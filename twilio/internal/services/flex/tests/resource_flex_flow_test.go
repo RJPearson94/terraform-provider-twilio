@@ -82,7 +82,7 @@ func TestAccTwilioChatChannelWebhook_invalidIntegrationURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioFlexFlow_basic(testData, friendlyName, channelType, integrationType, integrationURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"integration.0.url\" to have a host, got integrationURL"),
+				ExpectError: regexp.MustCompile(`(?s)expected "integration.0.url" to have a host, got integrationURL`),
 			},
 		},
 	})

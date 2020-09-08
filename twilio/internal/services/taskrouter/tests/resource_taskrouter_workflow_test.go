@@ -142,7 +142,7 @@ func TestAccTwilioTaskRouterWorkflow_invalidAssignmentCallbackURL(t *testing.T) 
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTaskRouterWorkflow_assignmentCallback(friendlyName, callbackURL, fallbackCallbackURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"assignment_callback_url\" to have a host, got callback"),
+				ExpectError: regexp.MustCompile(`(?s)expected "assignment_callback_url" to have a host, got callback`),
 			},
 		},
 	})
@@ -159,7 +159,7 @@ func TestAccTwilioTaskRouterWorkflow_invalidAssignmentFallbackCallbackURL(t *tes
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTaskRouterWorkflow_assignmentCallback(friendlyName, callbackURL, fallbackCallbackURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"fallback_assignment_callback_url\" to have a host, got fallback-callback"),
+				ExpectError: regexp.MustCompile(`(?s)expected "fallback_assignment_callback_url" to have a host, got fallback-callback`),
 			},
 		},
 	})

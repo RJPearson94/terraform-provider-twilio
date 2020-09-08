@@ -149,7 +149,7 @@ func TestAccTwilioProxyService_invalidCallbackURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioProxyService_callbacks(uniqueName, url, interceptURL, outOfSessionURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"callback_url\" to have a host, got callbackURL")},
+				ExpectError: regexp.MustCompile(`(?s)expected "callback_url" to have a host, got callbackURL`)},
 		},
 	})
 }
@@ -166,7 +166,7 @@ func TestAccTwilioProxyService_invalidInterceptCallbackURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioProxyService_callbacks(uniqueName, url, interceptURL, outOfSessionURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"intercept_callback_url\" to have a host, got interceptURL"),
+				ExpectError: regexp.MustCompile(`(?s)expected "intercept_callback_url" to have a host, got interceptURL`),
 			},
 		},
 	})
@@ -184,7 +184,7 @@ func TestAccTwilioProxyService_invalidOutOfSessionCallbackURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioProxyService_callbacks(uniqueName, url, interceptURL, outOfSessionURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"out_of_session_callback_url\" to have a host, got outOfSessionURL"),
+				ExpectError: regexp.MustCompile(`(?s)expected "out_of_session_callback_url" to have a host, got outOfSessionURL`),
 			},
 		},
 	})

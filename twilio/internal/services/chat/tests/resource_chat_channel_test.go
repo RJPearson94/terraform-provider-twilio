@@ -67,7 +67,7 @@ func TestAccTwilioChatChannel_invalidType(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioChatChannel_basic(friendlyName, channelType),
-				ExpectError: regexp.MustCompile("config is invalid: expected type to be one of \\[public private\\], got test"),
+				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \[public private\], got test`),
 			},
 		},
 	})

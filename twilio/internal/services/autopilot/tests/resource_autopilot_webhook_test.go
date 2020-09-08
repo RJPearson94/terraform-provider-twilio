@@ -69,7 +69,7 @@ func TestAccTwilioAutopilotWebhook_invalidWebhookURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAutopilotWebhook_basic(uniqueName, url, events),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"webhook_url\" to have a host, got webhookURL"),
+				ExpectError: regexp.MustCompile(`(?s)expected "webhook_url" to have a host, got webhookURL`),
 			},
 		},
 	})
@@ -86,7 +86,7 @@ func TestAccTwilioAutopilotAssistant_invalidWebhookMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAutopilotWebhook_method(uniqueName, method),
-				ExpectError: regexp.MustCompile("config is invalid: expected webhook_method to be one of \\[GET POST\\], got test"),
+				ExpectError: regexp.MustCompile(`(?s)expected webhook_method to be one of \[GET POST\], got test`),
 			},
 		},
 	})

@@ -68,7 +68,7 @@ func TestAccTwilioChatChannelWebhook_invalidPostWebhookURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioChatService_postWebhook(friendlyName, webhookURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"post_webhook_url\" to have a host, got webhook"),
+				ExpectError: regexp.MustCompile(`(?s)expected "post_webhook_url" to have a host, got webhook`),
 			},
 		},
 	})
@@ -84,7 +84,7 @@ func TestAccTwilioChatChannelWebhook_invalidPreWebhookURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioChatService_preWebhook(friendlyName, webhookURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"pre_webhook_url\" to have a host, got webhook"),
+				ExpectError: regexp.MustCompile(`(?s)expected "pre_webhook_url" to have a host, got webhook`),
 			},
 		},
 	})

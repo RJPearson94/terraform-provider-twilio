@@ -124,7 +124,7 @@ func TestAccTwilioAutopilotTask_invalidActionURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAutopilotTask_actionsURL(uniqueName, url),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"actions_url\" to have a host, got actionURL"),
+				ExpectError: regexp.MustCompile(`(?s)expected "actions_url" to have a host, got actionURL`),
 			},
 		},
 	})

@@ -171,7 +171,7 @@ func TestAccTwilioAutopilotAssistant_invalidDevelopmentStage(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAutopilotAssistant_developmentStage(friendlyName, developmentStage),
-				ExpectError: regexp.MustCompile("config is invalid: expected development_stage to be one of \\[in-development in-production\\], got test"),
+				ExpectError: regexp.MustCompile(`(?s)expected development_stage to be one of \[in-development in-production\], got test`),
 			},
 		},
 	})
@@ -188,7 +188,7 @@ func TestAccTwilioAutopilotAssistant_invalidCallbackURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAutopilotAssistant_callbackEvents(friendlyName, callbackURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"callback_url\" to have a host, got callbackURL"),
+				ExpectError: regexp.MustCompile(`(?s)expected "callback_url" to have a host, got callbackURL`),
 			},
 		},
 	})

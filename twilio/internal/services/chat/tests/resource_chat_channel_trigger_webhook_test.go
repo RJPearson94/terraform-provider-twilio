@@ -66,7 +66,7 @@ func TestAccTwilioChatChannelTriggerWebhook_invalidWebhookURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioChatChannelTriggerWebhook_basic(friendlyName, webhookURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"webhook_url\" to have a host, got webhook"),
+				ExpectError: regexp.MustCompile(`(?s)expected "webhook_url" to have a host, got webhook`),
 			},
 		},
 	})

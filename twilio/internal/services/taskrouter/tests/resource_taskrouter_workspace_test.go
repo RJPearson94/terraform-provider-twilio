@@ -70,8 +70,7 @@ func TestAccTwilioTaskRouterWorkspace_invalidOrderQueue(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTaskRouterWorkspace_basic(friendlyName, queueOrder),
-				ExpectError: regexp.MustCompile("config is invalid: expected prioritize_queue_order to be one of \\[LIFO FIFO\\], got test"),
-			},
+				ExpectError: regexp.MustCompile(`(?s)expected prioritize_queue_order to be one of \[LIFO FIFO\], got test`)},
 		},
 	})
 }
@@ -173,7 +172,7 @@ func TestAccTwilioTaskRouterWorkspace_invalidEventCallbackURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTaskRouterWorkspace_eventCallback(friendlyName, eventFilters, callbackURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"event_callback_url\" to have a host, got callback"),
+				ExpectError: regexp.MustCompile(`(?s)expected "event_callback_url" to have a host, got callback`),
 			},
 		},
 	})

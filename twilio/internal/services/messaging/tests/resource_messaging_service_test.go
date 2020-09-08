@@ -161,7 +161,7 @@ func TestAccTwilioMessagingService_invalidFallbackMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioMessagingService_fallback(friendlyName, fallbackMethod, fallbackURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected fallback_method to be one of \\[POST GET\\], got test"),
+				ExpectError: regexp.MustCompile(`(?s)expected fallback_method to be one of \[POST GET\], got test`),
 			},
 		},
 	})
@@ -178,7 +178,7 @@ func TestAccTwilioMessagingService_invalidFallbackURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioMessagingService_fallback(friendlyName, fallbackMethod, fallbackURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"fallback_url\" to have a host, got fallback"),
+				ExpectError: regexp.MustCompile(`(?s)expected "fallback_url" to have a host, got fallback`),
 			},
 		},
 	})
@@ -219,7 +219,7 @@ func TestAccTwilioMessagingService_invalidInboundMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioMessagingService_inbound(friendlyName, inboundMethod, inboundURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected inbound_method to be one of \\[POST GET\\], got test"),
+				ExpectError: regexp.MustCompile(`(?s)expected inbound_method to be one of \[POST GET\], got test`),
 			},
 		},
 	})
@@ -236,7 +236,7 @@ func TestAccTwilioMessagingService_invalidInboundURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioMessagingService_inbound(friendlyName, inboundMethod, inboundURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"inbound_request_url\" to have a host, got inbound"),
+				ExpectError: regexp.MustCompile(`(?s)expected "inbound_request_url" to have a host, got inbound`),
 			},
 		},
 	})
@@ -274,7 +274,7 @@ func TestAccTwilioMessagingService_invalidStatusCallbackURL(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioMessagingService_statusCallback(friendlyName, statusCallbackURL),
-				ExpectError: regexp.MustCompile("config is invalid: expected \"status_callback_url\" to have a host, got status"),
+				ExpectError: regexp.MustCompile(`(?s)expected "status_callback_url" to have a host, got status`),
 			},
 		},
 	})

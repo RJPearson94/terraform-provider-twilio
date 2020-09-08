@@ -67,7 +67,7 @@ func TestAccTwilioStudioFlow_invalidStatus(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioStudioFlow_basic(friendlyName, status),
-				ExpectError: regexp.MustCompile("config is invalid: expected status to be one of \\[draft published\\], got test"),
+				ExpectError: regexp.MustCompile(`(?s)expected status to be one of \[draft published\], got test`),
 			},
 		},
 	})
