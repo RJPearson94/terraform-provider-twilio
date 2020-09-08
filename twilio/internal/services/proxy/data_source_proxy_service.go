@@ -2,17 +2,17 @@ package proxy
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceProxyService() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceProxyServiceRead,
+		ReadContext: dataSourceProxyServiceRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -79,18 +79,16 @@ func dataSourceProxyService() *schema.Resource {
 	}
 }
 
-func dataSourceProxyServiceRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceProxyServiceRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	sid := d.Get("sid").(string)
 	getResponse, err := client.Service(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Proxy service with sid (%s) was not found", sid)
+			return diag.Errorf("Proxy service with sid (%s) was not found", sid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read proxy service: %s", err.Error())
+		return diag.Errorf("Failed to read proxy service: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

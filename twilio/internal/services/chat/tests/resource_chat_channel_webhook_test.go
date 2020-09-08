@@ -8,9 +8,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var channelWebhookResourceName = "twilio_chat_channel_webhook"
@@ -22,8 +22,7 @@ func TestAccTwilioChatChannelWebhook_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioChatChannelWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -62,7 +61,7 @@ func TestAccTwilioChatChannelWebhook_invalidWebhookURL(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioChatChannelWebhook_basic(friendlyName, webhookURL),
@@ -80,7 +79,7 @@ func TestAccTwilioChatChannelWebhook_update(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioChatChannelWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -140,7 +139,7 @@ func testAccCheckTwilioChatChannelWebhookDestroy(s *terraform.State) error {
 					return nil
 				}
 			}
-			return fmt.Errorf("Error occurred when retrieving channel webhook information %s", err)
+			return fmt.Errorf("Error occurred when retrieving channel webhook information %s", err.Error())
 		}
 	}
 
@@ -158,7 +157,7 @@ func testAccCheckTwilioChatChannelWebhookExists(name string) resource.TestCheckF
 		}
 
 		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Channel(rs.Primary.Attributes["channel_sid"]).Webhook(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving channel webhook information %s", err)
+			return fmt.Errorf("Error occurred when retrieving channel webhook information %s", err.Error())
 		}
 
 		return nil

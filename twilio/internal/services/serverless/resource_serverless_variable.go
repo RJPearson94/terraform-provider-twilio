@@ -10,15 +10,16 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/environment/variable"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/environment/variables"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceServerlessVariable() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceServerlessVariableCreate,
-		Read:   resourceServerlessVariableRead,
-		Update: resourceServerlessVariableUpdate,
-		Delete: resourceServerlessVariableDelete,
+		CreateContext: resourceServerlessVariableCreate,
+		ReadContext:   resourceServerlessVariableRead,
+		UpdateContext: resourceServerlessVariableUpdate,
+		DeleteContext: resourceServerlessVariableDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -88,10 +89,8 @@ func resourceServerlessVariable() *schema.Resource {
 	}
 }
 
-func resourceServerlessVariableCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessVariableCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &variables.CreateVariableInput{
 		Key:   d.Get("key").(string),
@@ -100,17 +99,15 @@ func resourceServerlessVariableCreate(d *schema.ResourceData, meta interface{}) 
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variables.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless variable: %s", err.Error())
+		return diag.Errorf("Failed to create serverless variable: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceServerlessVariableRead(d, meta)
+	return resourceServerlessVariableRead(ctx, d, meta)
 }
 
-func resourceServerlessVariableRead(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessVariableRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variable(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -118,7 +115,7 @@ func resourceServerlessVariableRead(d *schema.ResourceData, meta interface{}) er
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless variable: %s", err.Error())
+		return diag.Errorf("Failed to read serverless variable: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -138,10 +135,8 @@ func resourceServerlessVariableRead(d *schema.ResourceData, meta interface{}) er
 	return nil
 }
 
-func resourceServerlessVariableUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessVariableUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &variable.UpdateVariableInput{
 		Key:   utils.OptionalString(d, "key"),
@@ -150,20 +145,18 @@ func resourceServerlessVariableUpdate(d *schema.ResourceData, meta interface{}) 
 
 	updateResp, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variable(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update serverless variable: %s", err.Error())
+		return diag.Errorf("Failed to update serverless variable: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceServerlessVariableRead(d, meta)
+	return resourceServerlessVariableRead(ctx, d, meta)
 }
 
-func resourceServerlessVariableDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessVariableDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Variable(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete serverless variable: %s", err.Error())
+		return diag.Errorf("Failed to delete serverless variable: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

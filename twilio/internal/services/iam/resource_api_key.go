@@ -2,22 +2,22 @@ package iam
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/key"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/keys"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceIamApiKey() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceApiKeyCreate,
-		Read:   resourceApiKeyRead,
-		Update: resourceApiKeyUpdate,
-		Delete: resourceApiKeyDelete,
+		CreateContext: resourceApiKeyCreate,
+		ReadContext:   resourceApiKeyRead,
+		UpdateContext: resourceApiKeyUpdate,
+		DeleteContext: resourceApiKeyDelete,
 
 		Timeouts: &schema.ResourceTimeout{
 			Create: schema.DefaultTimeout(10 * time.Minute),
@@ -57,10 +57,8 @@ func resourceIamApiKey() *schema.Resource {
 	}
 }
 
-func resourceApiKeyCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceApiKeyCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &keys.CreateKeyInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
@@ -68,18 +66,16 @@ func resourceApiKeyCreate(d *schema.ResourceData, meta interface{}) error {
 
 	createResult, err := client.Account(d.Get("account_sid").(string)).Keys.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("Failed to create account api key: %s", err.Error())
+		return diag.Errorf("Failed to create account api key: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
 	d.Set("secret", createResult.Secret)
-	return resourceApiKeyRead(d, meta)
+	return resourceApiKeyRead(ctx, d, meta)
 }
 
-func resourceApiKeyRead(d *schema.ResourceData, meta interface{}) error {
+func resourceApiKeyRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -87,7 +83,7 @@ func resourceApiKeyRead(d *schema.ResourceData, meta interface{}) error {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read account api key: %s", err)
+		return diag.Errorf("Failed to read account api key: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -102,10 +98,8 @@ func resourceApiKeyRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceApiKeyUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceApiKeyUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &key.UpdateKeyInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
@@ -113,20 +107,18 @@ func resourceApiKeyUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	updateResp, err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update account api key: %s", err.Error())
+		return diag.Errorf("Failed to update account api key: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceApiKeyRead(d, meta)
+	return resourceApiKeyRead(ctx, d, meta)
 }
 
-func resourceApiKeyDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceApiKeyDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete account api key: %s", err.Error())
+		return diag.Errorf("Failed to delete account api key: %s", err.Error())
 	}
 
 	d.SetId("")

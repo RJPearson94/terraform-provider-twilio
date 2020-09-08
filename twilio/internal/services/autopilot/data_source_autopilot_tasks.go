@@ -2,18 +2,18 @@ package autopilot
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
 func dataSourceAutopilotTasks() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAutopilotTasksRead,
+		ReadContext: dataSourceAutopilotTasksRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -72,10 +72,8 @@ func dataSourceAutopilotTasks() *schema.Resource {
 	}
 }
 
-func dataSourceAutopilotTasksRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceAutopilotTasksRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	assistantSid := d.Get("assistant_sid").(string)
 	paginator := client.Assistant(assistantSid).Tasks.NewTasksPaginator()
@@ -85,9 +83,9 @@ func dataSourceAutopilotTasksRead(d *schema.ResourceData, meta interface{}) erro
 	err := paginator.Error()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] No tasks were found for assistant with sid (%s)", assistantSid)
+			return diag.Errorf("No tasks were found for assistant with sid (%s)", assistantSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to list autopilot tasks: %s", err.Error())
+		return diag.Errorf("Failed to list autopilot tasks: %s", err.Error())
 	}
 
 	d.SetId(assistantSid)
@@ -114,11 +112,11 @@ func dataSourceAutopilotTasksRead(d *schema.ResourceData, meta interface{}) erro
 
 		getActionsResponse, err := client.Assistant(task.AssistantSid).Task(task.Sid).Actions().FetchWithContext(ctx)
 		if err != nil {
-			return fmt.Errorf("[ERROR] Failed to read autopilot task actions: %s", err.Error())
+			return diag.Errorf("Failed to read autopilot task actions: %s", err.Error())
 		}
 		actionsJSONString, err := structure.FlattenJsonToString(getActionsResponse.Data)
 		if err != nil {
-			return fmt.Errorf("[ERROR] Unable to flatten actions json to string: %s", err.Error())
+			return diag.Errorf("Unable to flatten actions json to string: %s", err.Error())
 		}
 
 		taskMap["actions"] = actionsJSONString

@@ -11,14 +11,15 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/environment/deployments"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceServerlessDeployment() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceServerlessDeploymentCreate,
-		Read:   resourceServerlessDeploymentRead,
-		Delete: resourceServerlessDeploymentDelete,
+		CreateContext: resourceServerlessDeploymentCreate,
+		ReadContext:   resourceServerlessDeploymentRead,
+		DeleteContext: resourceServerlessDeploymentDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -96,20 +97,18 @@ func resourceServerlessDeployment() *schema.Resource {
 	}
 }
 
-func resourceServerlessDeploymentCreate(d *schema.ResourceData, meta interface{}) error {
-	createResult, err := createServerlessDeployment(d, meta, utils.OptionalString(d, "build_sid"), schema.TimeoutCreate)
+func resourceServerlessDeploymentCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	createResult, err := createServerlessDeployment(ctx, d, meta, utils.OptionalString(d, "build_sid"))
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless deployment: %s", err.Error())
+		return diag.Errorf("Failed to create serverless deployment: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceServerlessDeploymentRead(d, meta)
+	return resourceServerlessDeploymentRead(ctx, d, meta)
 }
 
-func resourceServerlessDeploymentRead(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessDeploymentRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	environmentsClient := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string))
 
@@ -119,7 +118,7 @@ func resourceServerlessDeploymentRead(d *schema.ResourceData, meta interface{}) 
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless deployment: %s", err.Error())
+		return diag.Errorf("Failed to read serverless deployment: %s", err.Error())
 	}
 
 	deploymentsPaginator := environmentsClient.Deployments.NewDeploymentsPaginatorWithOptions(&deployments.DeploymentsPageOptions{
@@ -130,7 +129,7 @@ func resourceServerlessDeploymentRead(d *schema.ResourceData, meta interface{}) 
 	deploymentsPaginator.Next()
 
 	if deploymentsPaginator.Error() != nil {
-		return fmt.Errorf("[ERROR] Failed to read serverless deployments: %s", deploymentsPaginator.Error().Error())
+		return diag.Errorf("Failed to read serverless deployments: %s", deploymentsPaginator.Error().Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -150,13 +149,13 @@ func resourceServerlessDeploymentRead(d *schema.ResourceData, meta interface{}) 
 	return nil
 }
 
-func resourceServerlessDeploymentDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessDeploymentDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	if d.Get("is_latest_deployment").(bool) {
 		if d.Get("build_sid") != nil {
 			log.Printf("[INFO] Serverless deployments cannot be deleted. So a new deployment will be create without a build sid as this will supersede the current deployment")
 
-			if _, err := createServerlessDeployment(d, meta, nil, schema.TimeoutDelete); err != nil {
-				return fmt.Errorf("[ERROR] Failed to create deployment without build sid: %s", err.Error())
+			if _, err := createServerlessDeployment(ctx, d, meta, nil); err != nil {
+				return diag.Errorf("Failed to create deployment without build sid: %s", err.Error())
 			}
 		} else {
 			log.Printf("[INFO] Serverless deployment build sid is already nil, so removing this resource from Terraform state as you cannot currently delete a serverless deployment")
@@ -169,10 +168,8 @@ func resourceServerlessDeploymentDelete(d *schema.ResourceData, meta interface{}
 	return nil
 }
 
-func createServerlessDeployment(d *schema.ResourceData, meta interface{}, sid *string, timeoutKey string) (*deployments.CreateDeploymentResponse, error) {
+func createServerlessDeployment(ctx context.Context, d *schema.ResourceData, meta interface{}, sid *string) (*deployments.CreateDeploymentResponse, error) {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(timeoutKey))
-	defer cancel()
 
 	createInput := &deployments.CreateDeploymentInput{
 		BuildSid: sid,

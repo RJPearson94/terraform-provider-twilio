@@ -10,16 +10,17 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/messaging/v1/service"
 	"github.com/RJPearson94/twilio-sdk-go/service/messaging/v1/services"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceMessagingService() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMessagingServiceCreate,
-		Read:   resourceMessagingServiceRead,
-		Update: resourceMessagingServiceUpdate,
-		Delete: resourceMessagingServiceDelete,
+		CreateContext: resourceMessagingServiceCreate,
+		ReadContext:   resourceMessagingServiceRead,
+		UpdateContext: resourceMessagingServiceUpdate,
+		DeleteContext: resourceMessagingServiceDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -137,10 +138,8 @@ func resourceMessagingService() *schema.Resource {
 	}
 }
 
-func resourceMessagingServiceCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingServiceCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &services.CreateServiceInput{
 		FriendlyName:       d.Get("friendly_name").(string),
@@ -159,17 +158,15 @@ func resourceMessagingServiceCreate(d *schema.ResourceData, meta interface{}) er
 
 	createResult, err := client.Services.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create messaging service: %s", err)
+		return diag.Errorf("Failed to create messaging service: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceMessagingServiceRead(d, meta)
+	return resourceMessagingServiceRead(ctx, d, meta)
 }
 
-func resourceMessagingServiceRead(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingServiceRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -177,7 +174,7 @@ func resourceMessagingServiceRead(d *schema.ResourceData, meta interface{}) erro
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read messaging service: %s", err)
+		return diag.Errorf("Failed to read messaging service: %s", err.Error())
 	}
 
 	d.Set("account_sid", getResponse.AccountSid)
@@ -205,10 +202,8 @@ func resourceMessagingServiceRead(d *schema.ResourceData, meta interface{}) erro
 	return nil
 }
 
-func resourceMessagingServiceUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingServiceUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &service.UpdateServiceInput{
 		FriendlyName:       utils.OptionalString(d, "friendly_name"),
@@ -227,20 +222,18 @@ func resourceMessagingServiceUpdate(d *schema.ResourceData, meta interface{}) er
 
 	updateResp, err := client.Service(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update messaging service: %s", err.Error())
+		return diag.Errorf("Failed to update messaging service: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceMessagingServiceRead(d, meta)
+	return resourceMessagingServiceRead(ctx, d, meta)
 }
 
-func resourceMessagingServiceDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingServiceDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete messaging service: %s", err.Error())
+		return diag.Errorf("Failed to delete messaging service: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

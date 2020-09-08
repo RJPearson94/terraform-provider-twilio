@@ -11,18 +11,19 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspaces"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 const workspaceEventsSeperator = ","
 
 func resourceTaskRouterWorkspace() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceTaskRouterWorkspaceCreate,
-		Read:   resourceTaskRouterWorkspaceRead,
-		Update: resourceTaskRouterWorkspaceUpdate,
-		Delete: resourceTaskRouterWorkspaceDelete,
+		CreateContext: resourceTaskRouterWorkspaceCreate,
+		ReadContext:   resourceTaskRouterWorkspaceRead,
+		UpdateContext: resourceTaskRouterWorkspaceUpdate,
+		DeleteContext: resourceTaskRouterWorkspaceDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -122,10 +123,8 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 	}
 }
 
-func resourceTaskRouterWorkspaceCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterWorkspaceCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &workspaces.CreateWorkspaceInput{
 		FriendlyName:         d.Get("friendly_name").(string),
@@ -138,17 +137,15 @@ func resourceTaskRouterWorkspaceCreate(d *schema.ResourceData, meta interface{})
 
 	createResult, err := client.Workspaces.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create taskrouter workspace: %s", err.Error())
+		return diag.Errorf("Failed to create taskrouter workspace: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceTaskRouterWorkspaceRead(d, meta)
+	return resourceTaskRouterWorkspaceRead(ctx, d, meta)
 }
 
-func resourceTaskRouterWorkspaceRead(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterWorkspaceRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Workspace(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -156,7 +153,7 @@ func resourceTaskRouterWorkspaceRead(d *schema.ResourceData, meta interface{}) e
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read taskrouter workspace: %s", err.Error())
+		return diag.Errorf("Failed to read taskrouter workspace: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -190,10 +187,8 @@ func resourceTaskRouterWorkspaceRead(d *schema.ResourceData, meta interface{}) e
 	return nil
 }
 
-func resourceTaskRouterWorkspaceUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterWorkspaceUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &workspace.UpdateWorkspaceInput{
 		FriendlyName:         utils.OptionalString(d, "friendly_name"),
@@ -206,20 +201,18 @@ func resourceTaskRouterWorkspaceUpdate(d *schema.ResourceData, meta interface{})
 
 	updateResp, err := client.Workspace(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update taskrouter workspace: %s", err.Error())
+		return diag.Errorf("Failed to update taskrouter workspace: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceTaskRouterWorkspaceRead(d, meta)
+	return resourceTaskRouterWorkspaceRead(ctx, d, meta)
 }
 
-func resourceTaskRouterWorkspaceDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceTaskRouterWorkspaceDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Workspace(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete taskrouter workspace: %s", err.Error())
+		return diag.Errorf("Failed to delete taskrouter workspace: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

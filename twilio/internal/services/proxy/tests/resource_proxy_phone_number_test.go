@@ -7,9 +7,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var proxyPhoneNumberResourceName = "twilio_proxy_phone_number"
@@ -25,8 +25,7 @@ func TestAccTwilioProxyPhoneNumber_basic(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioProxyPhoneNumberDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -81,7 +80,7 @@ func TestAccTwilioProxyPhoneNumber_update(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioProxyPhoneNumberDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -165,7 +164,7 @@ func testAccCheckTwilioProxyPhoneNumberDestroy(s *terraform.State) error {
 					return nil
 				}
 			}
-			return fmt.Errorf("Error occurred when retrieving proxy phone number information %s", err)
+			return fmt.Errorf("Error occurred when retrieving proxy phone number information %s", err.Error())
 		}
 	}
 
@@ -183,7 +182,7 @@ func testAccCheckTwilioProxyPhoneNumberExists(name string) resource.TestCheckFun
 		}
 
 		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).PhoneNumber(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving proxy phone number information %s", err)
+			return fmt.Errorf("Error occurred when retrieving proxy phone number information %s", err.Error())
 		}
 
 		return nil

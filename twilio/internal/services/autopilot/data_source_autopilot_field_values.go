@@ -2,17 +2,17 @@ package autopilot
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceAutopilotFieldValues() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAutopilotFieldValuesRead,
+		ReadContext: dataSourceAutopilotFieldValuesRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -71,10 +71,8 @@ func dataSourceAutopilotFieldValues() *schema.Resource {
 	}
 }
 
-func dataSourceAutopilotFieldValuesRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceAutopilotFieldValuesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	assistantSid := d.Get("assistant_sid").(string)
 	fieldTypeSid := d.Get("field_type_sid").(string)
@@ -85,9 +83,9 @@ func dataSourceAutopilotFieldValuesRead(d *schema.ResourceData, meta interface{}
 	err := paginator.Error()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] No field values were found for assistant with sid (%s) and field type with sid (%s)", assistantSid, fieldTypeSid)
+			return diag.Errorf("No field values were found for assistant with sid (%s) and field type with sid (%s)", assistantSid, fieldTypeSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to list autopilot field values: %s", err.Error())
+		return diag.Errorf("Failed to list autopilot field values: %s", err.Error())
 	}
 
 	d.SetId(fieldTypeSid + "/" + fieldTypeSid)

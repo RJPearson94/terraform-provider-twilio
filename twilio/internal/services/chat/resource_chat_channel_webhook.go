@@ -11,16 +11,17 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/chat/v2/service/channel/webhook"
 	"github.com/RJPearson94/twilio-sdk-go/service/chat/v2/service/channel/webhooks"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceChatChannelWebhook() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceChatChannelWebhookCreate,
-		Read:   resourceChatChannelWebhookRead,
-		Update: resourceChatChannelWebhookUpdate,
-		Delete: resourceChatChannelWebhookDelete,
+		CreateContext: resourceChatChannelWebhookCreate,
+		ReadContext:   resourceChatChannelWebhookRead,
+		UpdateContext: resourceChatChannelWebhookUpdate,
+		DeleteContext: resourceChatChannelWebhookDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -112,10 +113,8 @@ func resourceChatChannelWebhook() *schema.Resource {
 	}
 }
 
-func resourceChatChannelWebhookCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceChatChannelWebhookCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &webhooks.CreateChannelWebhookInput{
 		Type:                    "webhook",
@@ -127,17 +126,15 @@ func resourceChatChannelWebhookCreate(d *schema.ResourceData, meta interface{}) 
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhooks.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create chat channel webhook: %s", err)
+		return diag.Errorf("Failed to create chat channel webhook: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceChatChannelWebhookRead(d, meta)
+	return resourceChatChannelWebhookRead(ctx, d, meta)
 }
 
-func resourceChatChannelWebhookRead(d *schema.ResourceData, meta interface{}) error {
+func resourceChatChannelWebhookRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhook(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -148,7 +145,7 @@ func resourceChatChannelWebhookRead(d *schema.ResourceData, meta interface{}) er
 				return nil
 			}
 		}
-		return fmt.Errorf("[ERROR] Failed to read chat channel webhook: %s", err)
+		return diag.Errorf("Failed to read chat channel webhook: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -171,10 +168,8 @@ func resourceChatChannelWebhookRead(d *schema.ResourceData, meta interface{}) er
 	return nil
 }
 
-func resourceChatChannelWebhookUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceChatChannelWebhookUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &webhook.UpdateChannelWebhookInput{
 		ConfigurationURL:        utils.OptionalString(d, "webhook_url"),
@@ -185,20 +180,18 @@ func resourceChatChannelWebhookUpdate(d *schema.ResourceData, meta interface{}) 
 
 	updateResp, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhook(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update chat channel webhook: %s", err.Error())
+		return diag.Errorf("Failed to update chat channel webhook: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceChatChannelWebhookRead(d, meta)
+	return resourceChatChannelWebhookRead(ctx, d, meta)
 }
 
-func resourceChatChannelWebhookDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceChatChannelWebhookDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhook(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete chat channel webhook: %s", err.Error())
+		return diag.Errorf("Failed to delete chat channel webhook: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

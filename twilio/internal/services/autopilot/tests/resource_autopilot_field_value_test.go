@@ -7,9 +7,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var fieldValueResourceName = "twilio_autopilot_field_value"
@@ -22,8 +22,7 @@ func TestAccTwilioAutopilotFieldValue_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotFieldValueDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -65,7 +64,7 @@ func testAccCheckTwilioAutopilotFieldValueDestroy(s *terraform.State) error {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
-			return fmt.Errorf("Error occurred when retrieving field value information %s", err)
+			return fmt.Errorf("Error occurred when retrieving field value information %s", err.Error())
 		}
 	}
 
@@ -83,7 +82,7 @@ func testAccCheckTwilioAutopilotFieldValueExists(name string) resource.TestCheck
 		}
 
 		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).FieldType(rs.Primary.Attributes["field_type_sid"]).FieldValue(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving field value information %s", err)
+			return fmt.Errorf("Error occurred when retrieving field value information %s", err.Error())
 		}
 
 		return nil

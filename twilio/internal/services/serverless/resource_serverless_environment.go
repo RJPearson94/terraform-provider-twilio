@@ -9,14 +9,15 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/environments"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceServerlessEnvironment() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceServerlessEnvironmentCreate,
-		Read:   resourceServerlessEnvironmentRead,
-		Delete: resourceServerlessEnvironmentDelete,
+		CreateContext: resourceServerlessEnvironmentCreate,
+		ReadContext:   resourceServerlessEnvironmentRead,
+		DeleteContext: resourceServerlessEnvironmentDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -89,10 +90,8 @@ func resourceServerlessEnvironment() *schema.Resource {
 	}
 }
 
-func resourceServerlessEnvironmentCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &environments.CreateEnvironmentInput{
 		UniqueName:   d.Get("unique_name").(string),
@@ -101,17 +100,15 @@ func resourceServerlessEnvironmentCreate(d *schema.ResourceData, meta interface{
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Environments.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless environment: %s", err.Error())
+		return diag.Errorf("Failed to create serverless environment: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceServerlessEnvironmentRead(d, meta)
+	return resourceServerlessEnvironmentRead(ctx, d, meta)
 }
 
-func resourceServerlessEnvironmentRead(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Get("service_sid").(string)).Environment(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -119,7 +116,7 @@ func resourceServerlessEnvironmentRead(d *schema.ResourceData, meta interface{})
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless environment: %s", err.Error())
+		return diag.Errorf("Failed to read serverless environment: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -140,13 +137,11 @@ func resourceServerlessEnvironmentRead(d *schema.ResourceData, meta interface{})
 	return nil
 }
 
-func resourceServerlessEnvironmentDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Get("service_sid").(string)).Environment(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete serverless service: %s", err.Error())
+		return diag.Errorf("Failed to delete serverless service: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

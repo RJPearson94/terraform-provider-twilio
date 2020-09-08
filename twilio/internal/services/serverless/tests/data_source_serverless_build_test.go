@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
 var buildDataSourceName = "twilio_serverless_build"
@@ -18,7 +18,7 @@ func TestAccDataSourceTwilioServerlessBuild_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceTwilioServerlessBuild_basic(uniqueName, version),

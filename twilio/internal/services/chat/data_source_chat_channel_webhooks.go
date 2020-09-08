@@ -2,18 +2,18 @@ package chat
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/twilio-sdk-go/service/chat/v2/service/channel/webhooks"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceChatChannelWebhooks() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceChatChannelWebhooksRead,
+		ReadContext: dataSourceChatChannelWebhooksRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -102,10 +102,8 @@ func dataSourceChatChannelWebhooks() *schema.Resource {
 	}
 }
 
-func dataSourceChatChannelWebhooksRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceChatChannelWebhooksRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Chat
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	serviceSid := d.Get("service_sid").(string)
 	channelSid := d.Get("channel_sid").(string)
@@ -118,10 +116,10 @@ func dataSourceChatChannelWebhooksRead(d *schema.ResourceData, meta interface{})
 		if twilioError, ok := err.(*sdkUtils.TwilioError); ok {
 			// currently programmable chat returns a 403 if the service instance does not exist
 			if (twilioError.Status == 403 && twilioError.Message == "Service instance not found") || twilioError.IsNotFoundError() {
-				return fmt.Errorf("[ERROR] No channel webhooks were found for chat service with sid (%s) and channel with sid (%s)", serviceSid, channelSid)
+				return diag.Errorf("No channel webhooks were found for chat service with sid (%s) and channel with sid (%s)", serviceSid, channelSid)
 			}
 		}
-		return fmt.Errorf("[ERROR] Failed to read chat channel webhook: %s", err)
+		return diag.Errorf("Failed to read chat channel webhook: %s", err.Error())
 	}
 
 	d.SetId(serviceSid + "/" + channelSid)

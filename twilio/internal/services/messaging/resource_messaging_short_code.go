@@ -9,14 +9,15 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/messaging/v1/service/short_codes"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceMessagingShortCode() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMessagingShortCodeCreate,
-		Read:   resourceMessagingShortCodeRead,
-		Delete: resourceMessagingShortCodeDelete,
+		CreateContext: resourceMessagingShortCodeCreate,
+		ReadContext:   resourceMessagingShortCodeRead,
+		DeleteContext: resourceMessagingShortCodeDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -87,10 +88,8 @@ func resourceMessagingShortCode() *schema.Resource {
 	}
 }
 
-func resourceMessagingShortCodeCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingShortCodeCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &short_codes.CreateShortCodeInput{
 		ShortCodeSid: d.Get("sid").(string),
@@ -98,17 +97,15 @@ func resourceMessagingShortCodeCreate(d *schema.ResourceData, meta interface{}) 
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).ShortCodes.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create messaging short code: %s", err)
+		return diag.Errorf("Failed to create messaging short code: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceMessagingShortCodeRead(d, meta)
+	return resourceMessagingShortCodeRead(ctx, d, meta)
 }
 
-func resourceMessagingShortCodeRead(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingShortCodeRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Get("service_sid").(string)).ShortCode(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -116,7 +113,7 @@ func resourceMessagingShortCodeRead(d *schema.ResourceData, meta interface{}) er
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read messaging short code: %s", err)
+		return diag.Errorf("Failed to read messaging short code: %s", err.Error())
 	}
 
 	d.Set("account_sid", getResponse.AccountSid)
@@ -136,13 +133,11 @@ func resourceMessagingShortCodeRead(d *schema.ResourceData, meta interface{}) er
 	return nil
 }
 
-func resourceMessagingShortCodeDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingShortCodeDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Get("service_sid").(string)).ShortCode(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete messaging short code: %s", err.Error())
+		return diag.Errorf("Failed to delete messaging short code: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

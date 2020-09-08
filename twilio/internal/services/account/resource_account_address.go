@@ -10,15 +10,16 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/address"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/addresses"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceAccountAddress() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceAccountAddressCreate,
-		Read:   resourceAccountAddressRead,
-		Update: resourceAccountAddressUpdate,
-		Delete: resourceAccountAddressDelete,
+		CreateContext: resourceAccountAddressCreate,
+		ReadContext:   resourceAccountAddressRead,
+		UpdateContext: resourceAccountAddressUpdate,
+		DeleteContext: resourceAccountAddressDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -112,10 +113,8 @@ func resourceAccountAddress() *schema.Resource {
 	}
 }
 
-func resourceAccountAddressCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceAccountAddressCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &addresses.CreateAddressInput{
 		City:             d.Get("city").(string),
@@ -131,17 +130,15 @@ func resourceAccountAddressCreate(d *schema.ResourceData, meta interface{}) erro
 
 	createResult, err := client.Account(d.Get("account_sid").(string)).Addresses.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create address: %s", err.Error())
+		return diag.Errorf("Failed to create address: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceAccountAddressRead(d, meta)
+	return resourceAccountAddressRead(ctx, d, meta)
 }
 
-func resourceAccountAddressRead(d *schema.ResourceData, meta interface{}) error {
+func resourceAccountAddressRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Account(d.Get("account_sid").(string)).Address(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -150,7 +147,7 @@ func resourceAccountAddressRead(d *schema.ResourceData, meta interface{}) error 
 			return nil
 		}
 		// If the account sid is incorrect a 401 is returned, a this is a generic error this will not be handled here and an error will be returned
-		return fmt.Errorf("[ERROR] Failed to read address: %s", err.Error())
+		return diag.Errorf("Failed to read address: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -175,10 +172,8 @@ func resourceAccountAddressRead(d *schema.ResourceData, meta interface{}) error 
 	return nil
 }
 
-func resourceAccountAddressUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceAccountAddressUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &address.UpdateAddressInput{
 		City:             utils.OptionalString(d, "city"),
@@ -193,20 +188,18 @@ func resourceAccountAddressUpdate(d *schema.ResourceData, meta interface{}) erro
 
 	updateResp, err := client.Account(d.Get("account_sid").(string)).Address(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update address: %s", err.Error())
+		return diag.Errorf("Failed to update address: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceAccountAddressRead(d, meta)
+	return resourceAccountAddressRead(ctx, d, meta)
 }
 
-func resourceAccountAddressDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceAccountAddressDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Account(d.Get("account_sid").(string)).Address(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete address: %s", err.Error())
+		return diag.Errorf("Failed to delete address: %s", err.Error())
 	}
 
 	d.SetId("")

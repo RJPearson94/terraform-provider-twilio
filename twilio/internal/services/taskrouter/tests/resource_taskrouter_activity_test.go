@@ -7,9 +7,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var activityResourceName = "twilio_taskrouter_activity"
@@ -20,8 +20,7 @@ func TestAccTwilioTaskRouterActivity_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioTaskRouterActivityDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -39,12 +38,6 @@ func TestAccTwilioTaskRouterActivity_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
-			{
-				ResourceName:      stateResourceName,
-				ImportState:       true,
-				ImportStateIdFunc: testAccTwilioTaskRouterActivityImportStateIdFunc(stateResourceName),
-				ImportStateVerify: true,
-			},
 		},
 	})
 }
@@ -57,7 +50,7 @@ func TestAccTwilioTaskRouterActivity_update(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioTaskRouterActivityDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -106,7 +99,7 @@ func testAccCheckTwilioTaskRouterActivityDestroy(s *terraform.State) error {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
-			return fmt.Errorf("Error occurred when retrieving activity information %s", err)
+			return fmt.Errorf("Error occurred when retrieving activity information %s", err.Error())
 		}
 	}
 
@@ -124,7 +117,7 @@ func testAccCheckTwilioTaskRouterActivityExists(name string) resource.TestCheckF
 		}
 
 		if _, err := client.Workspace(rs.Primary.Attributes["workspace_sid"]).Activity(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving activity information %s", err)
+			return fmt.Errorf("Error occurred when retrieving activity information %s", err.Error())
 		}
 
 		return nil

@@ -2,17 +2,17 @@ package taskrouter
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceTaskRouterTaskQueue() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceTaskRouterTaskQueueRead,
+		ReadContext: dataSourceTaskRouterTaskQueueRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -83,19 +83,17 @@ func dataSourceTaskRouterTaskQueue() *schema.Resource {
 	}
 }
 
-func dataSourceTaskRouterTaskQueueRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceTaskRouterTaskQueueRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	workspaceSid := d.Get("workspace_sid").(string)
 	sid := d.Get("sid").(string)
 	getResponse, err := client.Workspace(workspaceSid).TaskQueue(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Task queue with sid (%s) was not found for taskrouter workspace with sid (%s)", sid, workspaceSid)
+			return diag.Errorf("Task queue with sid (%s) was not found for taskrouter workspace with sid (%s)", sid, workspaceSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read task queue: %s", err)
+		return diag.Errorf("Failed to read task queue: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

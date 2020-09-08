@@ -10,17 +10,18 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1/assistant/task"
 	"github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1/assistant/tasks"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceAutopilotTask() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceAutopilotTaskCreate,
-		Read:   resourceAutopilotTaskRead,
-		Update: resourceAutopilotTaskUpdate,
-		Delete: resourceAutopilotTaskDelete,
+		CreateContext: resourceAutopilotTaskCreate,
+		ReadContext:   resourceAutopilotTaskRead,
+		UpdateContext: resourceAutopilotTaskUpdate,
+		DeleteContext: resourceAutopilotTaskDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -100,10 +101,8 @@ func resourceAutopilotTask() *schema.Resource {
 	}
 }
 
-func resourceAutopilotTaskCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceAutopilotTaskCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &tasks.CreateTaskInput{
 		UniqueName:   d.Get("unique_name").(string),
@@ -114,17 +113,15 @@ func resourceAutopilotTaskCreate(d *schema.ResourceData, meta interface{}) error
 
 	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).Tasks.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create autopilot task: %s", err.Error())
+		return diag.Errorf("Failed to create autopilot task: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceAutopilotTaskRead(d, meta)
+	return resourceAutopilotTaskRead(ctx, d, meta)
 }
 
-func resourceAutopilotTaskRead(d *schema.ResourceData, meta interface{}) error {
+func resourceAutopilotTaskRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -132,7 +129,7 @@ func resourceAutopilotTaskRead(d *schema.ResourceData, meta interface{}) error {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read autopilot task: %s", err.Error())
+		return diag.Errorf("Failed to read autopilot task: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -151,22 +148,20 @@ func resourceAutopilotTaskRead(d *schema.ResourceData, meta interface{}) error {
 
 	getActionsResponse, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Id()).Actions().FetchWithContext(ctx)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to read autopilot task actions: %s", err.Error())
+		return diag.Errorf("Failed to read autopilot task actions: %s", err.Error())
 	}
 
 	actionsJSONString, err := structure.FlattenJsonToString(getActionsResponse.Data)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Unable to flatten actions json to string: %s", err.Error())
+		return diag.Errorf("Unable to flatten actions json to string: %s", err.Error())
 	}
 	d.Set("actions", actionsJSONString)
 
 	return nil
 }
 
-func resourceAutopilotTaskUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceAutopilotTaskUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &task.UpdateTaskInput{
 		UniqueName:   utils.OptionalString(d, "unique_name"),
@@ -181,20 +176,18 @@ func resourceAutopilotTaskUpdate(d *schema.ResourceData, meta interface{}) error
 
 	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update autopilot task: %s", err.Error())
+		return diag.Errorf("Failed to update autopilot task: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceAutopilotTaskRead(d, meta)
+	return resourceAutopilotTaskRead(ctx, d, meta)
 }
 
-func resourceAutopilotTaskDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceAutopilotTaskDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete autopilot task: %s", err.Error())
+		return diag.Errorf("Failed to delete autopilot task: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

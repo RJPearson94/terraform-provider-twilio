@@ -9,14 +9,15 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/messaging/v1/service/phone_numbers"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceMessagingPhoneNumber() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMessagingPhoneNumberCreate,
-		Read:   resourceMessagingPhoneNumberRead,
-		Delete: resourceMessagingPhoneNumberDelete,
+		CreateContext: resourceMessagingPhoneNumberCreate,
+		ReadContext:   resourceMessagingPhoneNumberRead,
+		DeleteContext: resourceMessagingPhoneNumberDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -87,10 +88,8 @@ func resourceMessagingPhoneNumber() *schema.Resource {
 	}
 }
 
-func resourceMessagingPhoneNumberCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingPhoneNumberCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &phone_numbers.CreatePhoneNumberInput{
 		PhoneNumberSid: d.Get("sid").(string),
@@ -98,17 +97,15 @@ func resourceMessagingPhoneNumberCreate(d *schema.ResourceData, meta interface{}
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).PhoneNumbers.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create messaging phone number: %s", err)
+		return diag.Errorf("Failed to create messaging phone number: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceMessagingPhoneNumberRead(d, meta)
+	return resourceMessagingPhoneNumberRead(ctx, d, meta)
 }
 
-func resourceMessagingPhoneNumberRead(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingPhoneNumberRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -116,7 +113,7 @@ func resourceMessagingPhoneNumberRead(d *schema.ResourceData, meta interface{}) 
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read messaging phone number: %s", err)
+		return diag.Errorf("Failed to read messaging phone number: %s", err.Error())
 	}
 
 	d.Set("account_sid", getResponse.AccountSid)
@@ -136,13 +133,11 @@ func resourceMessagingPhoneNumberRead(d *schema.ResourceData, meta interface{}) 
 	return nil
 }
 
-func resourceMessagingPhoneNumberDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceMessagingPhoneNumberDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Get("service_sid").(string)).PhoneNumber(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete messaging phone number: %s", err.Error())
+		return diag.Errorf("Failed to delete messaging phone number: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

@@ -7,8 +7,8 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var addressResourceName = "twilio_account_address"
@@ -19,8 +19,7 @@ func TestAccTwilioAccountAddress_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAccountAddressDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -61,7 +60,7 @@ func TestAccTwilioAccountAddress_update(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAccountAddressDestroy,
 		Steps: []resource.TestStep{
 			{

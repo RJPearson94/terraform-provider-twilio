@@ -2,17 +2,17 @@ package messaging
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceMessagingService() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMessagingServiceRead,
+		ReadContext: dataSourceMessagingServiceRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -91,18 +91,16 @@ func dataSourceMessagingService() *schema.Resource {
 	}
 }
 
-func dataSourceMessagingServiceRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceMessagingServiceRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	sid := d.Get("sid").(string)
 	getResponse, err := client.Service(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Messaging service with sid (%s) was not found", sid)
+			return diag.Errorf("Messaging service with sid (%s) was not found", sid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read messaging service: %s", err)
+		return diag.Errorf("Failed to read messaging service: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

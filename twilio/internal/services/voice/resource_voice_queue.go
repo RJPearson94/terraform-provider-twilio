@@ -10,15 +10,16 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/queue"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/queues"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceVoiceQueue() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceVoiceQueueCreate,
-		Read:   resourceVoiceQueueRead,
-		Update: resourceVoiceQueueUpdate,
-		Delete: resourceVoiceQueueDelete,
+		CreateContext: resourceVoiceQueueCreate,
+		ReadContext:   resourceVoiceQueueRead,
+		UpdateContext: resourceVoiceQueueUpdate,
+		DeleteContext: resourceVoiceQueueDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -82,10 +83,8 @@ func resourceVoiceQueue() *schema.Resource {
 	}
 }
 
-func resourceVoiceQueueCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceVoiceQueueCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &queues.CreateQueueInput{
 		FriendlyName: d.Get("friendly_name").(string),
@@ -94,17 +93,15 @@ func resourceVoiceQueueCreate(d *schema.ResourceData, meta interface{}) error {
 
 	createResult, err := client.Account(d.Get("account_sid").(string)).Queues.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create queue: %s", err.Error())
+		return diag.Errorf("Failed to create queue: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceVoiceQueueRead(d, meta)
+	return resourceVoiceQueueRead(ctx, d, meta)
 }
 
-func resourceVoiceQueueRead(d *schema.ResourceData, meta interface{}) error {
+func resourceVoiceQueueRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Account(d.Get("account_sid").(string)).Queue(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -113,7 +110,7 @@ func resourceVoiceQueueRead(d *schema.ResourceData, meta interface{}) error {
 			return nil
 		}
 		// If the account sid is incorrect a 401 is returned, a this is a generic error this will not be handled here and an error will be returned
-		return fmt.Errorf("[ERROR] Failed to read queue: %s", err.Error())
+		return diag.Errorf("Failed to read queue: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -131,10 +128,8 @@ func resourceVoiceQueueRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceVoiceQueueUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceVoiceQueueUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &queue.UpdateQueueInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
@@ -143,20 +138,18 @@ func resourceVoiceQueueUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	updateResp, err := client.Account(d.Get("account_sid").(string)).Queue(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update queue: %s", err.Error())
+		return diag.Errorf("Failed to update queue: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceVoiceQueueRead(d, meta)
+	return resourceVoiceQueueRead(ctx, d, meta)
 }
 
-func resourceVoiceQueueDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceVoiceQueueDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Account(d.Get("account_sid").(string)).Queue(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete queue: %s", err.Error())
+		return diag.Errorf("Failed to delete queue: %s", err.Error())
 	}
 
 	d.SetId("")

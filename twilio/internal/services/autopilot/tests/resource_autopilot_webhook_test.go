@@ -9,9 +9,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var webhookResourceName = "twilio_autopilot_webhook"
@@ -24,8 +24,7 @@ func TestAccTwilioAutopilotWebhook_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -64,7 +63,7 @@ func TestAccTwilioAutopilotWebhook_invalidWebhookURL(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -81,7 +80,7 @@ func TestAccTwilioAutopilotAssistant_invalidWebhookMethod(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -102,7 +101,7 @@ func TestAccTwilioAutopilotWebhook_update(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAutopilotWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -158,7 +157,7 @@ func testAccCheckTwilioAutopilotWebhookDestroy(s *terraform.State) error {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
-			return fmt.Errorf("Error occurred when retrieving webhook information %s", err)
+			return fmt.Errorf("Error occurred when retrieving webhook information %s", err.Error())
 		}
 	}
 
@@ -176,7 +175,7 @@ func testAccCheckTwilioAutopilotWebhookExists(name string) resource.TestCheckFun
 		}
 
 		if _, err := client.Assistant(rs.Primary.Attributes["assistant_sid"]).Webhook(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving webhook information %s", err)
+			return fmt.Errorf("Error occurred when retrieving webhook information %s", err.Error())
 		}
 
 		return nil

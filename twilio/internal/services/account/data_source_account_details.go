@@ -2,17 +2,17 @@ package account
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceAccountDetails() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAccountDetailsRead,
+		ReadContext: dataSourceAccountDetailsRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -56,18 +56,16 @@ func dataSourceAccountDetails() *schema.Resource {
 	}
 }
 
-func dataSourceAccountDetailsRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceAccountDetailsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	sid := d.Get("sid").(string)
 	getResponse, err := client.Account(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Account with sid (%s) was not found", sid)
+			return diag.Errorf("Account with sid (%s) was not found", sid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read account details: %s", err)
+		return diag.Errorf("Failed to read account details: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

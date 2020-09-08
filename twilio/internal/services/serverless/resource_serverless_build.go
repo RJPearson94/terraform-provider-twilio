@@ -13,15 +13,16 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/builds"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceServerlessBuild() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceServerlessBuildCreate,
-		Read:   resourceServerlessBuildRead,
-		Update: resourceServerlessBuildUpdate,
-		Delete: resourceServerlessBuildDelete,
+		CreateContext: resourceServerlessBuildCreate,
+		ReadContext:   resourceServerlessBuildRead,
+		UpdateContext: resourceServerlessBuildUpdate,
+		DeleteContext: resourceServerlessBuildDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -195,10 +196,8 @@ func resourceServerlessBuild() *schema.Resource {
 	}
 }
 
-func resourceServerlessBuildCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessBuildCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	dependencyArray := make([]builds.CreateDependency, 0)
 	for key, value := range d.Get("dependencies").(map[string]interface{}) {
@@ -210,7 +209,7 @@ func resourceServerlessBuildCreate(d *schema.ResourceData, meta interface{}) err
 
 	dependencies, err := json.Marshal(dependencyArray)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to marshal dependencies: %s", err)
+		return diag.Errorf("Failed to marshal dependencies: %s", err.Error())
 	}
 
 	createInput := &builds.CreateBuildInput{
@@ -221,25 +220,23 @@ func resourceServerlessBuildCreate(d *schema.ResourceData, meta interface{}) err
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Builds.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create serverless build: %s", err.Error())
+		return diag.Errorf("Failed to create serverless build: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
 
 	pollings := d.Get("polling").([]interface{})
 	if len(pollings) == 1 {
-		if err := poll(d, meta.(*common.TwilioClient), pollings[0].(map[string]interface{})); err != nil {
+		if err := poll(ctx, d, meta.(*common.TwilioClient), pollings[0].(map[string]interface{})); err != nil {
 			return err
 		}
 	}
 
-	return resourceServerlessBuildRead(d, meta)
+	return resourceServerlessBuildRead(ctx, d, meta)
 }
 
-func resourceServerlessBuildRead(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessBuildRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -247,7 +244,7 @@ func resourceServerlessBuildRead(d *schema.ResourceData, meta interface{}) error
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless build: %s", err.Error())
+		return diag.Errorf("Failed to read serverless build: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -268,19 +265,17 @@ func resourceServerlessBuildRead(d *schema.ResourceData, meta interface{}) error
 	return nil
 }
 
-func resourceServerlessBuildUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessBuildUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	log.Printf("[INFO] Serverless deployments cannot be updated. So only polling config can be updated without a new resource being created")
 
 	return nil
 }
 
-func resourceServerlessBuildDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceServerlessBuildDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Get("service_sid").(string)).Build(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete serverless build: %s", err.Error())
+		return diag.Errorf("Failed to delete serverless build: %s", err.Error())
 	}
 
 	d.SetId("")
@@ -296,27 +291,25 @@ func expandVersionSids(input []interface{}) *[]string {
 	return &versionSids
 }
 
-func poll(d *schema.ResourceData, client *common.TwilioClient, pollingConfig map[string]interface{}) error {
+func poll(ctx context.Context, d *schema.ResourceData, client *common.TwilioClient, pollingConfig map[string]interface{}) diag.Diagnostics {
 	if pollingConfig["enabled"].(bool) {
 		for i := 0; i < pollingConfig["max_attempts"].(int); i++ {
 			log.Printf("[INFO] Build Polling attempt # %v", i+1)
-			ctx, cancel := context.WithTimeout(client.StopContext, d.Timeout(schema.TimeoutRead))
-			defer cancel()
 
 			getResponse, err := client.Serverless.Service(d.Get("service_sid").(string)).Build(d.Id()).FetchWithContext(ctx)
 			if err != nil {
-				return fmt.Errorf("[ERROR] Failed to poll serverless build: %s", err.Error())
+				return diag.Errorf("Failed to poll serverless build: %s", err.Error())
 			}
 
 			if getResponse.Status == "failed" {
-				return fmt.Errorf("[ERROR] Serverless build failed")
+				return diag.Errorf("Serverless build failed")
 			}
 			if getResponse.Status == "completed" {
 				return nil
 			}
 			time.Sleep(time.Duration(pollingConfig["delay_in_ms"].(int)) * time.Millisecond)
 		}
-		return fmt.Errorf("[ERROR] Reached max polling attempts without a completed build")
+		return diag.Errorf("Reached max polling attempts without a completed build")
 	}
 	return nil
 }

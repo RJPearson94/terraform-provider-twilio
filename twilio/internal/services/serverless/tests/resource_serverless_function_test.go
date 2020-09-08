@@ -8,9 +8,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var functionResourceName = "twilio_serverless_function"
@@ -23,8 +23,7 @@ func TestAccTwilioServerlessFunction_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		Providers:         acceptance.TestAccProviders,
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioServerlessFunctionDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -67,7 +66,7 @@ func TestAccTwilioServerlessFunction_multipleFunctions(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioServerlessFunctionDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -88,7 +87,7 @@ func TestAccTwilioServerlessAssetFunction_invalidVisibility(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioServerlessFunction_basic(uniqueName, friendlyName, visibility),
@@ -109,7 +108,7 @@ func TestAccTwilioServerlessFunction_update(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioServerlessFunctionDestroy,
 		Steps: []resource.TestStep{
 			{
@@ -168,14 +167,14 @@ func testAccCheckTwilioServerlessFunctionDestroy(s *terraform.State) error {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
-			return fmt.Errorf("Error occurred when retrieving function information %s", err)
+			return fmt.Errorf("Error occurred when retrieving function information %s", err.Error())
 		}
 
 		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.ID).Version(rs.Primary.Attributes["latest_version_sid"]).Fetch(); err != nil {
 			if utils.IsNotFoundError(err) {
 				return nil
 			}
-			return fmt.Errorf("Error occurred when retrieving function version information %s", err)
+			return fmt.Errorf("Error occurred when retrieving function version information %s", err.Error())
 		}
 	}
 
@@ -193,11 +192,11 @@ func testAccCheckTwilioServerlessFunctionExists(name string) resource.TestCheckF
 		}
 
 		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.ID).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving function information %s", err)
+			return fmt.Errorf("Error occurred when retrieving function information %s", err.Error())
 		}
 
 		if _, err := client.Service(rs.Primary.Attributes["service_sid"]).Function(rs.Primary.ID).Version(rs.Primary.Attributes["latest_version_sid"]).Fetch(); err != nil {
-			return fmt.Errorf("Error occurred when retrieving function version information %s", err)
+			return fmt.Errorf("Error occurred when retrieving function version information %s", err.Error())
 		}
 
 		return nil

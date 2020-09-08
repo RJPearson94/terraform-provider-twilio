@@ -2,17 +2,17 @@ package messaging
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceMessagingShortCodes() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMessagingShortCodesRead,
+		ReadContext: dataSourceMessagingShortCodesRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(10 * time.Minute),
@@ -70,10 +70,8 @@ func dataSourceMessagingShortCodes() *schema.Resource {
 	}
 }
 
-func dataSourceMessagingShortCodesRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceMessagingShortCodesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Messaging
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	serviceSid := d.Get("service_sid").(string)
 	paginator := client.Service(serviceSid).ShortCodes.NewShortCodesPaginator()
@@ -83,9 +81,9 @@ func dataSourceMessagingShortCodesRead(d *schema.ResourceData, meta interface{})
 	err := paginator.Error()
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] No short codes were found for messaging service with sid (%s)", serviceSid)
+			return diag.Errorf("No short codes were found for messaging service with sid (%s)", serviceSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read messaging short code: %s", err)
+		return diag.Errorf("Failed to read messaging short code: %s", err.Error())
 	}
 
 	d.SetId(serviceSid)

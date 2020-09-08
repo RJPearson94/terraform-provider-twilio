@@ -2,17 +2,17 @@ package account
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceAccountAddress() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAccountAddressRead,
+		ReadContext: dataSourceAccountAddressRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -83,20 +83,18 @@ func dataSourceAccountAddress() *schema.Resource {
 	}
 }
 
-func dataSourceAccountAddressRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceAccountAddressRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).API
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	accountSid := d.Get("account_sid").(string)
 	sid := d.Get("sid").(string)
 	getResponse, err := client.Account(accountSid).Address(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Address with sid (%s) was not found in account (%s)", sid, accountSid)
+			return diag.Errorf("Address with sid (%s) was not found in account (%s)", sid, accountSid)
 		}
 		// If the account sid is incorrect a 401 is returned, a this is a generic error this will not be handled here and an error will be returned
-		return fmt.Errorf("[ERROR] Failed to read address: %s", err.Error())
+		return diag.Errorf("Failed to read address: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)

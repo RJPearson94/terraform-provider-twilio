@@ -10,16 +10,17 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service"
 	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/services"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceProxyService() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceProxyServiceCreate,
-		Read:   resourceProxyServiceRead,
-		Update: resourceProxyServiceUpdate,
-		Delete: resourceProxyServiceDelete,
+		CreateContext: resourceProxyServiceCreate,
+		ReadContext:   resourceProxyServiceRead,
+		UpdateContext: resourceProxyServiceUpdate,
+		DeleteContext: resourceProxyServiceDelete,
 
 		Importer: &schema.ResourceImporter{
 			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
@@ -111,10 +112,8 @@ func resourceProxyService() *schema.Resource {
 	}
 }
 
-func resourceProxyServiceCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyServiceCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
-	defer cancel()
 
 	createInput := &services.CreateServiceInput{
 		UniqueName:              d.Get("unique_name").(string),
@@ -129,17 +128,15 @@ func resourceProxyServiceCreate(d *schema.ResourceData, meta interface{}) error 
 
 	createResult, err := client.Services.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return fmt.Errorf("[ERROR] Failed to create proxy service: %s", err.Error())
+		return diag.Errorf("Failed to create proxy service: %s", err.Error())
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceProxyServiceRead(d, meta)
+	return resourceProxyServiceRead(ctx, d, meta)
 }
 
-func resourceProxyServiceRead(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyServiceRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	getResponse, err := client.Service(d.Id()).FetchWithContext(ctx)
 	if err != nil {
@@ -147,7 +144,7 @@ func resourceProxyServiceRead(d *schema.ResourceData, meta interface{}) error {
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("[ERROR] Failed to read proxy service: %s", err.Error())
+		return diag.Errorf("Failed to read proxy service: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)
@@ -172,10 +169,8 @@ func resourceProxyServiceRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceProxyServiceUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyServiceUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
-	defer cancel()
 
 	updateInput := &service.UpdateServiceInput{
 		UniqueName:              utils.OptionalString(d, "unique_name"),
@@ -190,20 +185,18 @@ func resourceProxyServiceUpdate(d *schema.ResourceData, meta interface{}) error 
 
 	updateResp, err := client.Service(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return fmt.Errorf("Failed to update proxy service: %s", err.Error())
+		return diag.Errorf("Failed to update proxy service: %s", err.Error())
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceProxyServiceRead(d, meta)
+	return resourceProxyServiceRead(ctx, d, meta)
 }
 
-func resourceProxyServiceDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceProxyServiceDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Proxy
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutDelete))
-	defer cancel()
 
 	if err := client.Service(d.Id()).DeleteWithContext(ctx); err != nil {
-		return fmt.Errorf("Failed to delete proxy service: %s", err.Error())
+		return diag.Errorf("Failed to delete proxy service: %s", err.Error())
 	}
 	d.SetId("")
 	return nil

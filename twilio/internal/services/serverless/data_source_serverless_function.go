@@ -2,7 +2,6 @@ package serverless
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -10,12 +9,13 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/function/versions"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceServerlessFunction() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceServerlessFunctionRead,
+		ReadContext: dataSourceServerlessFunctionRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
@@ -70,10 +70,8 @@ func dataSourceServerlessFunction() *schema.Resource {
 	}
 }
 
-func dataSourceServerlessFunctionRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceServerlessFunctionRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Serverless
-	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
-	defer cancel()
 
 	serviceSid := d.Get("service_sid").(string)
 	sid := d.Get("sid").(string)
@@ -82,9 +80,9 @@ func dataSourceServerlessFunctionRead(d *schema.ResourceData, meta interface{}) 
 	getResponse, err := functionClient.FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return fmt.Errorf("[ERROR] Function with sid (%s) was not found for serverless service with sid (%s)", sid, serviceSid)
+			return diag.Errorf("Function with sid (%s) was not found for serverless service with sid (%s)", sid, serviceSid)
 		}
-		return fmt.Errorf("[ERROR] Failed to read serverless function: %s", err.Error())
+		return diag.Errorf("Failed to read serverless function: %s", err.Error())
 	}
 
 	d.SetId(getResponse.Sid)
@@ -108,7 +106,7 @@ func dataSourceServerlessFunctionRead(d *schema.ResourceData, meta interface{}) 
 	versionsPaginator.Next()
 
 	if versionsPaginator.Error() != nil {
-		return fmt.Errorf("[ERROR] Failed to read serverless function versions: %s", versionsPaginator.Error().Error())
+		return diag.Errorf("Failed to read serverless function versions: %s", versionsPaginator.Error().Error())
 	}
 
 	if len(versionsPaginator.Versions) > 0 {
@@ -121,9 +119,9 @@ func dataSourceServerlessFunctionRead(d *schema.ResourceData, meta interface{}) 
 		contentGetResponse, contentErr := functionClient.Version(latestVersion.Sid).Content().FetchWithContext(ctx)
 		if contentErr != nil {
 			if utils.IsNotFoundError(contentErr) {
-				return fmt.Errorf("[ERROR] Function version with sid (%s) was not found for serverless service with sid (%s) and function with sid (%s)", latestVersion.Sid, serviceSid, sid)
+				return diag.Errorf("Function version with sid (%s) was not found for serverless service with sid (%s) and function with sid (%s)", latestVersion.Sid, serviceSid, sid)
 			}
-			return fmt.Errorf("[ERROR] Failed to read serverless function version content: %s", err.Error())
+			return diag.Errorf("Failed to read serverless function version content: %s", err.Error())
 		}
 
 		d.Set("content", contentGetResponse.Content)

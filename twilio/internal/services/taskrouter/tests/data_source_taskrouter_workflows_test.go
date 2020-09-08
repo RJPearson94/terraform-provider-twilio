@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
 var workflowsDataSourceName = "twilio_taskrouter_workflows"
@@ -17,7 +17,7 @@ func TestAccDataSourceTwilioTaskRouterWorkflows_basic(t *testing.T) {
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories(),
+		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceTwilioTaskRouterWorkflows_basic(friendlyName),
@@ -60,9 +60,9 @@ resource "twilio_taskrouter_workflow" "workflow" {
   friendly_name = "%s"
   configuration = <<EOF
 {
-  "task_routing": {
+  "task_routing":{
     "filters": [],
-    "default_filter": {
+    "default_filter":{
       "queue": "${twilio_taskrouter_task_queue.task_queue.sid}"
     }
   }
