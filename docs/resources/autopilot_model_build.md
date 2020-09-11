@@ -9,6 +9,8 @@ Manages an Autopilot model build. See the [API docs](https://www.twilio.com/docs
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
+~> To allow terraform to correctly manage the lifecycle of the model build you should use `create_before_destroy` argument in the lifecycle block. The docs can be found [here](https://www.terraform.io/docs/configuration/resources.html#create_before_destroy)
+
 ## Example Usage
 
 ```hcl
@@ -30,15 +32,22 @@ resource "twilio_autopilot_task_sample" "task_sample" {
 
 resource "twilio_autopilot_model_build" "model_build" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
-  unique_name   = "test"
+
+  triggers = {
+    redeployment = sha1(join(",", list(
+      twilio_autopilot_task_sample.task_sample.sid,
+      twilio_autopilot_task_sample.task_sample.language,
+      twilio_autopilot_task_sample.task_sample.tagged_text,
+    )))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   polling {
     enabled = true
   }
-
-  depends_on = [
-    twilio_autopilot_task_sample.task_sample
-  ]
 }
 ```
 
@@ -47,8 +56,10 @@ resource "twilio_autopilot_model_build" "model_build" {
 The following arguments are supported:
 
 - `assistant_sid` - (Mandatory) The SID of the assistant to associate the model build with. Changing this forces a new resource to be created
-- `unique_name` - (Mandatory) The unique name of the model build
+- `unique_name_prefix` - (Optional) The prefix to be concatenated with an unique ID to form the unique name of the model build
 - `status_callback` - (Optional) The callback URL to post build statuses to. Changing this forces a new resource to be created
+- `triggers` - (Optional) A map of key value pairs which can be used to determine if changes have occurred and a redeployment is necessary. Changing this forces a new resource to be created
+~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of terraform.
 - `polling` - (Optional) A `polling` block as documented below.
 
 ---
@@ -66,9 +77,11 @@ The following attributes are exported:
 - `id` - The ID of the model build (Same as the SID)
 - `sid` - The SID of the model build (Same as the ID)
 - `account_sid` - The account SID associated with the model build
+- `unique_name_prefix` - The prefix to be concatenated with an unique ID to form the unique name of the model build
 - `unique_name` - The unique name of the model build
 - `status_callback` - The callback URL to post build statuses to
 - `status` - The current model build status
+- `triggers` - A map of key value pairs which can be used to determine if changes have occurred and a redeployment is necessary.
 - `error_code` - The error code of the model build if the status is failed
 - `build_duration` - The duration of the model build (in seconds)
 - `date_created` - The date in RFC3339 format that the model build was created
@@ -93,3 +106,5 @@ A model build can be imported using the `/Assistants/{assistantSid}/ModelBuilds/
 ```shell
 terraform import twilio_autopilot_model_build.model_build /Assistants/UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/ModelBuilds/UGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
+
+!> The following arguments "unique_name_prefix", "triggers" and "polling" cannot be imported

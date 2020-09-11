@@ -11,6 +11,8 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1/assistant/model_build"
 	"github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1/assistant/model_builds"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -59,14 +61,26 @@ func resourceAutopilotModelBuild() *schema.Resource {
 				Required: true,
 				ForceNew: true,
 			},
+			"unique_name_prefix": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 			"unique_name": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: true,
+				Computed: true,
 			},
 			"status_callback": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				ForceNew: true,
+			},
+			"triggers": {
+				Type:     schema.TypeMap,
+				Optional: true,
+				ForceNew: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 			},
 			"build_duration": &schema.Schema{
 				Type:     schema.TypeInt,
@@ -124,8 +138,14 @@ func resourceAutopilotModelBuildCreate(d *schema.ResourceData, meta interface{})
 	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutCreate))
 	defer cancel()
 
+	var uniqueName *string = nil
+
+	if v, ok := d.GetOk("unique_name_prefix"); ok {
+		uniqueName = sdkUtils.String(v.(string) + resource.UniqueId())
+	}
+
 	createInput := &model_builds.CreateModelBuildInput{
-		UniqueName:     utils.OptionalString(d, "unique_name"),
+		UniqueName:     uniqueName,
 		StatusCallback: utils.OptionalString(d, "status_callback"),
 	}
 
@@ -179,12 +199,22 @@ func resourceAutopilotModelBuildRead(d *schema.ResourceData, meta interface{}) e
 }
 
 func resourceAutopilotModelBuildUpdate(d *schema.ResourceData, meta interface{}) error {
+	if !d.HasChanges("unique_name_prefix") {
+		return nil
+	}
+
 	client := meta.(*common.TwilioClient).Autopilot
 	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutUpdate))
 	defer cancel()
 
+	var uniqueName *string = nil
+
+	if v, ok := d.GetOk("unique_name_prefix"); ok {
+		uniqueName = sdkUtils.String(v.(string) + resource.UniqueId())
+	}
+
 	updateInput := &model_build.UpdateModelBuildInput{
-		UniqueName: utils.OptionalString(d, "unique_name"),
+		UniqueName: uniqueName,
 	}
 
 	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuild(d.Id()).UpdateWithContext(ctx, updateInput)

@@ -16,13 +16,20 @@ resource "twilio_autopilot_task_sample" "task_sample" {
 
 resource "twilio_autopilot_model_build" "model_build" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
-  unique_name   = "test"
+
+  triggers = {
+    redeployment = sha1(join(",", list(
+      twilio_autopilot_task_sample.task_sample.sid,
+      twilio_autopilot_task_sample.task_sample.language,
+      twilio_autopilot_task_sample.task_sample.tagged_text,
+    )))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   polling {
     enabled = true
   }
-
-  depends_on = [
-    twilio_autopilot_task_sample.task_sample
-  ]
 }
