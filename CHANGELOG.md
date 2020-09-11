@@ -1,3 +1,9 @@
+## v0.2.0 (unreleased)
+
+BUG FIXES
+
+`twilio_autopilot_model_build` A new model build wasn't automatically when dependent resources were updated. [Issue](https://github.com/RJPearson94/terraform-provider-twilio/issues/7) **Breaking Change**
+
 ## v0.1.1 (2020-09-06)
 
 Update Documentation with Terraform Registry Information and disclaimer of terraform docs
