@@ -1,4 +1,4 @@
-## v0.2.0 (unreleased)
+## v0.2.0 (2020-09-12)
 
 FEATURES
 `twilio_autopilot_model_build` Add `triggers` to force the recreated of a model build [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/autopilot_model_build.md)
