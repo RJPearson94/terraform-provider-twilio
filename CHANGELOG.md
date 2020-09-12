@@ -1,8 +1,16 @@
 ## v0.2.0 (unreleased)
 
+FEATURES
+`twilio_autopilot_model_build` Add `triggers` to force the recreated of a model build [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/autopilot_model_build.md)
+`twilio_serverless_build` Add `triggers` to force the recreated of a build [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/serverless_build.md)
+`twilio_serverless_deployment` Add `triggers` to force the recreated of a build and add `is_latest_deployment` to indicate whether the terraform resource is the latest deployment [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/serverless_deployment.md)
+
 BUG FIXES
 
 `twilio_autopilot_model_build` A new model build wasn't automatically when dependent resources were updated. [Issue](https://github.com/RJPearson94/terraform-provider-twilio/issues/7) **Breaking Change**
+`twilio_serverless_asset` recompute latest_version_sid when the asset was changed [Related Issue](https://github.com/RJPearson94/terraform-provider-twilio/issues/6)
+`twilio_serverless_function` recompute latest_version_sid when the function was changed [Related Issue](https://github.com/RJPearson94/terraform-provider-twilio/issues/6)
+`twilio_serverless_build` Removed computed flag on asset and function version arguments to allow an artefact to be removed and the build is recreated and force a new resource to be created when when function and/ or asset sid has changed [Related Issue](https://github.com/RJPearson94/terraform-provider-twilio/issues/6) **Breaking Change**
 
 ## v0.1.1 (2020-09-06)
 
@@ -81,18 +89,18 @@ FEATURES
 - **New Resource:** `twilio_proxy_service` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/proxy_service.md)
 - **New Resource:** `twilio_proxy_phone_number` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/proxy_phone_number.md)
 - **New Resource:** `twilio_proxy_short_code` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/proxy_short_code.md)
-- **New Data Source:** `twilio_serverless_asset` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/erverless_asset.md)
-- **New Data Source:** `twilio_serverless_assets` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-source/serverless_assets.md)
-- **New Data Source:** `twilio_serverless_build` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/erverless_buid.md)
-- **New Data Source:** `twilio_serverless_builds` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-source/sererless_builds.md)
-- **New Data Source:** `twilio_serverless_deployment` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-surces/erverless_deployment.md)
-- **New Data Source:** `twilio_serverless_deployments` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-surcesserverless_deployments.md)
-- **New Data Source:** `twilio_serverless_environment` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sourcs/erverless_environment.md)
-- **New Data Source:** `twilio_serverless_environments` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-souce/serverless_environments.md)
-- **New Data Source:** `twilio_serverless_function` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/everless_function.md)
-- **New Data Source:** `twilio_serverless_functions` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sourcs/severless_functions.md)
-- **New Data Source:** `twilio_serverless_service` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sourceserverless_service.md)
-- **New Data Source:** `twilio_serverless_variable` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sourceserverless_variable.md)
+- **New Data Source:** `twilio_serverless_asset` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/serverless_asset.md)
+- **New Data Source:** `twilio_serverless_assets` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/serverless_assets.md)
+- **New Data Source:** `twilio_serverless_build` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/serverless_buid.md)
+- **New Data Source:** `twilio_serverless_builds` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sererless_builds.md)
+- **New Data Source:** `twilio_serverless_deployment` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/serverless_deployment.md)
+- **New Data Source:** `twilio_serverless_deployments` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/serverless_deployments.md)
+- **New Data Source:** `twilio_serverless_environment` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/serverless_environment.md)
+- **New Data Source:** `twilio_serverless_environments` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/serverless_environments.md)
+- **New Data Source:** `twilio_serverless_function` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/severless_function.md)
+- **New Data Source:** `twilio_serverless_functions` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/severless_functions.md)
+- **New Data Source:** `twilio_serverless_service` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/serverless_service.md)
+- **New Data Source:** `twilio_serverless_variable` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/serverless_variable.md)
 - **New Data Source:** `twilio_serverless_variables` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-soures/serverless_variables.md)
 - **New Resource:** `twilio_serverless_environment` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/severless_environment.md)
 - **New Resource:** `twilio_serverless_service` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/serverless_service.md)
