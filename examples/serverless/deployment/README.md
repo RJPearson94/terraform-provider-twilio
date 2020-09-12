@@ -11,6 +11,8 @@ This example provisions the following resources:
 - serverless environment
 - serverless deployment
 
+**Note:** if a new build is created, the deployment and current build will be removed before this build is created/ built
+
 ## Requirements
 
 | Name      | Version |

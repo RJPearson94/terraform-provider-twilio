@@ -17,6 +17,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/function/versions"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/functions"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"github.com/mitchellh/go-homedir"
@@ -126,6 +127,17 @@ func resourceServerlessFunction() *schema.Resource {
 				Computed: true,
 			},
 		},
+
+		CustomizeDiff: customdiff.All(
+			customdiff.ComputedIf("latest_version_sid", func(d *schema.ResourceDiff, meta interface{}) bool {
+				for _, key := range []string{"source", "source_hash", "content", "content_file_name", "content_type", "path", "visibility"} {
+					if d.HasChange(key) {
+						return true
+					}
+				}
+				return false
+			}),
+		),
 	}
 }
 

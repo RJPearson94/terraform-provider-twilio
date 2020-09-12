@@ -10,6 +10,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/environment/deployments"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -67,6 +68,18 @@ func resourceServerlessDeployment() *schema.Resource {
 				Optional: true,
 				ForceNew: true,
 			},
+			"triggers": {
+				Type:     schema.TypeMap,
+				Optional: true,
+				ForceNew: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+			"is_latest_deployment": &schema.Schema{
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
 			"date_created": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
@@ -98,7 +111,9 @@ func resourceServerlessDeploymentRead(d *schema.ResourceData, meta interface{}) 
 	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
 	defer cancel()
 
-	getResponse, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Deployment(d.Id()).FetchWithContext(ctx)
+	environmentsClient := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string))
+
+	getResponse, err := environmentsClient.Deployment(d.Id()).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
 			d.SetId("")
@@ -107,11 +122,23 @@ func resourceServerlessDeploymentRead(d *schema.ResourceData, meta interface{}) 
 		return fmt.Errorf("[ERROR] Failed to read serverless deployment: %s", err.Error())
 	}
 
+	deploymentsPaginator := environmentsClient.Deployments.NewDeploymentsPaginatorWithOptions(&deployments.DeploymentsPageOptions{
+		PageSize: sdkUtils.Int(5),
+	})
+	// The twilio api return the latest version as the first element in the array.
+	// So there is no need to loop to retrieve all records
+	deploymentsPaginator.Next()
+
+	if deploymentsPaginator.Error() != nil {
+		return fmt.Errorf("[ERROR] Failed to read serverless deployments: %s", deploymentsPaginator.Error().Error())
+	}
+
 	d.Set("sid", getResponse.Sid)
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("service_sid", getResponse.ServiceSid)
 	d.Set("environment_sid", getResponse.EnvironmentSid)
 	d.Set("build_sid", getResponse.BuildSid)
+	d.Set("is_latest_deployment", deploymentsPaginator.Deployments[0].Sid == getResponse.Sid)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {
@@ -124,10 +151,18 @@ func resourceServerlessDeploymentRead(d *schema.ResourceData, meta interface{}) 
 }
 
 func resourceServerlessDeploymentDelete(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[INFO] Serverless deployments cannot be deleted. So a new deployment will be create without a build sid as this will supersede the current deployment")
+	if d.Get("is_latest_deployment").(bool) {
+		if d.Get("build_sid") != nil {
+			log.Printf("[INFO] Serverless deployments cannot be deleted. So a new deployment will be create without a build sid as this will supersede the current deployment")
 
-	if _, err := createServerlessDeployment(d, meta, nil, schema.TimeoutDelete); err != nil {
-		return fmt.Errorf("[ERROR] Failed to create deployment without build sid: %s", err.Error())
+			if _, err := createServerlessDeployment(d, meta, nil, schema.TimeoutDelete); err != nil {
+				return fmt.Errorf("[ERROR] Failed to create deployment without build sid: %s", err.Error())
+			}
+		} else {
+			log.Printf("[INFO] Serverless deployment build sid is already nil, so removing this resource from Terraform state as you cannot currently delete a serverless deployment")
+		}
+	} else {
+		log.Printf("[INFO] Serverless deployment is not the latest deployments, so skipping creating a new deployment without a build sid")
 	}
 
 	d.SetId("")

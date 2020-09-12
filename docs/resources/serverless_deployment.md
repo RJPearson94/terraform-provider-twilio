@@ -9,6 +9,8 @@ Manages a Serverless deployment. See the [API docs](https://www.twilio.com/docs/
 
 For more information on Serverless (also known as Runtime), see the product [page](https://www.twilio.com/runtime)
 
+~> Serverless deployments cannot be removed, they can only be superseded. When a destroy is required Terraform will check if the resource is the latest deployment. If the resource is the latest deployment and the `build_sid` is not nil a new deployment will be created with a nil `build_sid` to remove this resource as the active deployment, this allows the build to be destroyed. If the `build_sid` is nil or if the resource is not the latest version then the resource will be removed from the Terraform state without a new deployment being created.
+
 !> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage
@@ -36,9 +38,11 @@ EOF
 
 resource "twilio_serverless_build" "build" {
   service_sid = twilio_serverless_service.service.sid
+
   function_version {
     sid = twilio_serverless_function.function.latest_version_sid
   }
+
   dependencies = {
     "twilio" : "3.6.3"
   }
@@ -67,6 +71,8 @@ The following arguments are supported:
 - `service_sid` - (Mandatory) The serverless service SID to associate the deployment with. Changing this forces a new resource to be created
 - `environment_sid` - (Mandatory) The serverless environment SID to associate the deployment with. Changing this forces a new resource to be created
 - `build_sid` - (Optional) The build SID to be deployed to the environment. Changing this forces a new resource to be created
+- `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary. Changing this forces a new resource to be created
+~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of terraform.
 
 ## Attributes Reference
 
@@ -78,6 +84,9 @@ The following attributes are exported:
 - `service_sid` - The service SID associated with the deployment
 - `environment_sid` - The environment SID associated with the deployment
 - `build_sid` - The build SID to be deployed to the environment
+- `is_latest_deployment` - Determine whether this deployment is the latest
+~> This caters for when deployments are made and Terraform state is not aware of them
+- `triggers` - A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary.
 - `date_created` - The date in RFC3339 format that the deployment was created
 - `date_updated` - The date in RFC3339 format that the deployment was updated
 - `url` - The URL of the deployment
@@ -97,3 +106,5 @@ A deployment can be imported using the `/Services/{serviceSid}/Environments/{env
 ```shell
 terraform import twilio_serverless_deployment.deployment /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Environments/ZEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Deployments/ZDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
+
+!> "triggers" cannot be imported

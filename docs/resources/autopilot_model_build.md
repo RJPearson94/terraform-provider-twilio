@@ -58,7 +58,7 @@ The following arguments are supported:
 - `assistant_sid` - (Mandatory) The SID of the assistant to associate the model build with. Changing this forces a new resource to be created
 - `unique_name_prefix` - (Optional) The prefix to be concatenated with an unique ID to form the unique name of the model build
 - `status_callback` - (Optional) The callback URL to post build statuses to. Changing this forces a new resource to be created
-- `triggers` - (Optional) A map of key value pairs which can be used to determine if changes have occurred and a redeployment is necessary. Changing this forces a new resource to be created
+- `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary. Changing this forces a new resource to be created
 ~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of terraform.
 - `polling` - (Optional) A `polling` block as documented below.
 
@@ -81,7 +81,7 @@ The following attributes are exported:
 - `unique_name` - The unique name of the model build
 - `status_callback` - The callback URL to post build statuses to
 - `status` - The current model build status
-- `triggers` - A map of key value pairs which can be used to determine if changes have occurred and a redeployment is necessary.
+- `triggers` - A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary.
 - `error_code` - The error code of the model build if the status is failed
 - `build_duration` - The duration of the model build (in seconds)
 - `date_created` - The date in RFC3339 format that the model build was created

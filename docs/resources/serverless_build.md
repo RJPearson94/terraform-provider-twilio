@@ -38,9 +38,11 @@ EOF
 
 resource "twilio_serverless_build" "build" {
   service_sid = twilio_serverless_service.service.sid
+
   function_version {
     sid = twilio_serverless_function.function.latest_version_sid
   }
+
   dependencies = {
     "twilio" : "3.6.3"
   }
@@ -60,18 +62,20 @@ The following arguments are supported:
 - `function_version` - (Optional) A `function_version` block as documented below. Changing this forces a new resource to be created
 - `dependencies` - (Optional) Map of dependencies to be included in the build. Changing this forces a new resource to be created
 - `polling` - (Optional) A `polling` block as documented below.
+- `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary. Changing this forces a new resource to be created
+~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of terraform.
 
 ---
 
 An `asset_version` block supports the following:
 
-- `sid` - (Required) The SID of the asset version
+- `sid` - (Required) The SID of the asset version. Changing this forces a new resource to be created
 
 ---
 
 A `function_version` block supports the following:
 
-- `sid` - (Required) The SID of the function version
+- `sid` - (Required) The SID of the function version. Changing this forces a new resource to be created
 
 ---
 
@@ -91,6 +95,7 @@ The following attributes are exported:
 - `service_sid` - The service SID associated with the build
 - `asset_version` - A `asset_version` block as documented below.
 - `function_version` - A `function_version` block as documented below.
+- `triggers` - A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary.
 - `dependencies` - Map of dependencies to be included in the build
 - `status` - The current status of the build job
 - `date_created` - The date in RFC3339 format that the build was created

@@ -64,12 +64,12 @@ func resourceServerlessBuild() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				ForceNew: true,
-				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"sid": &schema.Schema{
 							Type:     schema.TypeString,
 							Required: true,
+							ForceNew: true,
 						},
 						"account_sid": &schema.Schema{
 							Type:     schema.TypeString,
@@ -102,12 +102,12 @@ func resourceServerlessBuild() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				ForceNew: true,
-				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"sid": &schema.Schema{
 							Type:     schema.TypeString,
 							Required: true,
+							ForceNew: true,
 						},
 						"account_sid": &schema.Schema{
 							Type:     schema.TypeString,
@@ -165,6 +165,14 @@ func resourceServerlessBuild() *schema.Resource {
 							Default:  1000,
 						},
 					},
+				},
+			},
+			"triggers": {
+				Type:     schema.TypeMap,
+				Optional: true,
+				ForceNew: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
 				},
 			},
 			"status": &schema.Schema{
