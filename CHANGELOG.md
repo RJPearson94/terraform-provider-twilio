@@ -1,4 +1,4 @@
-## v0.2.0 (unreleased)
+## v0.2.1 (2020-09-13)
 
 BUG FIXES
 
