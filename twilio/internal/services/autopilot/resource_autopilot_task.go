@@ -153,6 +153,7 @@ func resourceAutopilotTaskRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return fmt.Errorf("[ERROR] Failed to read autopilot task actions: %s", err.Error())
 	}
+
 	actionsJSONString, err := structure.FlattenJsonToString(getActionsResponse.Data)
 	if err != nil {
 		return fmt.Errorf("[ERROR] Unable to flatten actions json to string: %s", err.Error())
@@ -170,8 +171,12 @@ func resourceAutopilotTaskUpdate(d *schema.ResourceData, meta interface{}) error
 	updateInput := &task.UpdateTaskInput{
 		UniqueName:   utils.OptionalString(d, "unique_name"),
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
-		ActionsURL:   utils.OptionalString(d, "actions_url"),
-		Actions:      utils.OptionalJSONString(d, "actions"),
+	}
+
+	if d.HasChange("actions") {
+		updateInput.Actions = utils.OptionalJSONString(d, "actions")
+	} else {
+		updateInput.ActionsURL = utils.OptionalString(d, "actions_url")
 	}
 
 	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Id()).UpdateWithContext(ctx, updateInput)

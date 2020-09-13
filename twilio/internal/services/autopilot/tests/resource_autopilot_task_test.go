@@ -82,6 +82,53 @@ func TestAccTwilioAutopilotTask_actions(t *testing.T) {
 	})
 }
 
+func TestAccTwilioAutopilotTask_updateActions(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.task", taskResourceName)
+	uniqueName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioAutopilotTask_actions(uniqueName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotTaskExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "actions", "{\"actions\":[{\"say\":{\"speech\":\"Hello World\"}}]}"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "actions_url"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				Config: testAccTwilioAutopilotTask_updatedActions(uniqueName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotTaskExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "actions", "{\"actions\":[{\"say\":{\"speech\":\"New World\"}}]}"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "actions_url"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccTwilioAutopilotTask_actionsURL(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.task", taskResourceName)
 	uniqueName := acctest.RandString(10)
@@ -104,6 +151,151 @@ func TestAccTwilioAutopilotTask_actionsURL(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotTask_updateActionsURL(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.task", taskResourceName)
+	uniqueName := acctest.RandString(10)
+	url := "http://localhost/action"
+	newURL := "http://localhost/action2"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioAutopilotTask_actionsURL(uniqueName, url),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotTaskExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "actions_url", url),
+					resource.TestCheckResourceAttr(stateResourceName, "actions", "{\"actions\":[{\"redirect\":\"http://localhost/action\"}]}"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				Config: testAccTwilioAutopilotTask_actionsURL(uniqueName, newURL),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotTaskExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "actions_url", newURL),
+					resource.TestCheckResourceAttr(stateResourceName, "actions", "{\"actions\":[{\"redirect\":\"http://localhost/action2\"}]}"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotTask_changeActionsToUseURL(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.task", taskResourceName)
+	uniqueName := acctest.RandString(10)
+	url := "http://localhost/action"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioAutopilotTask_actions(uniqueName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotTaskExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "actions", "{\"actions\":[{\"say\":{\"speech\":\"Hello World\"}}]}"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "actions_url"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				Config: testAccTwilioAutopilotTask_actionsURL(uniqueName, url),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotTaskExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "actions_url", url),
+					resource.TestCheckResourceAttr(stateResourceName, "actions", "{\"actions\":[{\"redirect\":\"http://localhost/action\"}]}"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotTask_changeActionsURLToActionsJSON(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.task", taskResourceName)
+	uniqueName := acctest.RandString(10)
+	url := "http://localhost/action"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories(),
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioAutopilotTask_actionsURL(uniqueName, url),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotTaskExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "actions_url", url),
+					resource.TestCheckResourceAttr(stateResourceName, "actions", "{\"actions\":[{\"redirect\":\"http://localhost/action\"}]}"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				Config: testAccTwilioAutopilotTask_actions(uniqueName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotTaskExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "actions", "{\"actions\":[{\"say\":{\"speech\":\"Hello World\"}}]}"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "actions_url"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -254,6 +446,30 @@ resource "twilio_autopilot_task" "task" {
 		{
 			"say": {
 				"speech": "Hello World"
+			}
+		}
+	]
+}
+EOF
+}
+`, uniqueName, uniqueName)
+}
+
+func testAccTwilioAutopilotTask_updatedActions(uniqueName string) string {
+	return fmt.Sprintf(`
+resource "twilio_autopilot_assistant" "assistant" {
+  unique_name = "%s"
+}
+
+resource "twilio_autopilot_task" "task" {
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%s"
+  actions       = <<EOF
+{
+	"actions": [
+		{
+			"say": {
+				"speech": "New World"
 			}
 		}
 	]
