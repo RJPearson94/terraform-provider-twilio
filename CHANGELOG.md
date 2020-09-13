@@ -1,3 +1,9 @@
+## v0.2.0 (unreleased)
+
+BUG FIXES
+
+`twilio_autopilot_task` Fix issue with action json not being updated. Sending the Action URL superseded the actions json change. The update task function now checks if the actions json has changed and conditionally sets either the actions or actions_url field on the update request
+
 ## v0.2.0 (2020-09-12)
 
 FEATURES
@@ -7,7 +13,7 @@ FEATURES
 
 BUG FIXES
 
-`twilio_autopilot_model_build` A new model build wasn't automatically when dependent resources were updated. [Issue](https://github.com/RJPearson94/terraform-provider-twilio/issues/7) **Breaking Change**
+`twilio_autopilot_model_build` A new model build wasn't automatically triggered when dependent resources were updated. [Issue](https://github.com/RJPearson94/terraform-provider-twilio/issues/7) **Breaking Change**
 `twilio_serverless_asset` recompute latest_version_sid when the asset was changed [Related Issue](https://github.com/RJPearson94/terraform-provider-twilio/issues/6)
 `twilio_serverless_function` recompute latest_version_sid when the function was changed [Related Issue](https://github.com/RJPearson94/terraform-provider-twilio/issues/6)
 `twilio_serverless_build` Removed computed flag on asset and function version arguments to allow an artefact to be removed and the build is recreated and force a new resource to be created when when function and/ or asset sid has changed [Related Issue](https://github.com/RJPearson94/terraform-provider-twilio/issues/6) **Breaking Change**
