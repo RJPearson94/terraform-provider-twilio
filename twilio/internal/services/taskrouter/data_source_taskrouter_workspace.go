@@ -20,62 +20,62 @@ func dataSourceTaskRouterWorkspace() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": &schema.Schema{
+			"friendly_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"event_callback_url": &schema.Schema{
+			"event_callback_url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"event_filters": &schema.Schema{
+			"event_filters": {
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
-			"multi_task_enabled": &schema.Schema{
+			"multi_task_enabled": {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"prioritize_queue_order": &schema.Schema{
+			"prioritize_queue_order": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"default_activity_name": &schema.Schema{
+			"default_activity_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"default_activity_sid": &schema.Schema{
+			"default_activity_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"timeout_activity_name": &schema.Schema{
+			"timeout_activity_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"timeout_activity_sid": &schema.Schema{
+			"timeout_activity_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

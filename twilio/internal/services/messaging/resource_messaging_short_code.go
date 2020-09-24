@@ -42,44 +42,44 @@ func resourceMessagingShortCode() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"service_sid": &schema.Schema{
+			"service_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"capabilities": &schema.Schema{
+			"capabilities": {
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
-			"country_code": &schema.Schema{
+			"country_code": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"short_code": &schema.Schema{
+			"short_code": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

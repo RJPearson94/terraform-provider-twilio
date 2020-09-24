@@ -19,15 +19,15 @@ func dataSourceAccountBalance() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"balance": &schema.Schema{
+			"balance": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"currency": &schema.Schema{
+			"currency": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

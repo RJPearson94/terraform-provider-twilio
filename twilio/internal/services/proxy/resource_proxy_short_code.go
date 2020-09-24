@@ -47,102 +47,102 @@ func resourceProxyShortCode() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"service_sid": &schema.Schema{
+			"service_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Optional: true,
 				ForceNew: true,
 			},
-			"is_reserved": &schema.Schema{
+			"is_reserved": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
-			"capabilities": &schema.Schema{
+			"capabilities": {
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"fax_inbound": &schema.Schema{
+						"fax_inbound": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"fax_outbound": &schema.Schema{
+						"fax_outbound": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"mms_inbound": &schema.Schema{
+						"mms_inbound": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"mms_outbound": &schema.Schema{
+						"mms_outbound": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"restriction_fax_domestic": &schema.Schema{
+						"restriction_fax_domestic": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"restriction_mms_domestic": &schema.Schema{
+						"restriction_mms_domestic": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"restriction_sms_domestic": &schema.Schema{
+						"restriction_sms_domestic": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"restriction_voice_domestic": &schema.Schema{
+						"restriction_voice_domestic": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"sip_trunking": &schema.Schema{
+						"sip_trunking": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"sms_inbound": &schema.Schema{
+						"sms_inbound": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"sms_outbound": &schema.Schema{
+						"sms_outbound": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"voice_inbound": &schema.Schema{
+						"voice_inbound": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"voice_outbound": &schema.Schema{
+						"voice_outbound": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
 					},
 				},
 			},
-			"short_code": &schema.Schema{
+			"short_code": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"iso_country": &schema.Schema{
+			"iso_country": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

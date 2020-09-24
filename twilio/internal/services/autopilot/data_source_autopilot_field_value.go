@@ -19,43 +19,43 @@ func dataSourceAutopilotFieldValue() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"assistant_sid": &schema.Schema{
+			"assistant_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"field_type_sid": &schema.Schema{
+			"field_type_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"language": &schema.Schema{
+			"language": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"value": &schema.Schema{
+			"value": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"synonym_of": &schema.Schema{
+			"synonym_of": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

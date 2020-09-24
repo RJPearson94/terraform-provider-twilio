@@ -46,37 +46,37 @@ func resourceAccountSubAccount() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"owner_account_sid": &schema.Schema{
+			"owner_account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": &schema.Schema{
+			"friendly_name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"auth_token": &schema.Schema{
+			"auth_token": {
 				Type:      schema.TypeString,
 				Computed:  true,
 				Sensitive: true,
 			},
-			"status": &schema.Schema{
+			"status": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"type": &schema.Schema{
+			"type": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

@@ -20,99 +20,99 @@ func dataSourceFlexFlow() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"channel_type": &schema.Schema{
+			"channel_type": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"chat_service_sid": &schema.Schema{
+			"chat_service_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"contact_identity": &schema.Schema{
+			"contact_identity": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"enabled": &schema.Schema{
+			"enabled": {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"friendly_name": &schema.Schema{
+			"friendly_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"integration": &schema.Schema{
+			"integration": {
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"channel": &schema.Schema{
+						"channel": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"creation_on_message": &schema.Schema{
+						"creation_on_message": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"flow_sid": &schema.Schema{
+						"flow_sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"priority": &schema.Schema{
+						"priority": {
 							Type:     schema.TypeInt,
 							Computed: true,
 						},
-						"retry_count": &schema.Schema{
+						"retry_count": {
 							Type:     schema.TypeInt,
 							Computed: true,
 						},
-						"timeout": &schema.Schema{
+						"timeout": {
 							Type:     schema.TypeInt,
 							Computed: true,
 						},
-						"url": &schema.Schema{
+						"url": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"workflow_sid": &schema.Schema{
+						"workflow_sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"workspace_sid": &schema.Schema{
+						"workspace_sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
 					},
 				},
 			},
-			"integration_type": &schema.Schema{
+			"integration_type": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"janitor_enabled": &schema.Schema{
+			"janitor_enabled": {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"long_lived": &schema.Schema{
+			"long_lived": {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

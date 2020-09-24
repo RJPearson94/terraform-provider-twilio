@@ -47,56 +47,56 @@ func resourceTaskRouterWorker() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"workspace_sid": &schema.Schema{
+			"workspace_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"friendly_name": &schema.Schema{
+			"friendly_name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"activity_sid": &schema.Schema{
+			"activity_sid": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"attributes": &schema.Schema{
+			"attributes": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				Computed:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
-			"activity_name": &schema.Schema{
+			"activity_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"available": &schema.Schema{
+			"available": {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_status_changed": &schema.Schema{
+			"date_status_changed": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

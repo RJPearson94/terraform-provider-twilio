@@ -22,9 +22,9 @@ func OptionalJSONString(d *schema.ResourceData, key string) *string {
 	return nil
 }
 
-func OptionalSeperatedString(d *schema.ResourceData, key string, seperator string) *string {
+func OptionalSeperatedString(d *schema.ResourceData, key string, separator string) *string {
 	if v, ok := d.GetOk(key); ok {
-		return sdkUtils.String(ConvertSliceToSeperatedString(v.([]interface{}), seperator))
+		return sdkUtils.String(ConvertSliceToSeperatedString(v.([]interface{}), separator))
 	}
 	return nil
 }

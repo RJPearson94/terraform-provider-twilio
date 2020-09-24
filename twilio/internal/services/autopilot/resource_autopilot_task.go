@@ -47,36 +47,36 @@ func resourceAutopilotTask() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"assistant_sid": &schema.Schema{
+			"assistant_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"friendly_name": &schema.Schema{
+			"friendly_name": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"unique_name": &schema.Schema{
+			"unique_name": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"actions_url": &schema.Schema{
+			"actions_url": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				Computed:      true,
 				ValidateFunc:  validation.IsURLWithHTTPorHTTPS,
 				ConflictsWith: []string{"actions"},
 			},
-			"actions": &schema.Schema{
+			"actions": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				Computed:         true,
@@ -84,15 +84,15 @@ func resourceAutopilotTask() *schema.Resource {
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 				ConflictsWith:    []string{"actions_url"},
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

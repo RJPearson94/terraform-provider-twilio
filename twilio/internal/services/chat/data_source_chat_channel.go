@@ -19,55 +19,55 @@ func dataSourceChatChannel() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"service_sid": &schema.Schema{
+			"service_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": &schema.Schema{
+			"friendly_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"unique_name": &schema.Schema{
+			"unique_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"attributes": &schema.Schema{
+			"attributes": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"type": &schema.Schema{
+			"type": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"created_by": &schema.Schema{
+			"created_by": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"members_count": &schema.Schema{
+			"members_count": {
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"messages_count": &schema.Schema{
+			"messages_count": {
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

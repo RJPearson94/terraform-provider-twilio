@@ -48,29 +48,29 @@ func resourceChatChannelWebhook() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"service_sid": &schema.Schema{
+			"service_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"channel_sid": &schema.Schema{
+			"channel_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"type": &schema.Schema{
+			"type": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"method": &schema.Schema{
+			"method": {
 				Type:     schema.TypeString,
 				Optional: true,
 				ValidateFunc: validation.StringInSlice([]string{
@@ -79,32 +79,32 @@ func resourceChatChannelWebhook() *schema.Resource {
 				}, false),
 				Computed: true,
 			},
-			"webhook_url": &schema.Schema{
+			"webhook_url": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"filters": &schema.Schema{
+			"filters": {
 				Type:     schema.TypeList,
 				Required: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
-			"retry_count": &schema.Schema{
+			"retry_count": {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

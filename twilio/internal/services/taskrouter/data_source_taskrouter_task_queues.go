@@ -19,68 +19,68 @@ func dataSourceTaskRouterTaskQueues() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"workspace_sid": &schema.Schema{
+			"workspace_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"task_queues": &schema.Schema{
+			"task_queues": {
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"sid": &schema.Schema{
+						"sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"friendly_name": &schema.Schema{
+						"friendly_name": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"event_callback_url": &schema.Schema{
+						"event_callback_url": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"assignment_activity_name": &schema.Schema{
+						"assignment_activity_name": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"assignment_activity_sid": &schema.Schema{
+						"assignment_activity_sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"reservation_activity_name": &schema.Schema{
+						"reservation_activity_name": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"reservation_activity_sid": &schema.Schema{
+						"reservation_activity_sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"max_reserved_workers": &schema.Schema{
+						"max_reserved_workers": {
 							Type:     schema.TypeInt,
 							Computed: true,
 						},
-						"target_workers": &schema.Schema{
+						"target_workers": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"task_order": &schema.Schema{
+						"task_order": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"date_created": &schema.Schema{
+						"date_created": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"date_updated": &schema.Schema{
+						"date_updated": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"url": &schema.Schema{
+						"url": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},

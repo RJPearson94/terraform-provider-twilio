@@ -38,3 +38,7 @@ jobs:
 
       - name: Test
         run: make test
+
+      - name: Refresh Go Report Card
+        if: github.ref == 'refs/heads/main'
+        run: make goreportcard-refresh

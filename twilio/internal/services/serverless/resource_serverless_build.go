@@ -47,96 +47,96 @@ func resourceServerlessBuild() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"service_sid": &schema.Schema{
+			"service_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"asset_version": &schema.Schema{
+			"asset_version": {
 				Type:     schema.TypeList,
 				Optional: true,
 				ForceNew: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"sid": &schema.Schema{
+						"sid": {
 							Type:     schema.TypeString,
 							Required: true,
 							ForceNew: true,
 						},
-						"account_sid": &schema.Schema{
+						"account_sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"service_sid": &schema.Schema{
+						"service_sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"asset_sid": &schema.Schema{
+						"asset_sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"date_created": &schema.Schema{
+						"date_created": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"path": &schema.Schema{
+						"path": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"visibility": &schema.Schema{
+						"visibility": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
 					},
 				},
 			},
-			"function_version": &schema.Schema{
+			"function_version": {
 				Type:     schema.TypeList,
 				Optional: true,
 				ForceNew: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"sid": &schema.Schema{
+						"sid": {
 							Type:     schema.TypeString,
 							Required: true,
 							ForceNew: true,
 						},
-						"account_sid": &schema.Schema{
+						"account_sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"service_sid": &schema.Schema{
+						"service_sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"function_sid": &schema.Schema{
+						"function_sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"date_created": &schema.Schema{
+						"date_created": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"path": &schema.Schema{
+						"path": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"visibility": &schema.Schema{
+						"visibility": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
 					},
 				},
 			},
-			"dependencies": &schema.Schema{
+			"dependencies": {
 				Type:     schema.TypeMap,
 				Optional: true,
 				ForceNew: true,
@@ -144,22 +144,22 @@ func resourceServerlessBuild() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
-			"polling": &schema.Schema{
+			"polling": {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"enabled": &schema.Schema{
+						"enabled": {
 							Type:     schema.TypeBool,
 							Required: true,
 						},
-						"max_attempts": &schema.Schema{
+						"max_attempts": {
 							Type:     schema.TypeInt,
 							Optional: true,
 							Default:  30,
 						},
-						"delay_in_ms": &schema.Schema{
+						"delay_in_ms": {
 							Type:     schema.TypeInt,
 							Optional: true,
 							Default:  1000,
@@ -175,19 +175,19 @@ func resourceServerlessBuild() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
-			"status": &schema.Schema{
+			"status": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

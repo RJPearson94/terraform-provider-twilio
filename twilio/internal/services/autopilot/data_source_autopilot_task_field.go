@@ -19,39 +19,39 @@ func dataSourceAutopilotTaskField() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"assistant_sid": &schema.Schema{
+			"assistant_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"task_sid": &schema.Schema{
+			"task_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"unique_name": &schema.Schema{
+			"unique_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"field_type": &schema.Schema{
+			"field_type": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

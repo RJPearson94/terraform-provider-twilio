@@ -10,7 +10,7 @@ func ConvertToStringSlice(input []interface{}) []string {
 	return stringArray
 }
 
-func ConvertSliceToSeperatedString(input []interface{}, seperator string) string {
+func ConvertSliceToSeperatedString(input []interface{}, separator string) string {
 	stringSlice := ConvertToStringSlice(input)
 	return strings.Join(stringSlice[:], seperator)
 }

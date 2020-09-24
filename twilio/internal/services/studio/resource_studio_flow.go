@@ -47,19 +47,19 @@ func resourceStudioFlow() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": &schema.Schema{
+			"friendly_name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"status": &schema.Schema{
+			"status": {
 				Type:     schema.TypeString,
 				Required: true,
 				ValidateFunc: validation.StringInSlice([]string{
@@ -67,42 +67,42 @@ func resourceStudioFlow() *schema.Resource {
 					"published",
 				}, false),
 			},
-			"definition": &schema.Schema{
+			"definition": {
 				Type:             schema.TypeString,
 				Required:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
-			"commit_message": &schema.Schema{
+			"commit_message": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"validate": &schema.Schema{
+			"validate": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
 			},
-			"revision": &schema.Schema{
+			"revision": {
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"valid": &schema.Schema{
+			"valid": {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"webhook_url": &schema.Schema{
+			"webhook_url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

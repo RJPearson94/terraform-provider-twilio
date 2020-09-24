@@ -45,24 +45,24 @@ func resourceMessagingService() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": &schema.Schema{
+			"friendly_name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"area_code_geomatch": &schema.Schema{
+			"area_code_geomatch": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
-			"fallback_method": &schema.Schema{
+			"fallback_method": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
@@ -71,17 +71,17 @@ func resourceMessagingService() *schema.Resource {
 					"GET",
 				}, false),
 			},
-			"fallback_to_long_code": &schema.Schema{
+			"fallback_to_long_code": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
-			"fallback_url": &schema.Schema{
+			"fallback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"inbound_method": &schema.Schema{
+			"inbound_method": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
@@ -90,46 +90,46 @@ func resourceMessagingService() *schema.Resource {
 					"GET",
 				}, false),
 			},
-			"inbound_request_url": &schema.Schema{
+			"inbound_request_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"mms_converter": &schema.Schema{
+			"mms_converter": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
-			"smart_encoding": &schema.Schema{
+			"smart_encoding": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
-			"status_callback_url": &schema.Schema{
+			"status_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Computed:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"sticky_sender": &schema.Schema{
+			"sticky_sender": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
-			"validity_period": &schema.Schema{
+			"validity_period": {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

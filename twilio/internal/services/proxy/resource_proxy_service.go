@@ -45,65 +45,65 @@ func resourceProxyService() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"chat_instance_sid": &schema.Schema{
+			"chat_instance_sid": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"chat_service_sid": &schema.Schema{
+			"chat_service_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"unique_name": &schema.Schema{
+			"unique_name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"default_ttl": &schema.Schema{
+			"default_ttl": {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Computed: true,
 			},
-			"callback_url": &schema.Schema{
+			"callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"geo_match_level": &schema.Schema{
+			"geo_match_level": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"number_selection_behavior": &schema.Schema{
+			"number_selection_behavior": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"intercept_callback_url": &schema.Schema{
+			"intercept_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"out_of_session_callback_url": &schema.Schema{
+			"out_of_session_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

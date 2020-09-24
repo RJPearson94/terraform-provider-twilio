@@ -49,36 +49,36 @@ func resourceAutopilotWebhook() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"assistant_sid": &schema.Schema{
+			"assistant_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"unique_name": &schema.Schema{
+			"unique_name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"events": &schema.Schema{
+			"events": {
 				Type:     schema.TypeList,
 				Optional: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
-			"webhook_url": &schema.Schema{
+			"webhook_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
-			"webhook_method": &schema.Schema{
+			"webhook_method": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
@@ -87,15 +87,15 @@ func resourceAutopilotWebhook() *schema.Resource {
 					"POST",
 				}, false),
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

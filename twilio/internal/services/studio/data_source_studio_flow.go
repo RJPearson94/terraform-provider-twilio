@@ -20,51 +20,51 @@ func dataSourceStudioFlow() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"friendly_name": &schema.Schema{
+			"friendly_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"status": &schema.Schema{
+			"status": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"definition": &schema.Schema{
+			"definition": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"commit_message": &schema.Schema{
+			"commit_message": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"revision": &schema.Schema{
+			"revision": {
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"valid": &schema.Schema{
+			"valid": {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"webhook_url": &schema.Schema{
+			"webhook_url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

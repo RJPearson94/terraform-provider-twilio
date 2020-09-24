@@ -45,25 +45,25 @@ func resourceServerlessDeployment() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"service_sid": &schema.Schema{
+			"service_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"environment_sid": &schema.Schema{
+			"environment_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"build_sid": &schema.Schema{
+			"build_sid": {
 				Type:     schema.TypeString,
 				Optional: true,
 				ForceNew: true,
@@ -76,19 +76,19 @@ func resourceServerlessDeployment() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
-			"is_latest_deployment": &schema.Schema{
+			"is_latest_deployment": {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},

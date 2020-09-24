@@ -20,78 +20,78 @@ func dataSourceChatChannelWebhooks() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"service_sid": &schema.Schema{
+			"service_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"channel_sid": &schema.Schema{
+			"channel_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"webhooks": &schema.Schema{
+			"webhooks": {
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"sid": &schema.Schema{
+						"sid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"type": &schema.Schema{
+						"type": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"configuration": &schema.Schema{
+						"configuration": {
 							Type:     schema.TypeList,
 							Computed: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"method": &schema.Schema{
+									"method": {
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"webhook_url": &schema.Schema{
+									"webhook_url": {
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"filters": &schema.Schema{
+									"filters": {
 										Type:     schema.TypeList,
 										Computed: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
 									},
-									"flow_sid": &schema.Schema{
+									"flow_sid": {
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"triggers": &schema.Schema{
+									"triggers": {
 										Type:     schema.TypeList,
 										Computed: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
 									},
-									"retry_count": &schema.Schema{
+									"retry_count": {
 										Type:     schema.TypeInt,
 										Computed: true,
 									},
 								},
 							},
 						},
-						"date_created": &schema.Schema{
+						"date_created": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"date_updated": &schema.Schema{
+						"date_updated": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"url": &schema.Schema{
+						"url": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},

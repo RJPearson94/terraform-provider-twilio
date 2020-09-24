@@ -18,7 +18,8 @@ testacc: fmt
 
 fmt:
 	@echo "==> Fixing source code with goimports (uses gofmt under the hood)..."
-	goimports -w ./$(PKG_NAME)
+	goimports -w ./$(PKG_NAME) 
+	gofmt -s -w ./$(PKG_NAME)
 
 terrafmt:
 	@echo "==> Format acceptance tests"
@@ -37,7 +38,15 @@ tools:
 	GO111MODULE=off go get -u github.com/boyter/scc
 	GO111MODULE=off go get -u golang.org/x/tools/cmd/goimports
 
+reportcard:
+	@echo "==> running go report card"
+	goreportcard-cli
+
+goreportcard-refresh:
+	@echo "==> refresh goreportcard checks"
+	curl -X POST -F "repo=github.com/RJPearson94/terraform-provider-twilio" https://goreportcard.com/checks
+
 generate:
 	go generate  ./...
 
-.PHONY: download build test testacc fmt terrafmt terrafmt-docs tools generate
+.PHONY: download build test testacc fmt terrafmt terrafmt-docs tools generate reportcard goreportcard-refresh

@@ -55,57 +55,57 @@ func resourceServerlessFunction() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"sid": &schema.Schema{
+			"sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"account_sid": &schema.Schema{
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"service_sid": &schema.Schema{
+			"service_sid": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"friendly_name": &schema.Schema{
+			"friendly_name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"latest_version_sid": &schema.Schema{
+			"latest_version_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"source": &schema.Schema{
+			"source": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"content"},
 			},
-			"source_hash": &schema.Schema{
+			"source_hash": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"content"},
 			},
-			"content": &schema.Schema{
+			"content": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				Computed:      true,
 				ConflictsWith: []string{"source"},
 			},
-			"content_file_name": &schema.Schema{
+			"content_file_name": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"source"},
 			},
-			"content_type": &schema.Schema{
+			"content_type": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"path": &schema.Schema{
+			"path": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"visibility": &schema.Schema{
+			"visibility": {
 				Type:     schema.TypeString,
 				Required: true,
 				ValidateFunc: validation.StringInSlice([]string{
@@ -114,15 +114,15 @@ func resourceServerlessFunction() *schema.Resource {
 					"private",
 				}, false),
 			},
-			"date_created": &schema.Schema{
+			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"date_updated": &schema.Schema{
+			"date_updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
