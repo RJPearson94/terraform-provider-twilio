@@ -12,5 +12,5 @@ func ConvertToStringSlice(input []interface{}) []string {
 
 func ConvertSliceToSeperatedString(input []interface{}, separator string) string {
 	stringSlice := ConvertToStringSlice(input)
-	return strings.Join(stringSlice[:], seperator)
+	return strings.Join(stringSlice[:], separator)
 }
