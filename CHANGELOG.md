@@ -1,3 +1,11 @@
+## v0.3.0 (unreleased)
+
+FEATURES
+
+- **New Data Source:** `twilio_account_addresses` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/account_addresses.md)
+- **New Data Source:** `twilio_account_address` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/account_address.md)
+- **New Resource:** `twilio_account_address` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/account_address.md)
+
 ## v0.2.1 (2020-09-13)
 
 BUG FIXES
