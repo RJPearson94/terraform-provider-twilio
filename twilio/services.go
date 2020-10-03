@@ -12,6 +12,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/serverless"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/studio"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/taskrouter"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/voice"
 )
 
 func SupportedServices() []common.ServiceRegistration {
@@ -26,5 +27,6 @@ func SupportedServices() []common.ServiceRegistration {
 		serverless.Registration{},
 		studio.Registration{},
 		taskrouter.Registration{},
+		voice.Registration{},
 	}
 }
