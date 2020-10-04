@@ -48,6 +48,12 @@ func TestAccTwilioTaskRouterWorkspace_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
+			{
+				ResourceName:      stateResourceName,
+				ImportState:       true,
+				ImportStateIdFunc: testAccTwilioTaskRouterWorkspaceImportStateIdFunc(stateResourceName),
+				ImportStateVerify: true,
+			},
 		},
 	})
 }

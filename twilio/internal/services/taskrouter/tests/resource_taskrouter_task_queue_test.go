@@ -45,6 +45,12 @@ func TestAccTwilioTaskRouterTaskQueue_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
+			{
+				ResourceName:      stateResourceName,
+				ImportState:       true,
+				ImportStateIdFunc: testAccTwilioTaskRouterTaskQueueImportStateIdFunc(stateResourceName),
+				ImportStateVerify: true,
+			},
 		},
 	})
 }
