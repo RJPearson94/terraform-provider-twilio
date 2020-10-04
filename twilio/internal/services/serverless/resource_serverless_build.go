@@ -296,7 +296,7 @@ func poll(ctx context.Context, d *schema.ResourceData, client *common.TwilioClie
 		for i := 0; i < pollingConfig["max_attempts"].(int); i++ {
 			log.Printf("[INFO] Build Polling attempt # %v", i+1)
 
-			getResponse, err := client.Serverless.Service(d.Get("service_sid").(string)).Build(d.Id()).FetchWithContext(ctx)
+			getResponse, err := client.Serverless.Service(d.Get("service_sid").(string)).Build(d.Id()).Status().FetchWithContext(ctx)
 			if err != nil {
 				return diag.Errorf("Failed to poll serverless build: %s", err.Error())
 			}
