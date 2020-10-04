@@ -88,11 +88,12 @@ func dataSourceAccountAddressRead(d *schema.ResourceData, meta interface{}) erro
 	ctx, cancel := context.WithTimeout(meta.(*common.TwilioClient).StopContext, d.Timeout(schema.TimeoutRead))
 	defer cancel()
 
-	getResponse, err := client.Account(d.Get("account_sid").(string)).Address(d.Get("sid").(string)).FetchWithContext(ctx)
+	accountSid := d.Get("account_sid").(string)
+	sid := d.Get("sid").(string)
+	getResponse, err := client.Account(accountSid).Address(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			d.SetId("")
-			return nil
+			return fmt.Errorf("[ERROR] Address with sid (%s) was not found in account (%s)", sid, accountSid)
 		}
 		// If the account sid is incorrect a 401 is returned, a this is a generic error this will not be handled here and an error will be returned
 		return fmt.Errorf("[ERROR] Failed to read address: %s", err.Error())
