@@ -1,4 +1,10 @@
-## v0.3.0 (unreleased)
+## v0.3.0 (2020-10-04)
+
+Update Terraform SDK Plugin to V2 and add new resources and data source for addresses and queues
+
+BREAKING CHANGES
+
+The terraform sdk plugin has been update to V2, this means that this provider requires terraform 0.12+
 
 FEATURES
 
