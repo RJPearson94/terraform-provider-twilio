@@ -31,10 +31,6 @@ var TestAccData *TestData
 var once sync.Once
 
 func init() {
-	if os.Getenv("TF_ACC") == "" {
-		return
-	}
-
 	InitialiseProviders()
 }
 
