@@ -6,6 +6,8 @@ The Twilio provider is used to interact with the many resources supported by Twi
 
 ## Installation
 
+**NOTE:** This provider only supports Terraform 0.12+
+
 ### Terraform 0.13+
 
 The provider has been published to the [Terraform Registry](https://registry.terraform.io/providers/RJPearson94/twilio/latest) you need to add the following code to your Terraform configuration and run terraform init. Terraform will take care of installing the provider for you.
@@ -25,7 +27,7 @@ provider "twilio" {
 }
 ```
 
-### Terraform 0.12 and below
+### Terraform 0.12
 
 This is a bit more work as you have to download the [latest release](https://github.com/RJPearson94/terraform-provider-twilio/releases/latest) of the terraform provider which can run on you machine operating system/ processor architecture. Then unzip the provider and place the provider in the `~/.terraform.d/plugins` folder (on most operating systems) and `%APPDATA%\terraform.d\plugins` on Windows. For more information see the [terraform docs](https://www.terraform.io/docs/extend/how-terraform-works.html#plugin-locations)
 
