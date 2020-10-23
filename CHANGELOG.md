@@ -1,3 +1,14 @@
+## v0.4.0 (unreleased)
+
+FEATURES
+
+- **New Data Source:** `twilio_phone_number_available_toll_free_numbers` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/phone_number_available_toll_free_numbers.md)
+- **New Data Source:** `twilio_phone_number_available_mobile_numbers` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/phone_number_available_mobile_numbers.md)
+- **New Data Source:** `twilio_phone_number_available_local_numbers` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/phone_number_available_local_numbers.md)
+- **New Data Source:** `twilio_phone_numbers` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/phone_number.md)
+- **New Data Source:** `twilio_phone_number` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/phone_number.md)
+- **New Resource:** `twilio_phone_number` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/phone_number.md)
+
 ## v0.3.0 (2020-10-04)
 
 Update Terraform SDK Plugin to V2 and add new resources and data source for addresses and queues

@@ -16,7 +16,7 @@ The provider has been published to the [Terraform Registry](https://registry.ter
 terraform {
   required_providers {
     twilio = {
-      source = "RJPearson94/twilio"
+      source  = "RJPearson94/twilio"
       version = ">= 0.2.1"
     }
   }

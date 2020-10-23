@@ -8,6 +8,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/flex"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/iam"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/messaging"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/phone_number"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/proxy"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/serverless"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/studio"
@@ -23,6 +24,7 @@ func SupportedServices() []common.ServiceRegistration {
 		flex.Registration{},
 		iam.Registration{},
 		messaging.Registration{},
+		phone_number.Registration{},
 		proxy.Registration{},
 		serverless.Registration{},
 		studio.Registration{},
