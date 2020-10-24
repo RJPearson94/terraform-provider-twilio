@@ -1,4 +1,4 @@
-## v0.4.0 (unreleased)
+## v0.4.0 (2020-10-24)
 
 FEATURES
 
