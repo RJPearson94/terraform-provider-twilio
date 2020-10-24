@@ -1,22 +1,21 @@
 ---
-page_title: "Twilio Phone Number"
+page_title: "Twilio Phone Numbers"
 subcategory: "Phone Numbers"
 ---
 
-# twilio_phone_number Resource
+# twilio_phone_numbers Data Source
 
-Manages a phone number. See the [API docs](https://www.twilio.com/docs/phone-numbers/api/incomingphonenumber-resource) for more information
+Use this data source to access information about the phone numbers associated with an existing account. See the [API docs](https://www.twilio.com/docs/phone-numbers/api/incomingphonenumber-resource) for more information
 
 ## Example Usage
 
 ```hcl
-resource "twilio_phone_number" "phone_number" {
-  account_sid  = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  phone_number = "+15005550006"
+data "twilio_phone_numbers" "phone_numbers" {
+  account_sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
-output "phone_number" {
-  value = twilio_phone_number.phone_number.phone_number
+output "phone_numbers" {
+  value = data.twilio_phone_numbers.phone_numbers
 }
 ```
 
@@ -24,52 +23,21 @@ output "phone_number" {
 
 The following arguments are supported:
 
-- `account_sid` - (Mandatory) The SID of the account to associate the phone number with. Changing this forces a new resource to be created.
-- `friendly_name` - (Optional) The friendly name of the phone number
-- `phone_number` - (Optional) The phone number to purchase. Changing this forces a new resource to be created. Conflicts with `area_code`.
-- `area_code` - (Optional) The area code to purchase a phone number in. Changing this forces a new resource to be created. Conflicts with `phone_number`.
-- `address_sid` - (Optional) The address SID the phone number is associated with
-- `emergency_address_sid` - (Optional) The emergency address SID the phone number is associated with
-- `emergency_status` - (Optional) The emergency status of the phone number
-- `messaging` - (Optional) A list of `messaging` blocks as documented below
-- `trunk_sid` - (Optional) The trunk SID the phone number is associated with
-- `voice_and_fax` - (Optional) A list of `voice_and_fax` blocks as documented below
-- `identity_sid` - (Optional) The identity SID the phone number is associated with
-- `bundle_sid` - (Optional) The bundle SID the phone number is associated with
-- `status_callback_url` - (Optional) The URL to call on each status change
-- `status_callback_method` - (Optional) The HTTP method which should be used to call the status callback URL
-
-~> Either the phone number or area code must be set
-
----
-
-A `messaging` block supports the following:
-
-- `application_sid` - (Optional) The application SID which should be called on each incoming message
-- `url` - (Optional) The URL which should be called on each incoming message
-- `method` - (Optional) The HTTP method which should be used to call the URL. Options are `GET` or `POST`
-- `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Options are `GET` or `POST`
-
----
-
-A `voice_and_fax` block supports the following:
-
-- `application_sid` - (Optional) The application SID which should be called on each incoming call or fax
-- `url` - (Optional) The URL which should be called on each incoming call or fax
-- `method` - (Optional) The HTTP method which should be used to call the URL. Options are `GET` or `POST`
-- `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Options are `GET` or `POST`
-- `caller_id_lookup` - (Optional) Whether caller ID lookup is enabled for the phone number
-- `receive_mode` - (Optional) The type of requests (voice or fax) that the phone number can accept. Options are `voice` or `fax`
+- `account_sid` - (Mandatory) The SID of the account the phone number is associated with
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-- `id` - The ID of the phone number (Same as the SID)
-- `sid` - The SID of the phone number (Same as the ID)
-- `account_sid` - The account SID the phone number is associated with
+- `id` - The ID of the resource (Same as the account SID)
+- `account_sid` - The SID of the account the queues are associated with
+- `phone_numbers` - A list of `phone_number` blocks as documented below
+
+---
+
+An `phone_number` block supports the following:
+
+- `sid` - The SID of the phone number
 - `friendly_name` - The friendly name of the phone number
 - `phone_number` - The phone number
 - `address_sid` - The address SID the phone number is associated with
@@ -80,7 +48,8 @@ The following attributes are exported:
 - `emergency_status` - The emergency status of the phone number
 - `messaging` - A `messaging` block as documented below
 - `trunk_sid` - The trunk SID the phone number is associated with
-- `voice_and_fax` - A `voice_and_fax` block as documented below
+- `voice` - A `voice` block as documented below
+- `fax` - A `fax` block as documented below
 - `identity_sid` - The identity SID the phone number is associated with
 - `bundle_sid` - The bundle SID the phone number is associated with
 - `status` - The status of the phone number
@@ -111,29 +80,27 @@ A `messaging` block supports the following:
 
 ---
 
-A `voice_and_fax` block supports the following:
+A `voice` block supports the following:
 
-- `application_sid` - The application SID which should be called on each incoming call or fax
-- `url` - The URL which should be called on each incoming call or fax
+- `application_sid` - The application SID which should be called on each incoming call
+- `url` - The URL which should be called on each incoming call
 - `method` - The HTTP method which should be used to call the URL
 - `fallback_url` - The fallback URL which should be called when the URL request fails
 - `fallback_method` - The HTTP method which should be used to call the fallback URL
 - `caller_id_lookup` - Whether caller ID lookup is enabled for the phone number
-- `receive_mode` - The type of requests (voice or fax) that the phone number can accept
+
+---
+
+A `fax` block supports the following:
+
+- `application_sid` - The application SID which should be called on each incoming fax
+- `url` - The URL which should be called on each incoming fax
+- `method` - The HTTP method which should be used to call the URL
+- `fallback_url` - The fallback URL which should be called when the URL request fails
+- `fallback_method` - The HTTP method which should be used to call the fallback URL
 
 ## Timeouts
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `create` - (Defaults to 10 minutes) Used when creating the phone number
-- `update` - (Defaults to 10 minutes) Used when updating the phone number
-- `read` - (Defaults to 5 minutes) Used when retrieving the phone number
-- `delete` - (Defaults to 10 minutes) Used when deleting the phone number
-
-## Import
-
-A flow can be imported using the `/Accounts/{accountSid}/PhoneNumbers/{sid}` format, e.g.
-
-```shell
-terraform import twilio_phone_number.phone_number /Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/PhoneNumbers/PNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```
+- `read` - (Defaults to 10 minutes) Used when retrieving the phone number details

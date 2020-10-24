@@ -35,8 +35,19 @@ func FlattenVoice(resp *incoming_phone_number.FetchIncomingPhoneNumberResponse) 
 			"fallback_method":  resp.VoiceFallbackMethod,
 			"fallback_url":     resp.VoiceFallbackURL,
 			"method":           resp.VoiceMethod,
-			"receive_mode":     resp.VoiceReceiveMode,
 			"url":              resp.VoiceURL,
+		},
+	}
+}
+
+func FlattenFax(resp *incoming_phone_number.FetchIncomingPhoneNumberResponse) *[]interface{} {
+	return &[]interface{}{
+		map[string]interface{}{
+			"application_sid": resp.VoiceApplicationSid,
+			"fallback_method": resp.VoiceFallbackMethod,
+			"fallback_url":    resp.VoiceFallbackURL,
+			"method":          resp.VoiceMethod,
+			"url":             resp.VoiceURL,
 		},
 	}
 }

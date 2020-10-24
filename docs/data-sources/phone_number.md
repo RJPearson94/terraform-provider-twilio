@@ -44,7 +44,8 @@ The following attributes are exported:
 - `emergency_status` - The emergency status of the phone number
 - `messaging` - A `messaging` block as documented below
 - `trunk_sid` - The trunk SID the phone number is associated with
-- `voice_and_fax` - A `voice_and_fax` block as documented below
+- `voice` - A `voice` block as documented below
+- `fax` - A `fax` block as documented below
 - `identity_sid` - The identity SID the phone number is associated with
 - `bundle_sid` - The bundle SID the phone number is associated with
 - `status` - The status of the phone number
@@ -75,15 +76,24 @@ A `messaging` block supports the following:
 
 ---
 
-A `voice_and_fax` block supports the following:
+A `voice` block supports the following:
 
-- `application_sid` - The application SID which should be called on each incoming call or fax
-- `url` - The URL which should be called on each incoming call or fax
+- `application_sid` - The application SID which should be called on each incoming call
+- `url` - The URL which should be called on each incoming call
 - `method` - The HTTP method which should be used to call the URL
 - `fallback_url` - The fallback URL which should be called when the URL request fails
 - `fallback_method` - The HTTP method which should be used to call the fallback URL
 - `caller_id_lookup` - Whether caller ID lookup is enabled for the phone number
-- `receive_mode` - The type of requests (voice or fax) that the phone number can accept
+
+---
+
+A `fax` block supports the following:
+
+- `application_sid` - The application SID which should be called on each incoming fax
+- `url` - The URL which should be called on each incoming fax
+- `method` - The HTTP method which should be used to call the URL
+- `fallback_url` - The fallback URL which should be called when the URL request fails
+- `fallback_method` - The HTTP method which should be used to call the fallback URL
 
 ## Timeouts
 

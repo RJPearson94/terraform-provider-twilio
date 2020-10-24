@@ -11,6 +11,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/incoming_phone_number"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/incoming_phone_numbers"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -167,11 +168,12 @@ func resourcePhoneNumber() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"voice_and_fax": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Computed: true,
-				MaxItems: 1,
+			"voice": {
+				Type:          schema.TypeList,
+				Optional:      true,
+				Computed:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"fax"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"application_sid": {
@@ -212,14 +214,49 @@ func resourcePhoneNumber() *schema.Resource {
 							Computed:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
-						"receive_mode": {
+					},
+				},
+			},
+			"fax": {
+				Type:          schema.TypeList,
+				Optional:      true,
+				Computed:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"voice"},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"application_sid": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"fallback_method": {
 							Type:     schema.TypeString,
 							Optional: true,
 							Computed: true,
 							ValidateFunc: validation.StringInSlice([]string{
-								"voice",
-								"fax",
+								"GET",
+								"POST",
 							}, false),
+						},
+						"fallback_url": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+						},
+						"method": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"GET",
+								"POST",
+							}, false),
+						},
+						"url": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Computed:     true,
+							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 					},
 				},
@@ -291,14 +328,23 @@ func resourcePhoneNumberCreate(ctx context.Context, d *schema.ResourceData, meta
 		createInput.SmsURL = utils.OptionalString(d, "messaging.0.url")
 	}
 
-	if _, ok := d.GetOk("voice_and_fax"); ok {
-		createInput.VoiceApplicationSid = utils.OptionalString(d, "voice_and_fax.0.application_sid")
-		createInput.VoiceCallerIDLookup = utils.OptionalBool(d, "voice_and_fax.0.caller_id_lookup")
-		createInput.VoiceFallbackMethod = utils.OptionalString(d, "voice_and_fax.0.fallback_method")
-		createInput.VoiceFallbackURL = utils.OptionalString(d, "voice_and_fax.0.fallback_url")
-		createInput.VoiceMethod = utils.OptionalString(d, "voice_and_fax.0.method")
-		createInput.VoiceReceiveMode = utils.OptionalString(d, "voice_and_fax.0.receive_mode")
-		createInput.VoiceURL = utils.OptionalString(d, "voice_and_fax.0.url")
+	if _, ok := d.GetOk("voice"); ok {
+		createInput.VoiceApplicationSid = utils.OptionalString(d, "voice.0.application_sid")
+		createInput.VoiceCallerIDLookup = utils.OptionalBool(d, "voice.0.caller_id_lookup")
+		createInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
+		createInput.VoiceFallbackURL = utils.OptionalString(d, "voice.0.fallback_url")
+		createInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
+		createInput.VoiceReceiveMode = sdkUtils.String(d.Get("voice").(string))
+		createInput.VoiceURL = utils.OptionalString(d, "voice.0.url")
+	}
+
+	if _, ok := d.GetOk("fax"); ok {
+		createInput.VoiceApplicationSid = utils.OptionalString(d, "fax.0.application_sid")
+		createInput.VoiceFallbackMethod = utils.OptionalString(d, "fax.0.fallback_method")
+		createInput.VoiceFallbackURL = utils.OptionalString(d, "fax.0.fallback_url")
+		createInput.VoiceMethod = utils.OptionalString(d, "fax.0.method")
+		createInput.VoiceReceiveMode = sdkUtils.String(d.Get("fax").(string))
+		createInput.VoiceURL = utils.OptionalString(d, "fax.0.url")
 	}
 
 	createResult, err := client.Account(d.Get("account_sid").(string)).IncomingPhoneNumbers.CreateWithContext(ctx, createInput)
@@ -340,7 +386,14 @@ func resourcePhoneNumberRead(ctx context.Context, d *schema.ResourceData, meta i
 	d.Set("status_callback_url", getResponse.StatusCallback)
 	d.Set("status_callback_method", getResponse.StatusCallbackMethod)
 	d.Set("trunk_sid", getResponse.TrunkSid)
-	d.Set("voice_and_fax", helper.FlattenVoice(getResponse))
+
+	if getResponse.VoiceReceiveMode == "voice" {
+		d.Set("voice", helper.FlattenVoice(getResponse))
+	}
+	if getResponse.VoiceReceiveMode == "fax" {
+		d.Set("fax", helper.FlattenFax(getResponse))
+	}
+
 	d.Set("date_created", getResponse.DateCreated.Time.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {
@@ -373,14 +426,23 @@ func resourcePhoneNumberUpdate(ctx context.Context, d *schema.ResourceData, meta
 		updateInput.SmsURL = utils.OptionalString(d, "messaging.0.url")
 	}
 
-	if _, ok := d.GetOk("voice_and_fax"); ok {
-		updateInput.VoiceApplicationSid = utils.OptionalString(d, "voice_and_fax.0.application_sid")
-		updateInput.VoiceCallerIDLookup = utils.OptionalBool(d, "voice_and_fax.0.caller_id_lookup")
-		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "voice_and_fax.0.fallback_method")
-		updateInput.VoiceFallbackURL = utils.OptionalString(d, "voice_and_fax.0.fallback_url")
-		updateInput.VoiceMethod = utils.OptionalString(d, "voice_and_fax.0.method")
-		updateInput.VoiceReceiveMode = utils.OptionalString(d, "voice_and_fax.0.receive_mode")
-		updateInput.VoiceURL = utils.OptionalString(d, "voice_and_fax.0.url")
+	if _, ok := d.GetOk("voice"); ok {
+		updateInput.VoiceApplicationSid = utils.OptionalString(d, "voice.0.application_sid")
+		updateInput.VoiceCallerIDLookup = utils.OptionalBool(d, "voice.0.caller_id_lookup")
+		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
+		updateInput.VoiceFallbackURL = utils.OptionalString(d, "voice.0.fallback_url")
+		updateInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
+		updateInput.VoiceReceiveMode = sdkUtils.String(d.Get("voice").(string))
+		updateInput.VoiceURL = utils.OptionalString(d, "voice.0.url")
+	}
+
+	if _, ok := d.GetOk("fax"); ok {
+		updateInput.VoiceApplicationSid = utils.OptionalString(d, "fax.0.application_sid")
+		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "fax.0.fallback_method")
+		updateInput.VoiceFallbackURL = utils.OptionalString(d, "fax.0.fallback_url")
+		updateInput.VoiceMethod = utils.OptionalString(d, "fax.0.method")
+		updateInput.VoiceReceiveMode = sdkUtils.String(d.Get("fax").(string))
+		updateInput.VoiceURL = utils.OptionalString(d, "fax.0.url")
 	}
 
 	updateResp, err := client.Account(d.Get("account_sid").(string)).IncomingPhoneNumber(d.Id()).UpdateWithContext(ctx, updateInput)

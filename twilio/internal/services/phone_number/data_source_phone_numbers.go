@@ -115,7 +115,7 @@ func dataSourcePhoneNumbers() *schema.Resource {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"voice_and_fax": {
+						"voice": {
 							Type:     schema.TypeList,
 							Computed: true,
 							Elem: &schema.Resource{
@@ -144,7 +144,31 @@ func dataSourcePhoneNumbers() *schema.Resource {
 										Type:     schema.TypeString,
 										Computed: true,
 									},
-									"receive_mode": {
+								},
+							},
+						},
+						"fax": {
+							Type:     schema.TypeList,
+							Computed: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"application_sid": {
+										Type:     schema.TypeString,
+										Computed: true,
+									},
+									"fallback_method": {
+										Type:     schema.TypeString,
+										Computed: true,
+									},
+									"fallback_url": {
+										Type:     schema.TypeString,
+										Computed: true,
+									},
+									"url": {
+										Type:     schema.TypeString,
+										Computed: true,
+									},
+									"method": {
 										Type:     schema.TypeString,
 										Computed: true,
 									},
@@ -244,16 +268,30 @@ func dataSourcePhoneNumbersRead(ctx context.Context, d *schema.ResourceData, met
 		phoneNumberMap["status_callback_url"] = phoneNumber.StatusCallback
 		phoneNumberMap["status_callback_method"] = phoneNumber.StatusCallbackMethod
 		phoneNumberMap["trunk_sid"] = phoneNumber.TrunkSid
-		phoneNumberMap["voice_and_fax"] = []interface{}{
-			map[string]interface{}{
-				"application_sid":  phoneNumber.VoiceApplicationSid,
-				"caller_id_lookup": phoneNumber.VoiceCallerIDLookup,
-				"fallback_method":  phoneNumber.VoiceFallbackMethod,
-				"fallback_url":     phoneNumber.VoiceFallbackURL,
-				"method":           phoneNumber.VoiceMethod,
-				"receive_mode":     phoneNumber.VoiceReceiveMode,
-				"url":              phoneNumber.VoiceURL,
-			},
+
+		if phoneNumber.VoiceReceiveMode == "voice" {
+			phoneNumberMap["voice"] = []interface{}{
+				map[string]interface{}{
+					"application_sid":  phoneNumber.VoiceApplicationSid,
+					"caller_id_lookup": phoneNumber.VoiceCallerIDLookup,
+					"fallback_method":  phoneNumber.VoiceFallbackMethod,
+					"fallback_url":     phoneNumber.VoiceFallbackURL,
+					"method":           phoneNumber.VoiceMethod,
+					"url":              phoneNumber.VoiceURL,
+				},
+			}
+		}
+
+		if phoneNumber.VoiceReceiveMode == "fax" {
+			phoneNumberMap["fax"] = []interface{}{
+				map[string]interface{}{
+					"application_sid": phoneNumber.VoiceApplicationSid,
+					"fallback_method": phoneNumber.VoiceFallbackMethod,
+					"fallback_url":    phoneNumber.VoiceFallbackURL,
+					"method":          phoneNumber.VoiceMethod,
+					"url":             phoneNumber.VoiceURL,
+				},
+			}
 		}
 		phoneNumberMap["date_created"] = phoneNumber.DateCreated.Time.Format(time.RFC3339)
 

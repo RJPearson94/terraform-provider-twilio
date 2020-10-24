@@ -9,6 +9,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func dataSourcePhoneNumber() *schema.Resource {
@@ -112,38 +113,95 @@ func dataSourcePhoneNumber() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"voice_and_fax": {
-				Type:     schema.TypeList,
-				Computed: true,
+			"voice": {
+				Type:          schema.TypeList,
+				Optional:      true,
+				Computed:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"fax"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"application_sid": {
 							Type:     schema.TypeString,
-							Computed: true,
+							Optional: true,
 						},
 						"caller_id_lookup": {
 							Type:     schema.TypeBool,
+							Optional: true,
 							Computed: true,
 						},
 						"fallback_method": {
 							Type:     schema.TypeString,
+							Optional: true,
 							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"GET",
+								"POST",
+							}, false),
 						},
 						"fallback_url": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"url": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 						"method": {
 							Type:     schema.TypeString,
+							Optional: true,
 							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"GET",
+								"POST",
+							}, false),
 						},
-						"receive_mode": {
+						"url": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Computed:     true,
+							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+						},
+					},
+				},
+			},
+			"fax": {
+				Type:          schema.TypeList,
+				Optional:      true,
+				Computed:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"voice"},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"application_sid": {
 							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"fallback_method": {
+							Type:     schema.TypeString,
+							Optional: true,
 							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"GET",
+								"POST",
+							}, false),
+						},
+						"fallback_url": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+						},
+						"method": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"GET",
+								"POST",
+							}, false),
+						},
+						"url": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Computed:     true,
+							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 					},
 				},
@@ -217,7 +275,14 @@ func dataSourcePhoneNumberRead(ctx context.Context, d *schema.ResourceData, meta
 	d.Set("status_callback_url", getResponse.StatusCallback)
 	d.Set("status_callback_method", getResponse.StatusCallbackMethod)
 	d.Set("trunk_sid", getResponse.TrunkSid)
-	d.Set("voice_and_fax", helper.FlattenVoice(getResponse))
+
+	if getResponse.VoiceReceiveMode == "voice" {
+		d.Set("voice", helper.FlattenVoice(getResponse))
+	}
+	if getResponse.VoiceReceiveMode == "fax" {
+		d.Set("fax", helper.FlattenFax(getResponse))
+	}
+
 	d.Set("date_created", getResponse.DateCreated.Time.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {
