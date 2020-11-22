@@ -117,11 +117,13 @@ func resourceChatChannelWebhookCreate(ctx context.Context, d *schema.ResourceDat
 	client := meta.(*common.TwilioClient).Chat
 
 	createInput := &webhooks.CreateChannelWebhookInput{
-		Type:                    "webhook",
-		ConfigurationURL:        utils.OptionalString(d, "webhook_url"),
-		ConfigurationMethod:     utils.OptionalString(d, "method"),
-		ConfigurationRetryCount: utils.OptionalInt(d, "retry_count"),
-		ConfigurationFilters:    utils.OptionalStringSlice(d, "filters"),
+		Type: "webhook",
+		Configuration: &webhooks.CreateChannelWebhookConfigurationInput{
+			URL:        utils.OptionalString(d, "webhook_url"),
+			Method:     utils.OptionalString(d, "method"),
+			RetryCount: utils.OptionalInt(d, "retry_count"),
+			Filters:    utils.OptionalStringSlice(d, "filters"),
+		},
 	}
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhooks.CreateWithContext(ctx, createInput)
@@ -172,10 +174,12 @@ func resourceChatChannelWebhookUpdate(ctx context.Context, d *schema.ResourceDat
 	client := meta.(*common.TwilioClient).Chat
 
 	updateInput := &webhook.UpdateChannelWebhookInput{
-		ConfigurationURL:        utils.OptionalString(d, "webhook_url"),
-		ConfigurationMethod:     utils.OptionalString(d, "method"),
-		ConfigurationRetryCount: utils.OptionalInt(d, "retry_count"),
-		ConfigurationFilters:    utils.OptionalStringSlice(d, "filters"),
+		Configuration: &webhook.UpdateChannelWebhookConfigurationInput{
+			URL:        utils.OptionalString(d, "webhook_url"),
+			Method:     utils.OptionalString(d, "method"),
+			RetryCount: utils.OptionalInt(d, "retry_count"),
+			Filters:    utils.OptionalStringSlice(d, "filters"),
+		},
 	}
 
 	updateResp, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhook(d.Id()).UpdateWithContext(ctx, updateInput)

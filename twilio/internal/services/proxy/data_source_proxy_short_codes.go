@@ -175,28 +175,26 @@ func dataSourceProxyShortCodesRead(ctx context.Context, d *schema.ResourceData, 
 	return nil
 }
 
-func flattenPageShortCodeCapabilities(capabilities *short_codes.PageShortCodeResponseCapabilities) *[]interface{} {
+func flattenPageShortCodeCapabilities(capabilities *short_codes.PageShortCodeCapabilitiesResponse) *[]interface{} {
 	if capabilities == nil {
 		return nil
 	}
 
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["fax_inbound"] = capabilities.FaxInbound
-	result["fax_outbound"] = capabilities.FaxOutbound
-	result["mms_inbound"] = capabilities.MmsInbound
-	result["mms_outbound"] = capabilities.MmsOutbound
-	result["restriction_fax_domestic"] = capabilities.RestrictionFaxDomestic
-	result["restriction_mms_domestic"] = capabilities.RestrictionMmsDomestic
-	result["restriction_sms_domestic"] = capabilities.RestrictionSmsDomestic
-	result["restriction_voice_domestic"] = capabilities.RestrictionVoiceDomestic
-	result["sip_trunking"] = capabilities.SipTrunking
-	result["sms_inbound"] = capabilities.SmsInbound
-	result["sms_outbound"] = capabilities.SmsOutbound
-	result["voice_inbound"] = capabilities.VoiceInbound
-	result["voice_outbound"] = capabilities.VoiceOutbound
-
-	results = append(results, result)
-	return &results
+	return &[]interface{}{
+		map[string]interface{}{
+			"fax_inbound":                capabilities.FaxInbound,
+			"fax_outbound":               capabilities.FaxOutbound,
+			"mms_inbound":                capabilities.MmsInbound,
+			"mms_outbound":               capabilities.MmsOutbound,
+			"restriction_fax_domestic":   capabilities.RestrictionFaxDomestic,
+			"restriction_mms_domestic":   capabilities.RestrictionMmsDomestic,
+			"restriction_sms_domestic":   capabilities.RestrictionSmsDomestic,
+			"restriction_voice_domestic": capabilities.RestrictionVoiceDomestic,
+			"sip_trunking":               capabilities.SipTrunking,
+			"sms_inbound":                capabilities.SmsInbound,
+			"sms_outbound":               capabilities.SmsOutbound,
+			"voice_inbound":              capabilities.VoiceInbound,
+			"voice_outbound":             capabilities.VoiceOutbound,
+		},
+	}
 }

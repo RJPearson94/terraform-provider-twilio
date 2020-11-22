@@ -1,74 +1,54 @@
 package helper
 
-func FlattenNotifications(input map[string]interface{}) *[]interface{} {
-	if input == nil {
-		return nil
+import "github.com/RJPearson94/twilio-sdk-go/service/chat/v2/service"
+
+func FlattenNotifications(input service.FetchServiceNotificationsResponse) *[]interface{} {
+	return &[]interface{}{
+		map[string]interface{}{
+			"added_to_channel":     flattenNotificationsAction(input.AddedToChannel),
+			"invited_to_channel":   flattenNotificationsAction(input.InvitedToChannel),
+			"removed_from_channel": flattenNotificationsAction(input.RemovedFromChannel),
+			"new_message":          flattenNewMesage(input.NewMessage),
+			"log_enabled":          input.LogEnabled,
+		},
 	}
-
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["added_to_channel"] = FlattenChannelUserModification(input["added_to_channel"].(map[string]interface{}))
-	result["invited_to_channel"] = FlattenChannelUserModification(input["invited_to_channel"].(map[string]interface{}))
-	result["removed_from_channel"] = FlattenChannelUserModification(input["removed_from_channel"].(map[string]interface{}))
-	result["new_message"] = FlattenNewMesage(input["new_message"].(map[string]interface{}))
-	result["log_enabled"] = input["log_enabled"]
-	results = append(results, result)
-
-	return &results
 }
 
-func FlattenChannelUserModification(input map[string]interface{}) *[]interface{} {
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["enabled"] = input["enabled"]
-	result["template"] = input["template"]
-	result["sound"] = input["sound"]
-
-	results = append(results, result)
-	return &results
-}
-
-func FlattenNewMesage(input map[string]interface{}) *[]interface{} {
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["enabled"] = input["enabled"]
-	result["template"] = input["template"]
-	result["sound"] = input["sound"]
-	result["badge_count_enabled"] = input["badge_count_enabled"]
-
-	results = append(results, result)
-	return &results
-}
-
-func FlattenLimits(input map[string]interface{}) *[]interface{} {
-	if input == nil {
-		return nil
+func FlattenLimits(input service.FetchServiceLimitsResponse) *[]interface{} {
+	return &[]interface{}{
+		map[string]interface{}{
+			"user_channels":   input.UserChannels,
+			"channel_members": input.ChannelMembers,
+		},
 	}
-
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["user_channels"] = input["user_channels"]
-	result["channel_members"] = input["channel_members"]
-
-	results = append(results, result)
-	return &results
 }
 
-func FlattenMedia(input map[string]interface{}) *[]interface{} {
-	if input == nil {
-		return nil
+func FlattenMedia(input service.FetchServiceMediaResponse) *[]interface{} {
+	return &[]interface{}{
+		map[string]interface{}{
+			"compatibility_message": input.CompatibilityMessage,
+			"size_limit_mb":         input.SizeLimitMB,
+		},
 	}
+}
 
-	results := make([]interface{}, 0)
+func flattenNotificationsAction(input service.FetchServiceNotificationsActionResponse) *[]interface{} {
+	return &[]interface{}{
+		map[string]interface{}{
+			"enabled":  input.Enabled,
+			"template": input.Template,
+			"sound":    input.Sound,
+		},
+	}
+}
 
-	result := make(map[string]interface{})
-	result["compatibility_message"] = input["compatibility_message"]
-	result["size_limit_mb"] = input["size_limit_mb"]
-
-	results = append(results, result)
-	return &results
+func flattenNewMesage(input service.FetchServiceNotificationsNewMessageResponse) *[]interface{} {
+	return &[]interface{}{
+		map[string]interface{}{
+			"enabled":             input.Enabled,
+			"template":            input.Template,
+			"sound":               input.Sound,
+			"badge_count_enabled": input.BadgeCountEnabled,
+		},
+	}
 }

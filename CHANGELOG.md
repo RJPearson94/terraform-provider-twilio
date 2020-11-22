@@ -1,3 +1,15 @@
+## v0.5.0 (unreleased)
+
+Bump Terraform SDK Plugin and Twilio Go SDK versions
+Deprecated searching for fax enabled phone numbers using the `twilio_phone_number_available_local_numbers`, `twilio_phone_number_available_mobile_numbers` and `twilio_phone_number_available_toll_free_numbers` data sources
+Deprecated fax block for `twilio_phone_number` resource and `twilio_phone_number` and `twilio_phone_numbers` data sources
+Deprecated fax from the capabilities block for `twilio_phone_number` resource and `twilio_phone_number` and `twilio_phone_numbers` data sources
+In the next version only the voice block will be supported for `twilio_phone_number` resource and `twilio_phone_number` and `twilio_phone_numbers` data sources
+
+BREAKING CHANGES
+
+The twilio api no longer returns whether a phone number is configured to integrated with services when a call or fax is received. If no value is supplied then the `voice` block will be used for `twilio_phone_number` resource and `twilio_phone_number` and `twilio_phone_numbers` data sources
+
 ## v0.4.0 (2020-10-24)
 
 FEATURES

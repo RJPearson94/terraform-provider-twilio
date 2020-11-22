@@ -182,15 +182,17 @@ func resourceFlexFlowCreate(ctx context.Context, d *schema.ResourceData, meta in
 	}
 
 	if _, ok := d.GetOk("integration"); ok {
-		createInput.IntegrationChannel = utils.OptionalString(d, "integration.0.channel")
-		createInput.IntegrationCreationOnMessage = utils.OptionalBool(d, "integration.0.creation_on_message")
-		createInput.IntegrationFlowSid = utils.OptionalString(d, "integration.0.flow_sid")
-		createInput.IntegrationPriority = utils.OptionalInt(d, "integration.0.priority")
-		createInput.IntegrationRetryCount = utils.OptionalInt(d, "integration.0.retry_count")
-		createInput.IntegrationTimeout = utils.OptionalInt(d, "integration.0.timeout")
-		createInput.IntegrationURL = utils.OptionalString(d, "integration.0.url")
-		createInput.IntegrationWorkflowSid = utils.OptionalString(d, "integration.0.workflow_sid")
-		createInput.IntegrationWorkspaceSid = utils.OptionalString(d, "integration.0.workspace_sid")
+		createInput.Integration = &flex_flows.CreateFlexFlowIntegrationInput{
+			Channel:           utils.OptionalString(d, "integration.0.channel"),
+			CreationOnMessage: utils.OptionalBool(d, "integration.0.creation_on_message"),
+			FlowSid:           utils.OptionalString(d, "integration.0.flow_sid"),
+			Priority:          utils.OptionalInt(d, "integration.0.priority"),
+			RetryCount:        utils.OptionalInt(d, "integration.0.retry_count"),
+			Timeout:           utils.OptionalInt(d, "integration.0.timeout"),
+			URL:               utils.OptionalString(d, "integration.0.url"),
+			WorkflowSid:       utils.OptionalString(d, "integration.0.workflow_sid"),
+			WorkspaceSid:      utils.OptionalString(d, "integration.0.workspace_sid"),
+		}
 	}
 
 	createResult, err := client.FlexFlows.CreateWithContext(ctx, createInput)
@@ -251,15 +253,17 @@ func resourceFlexFlowUpdate(ctx context.Context, d *schema.ResourceData, meta in
 	}
 
 	if _, ok := d.GetOk("integration"); ok {
-		updateInput.IntegrationChannel = utils.OptionalString(d, "integration.0.channel")
-		updateInput.IntegrationCreationOnMessage = utils.OptionalBool(d, "integration.0.creation_on_message")
-		updateInput.IntegrationFlowSid = utils.OptionalString(d, "integration.0.flow_sid")
-		updateInput.IntegrationPriority = utils.OptionalInt(d, "integration.0.priority")
-		updateInput.IntegrationRetryCount = utils.OptionalInt(d, "integration.0.retry_count")
-		updateInput.IntegrationTimeout = utils.OptionalInt(d, "integration.0.timeout")
-		updateInput.IntegrationURL = utils.OptionalString(d, "integration.0.url")
-		updateInput.IntegrationWorkflowSid = utils.OptionalString(d, "integration.0.workflowSid")
-		updateInput.IntegrationWorkspaceSid = utils.OptionalString(d, "integration.0.workspace_sid")
+		updateInput.Integration = &flex_flow.UpdateFlexFlowIntegrationInput{
+			Channel:           utils.OptionalString(d, "integration.0.channel"),
+			CreationOnMessage: utils.OptionalBool(d, "integration.0.creation_on_message"),
+			FlowSid:           utils.OptionalString(d, "integration.0.flow_sid"),
+			Priority:          utils.OptionalInt(d, "integration.0.priority"),
+			RetryCount:        utils.OptionalInt(d, "integration.0.retry_count"),
+			Timeout:           utils.OptionalInt(d, "integration.0.timeout"),
+			URL:               utils.OptionalString(d, "integration.0.url"),
+			WorkflowSid:       utils.OptionalString(d, "integration.0.workflow_sid"),
+			WorkspaceSid:      utils.OptionalString(d, "integration.0.workspace_sid"),
+		}
 	}
 
 	createResult, err := client.FlexFlow(d.Id()).UpdateWithContext(ctx, updateInput)

@@ -104,7 +104,7 @@ func resourceChatRoleCreate(ctx context.Context, d *schema.ResourceData, meta in
 	createInput := &roles.CreateRoleInput{
 		FriendlyName: d.Get("friendly_name").(string),
 		Type:         d.Get("type").(string),
-		Permission:   utils.ConvertToStringSlice(d.Get("permissions").([]interface{})),
+		Permissions:  utils.ConvertToStringSlice(d.Get("permissions").([]interface{})),
 	}
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Roles.CreateWithContext(ctx, createInput)
@@ -152,7 +152,7 @@ func resourceChatRoleUpdate(ctx context.Context, d *schema.ResourceData, meta in
 	client := meta.(*common.TwilioClient).Chat
 
 	updateInput := &role.UpdateRoleInput{
-		Permission: utils.ConvertToStringSlice(d.Get("permissions").([]interface{})),
+		Permissions: utils.ConvertToStringSlice(d.Get("permissions").([]interface{})),
 	}
 
 	updateResp, err := client.Service(d.Get("service_sid").(string)).Role(d.Id()).UpdateWithContext(ctx, updateInput)

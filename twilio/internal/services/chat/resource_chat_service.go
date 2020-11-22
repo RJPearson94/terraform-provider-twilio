@@ -363,41 +363,57 @@ func resourceChatServiceUpdate(ctx context.Context, d *schema.ResourceData, meta
 	}
 
 	if _, ok := d.GetOk("notifications"); ok {
-		updateInput.NotificationsLogEnabled = utils.OptionalBool(d, "notifications.0.log_enabled")
+		notifications := &service.UpdateServiceNotificationsInput{
+			LogEnabled: utils.OptionalBool(d, "notifications.0.log_enabled"),
+		}
 
 		if _, ok := d.GetOk("notifications.0.new_message"); ok {
-			updateInput.NotificationsNewMessageEnabled = utils.OptionalBool(d, "notifications.0.new_message.0.enabled")
-			updateInput.NotificationsNewMessageTemplate = utils.OptionalString(d, "notifications.0.new_message.0.template")
-			updateInput.NotificationsNewMessageSound = utils.OptionalString(d, "notifications.0.new_message.0.sound")
-			updateInput.NotificationsNewMessageBadgeCountEnabled = utils.OptionalBool(d, "notifications.0.new_message.0.badge_count_enabled")
+			notifications.NewMessage = &service.UpdateServiceNotificationsNewMessageInput{
+				Enabled:           utils.OptionalBool(d, "notifications.0.new_message.0.enabled"),
+				Template:          utils.OptionalString(d, "notifications.0.new_message.0.template"),
+				Sound:             utils.OptionalString(d, "notifications.0.new_message.0.sound"),
+				BadgeCountEnabled: utils.OptionalBool(d, "notifications.0.new_message.0.badge_count_enabled"),
+			}
 		}
 
 		if _, ok := d.GetOk("notifications.0.added_to_channel"); ok {
-			updateInput.NotificationsAddedToChannelEnabled = utils.OptionalBool(d, "notifications.0.added_to_channel.0.enabled")
-			updateInput.NotificationsAddedToChannelTemplate = utils.OptionalString(d, "notifications.0.added_to_channel.0.template")
-			updateInput.NotificationsAddedToChannelSound = utils.OptionalString(d, "notifications.0.added_to_channel.0.sound")
+			notifications.AddedToChannel = &service.UpdateServiceNotificationsActionInput{
+				Enabled:  utils.OptionalBool(d, "notifications.0.added_to_channel.0.enabled"),
+				Template: utils.OptionalString(d, "notifications.0.added_to_channel.0.template"),
+				Sound:    utils.OptionalString(d, "notifications.0.added_to_channel.0.sound"),
+			}
 		}
 
 		if _, ok := d.GetOk("notifications.0.removed_from_channel"); ok {
-			updateInput.NotificationsRemovedFromChannelEnabled = utils.OptionalBool(d, "notifications.0.removed_from_channel.0.enabled")
-			updateInput.NotificationsRemovedFromChannelTemplate = utils.OptionalString(d, "notifications.0.removed_from_channel.0.template")
-			updateInput.NotificationsRemovedFromChannelSound = utils.OptionalString(d, "notifications.0.removed_from_channel.0.sound")
+			notifications.RemovedFromChannel = &service.UpdateServiceNotificationsActionInput{
+				Enabled:  utils.OptionalBool(d, "notifications.0.removed_from_channel.0.enabled"),
+				Template: utils.OptionalString(d, "notifications.0.removed_from_channel.0.template"),
+				Sound:    utils.OptionalString(d, "notifications.0.removed_from_channel.0.sound"),
+			}
 		}
 
 		if _, ok := d.GetOk("notifications.0.invited_to_channel"); ok {
-			updateInput.NotificationsInvitedToChannelEnabled = utils.OptionalBool(d, "notifications.0.invited_to_channel.0.enabled")
-			updateInput.NotificationsInvitedToChannelTemplate = utils.OptionalString(d, "notifications.0.invited_to_channel.0.template")
-			updateInput.NotificationsInvitedToChannelSound = utils.OptionalString(d, "notifications.0.invited_to_channel.0.sound")
+			notifications.InvitedToChannel = &service.UpdateServiceNotificationsActionInput{
+				Enabled:  utils.OptionalBool(d, "notifications.0.invited_to_channel.0.enabled"),
+				Template: utils.OptionalString(d, "notifications.0.invited_to_channel.0.template"),
+				Sound:    utils.OptionalString(d, "notifications.0.invited_to_channel.0.sound"),
+			}
 		}
+
+		updateInput.Notifications = notifications
 	}
 
 	if _, ok := d.GetOk("limits"); ok {
-		updateInput.LimitsChannelMembers = utils.OptionalInt(d, "limits.0.channel_members")
-		updateInput.LimitsUserChannels = utils.OptionalInt(d, "limits.0.user_channels")
+		updateInput.Limits = &service.UpdateServiceLimitsInput{
+			ChannelMembers: utils.OptionalInt(d, "limits.0.channel_members"),
+			UserChannels:   utils.OptionalInt(d, "limits.0.user_channels"),
+		}
 	}
 
 	if _, ok := d.GetOk("media"); ok {
-		updateInput.MediaCompatibilityMessage = utils.OptionalString(d, "media.0.compatibility_message")
+		updateInput.Media = &service.UpdateServiceMediaInput{
+			CompatibilityMessage: utils.OptionalString(d, "media.0.compatibility_message"),
+		}
 	}
 
 	updateResp, err := client.Service(d.Id()).UpdateWithContext(ctx, updateInput)

@@ -64,6 +64,8 @@ An `phone_number` block supports the following:
 A `capability` block supports the following:
 
 - `fax` - Whether the phone number supports fax
+!> the `fax` block has been deprecated and will be removed in future version
+
 - `sms` - Whether the phone number supports SMS
 - `mms` - Whether the phone number supports MMS
 - `voice` - Whether the phone number supports voice
@@ -92,6 +94,7 @@ A `voice` block supports the following:
 ---
 
 A `fax` block supports the following:
+!> the `fax` block has been deprecated and will be removed in future version
 
 - `application_sid` - The application SID which should be called on each incoming fax
 - `url` - The URL which should be called on each incoming fax

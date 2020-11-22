@@ -129,17 +129,15 @@ func dataSourceChatChannelWebhookRead(ctx context.Context, d *schema.ResourceDat
 	return nil
 }
 
-func flattenFetchConfiguration(input webhook.FetchChannelWebhookResponseConfiguration) *[]interface{} {
-	results := make([]interface{}, 0)
-
-	result := make(map[string]interface{})
-	result["webhook_url"] = input.URL
-	result["method"] = input.Method
-	result["retry_count"] = input.RetryCount
-	result["triggers"] = input.Triggers
-	result["flow_sid"] = input.FlowSid
-	result["filters"] = input.Filters
-	results = append(results, result)
-
-	return &results
+func flattenFetchConfiguration(input webhook.FetchChannelWebhookConfigurationResponse) *[]interface{} {
+	return &[]interface{}{
+		map[string]interface{}{
+			"webhook_url": input.URL,
+			"method":      input.Method,
+			"retry_count": input.RetryCount,
+			"triggers":    input.Triggers,
+			"flow_sid":    input.FlowSid,
+			"filters":     input.Filters,
+		},
+	}
 }

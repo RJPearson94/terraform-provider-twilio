@@ -60,6 +60,8 @@ A `location` block supports the following:
 A `capability` block supports the following:
 
 - `fax_enabled` - Whether to include fax enabled phone numbers
+!> the `fax_enabled` attribute has been deprecated and will be removed in future version
+
 - `sms_enabled` - Whether to include sms enabled phone numbers
 - `mms_enabled` - Whether to include mms enabled phone numbers
 - `voice_enabled` - Whether to include voice-enabled phone numbers
@@ -95,6 +97,8 @@ An `available_phone_number` block supports the following:
 A `capability` block supports the following:
 
 - `fax` - Whether the phone number supports fax
+!> the `fax` attribute has been deprecated and will be removed in future version
+
 - `sms` - Whether the phone number supports SMS
 - `mms` - Whether the phone number supports MMS
 - `voice` - Whether the phone number supports voice

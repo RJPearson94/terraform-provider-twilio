@@ -57,8 +57,9 @@ func dataSourcePhoneNumbers() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"fax": {
-										Type:     schema.TypeBool,
-										Computed: true,
+										Deprecated: "Due to Twilio disabling Programmable Fax for some accounts the api no longer return the necessary data so support will be removed in the next version and only voice will be supported",
+										Type:       schema.TypeBool,
+										Computed:   true,
 									},
 									"sms": {
 										Type:     schema.TypeBool,
@@ -148,8 +149,9 @@ func dataSourcePhoneNumbers() *schema.Resource {
 							},
 						},
 						"fax": {
-							Type:     schema.TypeList,
-							Computed: true,
+							Type:       schema.TypeList,
+							Deprecated: "Due to Twilio disabling Programmable Fax for some accounts the api no longer return the necessary data so support will be removed in the next version and only voice will be supported",
+							Computed:   true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"application_sid": {
@@ -269,7 +271,9 @@ func dataSourcePhoneNumbersRead(ctx context.Context, d *schema.ResourceData, met
 		phoneNumberMap["status_callback_method"] = phoneNumber.StatusCallbackMethod
 		phoneNumberMap["trunk_sid"] = phoneNumber.TrunkSid
 
-		if phoneNumber.VoiceReceiveMode == "voice" {
+		// Since Programmable fax has been disabled on some accounts voice receive mode is no
+		// longer being returned
+		if phoneNumber.VoiceReceiveMode == "" || phoneNumber.VoiceReceiveMode == "voice" {
 			phoneNumberMap["voice"] = []interface{}{
 				map[string]interface{}{
 					"application_sid":  phoneNumber.VoiceApplicationSid,

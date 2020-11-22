@@ -99,9 +99,11 @@ func resourceChatChannelStudioWebhookCreate(ctx context.Context, d *schema.Resou
 	client := meta.(*common.TwilioClient).Chat
 
 	createInput := &webhooks.CreateChannelWebhookInput{
-		Type:                    "studio",
-		ConfigurationFlowSid:    utils.OptionalString(d, "flow_sid"),
-		ConfigurationRetryCount: utils.OptionalInt(d, "retry_count"),
+		Type: "studio",
+		Configuration: &webhooks.CreateChannelWebhookConfigurationInput{
+			FlowSid:    utils.OptionalString(d, "flow_sid"),
+			RetryCount: utils.OptionalInt(d, "retry_count"),
+		},
 	}
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhooks.CreateWithContext(ctx, createInput)
@@ -150,8 +152,10 @@ func resourceChatChannelStudioWebhookUpdate(ctx context.Context, d *schema.Resou
 	client := meta.(*common.TwilioClient).Chat
 
 	updateInput := &webhook.UpdateChannelWebhookInput{
-		ConfigurationFlowSid:    utils.OptionalString(d, "flow_sid"),
-		ConfigurationRetryCount: utils.OptionalInt(d, "retry_count"),
+		Configuration: &webhook.UpdateChannelWebhookConfigurationInput{
+			FlowSid:    utils.OptionalString(d, "flow_sid"),
+			RetryCount: utils.OptionalInt(d, "retry_count"),
+		},
 	}
 
 	updateResp, err := client.Service(d.Get("service_sid").(string)).Channel(d.Get("channel_sid").(string)).Webhook(d.Id()).UpdateWithContext(ctx, updateInput)

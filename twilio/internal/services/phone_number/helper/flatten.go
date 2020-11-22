@@ -4,7 +4,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/incoming_phone_number"
 )
 
-func FlattenCapabilities(resp *incoming_phone_number.FetchIncomingPhoneNumberResponseCapabilities) *[]interface{} {
+func FlattenCapabilities(resp *incoming_phone_number.FetchIncomingPhoneNumberCapabilitiesResponse) *[]interface{} {
 	return &[]interface{}{
 		map[string]interface{}{
 			"fax":   resp.Fax,
