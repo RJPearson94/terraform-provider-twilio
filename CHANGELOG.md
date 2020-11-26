@@ -1,4 +1,4 @@
-## v0.5.0 (unreleased)
+## v0.5.0 (2020-11-26)
 
 Bump Terraform SDK Plugin and Twilio Go SDK versions
 Deprecated searching for fax enabled phone numbers using the `twilio_phone_number_available_local_numbers`, `twilio_phone_number_available_mobile_numbers` and `twilio_phone_number_available_toll_free_numbers` data sources
