@@ -113,9 +113,8 @@ func dataSourcePhoneNumberAvailableLocalNumbers() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"fax_enabled": {
-							Deprecated: "Due to Twilio disabling Programmable Fax for some accounts the api no longer return the necessary data so support will be removed in the next version",
-							Type:       schema.TypeBool,
-							Optional:   true,
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 						"sms_enabled": {
 							Type:     schema.TypeBool,
@@ -159,9 +158,8 @@ func dataSourcePhoneNumberAvailableLocalNumbers() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"fax": {
-										Deprecated: "Due to Twilio disabling Programmable Fax for some accounts the api no longer return the necessary data so support will be removed in the next version",
-										Type:       schema.TypeBool,
-										Computed:   true,
+										Type:     schema.TypeBool,
+										Computed: true,
 									},
 									"sms": {
 										Type:     schema.TypeBool,

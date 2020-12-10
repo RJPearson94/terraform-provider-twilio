@@ -94,9 +94,8 @@ func resourcePhoneNumber() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"fax": {
-							Deprecated: "Due to Twilio disabling Programmable Fax for some accounts the api no longer return the necessary data so support will be removed in the next version and only voice will be supported",
-							Type:       schema.TypeBool,
-							Computed:   true,
+							Type:     schema.TypeBool,
+							Computed: true,
 						},
 						"sms": {
 							Type:     schema.TypeBool,
@@ -220,7 +219,6 @@ func resourcePhoneNumber() *schema.Resource {
 			},
 			"fax": {
 				Type:          schema.TypeList,
-				Deprecated:    "Due to Twilio disabling Programmable Fax for some accounts the api no longer return the necessary data so support will be removed in the next version and only voice will be supported",
 				Optional:      true,
 				Computed:      true,
 				MaxItems:      1,

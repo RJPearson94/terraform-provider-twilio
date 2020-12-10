@@ -42,6 +42,8 @@ The following arguments are supported:
 
 ~> Either the phone number or area code must be set
 
+!> if the Twilio API doesn't return the voice receive mode field (this field hasn't been returned since Programmable Fax was disabled on some projects), then the provider will assume the configuration is for voice
+
 ---
 
 A `messaging` block supports the following:
@@ -100,6 +102,8 @@ The following attributes are exported:
 - `origin` - The origin of the phone number
 - `date_created` - The date in RFC3339 format that the phone number was created
 - `date_updated` - The date in RFC3339 format that the phone number was updated
+
+!> the `voice` block will be defaulted to if the Twilio API doesn't return the voice receive mode field, this data isn't being returned since Programmable Fax was disabled on some accounts
 
 ---
 

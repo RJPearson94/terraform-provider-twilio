@@ -35,7 +35,7 @@ The following attributes are exported:
 
 ---
 
-An `phone_number` block supports the following:
+A `phone_number` block supports the following:
 
 - `sid` - The SID of the phone number
 - `friendly_name` - The friendly name of the phone number
@@ -59,13 +59,13 @@ An `phone_number` block supports the following:
 - `date_created` - The date in RFC3339 format that the phone number was created
 - `date_updated` - The date in RFC3339 format that the phone number was updated
 
+!> the `voice` block will be defaulted to if the Twilio API doesn't return the voice receive mode field, this data isn't being returned since Programmable Fax was disabled on some accounts
+
 ---
 
 A `capability` block supports the following:
 
 - `fax` - Whether the phone number supports fax
-!> the `fax` block has been deprecated and will be removed in future version
-
 - `sms` - Whether the phone number supports SMS
 - `mms` - Whether the phone number supports MMS
 - `voice` - Whether the phone number supports voice
@@ -94,7 +94,6 @@ A `voice` block supports the following:
 ---
 
 A `fax` block supports the following:
-!> the `fax` block has been deprecated and will be removed in future version
 
 - `application_sid` - The application SID which should be called on each incoming fax
 - `url` - The URL which should be called on each incoming fax

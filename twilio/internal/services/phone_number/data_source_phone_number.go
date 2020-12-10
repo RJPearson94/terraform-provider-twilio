@@ -9,7 +9,6 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func dataSourcePhoneNumber() *schema.Resource {
@@ -55,9 +54,8 @@ func dataSourcePhoneNumber() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"fax": {
-							Deprecated: "Due to Twilio disabling Programmable Fax for some accounts the api no longer return the necessary data so support will be removed in the next version and only voice will be supported",
-							Type:       schema.TypeBool,
-							Computed:   true,
+							Type:     schema.TypeBool,
+							Computed: true,
 						},
 						"sms": {
 							Type:     schema.TypeBool,
@@ -115,95 +113,61 @@ func dataSourcePhoneNumber() *schema.Resource {
 				Computed: true,
 			},
 			"voice": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Computed:      true,
-				MaxItems:      1,
-				ConflictsWith: []string{"fax"},
+				Type:     schema.TypeList,
+				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"application_sid": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Computed: true,
 						},
 						"caller_id_lookup": {
 							Type:     schema.TypeBool,
-							Optional: true,
 							Computed: true,
 						},
 						"fallback_method": {
 							Type:     schema.TypeString,
-							Optional: true,
 							Computed: true,
-							ValidateFunc: validation.StringInSlice([]string{
-								"GET",
-								"POST",
-							}, false),
 						},
 						"fallback_url": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+							Type:     schema.TypeString,
+							Computed: true,
 						},
 						"method": {
 							Type:     schema.TypeString,
-							Optional: true,
 							Computed: true,
-							ValidateFunc: validation.StringInSlice([]string{
-								"GET",
-								"POST",
-							}, false),
 						},
 						"url": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Computed:     true,
-							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+							Type:     schema.TypeString,
+							Computed: true,
 						},
 					},
 				},
 			},
 			"fax": {
-				Type:          schema.TypeList,
-				Deprecated:    "Due to Twilio disabling Programmable Fax for some accounts the api no longer return the necessary data so support will be removed in the next version and only voice will be supported",
-				Optional:      true,
-				Computed:      true,
-				MaxItems:      1,
-				ConflictsWith: []string{"voice"},
+				Type:     schema.TypeList,
+				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"application_sid": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Computed: true,
 						},
 						"fallback_method": {
 							Type:     schema.TypeString,
-							Optional: true,
 							Computed: true,
-							ValidateFunc: validation.StringInSlice([]string{
-								"GET",
-								"POST",
-							}, false),
 						},
 						"fallback_url": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+							Type:     schema.TypeString,
+							Computed: true,
 						},
 						"method": {
 							Type:     schema.TypeString,
-							Optional: true,
 							Computed: true,
-							ValidateFunc: validation.StringInSlice([]string{
-								"GET",
-								"POST",
-							}, false),
 						},
 						"url": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Computed:     true,
-							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+							Type:     schema.TypeString,
+							Computed: true,
 						},
 					},
 				},
