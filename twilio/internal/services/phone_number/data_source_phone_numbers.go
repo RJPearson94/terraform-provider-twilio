@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/phone_number/helper"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -271,9 +272,7 @@ func dataSourcePhoneNumbersRead(ctx context.Context, d *schema.ResourceData, met
 		phoneNumberMap["status_callback_method"] = phoneNumber.StatusCallbackMethod
 		phoneNumberMap["trunk_sid"] = phoneNumber.TrunkSid
 
-		// Since Programmable fax has been disabled on some accounts voice receive mode is no
-		// longer being returned
-		if phoneNumber.VoiceReceiveMode == "" || phoneNumber.VoiceReceiveMode == "voice" {
+		if helper.IsVoiceReceiveMode(phoneNumber.VoiceReceiveMode) {
 			phoneNumberMap["voice"] = []interface{}{
 				map[string]interface{}{
 					"application_sid":  phoneNumber.VoiceApplicationSid,
@@ -284,9 +283,7 @@ func dataSourcePhoneNumbersRead(ctx context.Context, d *schema.ResourceData, met
 					"url":              phoneNumber.VoiceURL,
 				},
 			}
-		}
-
-		if phoneNumber.VoiceReceiveMode == "fax" {
+		} else {
 			phoneNumberMap["fax"] = []interface{}{
 				map[string]interface{}{
 					"application_sid": phoneNumber.VoiceApplicationSid,
@@ -297,6 +294,7 @@ func dataSourcePhoneNumbersRead(ctx context.Context, d *schema.ResourceData, met
 				},
 			}
 		}
+
 		phoneNumberMap["date_created"] = phoneNumber.DateCreated.Time.Format(time.RFC3339)
 
 		if phoneNumber.DateUpdated != nil {

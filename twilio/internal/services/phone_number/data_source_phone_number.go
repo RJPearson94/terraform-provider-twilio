@@ -278,12 +278,9 @@ func dataSourcePhoneNumberRead(ctx context.Context, d *schema.ResourceData, meta
 	d.Set("status_callback_method", getResponse.StatusCallbackMethod)
 	d.Set("trunk_sid", getResponse.TrunkSid)
 
-	// Since Programmable fax has been disabled on some accounts voice receive mode is no
-	// longer being returned
-	if getResponse.VoiceReceiveMode == "" || getResponse.VoiceReceiveMode == "voice" {
+	if helper.IsVoiceReceiveMode(getResponse.VoiceReceiveMode) {
 		d.Set("voice", helper.FlattenVoice(getResponse))
-	}
-	if getResponse.VoiceReceiveMode == "fax" {
+	} else {
 		d.Set("fax", helper.FlattenFax(getResponse))
 	}
 
