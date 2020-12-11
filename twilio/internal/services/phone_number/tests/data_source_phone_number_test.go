@@ -44,8 +44,6 @@ func TestAccDataSourceTwilioPhoneNumber_complete(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "origin"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_updated"),
 				),
 			},
 		},

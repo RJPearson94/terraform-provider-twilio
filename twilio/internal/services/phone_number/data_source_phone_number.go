@@ -244,10 +244,11 @@ func dataSourcePhoneNumberRead(ctx context.Context, d *schema.ResourceData, meta
 
 	if helper.IsVoiceReceiveMode(getResponse.VoiceReceiveMode) {
 		d.Set("voice", helper.FlattenVoice(getResponse))
+		d.Set("fax", &[]interface{}{})
 	} else {
 		d.Set("fax", helper.FlattenFax(getResponse))
+		d.Set("voice", &[]interface{}{})
 	}
-
 	d.Set("date_created", getResponse.DateCreated.Time.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {

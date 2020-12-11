@@ -5,14 +5,15 @@ import (
 )
 
 func FlattenCapabilities(resp *incoming_phone_number.FetchIncomingPhoneNumberCapabilitiesResponse) *[]interface{} {
-	return &[]interface{}{
-		map[string]interface{}{
-			"fax":   resp.Fax,
-			"sms":   resp.Sms,
-			"mms":   resp.Mms,
-			"voice": resp.Voice,
-		},
+	capabilities := make(map[string]interface{})
+	if resp.Fax != nil {
+		capabilities["fax"] = resp.Fax
 	}
+	capabilities["sms"] = resp.Sms
+	capabilities["mms"] = resp.Mms
+	capabilities["voice"] = resp.Voice
+
+	return &[]interface{}{capabilities}
 }
 
 func FlattenMessaging(resp *incoming_phone_number.FetchIncomingPhoneNumberResponse) *[]interface{} {

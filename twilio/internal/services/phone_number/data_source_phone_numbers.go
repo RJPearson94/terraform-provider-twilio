@@ -281,6 +281,7 @@ func dataSourcePhoneNumbersRead(ctx context.Context, d *schema.ResourceData, met
 					"url":              phoneNumber.VoiceURL,
 				},
 			}
+			phoneNumberMap["fax"] = []interface{}{}
 		} else {
 			phoneNumberMap["fax"] = []interface{}{
 				map[string]interface{}{
@@ -291,6 +292,7 @@ func dataSourcePhoneNumbersRead(ctx context.Context, d *schema.ResourceData, met
 					"url":             phoneNumber.VoiceURL,
 				},
 			}
+			phoneNumberMap["voice"] = []interface{}{}
 		}
 
 		phoneNumberMap["date_created"] = phoneNumber.DateCreated.Time.Format(time.RFC3339)
