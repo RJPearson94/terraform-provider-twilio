@@ -14,16 +14,15 @@ func FlattenAssetVersions(input *[]build.FetchAssetVersion) *[]interface{} {
 	results := make([]interface{}, 0)
 
 	for _, prop := range *input {
-		result := make(map[string]interface{})
-		result["sid"] = prop.Sid
-		result["account_sid"] = prop.AccountSid
-		result["service_sid"] = prop.ServiceSid
-		result["asset_sid"] = prop.AssetSid
-		result["date_created"] = prop.DateCreated.Format(time.RFC3339)
-		result["path"] = prop.Path
-		result["visibility"] = prop.Visibility
-
-		results = append(results, result)
+		results = append(results, map[string]interface{}{
+			"sid":          prop.Sid,
+			"account_sid":  prop.AccountSid,
+			"service_sid":  prop.ServiceSid,
+			"asset_sid":    prop.AssetSid,
+			"date_created": prop.DateCreated.Format(time.RFC3339),
+			"path":         prop.Path,
+			"visibility":   prop.Visibility,
+		})
 	}
 
 	return &results
@@ -37,16 +36,15 @@ func FlattenFunctionVersions(input *[]build.FetchFunctionVersion) *[]interface{}
 	results := make([]interface{}, 0)
 
 	for _, prop := range *input {
-		result := make(map[string]interface{})
-		result["sid"] = prop.Sid
-		result["account_sid"] = prop.AccountSid
-		result["service_sid"] = prop.ServiceSid
-		result["function_sid"] = prop.FunctionSid
-		result["date_created"] = prop.DateCreated.Format(time.RFC3339)
-		result["path"] = prop.Path
-		result["visibility"] = prop.Visibility
-
-		results = append(results, result)
+		results = append(results, map[string]interface{}{
+			"sid":          prop.Sid,
+			"account_sid":  prop.AccountSid,
+			"service_sid":  prop.ServiceSid,
+			"function_sid": prop.FunctionSid,
+			"date_created": prop.DateCreated.Format(time.RFC3339),
+			"path":         prop.Path,
+			"visibility":   prop.Visibility,
+		})
 	}
 
 	return &results
