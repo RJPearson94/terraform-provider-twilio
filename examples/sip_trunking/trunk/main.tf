@@ -1,0 +1,1 @@
+resource "twilio_sip_trunking_trunk" "trunk" {}

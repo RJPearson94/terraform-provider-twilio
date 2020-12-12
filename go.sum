@@ -40,6 +40,8 @@ github.com/RJPearson94/twilio-sdk-go v0.6.0 h1:i/CLwmvPrbb5C4c8Pv1qxmr8TXQ8ZzMsw
 github.com/RJPearson94/twilio-sdk-go v0.6.0/go.mod h1:FohltP65SjYuKsK3e+SKxjQLHQxQKpIgpB/RFXyeHlc=
 github.com/RJPearson94/twilio-sdk-go v0.7.0 h1:epOMckJvMF4xFgd12AbgBvGfhea2PV6Iubc3QCSeIJg=
 github.com/RJPearson94/twilio-sdk-go v0.7.0/go.mod h1:FohltP65SjYuKsK3e+SKxjQLHQxQKpIgpB/RFXyeHlc=
+github.com/RJPearson94/twilio-sdk-go v0.8.0 h1:eFtvOirhTePujKBqjQjkQUbeZUUCjywX2MmY6jY1KGM=
+github.com/RJPearson94/twilio-sdk-go v0.8.0/go.mod h1:FohltP65SjYuKsK3e+SKxjQLHQxQKpIgpB/RFXyeHlc=
 github.com/agext/levenshtein v1.2.1/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
 github.com/agext/levenshtein v1.2.2 h1:0S/Yg6LYmFJ5stwQeRp6EeOcCbj7xiqQSdNelsXvaqE=
 github.com/agext/levenshtein v1.2.2/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=

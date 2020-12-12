@@ -1,3 +1,16 @@
+## v0.6.0 (unrelased)
+
+FEATURES
+
+- **New Data Source:** `twilio_sip_trunking_origination_url` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_trunking_origination_url.md)
+- **New Data Source:** `twilio_sip_trunking_origination_urls` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_trunking_origination_urls.md)
+- **New Data Source:** `twilio_sip_trunking_phone_number` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_trunking_phone_number.md)
+- **New Data Source:** `twilio_sip_trunking_phone_numbers` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_trunking_phone_numbers.md)
+- **New Data Source:** `twilio_sip_trunking_trunk` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_trunking_trunk.md)
+- **New Resource:** `twilio_sip_trunking_origination_url` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_trunking_origination_url.md)
+- **New Resource:** `twilio_sip_trunking_phone_number` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_trunking_phone_number.md)
+- **New Resource:** `twilio_sip_trunking_trunk` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_trunking_trunk.md)
+
 ## v0.5.0 (2020-11-26)
 
 Bump Terraform SDK Plugin and Twilio Go SDK versions

@@ -11,6 +11,7 @@ import (
 	serverless "github.com/RJPearson94/twilio-sdk-go/service/serverless/v1"
 	studio "github.com/RJPearson94/twilio-sdk-go/service/studio/v2"
 	taskrouter "github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1"
+	trunking "github.com/RJPearson94/twilio-sdk-go/service/trunking/v1"
 	"github.com/RJPearson94/twilio-sdk-go/session/credentials"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 )
@@ -34,15 +35,16 @@ func (config *Config) Client() (interface{}, diag.Diagnostics) {
 		AccountSid:       config.AccountSid,
 		TerraformVersion: config.terraformVersion,
 
-		API:        api.NewWithCredentials(creds),
-		Autopilot:  autopilot.NewWithCredentials(creds),
-		Chat:       chat.NewWithCredentials(creds),
-		Flex:       flex.NewWithCredentials(creds),
-		Messaging:  messaging.NewWithCredentials(creds),
-		Proxy:      proxy.NewWithCredentials(creds),
-		Serverless: serverless.NewWithCredentials(creds),
-		Studio:     studio.NewWithCredentials(creds),
-		TaskRouter: taskrouter.NewWithCredentials(creds),
+		API:         api.NewWithCredentials(creds),
+		Autopilot:   autopilot.NewWithCredentials(creds),
+		Chat:        chat.NewWithCredentials(creds),
+		Flex:        flex.NewWithCredentials(creds),
+		Messaging:   messaging.NewWithCredentials(creds),
+		Proxy:       proxy.NewWithCredentials(creds),
+		Serverless:  serverless.NewWithCredentials(creds),
+		SIPTrunking: trunking.NewWithCredentials(creds),
+		Studio:      studio.NewWithCredentials(creds),
+		TaskRouter:  taskrouter.NewWithCredentials(creds),
 	}
 	return client, nil
 }

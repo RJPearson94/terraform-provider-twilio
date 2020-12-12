@@ -10,19 +10,21 @@ import (
 	serverless "github.com/RJPearson94/twilio-sdk-go/service/serverless/v1"
 	studio "github.com/RJPearson94/twilio-sdk-go/service/studio/v2"
 	taskrouter "github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1"
+	trunking "github.com/RJPearson94/twilio-sdk-go/service/trunking/v1"
 )
 
 type TwilioClient struct {
 	AccountSid       string
 	TerraformVersion string
 
-	API        *api.V2010
-	Autopilot  *autopilot.Autopilot
-	Chat       *chat.Chat
-	Flex       *flex.Flex
-	Messaging  *messaging.Messaging
-	Proxy      *proxy.Proxy
-	Serverless *serverless.Serverless
-	Studio     *studio.Studio
-	TaskRouter *taskrouter.TaskRouter
+	API         *api.V2010
+	Autopilot   *autopilot.Autopilot
+	Chat        *chat.Chat
+	Flex        *flex.Flex
+	Messaging   *messaging.Messaging
+	Proxy       *proxy.Proxy
+	Serverless  *serverless.Serverless
+	SIPTrunking *trunking.Trunking
+	Studio      *studio.Studio
+	TaskRouter  *taskrouter.TaskRouter
 }
