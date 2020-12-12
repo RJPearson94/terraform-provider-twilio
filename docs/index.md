@@ -53,7 +53,7 @@ Static credentials can be provided by adding an `account_sid`, `api_key` & `api_
 Usage:
 
 ```hcl
-provider "aws" {
+provider "twilio" {
   account_sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   api_key     = "SKXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   api_secret  = "api-secret"
@@ -67,7 +67,7 @@ Static credentials can be provided by adding an `account_sid` and `auth_token` i
 Usage:
 
 ```hcl
-provider "aws" {
+provider "twilio" {
   account_sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   auth_token  = "my-auth-token"
 }

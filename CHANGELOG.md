@@ -1,3 +1,6 @@
+## v0.6.1 (2020-12-12)
+
+Correct some incorrect documentation on the terraform registry
 ## v0.6.0 (2020-12-12)
 
 FEATURES
