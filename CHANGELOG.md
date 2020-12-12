@@ -1,4 +1,4 @@
-## v0.6.0 (unrelased)
+## v0.6.0 (2020-12-12)
 
 FEATURES
 
