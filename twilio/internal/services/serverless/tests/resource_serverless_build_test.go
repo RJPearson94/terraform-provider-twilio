@@ -34,7 +34,7 @@ func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "asset_version.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "function_version.#", "1"),
-					resource.TestCheckResourceAttr(stateResourceName, "dependencies.%", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "dependencies.%", "5"),
 					resource.TestCheckResourceAttr(stateResourceName, "dependencies.twilio", version),
 					resource.TestCheckResourceAttrSet(stateResourceName, "status"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -141,7 +141,11 @@ resource "twilio_serverless_build" "build" {
     sid = twilio_serverless_asset.asset.latest_version_sid
   }
   dependencies = {
-    "twilio" : "%s"
+	"twilio" : "%s",
+	"fs"     = "0.0.1-security"
+    "lodash" = "4.17.11"
+    "util"   = "0.11.0"
+    "xmldom" = "0.1.27"
   }
   polling {
     enabled = true

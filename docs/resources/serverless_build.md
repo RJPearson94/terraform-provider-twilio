@@ -45,6 +45,10 @@ resource "twilio_serverless_build" "build" {
 
   dependencies = {
     "twilio" : "3.6.3"
+    "fs"     = "0.0.1-security"
+    "lodash" = "4.17.11"
+    "util"   = "0.11.0"
+    "xmldom" = "0.1.27"
   }
 
   polling {
@@ -52,6 +56,8 @@ resource "twilio_serverless_build" "build" {
   }
 }
 ```
+
+~> When creating the build Twilio are currently injecting dependencies (at the time of writing it is `twilio`, `fs`, `lodash`, `util` & `xmldom`). Please ensure all dependencies (the ones needed for your app and Twilio supplied) are added to your terraform config otherwise differences will exist after applying the changes
 
 ## Argument Reference
 
@@ -62,8 +68,8 @@ The following arguments are supported:
 - `function_version` - (Optional) A `function_version` block as documented below. Changing this forces a new resource to be created
 - `dependencies` - (Optional) Map of dependencies to be included in the build. Changing this forces a new resource to be created
 - `polling` - (Optional) A `polling` block as documented below.
-- `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary. Changing this forces a new resource to be created
-~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of terraform.
+- `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and redeployment is necessary. Changing this forces a new resource to be created
+~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of Terraform.
 
 ---
 
@@ -83,7 +89,7 @@ A `polling` block supports the following:
 
 - `enabled` - (Required) Enable or disable polling of the build.
 - `max_attempts` - (Optional) The maximum number of polling attempts. Default is 30
-- `delay_in_ms` - (Optional) The time in milliseconds to wait between polling attempts.Default is 1000ms
+- `delay_in_ms` - (Optional) The time in milliseconds to wait between polling attempts. Default is 1000ms
 
 ## Attributes Reference
 
@@ -95,7 +101,7 @@ The following attributes are exported:
 - `service_sid` - The service SID associated with the build
 - `asset_version` - A `asset_version` block as documented below.
 - `function_version` - A `function_version` block as documented below.
-- `triggers` - A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary.
+- `triggers` - A map of key-value pairs which can be used to determine if changes have occurred and redeployment is necessary.
 - `dependencies` - Map of dependencies to be included in the build
 - `status` - The current status of the build job
 - `date_created` - The date in RFC3339 format that the build was created
