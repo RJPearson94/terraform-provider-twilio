@@ -2,6 +2,7 @@ package twilio
 
 import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/twilio-sdk-go/client"
 	api "github.com/RJPearson94/twilio-sdk-go/service/api/v2010"
 	autopilot "github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1"
 	chat "github.com/RJPearson94/twilio-sdk-go/service/chat/v2"
@@ -12,6 +13,7 @@ import (
 	studio "github.com/RJPearson94/twilio-sdk-go/service/studio/v2"
 	taskrouter "github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1"
 	trunking "github.com/RJPearson94/twilio-sdk-go/service/trunking/v1"
+	"github.com/RJPearson94/twilio-sdk-go/session"
 	"github.com/RJPearson94/twilio-sdk-go/session/credentials"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 )
@@ -31,20 +33,23 @@ func (config *Config) Client() (interface{}, diag.Diagnostics) {
 		return nil, diag.FromErr(err)
 	}
 
+	sess := session.New(creds)
+	sdkConfig := &client.Config{}
+
 	client := &common.TwilioClient{
 		AccountSid:       config.AccountSid,
 		TerraformVersion: config.terraformVersion,
 
-		API:         api.NewWithCredentials(creds),
-		Autopilot:   autopilot.NewWithCredentials(creds),
-		Chat:        chat.NewWithCredentials(creds),
-		Flex:        flex.NewWithCredentials(creds),
-		Messaging:   messaging.NewWithCredentials(creds),
-		Proxy:       proxy.NewWithCredentials(creds),
-		Serverless:  serverless.NewWithCredentials(creds),
-		SIPTrunking: trunking.NewWithCredentials(creds),
-		Studio:      studio.NewWithCredentials(creds),
-		TaskRouter:  taskrouter.NewWithCredentials(creds),
+		API:         api.New(sess, sdkConfig),
+		Autopilot:   autopilot.New(sess, sdkConfig),
+		Chat:        chat.New(sess, sdkConfig),
+		Flex:        flex.New(sess, sdkConfig),
+		Messaging:   messaging.New(sess, sdkConfig),
+		Proxy:       proxy.New(sess, sdkConfig),
+		Serverless:  serverless.New(sess, sdkConfig),
+		SIPTrunking: trunking.New(sess, sdkConfig),
+		Studio:      studio.New(sess, sdkConfig),
+		TaskRouter:  taskrouter.New(sess, sdkConfig),
 	}
 	return client, nil
 }
