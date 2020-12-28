@@ -123,8 +123,8 @@ resource "twilio_serverless_build" "build" {
     sid = twilio_serverless_function.function.latest_version_sid
   }
   dependencies = {
-	"twilio" : "3.6.3"
-	"fs"     = "0.0.1-security"
+    "twilio" : "3.6.3"
+    "fs"     = "0.0.1-security"
     "lodash" = "4.17.11"
     "util"   = "0.11.0"
     "xmldom" = "0.1.27"

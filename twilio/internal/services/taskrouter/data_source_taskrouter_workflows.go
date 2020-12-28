@@ -92,7 +92,7 @@ func dataSourceTaskRouterWorkflowsRead(ctx context.Context, d *schema.ResourceDa
 		if utils.IsNotFoundError(err) {
 			return diag.Errorf("No workflows were found for taskrouter workspace with sid (%s)", workspaceSid)
 		}
-		return diag.Errorf("Failed to read workflow: %s", err.Error())
+		return diag.Errorf("Failed to list workflows: %s", err.Error())
 	}
 
 	d.SetId(workspaceSid)
