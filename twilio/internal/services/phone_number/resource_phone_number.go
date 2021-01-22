@@ -329,21 +329,21 @@ func resourcePhoneNumberCreate(ctx context.Context, d *schema.ResourceData, meta
 	}
 
 	if _, ok := d.GetOk("voice"); ok {
+		createInput.VoiceReceiveMode = sdkUtils.String("voice")
 		createInput.VoiceApplicationSid = utils.OptionalString(d, "voice.0.application_sid")
 		createInput.VoiceCallerIDLookup = utils.OptionalBool(d, "voice.0.caller_id_lookup")
 		createInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
 		createInput.VoiceFallbackURL = utils.OptionalString(d, "voice.0.fallback_url")
 		createInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
-		createInput.VoiceReceiveMode = sdkUtils.String(d.Get("voice").(string))
 		createInput.VoiceURL = utils.OptionalString(d, "voice.0.url")
 	}
 
 	if _, ok := d.GetOk("fax"); ok {
+		createInput.VoiceReceiveMode = sdkUtils.String("fax")
 		createInput.VoiceApplicationSid = utils.OptionalString(d, "fax.0.application_sid")
 		createInput.VoiceFallbackMethod = utils.OptionalString(d, "fax.0.fallback_method")
 		createInput.VoiceFallbackURL = utils.OptionalString(d, "fax.0.fallback_url")
 		createInput.VoiceMethod = utils.OptionalString(d, "fax.0.method")
-		createInput.VoiceReceiveMode = sdkUtils.String(d.Get("fax").(string))
 		createInput.VoiceURL = utils.OptionalString(d, "fax.0.url")
 	}
 
@@ -428,21 +428,21 @@ func resourcePhoneNumberUpdate(ctx context.Context, d *schema.ResourceData, meta
 	}
 
 	if _, ok := d.GetOk("voice"); ok {
+		updateInput.VoiceReceiveMode = sdkUtils.String("voice")
 		updateInput.VoiceApplicationSid = utils.OptionalString(d, "voice.0.application_sid")
 		updateInput.VoiceCallerIDLookup = utils.OptionalBool(d, "voice.0.caller_id_lookup")
 		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
 		updateInput.VoiceFallbackURL = utils.OptionalString(d, "voice.0.fallback_url")
 		updateInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
-		updateInput.VoiceReceiveMode = sdkUtils.String(d.Get("voice").(string))
 		updateInput.VoiceURL = utils.OptionalString(d, "voice.0.url")
 	}
 
 	if _, ok := d.GetOk("fax"); ok {
+		updateInput.VoiceReceiveMode = sdkUtils.String("fax")
 		updateInput.VoiceApplicationSid = utils.OptionalString(d, "fax.0.application_sid")
 		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "fax.0.fallback_method")
 		updateInput.VoiceFallbackURL = utils.OptionalString(d, "fax.0.fallback_url")
 		updateInput.VoiceMethod = utils.OptionalString(d, "fax.0.method")
-		updateInput.VoiceReceiveMode = sdkUtils.String(d.Get("fax").(string))
 		updateInput.VoiceURL = utils.OptionalString(d, "fax.0.url")
 	}
 

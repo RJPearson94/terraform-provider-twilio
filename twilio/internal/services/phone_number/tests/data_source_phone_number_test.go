@@ -19,7 +19,7 @@ func TestAccDataSourceTwilioPhoneNumber_complete(t *testing.T) {
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioPhoneNumber_complete(testData),
+				Config: testAccDataSourceTwilioPhoneNumber_complete(testData),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "account_sid"),
@@ -50,7 +50,7 @@ func TestAccDataSourceTwilioPhoneNumber_complete(t *testing.T) {
 	})
 }
 
-func testAccTwilioPhoneNumber_complete(testData *acceptance.TestData) string {
+func testAccDataSourceTwilioPhoneNumber_complete(testData *acceptance.TestData) string {
 	return fmt.Sprintf(`
 data "twilio_phone_number" "phone_number" {
   account_sid = "%s"

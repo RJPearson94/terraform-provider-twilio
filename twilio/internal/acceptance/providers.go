@@ -18,11 +18,12 @@ type AddressDetails struct {
 }
 
 type TestData struct {
-	AccountSid            string
-	PhoneNumberSid        string
-	FlexChannelServiceSid string
-	CustomerName          string
-	Address               AddressDetails
+	AccountSid             string
+	PurchasablePhoneNumber string // TODO: Temp hack this needs to be looked up
+	PhoneNumberSid         string
+	FlexChannelServiceSid  string
+	CustomerName           string
+	Address                AddressDetails
 }
 
 var TestAccProvider *schema.Provider
@@ -43,10 +44,11 @@ func InitialiseProviders() {
 			},
 		}
 		TestAccData = &TestData{
-			AccountSid:            os.Getenv("TWILIO_ACCOUNT_SID"),
-			PhoneNumberSid:        os.Getenv("TWILIO_PHONE_NUMBER_SID"),
-			FlexChannelServiceSid: os.Getenv("TWILIO_FLEX_CHANNEL_SERVICE_SID"),
-			CustomerName:          os.Getenv("TWILIO_CUSTOMER_NAME"),
+			AccountSid:             os.Getenv("TWILIO_ACCOUNT_SID"),
+			PurchasablePhoneNumber: os.Getenv("TWILIO_PURCHASABLE_PHONE_NUMBER"), // TODO: Temp hack this needs to be looked up
+			PhoneNumberSid:         os.Getenv("TWILIO_PHONE_NUMBER_SID"),
+			FlexChannelServiceSid:  os.Getenv("TWILIO_FLEX_CHANNEL_SERVICE_SID"),
+			CustomerName:           os.Getenv("TWILIO_CUSTOMER_NAME"),
 			Address: AddressDetails{
 				Street:          os.Getenv("TWILIO_ADDRESS_STREET"),
 				StreetSecondary: os.Getenv("TWILIO_ADDRESS_STREET_SECONDARY"),
