@@ -1,11 +1,39 @@
+## v0.7.0 (unreleased)
+
+FEATURES
+
+- **New Data Source:** `twilio_conversations_configuration` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_configuration.md)
+- **New Data Source:** `twilio_conversations_conversation_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_conversation_webhook.md)
+- **New Data Source:** `twilio_conversations_conversation_webhooks` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_conversation_webhooks.md)
+- **New Data Source:** `twilio_conversations_conversation` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_conversation.md)
+- **New Data Source:** `twilio_conversations_conversations` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_conversations.md)
+- **New Data Source:** `twilio_conversations_role` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_role.md)
+- **New Data Source:** `twilio_conversations_roles` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_roles.md)
+- **New Data Source:** `twilio_conversations_service_configuration` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_service_configuration.md)
+- **New Data Source:** `twilio_conversations_service_notification` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_service_notification.md)
+- **New Data Source:** `twilio_conversations_service` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_service.md)
+- **New Data Source:** `twilio_conversations_user` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_user.md)
+- **New Data Source:** `twilio_conversations_users` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_users.md)
+- **New Data Source:** `twilio_conversations_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_webhook.md)
+- **New Resource:** `twilio_conversations_configuration` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_configuration.md)
+- **New Resource:** `twilio_conversations_conversation_studio_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_conversation_studio_webhook.md)
+- **New Resource:** `twilio_conversations_conversation_trigger_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_conversation_trigger_webhook.md)
+- **New Resource:** `twilio_conversations_conversation_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_conversation_webhook.md)
+- **New Resource:** `twilio_conversations_conversation` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_conversation.md)
+- **New Resource:** `twilio_conversations_push_credential_apn` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_push_credential_apn.md)
+- **New Resource:** `twilio_conversations_push_credential_fcm` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_push_credential_fcm.md)
+- **New Resource:** `twilio_conversations_role` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_role.md)
+- **New Resource:** `twilio_conversations_service_configuration` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_service_configuration.md)
+- **New Resource:** `twilio_conversations_service_notification` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_service_notification.md)
+- **New Resource:** `twilio_conversations_service` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_service.md)
+- **New Resource:** `twilio_conversations_user` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_user.md)
+- **New Resource:** `twilio_conversations_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_webhook.md)
+
 ## v0.6.2 (2021-01-22)
 
 Correct bug when setting VoiceReceiveMode on twilio phone number resource. The voice receive mode was incorrectly being set to the voice and fax state instead of the corresponding string value on both create and update. This has now been corrected
 
-## v0.6.1 (2020-12-12)
-
-Correct some incorrect documentation on the terraform registry
-
+Correct some documentation on the terraform registry
 ## v0.6.0 (2020-12-12)
 
 FEATURES

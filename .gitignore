@@ -10,6 +10,7 @@
 *.tfplan
 .terraform/
 crash.log
+.terraform.lock.hcl
 
 # Artefact
 terraform-provider-twilio

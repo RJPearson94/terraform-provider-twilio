@@ -6,6 +6,7 @@ import (
 	api "github.com/RJPearson94/twilio-sdk-go/service/api/v2010"
 	autopilot "github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1"
 	chat "github.com/RJPearson94/twilio-sdk-go/service/chat/v2"
+	conversations "github.com/RJPearson94/twilio-sdk-go/service/conversations/v1"
 	flex "github.com/RJPearson94/twilio-sdk-go/service/flex/v1"
 	messaging "github.com/RJPearson94/twilio-sdk-go/service/messaging/v1"
 	proxy "github.com/RJPearson94/twilio-sdk-go/service/proxy/v1"
@@ -40,16 +41,17 @@ func (config *Config) Client() (interface{}, diag.Diagnostics) {
 		AccountSid:       config.AccountSid,
 		TerraformVersion: config.terraformVersion,
 
-		API:         api.New(sess, sdkConfig),
-		Autopilot:   autopilot.New(sess, sdkConfig),
-		Chat:        chat.New(sess, sdkConfig),
-		Flex:        flex.New(sess, sdkConfig),
-		Messaging:   messaging.New(sess, sdkConfig),
-		Proxy:       proxy.New(sess, sdkConfig),
-		Serverless:  serverless.New(sess, sdkConfig),
-		SIPTrunking: trunking.New(sess, sdkConfig),
-		Studio:      studio.New(sess, sdkConfig),
-		TaskRouter:  taskrouter.New(sess, sdkConfig),
+		API:           api.New(sess, sdkConfig),
+		Autopilot:     autopilot.New(sess, sdkConfig),
+		Chat:          chat.New(sess, sdkConfig),
+		Conversations: conversations.New(sess, sdkConfig),
+		Flex:          flex.New(sess, sdkConfig),
+		Messaging:     messaging.New(sess, sdkConfig),
+		Proxy:         proxy.New(sess, sdkConfig),
+		Serverless:    serverless.New(sess, sdkConfig),
+		SIPTrunking:   trunking.New(sess, sdkConfig),
+		Studio:        studio.New(sess, sdkConfig),
+		TaskRouter:    taskrouter.New(sess, sdkConfig),
 	}
 	return client, nil
 }
