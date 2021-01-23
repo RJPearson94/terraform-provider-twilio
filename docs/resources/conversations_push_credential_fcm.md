@@ -14,7 +14,7 @@ For more information on conversations, see the product [page](https://www.twilio
 ```hcl
 resource "twilio_conversations_push_credential_fcm" "push_credential_fcm" {
   friendly_name = "fcm-credential"
-  secret = "<<fcm_secret>>"
+  secret        = "<<fcm_secret>>"
 }
 ```
 

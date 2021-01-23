@@ -15,9 +15,9 @@ For more information on conversations, see the product [page](https://www.twilio
 
 ```hcl
 data "twilio_conversations_conversation_webhook" "webhook" {
-  service_sid = "ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  service_sid      = "ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   conversation_sid = "CHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  sid         = "WHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  sid              = "WHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 output "webhook" {

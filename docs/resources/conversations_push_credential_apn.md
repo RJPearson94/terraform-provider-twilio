@@ -14,8 +14,8 @@ For more information on conversations, see the product [page](https://www.twilio
 ```hcl
 resource "twilio_conversations_push_credential_apn" "push_credential_apn" {
   friendly_name = "apn-credential"
-  certificate = "<<certificate>>"
-  private_key = "<<private_key>>"
+  certificate   = "<<certificate>>"
+  private_key   = "<<private_key>>"
 }
 ```
 

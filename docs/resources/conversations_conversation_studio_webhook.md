@@ -23,7 +23,7 @@ resource "twilio_conversations_conversation" "conversation" {
 resource "twilio_conversations_conversation_studio_webhook" "studio_webhook" {
   service_sid      = twilio_conversations_service.service.sid
   conversation_sid = twilio_conversations_conversation.conversation.sid
-  flow_sid    = "FWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  flow_sid         = "FWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 ```
 

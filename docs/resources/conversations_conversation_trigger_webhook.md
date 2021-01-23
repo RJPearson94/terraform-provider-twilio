@@ -23,8 +23,8 @@ resource "twilio_conversations_conversation" "conversation" {
 resource "twilio_conversations_conversation_trigger_webhook" "trigger_webhook" {
   service_sid      = twilio_conversations_service.service.sid
   conversation_sid = twilio_conversations_conversation.conversation.sid
-  webhook_url = "http://localhost/new"
-  triggers    = ["keyword"]
+  webhook_url      = "http://localhost/new"
+  triggers         = ["keyword"]
 }
 ```
 
