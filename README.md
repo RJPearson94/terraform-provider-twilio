@@ -49,3 +49,9 @@ provider "twilio" {
 ### Terraform 0.12
 
 This is a bit more work as you have to download the [latest release](https://github.com/RJPearson94/terraform-provider-twilio/releases/latest) of the terraform provider which can run on you machine operating system/ processor architecture. Then unzip the provider and place the provider in the `~/.terraform.d/plugins` folder (on most operating systems) and `%APPDATA%\terraform.d\plugins` on Windows. For more information see the [terraform docs](https://www.terraform.io/docs/extend/how-terraform-works.html#plugin-locations)
+
+## Dependencies
+
+- [Twilio Go SDK](https://github.com/RJPearson94/twilio-sdk-go)
+- [Terraform Plugin SDK](github.com/hashicorp/terraform-plugin-sdk)
+- [go-homdir](https://github.com/mitchellh/go-homedir)
