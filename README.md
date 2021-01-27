@@ -53,5 +53,5 @@ This is a bit more work as you have to download the [latest release](https://git
 ## Dependencies
 
 - [Twilio Go SDK](https://github.com/RJPearson94/twilio-sdk-go)
-- [Terraform Plugin SDK](github.com/hashicorp/terraform-plugin-sdk)
+- [Terraform Plugin SDK](https://github.com/hashicorp/terraform-plugin-sdk)
 - [go-homdir](https://github.com/mitchellh/go-homedir)
