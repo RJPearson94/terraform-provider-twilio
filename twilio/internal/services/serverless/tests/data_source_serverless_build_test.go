@@ -29,7 +29,7 @@ func TestAccDataSourceTwilioServerlessBuild_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "asset_versions.#", "1"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "function_versions.#", "1"),
-					resource.TestCheckResourceAttr(stateDataSourceName, "dependencies.%", "5"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "dependencies.%", "6"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "dependencies.twilio", version),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "status"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_created"),
@@ -81,11 +81,12 @@ resource "twilio_serverless_build" "build" {
     sid = twilio_serverless_asset.asset.latest_version_sid
   }
   dependencies = {
-    "twilio" : "%s"
-    "fs"     = "0.0.1-security"
-    "lodash" = "4.17.11"
-    "util"   = "0.11.0"
-    "xmldom" = "0.1.27"
+    "twilio"                  = "%s"
+    "fs"                      = "0.0.1-security"
+    "lodash"                  = "4.17.11"
+    "util"                    = "0.11.0"
+    "xmldom"                  = "0.1.27"
+    "@twilio/runtime-handler" = "1.0.1"
   }
 }
 

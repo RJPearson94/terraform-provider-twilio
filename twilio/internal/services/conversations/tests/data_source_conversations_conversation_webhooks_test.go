@@ -53,13 +53,13 @@ resource "twilio_conversations_service" "service" {
   friendly_name = "%s"
 }
 
-resource "twilio_conversations_conversation" "converstion" {
+resource "twilio_conversations_conversation" "conversation" {
   service_sid = twilio_conversations_service.service.sid
 }
 
 resource "twilio_conversations_conversation_webhook" "webhook" {
   service_sid      = twilio_conversations_service.service.sid
-  conversation_sid = twilio_conversations_conversation.converstion.sid
+  conversation_sid = twilio_conversations_conversation.conversation.sid
   webhook_url      = "%s"
   filters          = ["onMessageAdded"]
 }

@@ -26,6 +26,10 @@ fmt:
 	goimports -w ./$(PKG_NAME) 
 	gofmt -s -w ./$(PKG_NAME)
 
+terraform-fmt:
+	@echo "==> Format terraform examples"
+	@find examples | egrep ".tf$$" | sort | while read f; do terraform fmt $$f; done
+
 terrafmt:
 	@echo "==> Format acceptance tests"
 	@find twilio | egrep "_test.go" | sort | while read f; do terrafmt fmt -f $$f; done
@@ -54,4 +58,4 @@ goreportcard-refresh:
 generate:
 	go generate  ./...
 
-.PHONY: download build test testacc fmt terrafmt terrafmt-docs tools generate reportcard goreportcard-refresh
+.PHONY: download build test testacc fmt terraform-fmt terrafmt terrafmt-docs tools generate reportcard goreportcard-refresh
