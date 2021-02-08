@@ -9,7 +9,7 @@ Manages notification configuration for a conversations service. See the [API doc
 
 For more information on conversations, see the product [page](https://www.twilio.com/conversations)
 
-!> This resource modifies the Twilio conversations service notifications. No new resources will be provisioned instead, the configuration will be updated upon creation and the configuration will remain after the destruction of the resource.
+!> This resource modifies the Twilio conversations service notifications. No new resources will be provisioned. Instead, the configuration will be updated upon creation and the configuration will remain after the destruction of the resource.
 
 ## Example Usage
 

@@ -1,3 +1,7 @@
+## v0.7.1 (2021-02-08)
+
+Update conversation documentation to remove typos and improve the readability of the documentation
+
 ## v0.7.0 (2021-02-08)
 
 FEATURES
@@ -34,6 +38,7 @@ FEATURES
 Correct bug when setting VoiceReceiveMode on twilio phone number resource. The voice receive mode was incorrectly being set to the voice and fax state instead of the corresponding string value on both create and update. This has now been corrected
 
 Correct some documentation on the terraform registry
+
 ## v0.6.0 (2020-12-12)
 
 FEATURES

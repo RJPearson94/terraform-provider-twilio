@@ -30,8 +30,8 @@ The following arguments are supported:
 The following attributes are exported:
 
 - `id` - The ID of the push credentials (Same as the SID)
-- `sid` - The SID of the push credentials  (Same as the ID)
-- `account_sid` - The account SID associated with the push credentials 
+- `sid` - The SID of the push credentials (Same as the ID)
+- `account_sid` - The account SID associated with the push credentials
 - `friendly_name` - The friendly name of the push credentials
 - `secret` - The FCM secret
 - `type` - What type of notification service the credentials are for. The value will be `fcm`

@@ -9,7 +9,7 @@ Manages configuration for the conversations service. See the [API docs](https://
 
 For more information on conversations, see the product [page](https://www.twilio.com/conversations)
 
-!> This resource modifies the Twilio conversation configuration for the account. No new resources will be provisioned instead, the configuration will be updated upon creation and the configuration will remain after the destruction of the resource.
+!> This resource modifies the Twilio conversation configuration for the account. No new resources will be provisioned. Instead, the configuration will be updated upon creation and the configuration will remain after the destruction of the resource.
 
 ## Example Usage
 

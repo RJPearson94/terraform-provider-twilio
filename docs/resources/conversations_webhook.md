@@ -9,7 +9,7 @@ Manages the webhook configuration for the conversation service. See the [API doc
 
 For more information on conversations, see the product [page](https://www.twilio.com/conversations)
 
-!> This resource modifies the Twilio conversation webhook configuration for the account. No new resources will be provisioned instead, the webhook configuration will be updated upon creation and the webhook configuration will remain after the destruction of the resource.
+!> This resource modifies the Twilio conversation webhook configuration for the account. No new resources will be provisioned. Instead, the webhook configuration will be updated upon creation and the webhook configuration will remain after the destruction of the resource.
 
 ## Example Usage
 
