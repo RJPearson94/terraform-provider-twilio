@@ -3,6 +3,7 @@ PKG_NAME=twilio
 TEST_COUNT?=1
 ACCTEST_TIMEOUT?=60m
 ACCTEST_PARALLELISM?=1
+EXAMPLES?=$$(find . -type f -name "main.tf" -prune -exec dirname {} \;)
 
 default: build
 
@@ -58,4 +59,23 @@ goreportcard-refresh:
 generate:
 	go generate  ./...
 
-.PHONY: download build test testacc fmt terraform-fmt terrafmt terrafmt-docs tools generate reportcard goreportcard-refresh
+clean-examples:
+	@echo "==> Cleaning examples"
+	@find ./examples/* -type d -name ".terraform" -prune -exec rm -rf {} \;
+	@find ./examples/* -type f -name "terraform.tfstate" -prune -exec rm -rf {} \;
+	@find ./examples/* -type f -name "terraform.tfstate.backup" -prune -exec rm -rf {} \;
+	@find ./examples/* -type f -name ".terraform.lock.hcl" -prune -exec rm -rf {} \;
+
+validate-example:
+	@echo "==> Validating example $(EXAMPLE)"
+	terraform -chdir=$(EXAMPLE) init
+	terraform -chdir=$(EXAMPLE) validate
+
+validate-all-examples:
+	@echo "==> Validating examples"
+	make clean-examples
+	for example in $(EXAMPLES); do \
+		make validate-example EXAMPLE=$$example; \
+	done
+
+.PHONY: download build test testacc fmt terraform-fmt terrafmt terrafmt-docs tools generate reportcard goreportcard-refresh validate-example validate-all-examples clean-examples
