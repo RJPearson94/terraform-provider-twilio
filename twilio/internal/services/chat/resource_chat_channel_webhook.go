@@ -18,6 +18,8 @@ import (
 
 func resourceChatChannelWebhook() *schema.Resource {
 	return &schema.Resource{
+		DeprecationMessage: "Programmable Chat API will reach the end of life on 25th July 2022 (except for Flex applications), please see https://www.twilio.com/changelog/programmable-chat-end-of-life for more information",
+
 		CreateContext: resourceChatChannelWebhookCreate,
 		ReadContext:   resourceChatChannelWebhookRead,
 		UpdateContext: resourceChatChannelWebhookUpdate,

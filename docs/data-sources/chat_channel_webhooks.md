@@ -5,6 +5,8 @@ subcategory: "Programmable Chat"
 
 # twilio_chat_channel_webhooks Data Source
 
+!> This data source is deprecated. Programmable Chat API will reach the end of life on 25th July 2022 (except for Flex applications), please see <https://www.twilio.com/changelog/programmable-chat-end-of-life> for more information
+
 Use this data source to access information about the webhooks associated with an existing Programmable Chat service and channel. See the [API docs](https://www.twilio.com/docs/chat/rest/channel-webhook-resource) for more information
 
 ~> This is a generic data source which can be used to retrieve channel webhooks regardless of there type (webhook, trigger, studio)

@@ -1,5 +1,9 @@
 ## v0.8.0 (unreleased)
 
+NOTES
+
+Add deprecation warning to Programmable Chat resources and data sources
+
 FIXES
 
 Programmable Chat Channel Member `LastConsumedTimestamp` was being set as a time.Time, this data type is incompatible with Terraform, so setting the value as a RFC3339 string if the value is not nil

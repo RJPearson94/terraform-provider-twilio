@@ -5,6 +5,8 @@ subcategory: "Programmable Chat"
 
 # twilio_chat_role Resource
 
+!> This resource is deprecated. Programmable Chat API will reach the end of life on 25th July 2022 (except for Flex applications), please see <https://www.twilio.com/changelog/programmable-chat-end-of-life> for more information
+
 Manages a Programmable Chat role. See the [API docs](https://www.twilio.com/docs/chat/rest/role-resource) for more information
 
 For more information on Programmable Chat, see the product [page](https://www.twilio.com/chat)
