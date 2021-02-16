@@ -150,7 +150,9 @@ func resourceChatChannelMemberRead(ctx context.Context, d *schema.ResourceData, 
 	d.Set("identity", getResponse.Identity)
 	d.Set("role_sid", getResponse.RoleSid)
 	d.Set("last_consumed_message_index", getResponse.LastConsumedMessageIndex)
-	d.Set("last_consumption_timestamp", getResponse.LastConsumedTimestamp)
+	if getResponse.LastConsumedTimestamp != nil {
+		d.Set("last_consumption_timestamp", getResponse.LastConsumedTimestamp.Format(time.RFC3339))
+	}
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {

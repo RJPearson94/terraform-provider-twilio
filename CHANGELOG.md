@@ -1,5 +1,9 @@
 ## v0.8.0 (unreleased)
 
+FIXES
+
+Programmable Chat Channel Member `LastConsumedTimestamp` was being set as a time.Time, this data type is incompatible with Terraform, so setting the value as a RFC3339 string if the value is not nil
+
 FEATURES
 
 - **Updated Resource:** `twilio_serverless_build` Add `runtime` argument and `runtime` attribute

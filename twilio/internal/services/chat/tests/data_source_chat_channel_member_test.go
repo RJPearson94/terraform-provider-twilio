@@ -32,7 +32,7 @@ func TestAccDataSourceTwilioChatChannelMember_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateDataSource, "channel_sid"),
 					resource.TestCheckResourceAttrSet(stateDataSource, "role_sid"),
 					resource.TestCheckResourceAttrSet(stateDataSource, "last_consumed_message_index"),
-					resource.TestCheckResourceAttr(stateDataSource, "last_consumption_timestamp", ""),
+					resource.TestCheckNoResourceAttr(stateDataSource, "last_consumption_timestamp"),
 					resource.TestCheckResourceAttrSet(stateDataSource, "date_created"),
 					resource.TestCheckResourceAttrSet(stateDataSource, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateDataSource, "url"),

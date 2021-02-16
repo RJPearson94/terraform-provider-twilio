@@ -115,7 +115,9 @@ func dataSourceChatChannelMembersRead(ctx context.Context, d *schema.ResourceDat
 		memberMap["identity"] = member.Identity
 		memberMap["role_sid"] = member.RoleSid
 		memberMap["last_consumed_message_index"] = member.LastConsumedMessageIndex
-		memberMap["last_consumption_timestamp"] = member.LastConsumedTimestamp
+		if member.LastConsumedTimestamp != nil {
+			memberMap["last_consumption_timestamp"] = member.LastConsumedTimestamp.Format(time.RFC3339)
+		}
 		memberMap["date_created"] = member.DateCreated.Format(time.RFC3339)
 
 		if member.DateUpdated != nil {
