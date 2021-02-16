@@ -9,8 +9,6 @@ Use this data source to access information about an existing studio flow. See th
 
 For more information on Studio, see the product [page](https://www.twilio.com/studio)
 
-!> This API used to manage this resource is currently in beta and is subject to change
-
 ## Example Usage
 
 ```hcl

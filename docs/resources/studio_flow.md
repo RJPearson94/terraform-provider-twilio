@@ -9,8 +9,6 @@ Manages a Studio flow. See the [API docs](https://www.twilio.com/docs/studio/res
 
 For more information on Studio, see the product [page](https://www.twilio.com/studio)
 
-!> This API used to manage this resource is currently in beta and is subject to change
-
 ## Example Usage
 
 ```hcl
