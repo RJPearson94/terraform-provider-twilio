@@ -58,7 +58,7 @@ resource "twilio_serverless_build" "build" {
 }
 ```
 
-~> When creating the build Twilio are currently injecting dependencies (at the time of writing it is `twilio`, `fs`, `lodash`, `util` & `xmldom`). Please ensure all dependencies (the ones needed for your app and Twilio supplied) are added to your terraform config otherwise differences will exist after applying the changes
+~> When creating the build Twilio are currently injecting dependencies (at the time of writing it is `twilio`, `fs`, `lodash`, `util`, `xmldom` & `@twilio/runtime-handler`). If you need custom dependencies please ensure all dependencies (the ones needed for your app and Twilio supplied) are added to your terraform config otherwise the terraform config and state will not match after applying the changes
 
 ## Argument Reference
 
@@ -68,9 +68,10 @@ The following arguments are supported:
 - `asset_version` - (Optional) A `asset_version` block as documented below. Changing this forces a new resource to be created
 - `function_version` - (Optional) A `function_version` block as documented below. Changing this forces a new resource to be created
 - `dependencies` - (Optional) Map of dependencies to be included in the build. Changing this forces a new resource to be created
+- `runtime` - (Optional) The target runtime of the serverless functions and assets. Changing this forces a new resource to be created
 - `polling` - (Optional) A `polling` block as documented below.
 - `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and redeployment is necessary. Changing this forces a new resource to be created
-~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of Terraform.
+  ~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of Terraform.
 
 ---
 
@@ -104,6 +105,7 @@ The following attributes are exported:
 - `function_version` - A `function_version` block as documented below.
 - `triggers` - A map of key-value pairs which can be used to determine if changes have occurred and redeployment is necessary.
 - `dependencies` - Map of dependencies to be included in the build
+- `runtime` - The target runtime of the serverless functions and assets
 - `status` - The current status of the build job
 - `date_created` - The date in RFC3339 format that the build was created
 - `date_updated` - The date in RFC3339 format that the build was updated

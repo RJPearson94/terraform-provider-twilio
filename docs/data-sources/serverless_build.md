@@ -42,6 +42,7 @@ The following attributes are exported:
 - `asset_version` - A `asset_version` block as documented below.
 - `function_version` - A `function_version` block as documented below.
 - `dependencies` - Map of dependencies to be included in the build
+- `runtime` - The target runtime of the serverless functions and assets
 - `status` - The current status of the build job
 - `date_created` - The date in RFC3339 format that the build was created
 - `date_updated` - The date in RFC3339 format that the build was updated

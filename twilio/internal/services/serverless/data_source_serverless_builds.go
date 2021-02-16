@@ -116,6 +116,10 @@ func dataSourceServerlessBuilds() *schema.Resource {
 								Type: schema.TypeString,
 							},
 						},
+						"runtime": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
 						"status": {
 							Type:     schema.TypeString,
 							Computed: true,
@@ -167,6 +171,7 @@ func dataSourceServerlessBuildsRead(ctx context.Context, d *schema.ResourceData,
 
 		buildMap["sid"] = build.Sid
 		buildMap["status"] = build.Status
+		buildMap["runtime"] = build.Runtime
 		buildMap["asset_versions"] = flattenAssetVersions(build.AssetVersions)
 		buildMap["function_versions"] = flattenPageFunctionVersions(build.FunctionVersions)
 		buildMap["dependencies"] = flattenPageDependencies(build.Dependencies)

@@ -111,6 +111,10 @@ func dataSourceServerlessBuild() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
+			"runtime": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
 			"status": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -157,6 +161,7 @@ func dataSourceServerlessBuildRead(ctx context.Context, d *schema.ResourceData, 
 		d.Set("date_updated", getResponse.DateUpdated.Format(time.RFC3339))
 	}
 
+	d.Set("runtime", getResponse.Runtime)
 	d.Set("status", getResponse.Status)
 	d.Set("url", getResponse.URL)
 

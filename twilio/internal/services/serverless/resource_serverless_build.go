@@ -140,6 +140,7 @@ func resourceServerlessBuild() *schema.Resource {
 			"dependencies": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Computed: true,
 				ForceNew: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
@@ -175,6 +176,12 @@ func resourceServerlessBuild() *schema.Resource {
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
+			},
+			"runtime": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
 			},
 			"status": {
 				Type:     schema.TypeString,
@@ -216,6 +223,7 @@ func resourceServerlessBuildCreate(ctx context.Context, d *schema.ResourceData, 
 		AssetVersions:    expandVersionSids(d.Get("asset_version").([]interface{})),
 		FunctionVersions: expandVersionSids(d.Get("function_version").([]interface{})),
 		Dependencies:     sdkUtils.String(string(dependencies)),
+		Runtime:          utils.OptionalString(d, "runtime"),
 	}
 
 	createResult, err := client.Service(d.Get("service_sid").(string)).Builds.CreateWithContext(ctx, createInput)
@@ -250,6 +258,7 @@ func resourceServerlessBuildRead(ctx context.Context, d *schema.ResourceData, me
 	d.Set("sid", getResponse.Sid)
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("service_sid", getResponse.ServiceSid)
+	d.Set("runtime", getResponse.Runtime)
 	d.Set("asset_version", helper.FlattenAssetVersions(getResponse.AssetVersions))
 	d.Set("function_version", helper.FlattenFunctionVersions(getResponse.FunctionVersions))
 	d.Set("dependencies", helper.FlattenDependencies(getResponse.Dependencies))

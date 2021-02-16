@@ -32,6 +32,7 @@ func TestAccDataSourceTwilioServerlessBuilds_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(stateDataSourceName, "builds.0.function_versions.#", "1"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "builds.0.dependencies.%", "6"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "builds.0.dependencies.twilio", version),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "builds.0.runtime"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "builds.0.status"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "builds.0.date_created"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "builds.0.date_updated"),

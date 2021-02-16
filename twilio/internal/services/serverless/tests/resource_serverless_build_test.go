@@ -17,7 +17,6 @@ var buildResourceName = "twilio_serverless_build"
 func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.build", buildResourceName)
 	uniqueName := acctest.RandString(10)
-	version := "3.6.2"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -25,7 +24,7 @@ func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioServerlessBuildDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioServerlessBuild_basic(uniqueName, version),
+				Config: testAccTwilioServerlessBuild_basic(uniqueName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessBuildExists(stateResourceName),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
@@ -34,8 +33,8 @@ func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "asset_version.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "function_version.#", "1"),
-					resource.TestCheckResourceAttr(stateResourceName, "dependencies.%", "6"),
-					resource.TestCheckResourceAttr(stateResourceName, "dependencies.twilio", version),
+					resource.TestCheckResourceAttrSet(stateResourceName, "dependencies.%"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "runtime"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "status"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
@@ -48,6 +47,40 @@ func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 				ImportStateIdFunc:       testAccTwilioServerlessBuildImportStateIdFunc(stateResourceName),
 				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"polling"},
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessBuild_dependenciesAndRuntime(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.build", buildResourceName)
+	uniqueName := acctest.RandString(10)
+	version := "3.6.2"
+	runtime := "node12"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioServerlessBuildDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessBuild_dependenciesAndRuntime(uniqueName, version, runtime),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessBuildExists(stateResourceName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
+					resource.TestCheckResourceAttr(stateResourceName, "asset_version.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "function_version.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "dependencies.%", "6"),
+					resource.TestCheckResourceAttr(stateResourceName, "dependencies.twilio", version),
+					resource.TestCheckResourceAttr(stateResourceName, "runtime", runtime),
+					resource.TestCheckResourceAttrSet(stateResourceName, "status"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
 			},
 		},
 	})
@@ -101,7 +134,53 @@ func testAccTwilioServerlessBuildImportStateIdFunc(name string) resource.ImportS
 	}
 }
 
-func testAccTwilioServerlessBuild_basic(uniqueName string, twilioVersion string) string {
+func testAccTwilioServerlessBuild_basic(uniqueName string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "service-%s"
+  friendly_name = "test"
+}
+
+resource "twilio_serverless_function" "function" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = <<EOF
+exports.handler = function (context, event, callback) {
+	callback(null, "Hello World");
+};
+EOF
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "private"
+}
+
+resource "twilio_serverless_asset" "asset" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset"
+  visibility        = "private"
+}
+
+resource "twilio_serverless_build" "build" {
+  service_sid = twilio_serverless_service.service.sid
+  function_version {
+    sid = twilio_serverless_function.function.latest_version_sid
+  }
+  asset_version {
+    sid = twilio_serverless_asset.asset.latest_version_sid
+  }
+  polling {
+    enabled = true
+  }
+}
+`, uniqueName)
+}
+
+func testAccTwilioServerlessBuild_dependenciesAndRuntime(uniqueName string, twilioVersion string, runtime string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
   unique_name   = "service-%s"
@@ -148,9 +227,10 @@ resource "twilio_serverless_build" "build" {
     "xmldom"                  = "0.1.27"
     "@twilio/runtime-handler" = "1.0.1"
   }
+  runtime = "%s"
   polling {
     enabled = true
   }
 }
-`, uniqueName, twilioVersion)
+`, uniqueName, twilioVersion, runtime)
 }
