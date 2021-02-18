@@ -105,7 +105,7 @@ func resourceConversationsServiceConfigurationUpdate(ctx context.Context, d *sch
 }
 
 func resourceConversationsServiceConfigurationDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("[INFO] Conversations service configuration cannot be so skipping destroy")
+	log.Printf("[INFO] Conversations service configuration cannot be deleted, so removing from the Terraform state")
 
 	d.SetId("")
 	return nil

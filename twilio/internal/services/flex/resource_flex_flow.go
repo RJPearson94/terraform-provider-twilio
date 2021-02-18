@@ -213,7 +213,7 @@ func resourceFlexFlowRead(ctx context.Context, d *schema.ResourceData, meta inte
 			d.SetId("")
 			return nil
 		}
-		return diag.Errorf("Failed to read flex channel: %s", err.Error())
+		return diag.Errorf("Failed to read flex flow: %s", err.Error())
 	}
 
 	d.Set("sid", getResponse.Sid)

@@ -193,7 +193,7 @@ func resourceConversationsServiceNotificationUpdate(ctx context.Context, d *sche
 }
 
 func resourceConversationsServiceNotificationDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("[INFO] Conversations service notification cannot be so skipping destroy")
+	log.Printf("[INFO] Conversations service notification cannot be deleted, so removing from the Terraform state")
 
 	d.SetId("")
 	return nil

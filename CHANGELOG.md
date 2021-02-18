@@ -35,6 +35,12 @@ FEATURES
 - **New Resource:** `twilio_sip_domain_credential_list_mapping` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_domain_credential_list_mapping.md)
 - **New Resource:** `twilio_sip_ip_access_control_list` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_ip_access_control_list.md)
 - **New Resource:** `twilio_sip_ip_address` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_ip_address.md)
+- **New Data Source:** `twilio_flex_plugin` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/flex_plugin.md)
+- **New Data Source:** `twilio_flex_plugin_configuration` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/flex_plugin_configuration.md)
+- **New Data Source:** `twilio_flex_plugin_release` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/flex_plugin_release.md)
+- **New Resource:** `twilio_flex_plugin` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/flex_plugin.md)
+- **New Resource:** `twilio_flex_plugin_configuration` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/flex_plugin_configuration.md)
+- **New Resource:** `twilio_flex_plugin_release` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/flex_plugin_release.md)
 - **Updated Resource:** `twilio_sip_trunking_phone_number` Add `phone_number_sid` argument and `phone_number_sid` attribute (to superseed `sid` argument)
 - **Updated Resource:** `twilio_serverless_build` Add `runtime` argument and `runtime` attribute
 - **Updated Data Source:** `twilio_serverless_build` Add `runtime` attribute
