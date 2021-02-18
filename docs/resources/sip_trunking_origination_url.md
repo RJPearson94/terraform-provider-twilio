@@ -28,8 +28,8 @@ resource "twilio_sip_trunking_origination_url" "origination_url" {
 
 The following arguments are supported:
 
-- `trunk_sid` - (Mandatory) The SID of the SIP trunk the phone number is associated with. Changing this forces a new resource to be created
-- `enabled` - (Mandatory)  Whether the origination URL is enabled
+- `trunk_sid` - (Mandatory) The trunk SID to associate the origination URL with. Changing this forces a new resource to be created
+- `enabled` - (Mandatory) Whether the origination URL is enabled
 - `friendly_name` - (Mandatory) The friendly name of the origination URL
 - `priority` - (Mandatory) The priority/ importance of the origination URL
 - `sip_url` - (Mandatory) The SIP address to route origination calls to
@@ -39,10 +39,10 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the origination URL (Same as the SID)
-- `sid` - The SID of the origination URL (Same as the ID)
-- `account_sid` - The account SID the origination URL is associated with
-- `trunk_sid` - The SID of the SIP trunk the origination URL is associated with
+- `id` - The ID of the origination URL (Same as the `sid`)
+- `sid` - The SID of the origination URL (Same as the `id`)
+- `account_sid` - The account SID associated with the origination URL
+- `trunk_sid` - The trunk SID associated with the origination URL
 - `enabled` - Whether the origination URL is enabled
 - `friendly_name` - The friendly name of the origination URL
 - `priority` - The priority/ importance of the origination URL
@@ -51,6 +51,15 @@ The following attributes are exported:
 - `date_created` - The date in RFC3339 format that the origination URL was created
 - `date_updated` - The date in RFC3339 format that the origination URL was updated
 - `url` - The URL of the origination URL resource
+
+## Timeouts
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+
+- `create` - (Defaults to 10 minutes) Used when creating the origination URL
+- `update` - (Defaults to 10 minutes) Used when updating the origination URL
+- `read` - (Defaults to 5 minutes) Used when retrieving the origination URL
+- `delete` - (Defaults to 10 minutes) Used when deleting the origination URL
 
 ## Import
 

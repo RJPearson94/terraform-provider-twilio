@@ -75,7 +75,7 @@ func dataSourceSIPTrunkingOriginationURLRead(ctx context.Context, d *schema.Reso
 	getResponse, err := client.Trunk(trunkSid).OriginationURL(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return diag.Errorf("SIP trunk phone number with sid (%s) was not found for SIP trunk with sid (%s)", sid, trunkSid)
+			return diag.Errorf("SIP trunk origination url with sid (%s) was not found for SIP trunk with sid (%s)", sid, trunkSid)
 		}
 		return diag.Errorf("Failed to read SIP trunk origination url: %s", err.Error())
 	}

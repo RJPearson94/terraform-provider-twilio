@@ -33,8 +33,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the origination URL (Same as the SID)
-- `sid` - The SID of the origination URL (Same as the ID)
+- `id` - The ID of the origination URL (Same as the `sid`)
+- `sid` - The SID of the origination URL (Same as the `id`)
 - `account_sid` - The account SID the origination URL is associated with
 - `trunk_sid` - The SID of the SIP trunk the origination URL is associated with
 - `enabled` - Whether the origination URL is enabled

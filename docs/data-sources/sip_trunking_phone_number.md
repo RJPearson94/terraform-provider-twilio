@@ -33,8 +33,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the phone number (Same as the SID)
-- `sid` - The SID of the phone number (Same as the ID)
+- `id` - The ID of the phone number (Same as the `sid`)
+- `sid` - The SID of the phone number (Same as the `id`)
 - `account_sid` - The account SID the phone number is associated with
 - `friendly_name` - The friendly name of the phone number
 - `phone_number` - The phone number

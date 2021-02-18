@@ -3,6 +3,7 @@
 NOTES
 
 Add deprecation warning to Programmable Chat resources and data sources
+Add deprecation warning to `twilio_sip_trunking_phone_number` `sid` argument
 
 FIXES
 
@@ -10,6 +11,31 @@ Programmable Chat Channel Member `LastConsumedTimestamp` was being set as a time
 
 FEATURES
 
+- **New Data Source:** `twilio_sip_trunking_credential_list` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_trunking_credential_list.md)
+- **New Data Source:** `twilio_sip_trunking_credential_lists` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_trunking_credential_lists.md)
+- **New Data Source:** `twilio_sip_trunking_ip_access_control_list` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_trunking_ip_access_control_list.md)
+- **New Data Source:** `twilio_sip_trunking_ip_access_control_lists` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_trunking_ip_access_control_lists.md)
+- **New Resource:** `twilio_sip_trunking_credential_list` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_trunking_credential_list.md)
+- **New Resource:** `twilio_sip_trunking_ip_access_control_list` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_trunking_ip_access_control_list.md)
+- **New Data Source:** `twilio_sip_credential` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_credential.md)
+- **New Data Source:** `twilio_sip_credentials` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_credentials.md)
+- **New Data Source:** `twilio_sip_credential_list` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_credential_list.md)
+- **New Data Source:** `twilio_sip_domain` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_domain.md)
+- **New Data Source:** `twilio_sip_domain_ip_access_control_list_mapping` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_domain_ip_access_control_list_mapping.md)
+- **New Data Source:** `twilio_sip_domain_ip_access_control_list_mappings` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_domain_ip_access_control_list_mappings.md)
+- **New Data Source:** `twilio_sip_domain_credential_list_mapping` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_domain_credential_list_mapping.md)
+- **New Data Source:** `twilio_sip_domain_credential_list_mappings` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_domain_credential_list_mappings.md)
+- **New Data Source:** `twilio_sip_ip_access_control_list` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_ip_access_control_list.md)
+- **New Data Source:** `twilio_sip_ip_address` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_ip_address.md)
+- **New Data Source:** `twilio_sip_ip_addresses` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_ip_addresses.md)
+- **New Resource:** `twilio_sip_credential` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_credential.md)
+- **New Resource:** `twilio_sip_credential_list` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_credential_list.md)
+- **New Resource:** `twilio_sip_domain` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_domain.md)
+- **New Resource:** `twilio_sip_domain_ip_access_control_list_mapping` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_domain_ip_access_control_list_mapping.md)
+- **New Resource:** `twilio_sip_domain_credential_list_mapping` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_domain_credential_list_mapping.md)
+- **New Resource:** `twilio_sip_ip_access_control_list` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_ip_access_control_list.md)
+- **New Resource:** `twilio_sip_ip_address` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_ip_address.md)
+- **Updated Resource:** `twilio_sip_trunking_phone_number` Add `phone_number_sid` argument and `phone_number_sid` attribute (to superseed `sid` argument)
 - **Updated Resource:** `twilio_serverless_build` Add `runtime` argument and `runtime` attribute
 - **Updated Data Source:** `twilio_serverless_build` Add `runtime` attribute
 - **Updated Data Source:** `twilio_serverless_builds` Add `runtime` attribute

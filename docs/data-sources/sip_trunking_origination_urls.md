@@ -31,8 +31,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the trunk SID)
-- `trunk_sid` - The SID of the SIP trunk the origination URLs are associated with
+- `id` - The ID of the resource (Same as the `trunk_sid`)
+- `trunk_sid` - The SID of the SIP trunk the origination URLs are associated with (Same as the `id`)
 - `account_sid` - The account SID associated with the origination URLs
 - `origination_urls` - A list of `origination_url` blocks as documented below
 

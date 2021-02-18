@@ -12,6 +12,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/phone_number"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/proxy"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/serverless"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/sip"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/sip_trunking"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/studio"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/taskrouter"
@@ -31,6 +32,7 @@ func SupportedServices() []common.ServiceRegistration {
 		proxy.Registration{},
 		serverless.Registration{},
 		studio.Registration{},
+		sip.Registration{},
 		sip_trunking.Registration{},
 		taskrouter.Registration{},
 		voice.Registration{},

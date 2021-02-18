@@ -24,23 +24,28 @@ resource "twilio_sip_trunking_phone_number" "phone_number" {
 
 The following arguments are supported:
 
-- `trunk_sid` - (Mandatory) The SID of the SIP trunk the phone number is associated with. Changing this forces a new resource to be created
-- `sid` - (Mandatory) The SID of the phone number. Changing this forces a new resource to be created
+- `trunk_sid` - (Mandatory) The trunk SID to associate the phone number with. Changing this forces a new resource to be created
+- `sid` - (Optional) The phone number SID to associate the resource with. Changing this forces a new resource to be created
+- `phone_number_sid` - (Optional) The phone number SID to associate the resource with. Changing this forces a new resource to be created
+
+!> `sid` input argument is deprecated, please use `phone_number_sid` instead
+~> Either `sid` or `phone_number_sid` need to be specified
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-- `id` - The ID of the phone number (Same as the SID)
-- `sid` - The SID of the phone number (Same as the ID)
+- `id` - The ID of the phone number (Same as the `sid`)
+- `sid` - The SID of the phone number (Same as the `id`)
 - `account_sid` - The account SID the phone number is associated with
+- `trunk_sid` - The trunk SID the phone number is associated with
 - `friendly_name` - The friendly name of the phone number
+- `phone_number_sid` - The phone number SID associated with the resource
 - `phone_number` - The phone number
 - `address_requirements` - The address requirements of the phone number
 - `beta` - Whether the phone number is in beta on the platform
 - `capabilities` - A `capability` block as documented below
 - `messaging` - A `messaging` block as documented below
-- `trunk_sid` - The SID of the SIP trunk the phone number is associated with
 - `voice` - A `voice` block as documented below
 - `fax` - A `fax` block as documented below
 - `status_callback_url` - The URL to call on each status change

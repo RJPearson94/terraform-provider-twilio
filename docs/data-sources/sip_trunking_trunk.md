@@ -31,8 +31,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the SIP trunk (Same as the SID)
-- `sid` - The SID of the SIP trunk (Same as the ID)
+- `id` - The ID of the SIP trunk (Same as the `sid`)
+- `sid` - The SID of the SIP trunk (Same as the `id`)
 - `account_sid` - The account SID the SIP trunk is associated with
 - `cnam_lookup_enabled` - Whether Caller ID Name is enabled on the SIP trunk
 - `disaster_recovery_url` - The URL to call in event of disaster recovery
@@ -43,7 +43,7 @@ The following attributes are exported:
 - `secure` - Whether secure trunking is enabled on the SIP trunk
 - `transfer_mode` - The call transfer configuration on the SIP trunk
 - `auth_type` - The auth configuration on the SIP trunk
-- `auth_type_set` - The auth type set on the SIP trunk
+- `auth_type_set` - The auth typeset on the SIP trunk
 - `date_created` - The date in RFC3339 format that the SIP trunk was created
 - `date_updated` - The date in RFC3339 format that the SIP trunk was updated
 - `url` - The URL of the SIP trunk resource
