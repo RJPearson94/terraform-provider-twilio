@@ -31,16 +31,16 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the assistant SID)
+- `id` - The ID of the resource (Same as the `assistant_sid`)
 - `account_sid` - The SID of the account the webhooks are associated with
-- `assistant_sid` - The SID of the assistant the webhooks are associated with
+- `assistant_sid` - The SID of the assistant the webhooks are associated with (Same as the `id`)
 - `webhooks` - A list of `webhook` blocks as documented below
 
 ---
 
 A `webhook` block supports the following:
 
-- `sid` - The SID of the webhook (Same as the ID)
+- `sid` - The SID of the webhook (Same as the `id`)
 - `unique_name` - The unique name of the webhook
 - `webhook_url` - The webhook URL
 - `events` - A list of webhook events strings which trigger the webhook

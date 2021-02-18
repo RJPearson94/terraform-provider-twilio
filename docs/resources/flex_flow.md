@@ -58,8 +58,8 @@ An `integration` block supports the following:
 
 The following attributes are exported:
 
-- `id` - The ID of the flow (Same as the SID)
-- `sid` - The SID of the flow (Same as the ID)
+- `id` - The ID of the flow (Same as the `sid`)
+- `sid` - The SID of the flow (Same as the `id`)
 - `account_sid` - The account SID associated with the flow
 - `channel_type` - The type of channel which is integrated with the flow
 - `chat_service_sid` - The chat service SID associated with the flow

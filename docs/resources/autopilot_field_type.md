@@ -35,8 +35,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the field type (Same as the SID)
-- `sid` - The SID of the field type (Same as the ID)
+- `id` - The ID of the field type (Same as the `sid`)
+- `sid` - The SID of the field type (Same as the `id`)
 - `account_sid` - The account SID associated with the field type
 - `assistant_sid` - The SID of the assistant to attach the field type to
 - `unique_name` - The unique name of the field type

@@ -32,9 +32,9 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the push credentials (Same as the SID)
-- `sid` - The SID of the push credentials  (Same as the ID)
-- `account_sid` - The account SID associated with the push credentials 
+- `id` - The ID of the push credentials (Same as the `sid`)
+- `sid` - The SID of the push credentials (Same as the `id`)
+- `account_sid` - The account SID associated with the push credentials
 - `friendly_name` - The friendly name of the push credentials
 - `certificate` - The APN certificate
 - `private_key` - The APN private key

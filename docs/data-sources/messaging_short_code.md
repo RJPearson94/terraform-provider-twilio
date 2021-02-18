@@ -35,8 +35,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the short code (Same as the SID)
-- `sid` - The SID of the Twilio short code associated with the messaging service (Same as the ID)
+- `id` - The ID of the short code (Same as the `sid`)
+- `sid` - The SID of the Twilio short code associated with the messaging service (Same as the `id`)
 - `service_sid` - The messaging service SID associated with the short code
 - `account_sid` - The account SID associated with the short code
 - `capabilities` - The capabilities that are enabled for the short code

@@ -68,8 +68,8 @@ A `capability` block supports the following:
 
 The following attributes are exported:
 
-- `id` - The ID of the phone number (Same as the SID)
-- `sid` - The SID of the phone number (Same as the ID)
+- `id` - The ID of the phone number (Same as the `sid`)
+- `sid` - The SID of the phone number (Same as the `id`)
 - `account_sid` - The account SID the phone number is associated with
 - `iso_country` - The ISO country of the phone number to each
 - `available_phone_numbers` - A list of `available_phone_number` blocks as documented below

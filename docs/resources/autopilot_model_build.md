@@ -59,7 +59,7 @@ The following arguments are supported:
 - `unique_name_prefix` - (Optional) The prefix to be concatenated with an unique ID to form the unique name of the model build
 - `status_callback` - (Optional) The callback URL to post build statuses to. Changing this forces a new resource to be created
 - `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary. Changing this forces a new resource to be created
-~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of terraform.
+  ~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of terraform.
 - `polling` - (Optional) A `polling` block as documented below.
 
 ---
@@ -74,8 +74,8 @@ A `polling` block supports the following:
 
 The following attributes are exported:
 
-- `id` - The ID of the model build (Same as the SID)
-- `sid` - The SID of the model build (Same as the ID)
+- `id` - The ID of the model build (Same as the `sid`)
+- `sid` - The SID of the model build (Same as the `id`)
 - `account_sid` - The account SID associated with the model build
 - `unique_name_prefix` - The prefix to be concatenated with an unique ID to form the unique name of the model build
 - `unique_name` - The unique name of the model build

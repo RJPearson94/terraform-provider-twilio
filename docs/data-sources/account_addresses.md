@@ -29,8 +29,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the account SID)
-- `account_sid` - The SID of the account the addresses are associated with
+- `id` - The ID of the resource (Same as the `account_sid`)
+- `account_sid` - The SID of the account the addresses are associated with (Same as the `id`)
 - `addresses` - A list of `address` blocks as documented below
 
 ---

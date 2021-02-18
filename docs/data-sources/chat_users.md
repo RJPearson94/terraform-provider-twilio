@@ -33,9 +33,9 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the service SID)
+- `id` - The ID of the resource (Same as the `service_sid`)
 - `account_sid` - The SID of the account the users are associated with
-- `service_sid` - The SID of the service the users are associated with
+- `service_sid` - The SID of the service the users are associated with (Same as the `id`)
 - `users` - A list of `user` blocks as documented below
 
 ---

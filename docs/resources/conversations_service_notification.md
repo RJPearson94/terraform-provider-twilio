@@ -62,8 +62,8 @@ A `removed_from_conversation` block supports the following:
 
 The following attributes are exported:
 
-- `id` - The ID of the service (Same as the Service SID)
-- `service_sid` - The service SID associated with the notification configuration (Same as ID)
+- `id` - The ID of the service (Same as the `service_sid`)
+- `service_sid` - The service SID associated with the notification configuration (Same as the `id`)
 - `new_message` - A `new_message` block as documented below.
 - `added_to_conversation` - An `added_to_conversation` block as documented below.
 - `removed_from_conversation` - A `removed_from_conversation` block as documented below.

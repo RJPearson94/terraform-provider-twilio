@@ -31,8 +31,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the workspace SID)
-- `workspace_sid` - The SID of the workspace the workflows are associated with
+- `id` - The ID of the resource (Same as the `workspace_sid`)
+- `workspace_sid` - The SID of the workspace the workflows are associated with (Same as the `id`)
 - `account_sid` - The account SID associated with the workflows
 - `workflows` - A list of `workflow` blocks as documented below
 

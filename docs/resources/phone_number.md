@@ -50,9 +50,9 @@ A `messaging` block supports the following:
 
 - `application_sid` - (Optional) The application SID which should be called on each incoming message
 - `url` - (Optional) The URL which should be called on each incoming message
-- `method` - (Optional) The HTTP method which should be used to call the URL. Options are `GET` or `POST`
+- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`
 - `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Options are `GET` or `POST`
+- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`
 
 ---
 
@@ -60,9 +60,9 @@ A `voice` block supports the following:
 
 - `application_sid` - (Optional) The application SID which should be called on each incoming call
 - `url` - (Optional) The URL which should be called on each incoming call
-- `method` - (Optional) The HTTP method which should be used to call the URL. Options are `GET` or `POST`
+- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`
 - `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Options are `GET` or `POST`
+- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`
 - `caller_id_lookup` - (Optional) Whether caller ID lookup is enabled for the phone number
 
 ---
@@ -71,16 +71,16 @@ A `fax` block supports the following:
 
 - `application_sid` - (Optional) The application SID which should be called on each incoming fax
 - `url` - (Optional) The URL which should be called on each incoming fax
-- `method` - (Optional) The HTTP method which should be used to call the URL. Options are `GET` or `POST`
+- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`
 - `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Options are `GET` or `POST`
+- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-- `id` - The ID of the phone number (Same as the SID)
-- `sid` - The SID of the phone number (Same as the ID)
+- `id` - The ID of the phone number (Same as the `sid`)
+- `sid` - The SID of the phone number (Same as the `id`)
 - `account_sid` - The account SID the phone number is associated with
 - `friendly_name` - The friendly name of the phone number
 - `phone_number` - The phone number

@@ -5,7 +5,7 @@ subcategory: "Programmable Messaging"
 
 # twilio_messaging_short_codes Resource
 
-Use this data source to access information about the short codes associated with an existing Programmable Messaging service. See the [API docs](https://www.twilio.com/docs/sms/services/api/short code-resource) for more information
+Use this data source to access information about the short codes associated with an existing Programmable Messaging service. See the [API docs](https://www.twilio.com/docs/messaging/services/api/shortcode-resource) for more information
 
 For more information on Programmable Messaging, see the product [page](https://www.twilio.com/messaging)
 
@@ -33,8 +33,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the service SID)
-- `service_sid` - The SID of the messaging service the short codes are associated with
+- `id` - The ID of the resource (Same as the `service_sid`)
+- `service_sid` - The SID of the messaging service the short codes are associated with (Same as the `id`)
 - `account_sid` - The account SID associated with the short code
 - `short_codes` - A list of `short_code` blocks as documented below
 

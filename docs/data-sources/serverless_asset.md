@@ -35,8 +35,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the asset (Same as the SID)
-- `sid` - The SID of the asset (Same as the ID)
+- `id` - The ID of the asset (Same as the `sid`)
+- `sid` - The SID of the asset (Same as the `id`)
 - `account_sid` - The account SID of the asset is deployed into
 - `service_sid` - The service SID of the asset is managed under
 - `friendly_name` - The name of the asset

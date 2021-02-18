@@ -31,9 +31,9 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the assistant SID)
+- `id` - The ID of the resource (Same as the `assistant_sid`)
 - `account_sid` - The SID of the account the field types are associated with
-- `assistant_sid` - The SID of the assistant the field types are associated with
+- `assistant_sid` - The SID of the assistant the field types are associated with (Same as the `id`)
 - `field_types` - A list of `field_type` blocks as documented below
 
 ---

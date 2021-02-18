@@ -31,8 +31,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the service (Same as the SID)
-- `sid` - The SID of the service (Same as the ID)
+- `id` - The ID of the service (Same as the `sid`)
+- `sid` - The SID of the service (Same as the `id`)
 - `friendly_name` - The friendly name of the service
 - `date_created` - The date in RFC3339 format that the service was created
 - `date_updated` - The date in RFC3339 format that the service was updated

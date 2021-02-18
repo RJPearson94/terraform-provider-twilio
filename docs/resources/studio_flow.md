@@ -55,8 +55,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the Studio flow (Same as the SID)
-- `sid` - The SID of the Studio flow (Same as the ID)
+- `id` - The ID of the Studio flow (Same as the `sid`)
+- `sid` - The SID of the Studio flow (Same as the `id`)
 - `friendly_name` - The name of the Studio flow
 - `definition` - The flow definition JSON
 - `status` - The status of the Studio flow

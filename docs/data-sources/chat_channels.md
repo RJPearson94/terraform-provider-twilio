@@ -33,9 +33,9 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the service SID)
+- `id` - The ID of the resource (Same as the `service_sid`)
 - `account_sid` - The SID of the account the channels are associated with
-- `service_sid` - The SID of the service the channels are associated with
+- `service_sid` - The SID of the service the channels are associated with (Same as the `id`)
 - `channels` - A list of `channel` blocks as documented below
 
 ---

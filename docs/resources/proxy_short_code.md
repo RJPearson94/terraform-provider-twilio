@@ -37,8 +37,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the proxy short code resource (Same as the SID)
-- `sid` - The SID of a Twilio short code associated with the proxy (Same as the ID)
+- `id` - The ID of the proxy short code resource (Same as the `sid`)
+- `sid` - The SID of a Twilio short code associated with the proxy (Same as the `id`)
 - `account_sid` - The account SID of the short code resource is deployed into
 - `service_sid` - The SID of a Twilio proxy service
 - `is_reserved` - Whether the short code is reserved

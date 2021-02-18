@@ -31,8 +31,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the address (Same as the SID)
-- `sid` - The SID of the address (Same as the ID)
+- `id` - The ID of the address (Same as the `sid`)
+- `sid` - The SID of the address (Same as the `id`)
 - `account_sid` - The account SID the address is associated with
 - `friendly_name` - The friendly name of the address
 - `customer_name` - The customer/ business name

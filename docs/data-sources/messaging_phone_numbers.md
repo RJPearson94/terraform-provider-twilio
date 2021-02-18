@@ -33,8 +33,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the service SID)
-- `service_sid` - The SID of the messaging service the phone numbers are associated with
+- `id` - The ID of the resource (Same as the `service_sid`)
+- `service_sid` - The SID of the messaging service the phone numbers are associated with (Same as the `id`)
 - `account_sid` - The account SID associated with the phone number
 - `phone_numbers` - A list of `phone_number` blocks as documented below
 

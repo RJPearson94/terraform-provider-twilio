@@ -29,8 +29,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the account (Same as the SID)
-- `sid` - The SID of the account (Same as the ID)
+- `id` - The ID of the account (Same as the `sid`)
+- `sid` - The SID of the account (Same as the `id`)
 - `friendly_name` - The friendly name of the account
 - `status` - The status of the account
 - `owner_account_sid` - The SID of the parent/ owner account

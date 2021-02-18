@@ -97,8 +97,8 @@ A `removed_from_channel` block supports the following:
 
 The following attributes are exported:
 
-- `id` - The ID of the service (Same as the SID)
-- `sid` - The SID of the service (Same as the ID)
+- `id` - The ID of the service (Same as the `sid`)
+- `sid` - The SID of the service (Same as the `id`)
 - `account_sid` - The account SID associated with the service
 - `default_channel_creator_role_sid` - The Role SID that is associated with a user when they join a new channel
 - `default_channel_role_sid` - The Role SID that is associated with a user when they are added to a channel

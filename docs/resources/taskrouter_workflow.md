@@ -54,8 +54,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the workflow (Same as the SID)
-- `sid` - The SID of the workflow (Same as the ID)
+- `id` - The ID of the workflow (Same as the `sid`)
+- `sid` - The SID of the workflow (Same as the `id`)
 - `account_sid` - The account SID of the workflow is deployed into
 - `workspace_sid` - The workspace SID to create the workflow under
 - `friendly_name` - The name of the workflow

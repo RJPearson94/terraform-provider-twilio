@@ -42,16 +42,16 @@ The following arguments are supported:
 - `source_hash` - (Optional) A hash of the asset file to trigger deployments. Conflicts with `content`
 - `content_type` - (Mandatory) The file MIME-type
 - `path` - (Mandatory) The request URI path
-- `visibility` - (Mandatory) The visibility of the asset. Options are `public` or `protected` or `private`
+- `visibility` - (Mandatory) The visibility of the asset. Valid values are `public` or `protected` or `private`
 
-**NOTE:** Either source or content need to be specified
+~> Either source or content need to be specified
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-- `id` - The ID of the asset (Same as the SID)
-- `sid` - The SID of the asset (Same as the ID)
+- `id` - The ID of the asset (Same as the `sid`)
+- `sid` - The SID of the asset (Same as the `id`)
 - `account_sid` - The account SID of the asset is deployed into
 - `service_sid` - The service SID of the asset is managed under
 - `friendly_name` - The name of the asset

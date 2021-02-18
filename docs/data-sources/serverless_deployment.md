@@ -37,8 +37,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the deployment (Same as the SID)
-- `sid` - The SID of the deployment (Same as the ID)
+- `id` - The ID of the deployment (Same as the `sid`)
+- `sid` - The SID of the deployment (Same as the `id`)
 - `account_sid` - The account SID associated with the deployment
 - `service_sid` - The service SID associated with the deployment
 - `environment_sid` - The environment SID associated with the deployment

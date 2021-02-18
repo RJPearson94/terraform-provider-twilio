@@ -37,8 +37,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the channel member (Same as the SID)
-- `sid` - The SID of the channel member (Same as the ID)
+- `id` - The ID of the channel member (Same as the `sid`)
+- `sid` - The SID of the channel member (Same as the `id`)
 - `account_sid` - The account SID associated with the channel member
 - `service_sid` - The service SID associated with the channel member
 - `channel_sid` - The channel SID associated with the channel member

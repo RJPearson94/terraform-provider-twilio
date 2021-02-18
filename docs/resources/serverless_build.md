@@ -97,8 +97,8 @@ A `polling` block supports the following:
 
 The following attributes are exported:
 
-- `id` - The ID of the build (Same as the SID)
-- `sid` - The SID of the build (Same as the ID)
+- `id` - The ID of the build (Same as the `sid`)
+- `sid` - The SID of the build (Same as the `id`)
 - `account_sid` - The account SID associated with the build
 - `service_sid` - The service SID associated with the build
 - `asset_version` - A `asset_version` block as documented below.

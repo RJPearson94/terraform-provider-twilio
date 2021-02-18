@@ -40,8 +40,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the conversation webhook (Same as the SID)
-- `sid` - The SID of the conversation webhook (Same as the ID)
+- `id` - The ID of the conversation webhook (Same as the `sid`)
+- `sid` - The SID of the conversation webhook (Same as the `id`)
 - `account_sid` - The account SID associated with the conversation webhook
 - `service_sid` - The service SID associated with the conversation webhook
 - `conversation_sid` - The conversation SID to associate the webhook with

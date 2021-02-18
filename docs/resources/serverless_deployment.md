@@ -77,20 +77,20 @@ The following arguments are supported:
 - `environment_sid` - (Mandatory) The serverless environment SID to associate the deployment with. Changing this forces a new resource to be created
 - `build_sid` - (Optional) The build SID to be deployed to the environment. Changing this forces a new resource to be created
 - `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary. Changing this forces a new resource to be created
-~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of terraform.
+  ~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of terraform.
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-- `id` - The ID of the deployment (Same as the SID)
-- `sid` - The SID of the deployment (Same as the ID)
+- `id` - The ID of the deployment (Same as the `sid`)
+- `sid` - The SID of the deployment (Same as the `id`)
 - `account_sid` - The account SID associated with the deployment
 - `service_sid` - The service SID associated with the deployment
 - `environment_sid` - The environment SID associated with the deployment
 - `build_sid` - The build SID to be deployed to the environment
 - `is_latest_deployment` - Determine whether this deployment is the latest
-~> This caters for when deployments are made and Terraform state is not aware of them
+  ~> This caters for when deployments are made and Terraform state is not aware of them
 - `triggers` - A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary.
 - `date_created` - The date in RFC3339 format that the deployment was created
 - `date_updated` - The date in RFC3339 format that the deployment was updated

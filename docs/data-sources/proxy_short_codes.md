@@ -33,8 +33,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the service SID)
-- `service_sid` - The SID of the proxy service the short codes are associated with
+- `id` - The ID of the resource (Same as the `service_sid`)
+- `service_sid` - The SID of the proxy service the short codes are associated with (Same as the `id`)
 - `account_sid` - The account SID associated with the short code
 - `short_codes` - A list of `short_code` blocks as documented below
 

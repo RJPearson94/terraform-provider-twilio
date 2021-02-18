@@ -40,8 +40,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the task queue (Same as the SID)
-- `sid` - The SID of the task queue (Same as the ID)
+- `id` - The ID of the task queue (Same as the `sid`)
+- `sid` - The SID of the task queue (Same as the `id`)
 - `account_sid` - The account SID of the task queue is deployed into
 - `workspace_sid` - The workspace SID to create the task queue under
 - `friendly_name` - The name of the task queue

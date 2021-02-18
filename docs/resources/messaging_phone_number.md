@@ -35,8 +35,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the phone number (Same as the SID)
-- `sid` - The SID of the Twilio phone number associated with the messaging service (Same as the ID)
+- `id` - The ID of the phone number (Same as the `sid`)
+- `sid` - The SID of the Twilio phone number associated with the messaging service (Same as the `id`)
 - `service_sid` - The messaging service SID associated with the phone number
 - `account_sid` - The account SID associated with the phone number
 - `capabilities` - The capabilities that are enabled for the phone number

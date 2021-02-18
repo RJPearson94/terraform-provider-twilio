@@ -31,8 +31,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the service (Same as the Service SID)
-- `service_sid` - The service SID associated with the configuration (Same as ID)
+- `id` - The ID of the service (Same as the `service_sid`)
+- `service_sid` - The service SID associated with the configuration (Same as the `id`)
 - `default_chat_service_role_sid` - The default role assigned to users when they are added to the service
 - `default_conversation_creator_role_sid` - The default role assigned to creator users when they join a new conversation
 - `default_conversation_role_sid` - The default role assigned to users when they join a new conversation

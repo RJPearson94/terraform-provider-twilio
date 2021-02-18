@@ -37,8 +37,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the activity (Same as the SID)
-- `sid` - The SID of the activity (Same as the ID)
+- `id` - The ID of the activity (Same as the `sid`)
+- `sid` - The SID of the activity (Same as the `id`)
 - `account_sid` - The account SID of the activity is deployed into
 - `workspace_sid` - The workspace SID to create the activity under.
 - `friendly_name` - The name of the activity

@@ -33,8 +33,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the user (Same as the SID)
-- `sid` - The SID of the user (Same as the ID)
+- `id` - The ID of the user (Same as the `sid`)
+- `sid` - The SID of the user (Same as the `id`)
 - `account_sid` - The account SID associated with the user
 - `service_sid` - The service SID associated with the user with
 - `identity` - The identity of the user

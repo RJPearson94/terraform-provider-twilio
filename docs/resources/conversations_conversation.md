@@ -44,8 +44,8 @@ A `timer` block supports the following:
 
 The following attributes are exported:
 
-- `id` - The ID of the conversation (Same as the SID)
-- `sid` - The SID of the conversation (Same as the ID)
+- `id` - The ID of the conversation (Same as the `sid`)
+- `sid` - The SID of the conversation (Same as the `id`)
 - `account_sid` - The account SID associated with the conversation
 - `service_sid` - The service SID associated with the conversation
 - `unique_name` - The unique name of the conversation

@@ -29,8 +29,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the account SID)
-- `account_sid` - The SID of the account the queues are associated with
+- `id` - The ID of the resource (Same as the `account_sid`)
+- `account_sid` - The SID of the account the queues are associated with (Same as the `id`)
 - `phone_numbers` - A list of `phone_number` blocks as documented below
 
 ---

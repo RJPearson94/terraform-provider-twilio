@@ -33,8 +33,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the service (Same as the SID)
-- `sid` - The SID of the service (Same as the ID)
+- `id` - The ID of the service (Same as the `sid`)
+- `sid` - The SID of the service (Same as the `id`)
 - `account_sid` - The account SID of the service is deployed into
 - `chat_instance_sid` - The chat instance SID of the service
 - `chat_service_sid` - The chat service SID of the service

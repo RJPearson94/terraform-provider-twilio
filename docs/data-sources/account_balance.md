@@ -31,8 +31,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the account (Same as the SID)
-- `account_sid` - The SID of the account (Same as the ID)
+- `id` - The ID of the account (Same as the `sid`)
+- `account_sid` - The SID of the account (Same as the `id`)
 - `balance` - The balance of the account
 - `currency` - The currency of the account
 

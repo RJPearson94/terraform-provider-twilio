@@ -31,8 +31,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the service (Same as the account SID)
-- `account_sid` - The account SID associated with the webhook (Same as the ID)
+- `id` - The ID of the service (Same as the `account_sid`)
+- `account_sid` - The account SID associated with the webhook (Same as the `id`)
 - `target` - The target of webhook
 - `method` - The HTTP method to trigger the webhook
 - `pre_webhook_url` - The pre webhook URL

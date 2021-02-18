@@ -47,16 +47,16 @@ The following arguments are supported:
 - `source_hash` - (Optional) A hash of the function file to trigger deployments. Conflicts with `content`
 - `content_type` - (Mandatory) The file MIME-type
 - `path` - (Mandatory) The request URI path
-- `visibility` - (Mandatory) The visibility of the function. Options are `public` or `protected` or `private`
+- `visibility` - (Mandatory) The visibility of the function. Valid values are `public` or `protected` or `private`
 
-**NOTE:** Either source or content need to be specified
+~> Either source or content need to be specified
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-- `id` - The ID of the function (Same as the SID)
-- `sid` - The SID of the function (Same as the ID)
+- `id` - The ID of the function (Same as the `sid`)
+- `sid` - The SID of the function (Same as the `id`)
 - `account_sid` - The account SID of the function is deployed into
 - `service_sid` - The service SID of the function is managed under
 - `friendly_name` - The name of the function

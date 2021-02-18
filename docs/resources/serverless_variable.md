@@ -45,8 +45,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the environment variable (Same as the SID)
-- `sid` - The SID of the environment variable (Same as the ID)
+- `id` - The ID of the environment variable (Same as the `sid`)
+- `sid` - The SID of the environment variable (Same as the `id`)
 - `account_sid` - The account SID of the environment variable is deployed into
 - `service_sid` - The service SID of the environment variable is deployed into
 - `environment_sid` - The environment SID of the environment variable is managed under

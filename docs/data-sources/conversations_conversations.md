@@ -31,9 +31,9 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the service SID)
+- `id` - The ID of the resource (Same as the `service_sid`)
 - `account_sid` - The SID of the account the conversations are associated with
-- `service_sid` - The SID of the service the conversations are associated with
+- `service_sid` - The SID of the service the conversations are associated with (Same as the `id`)
 - `conversations` - A list of `conversation` blocks as documented below
 
 ---

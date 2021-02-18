@@ -31,9 +31,9 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the service SID)
+- `id` - The ID of the resource (Same as the `service_sid`)
 - `account_sid` - The SID of the account the roles are associated with
-- `service_sid` - The SID of the service the roles are associated with
+- `service_sid` - The SID of the service the roles are associated with (Same as the `id`)
 - `roles` - A list of `role` blocks as documented below
 
 ---

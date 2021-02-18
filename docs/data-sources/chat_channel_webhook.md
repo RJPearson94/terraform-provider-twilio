@@ -39,8 +39,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the channel webhook (Same as the SID)
-- `sid` - The SID of the channel webhook (Same as the ID)
+- `id` - The ID of the channel webhook (Same as the `sid`)
+- `sid` - The SID of the channel webhook (Same as the `id`)
 - `account_sid` - The account SID associated with the channel webhook
 - `service_sid` - The service SID associated with the channel webhook
 - `channel_sid` - The channel SID associated with the channel webhook

@@ -31,9 +31,9 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the resource (Same as the assistant SID)
+- `id` - The ID of the resource (Same as the `assistant_sid`)
 - `account_sid` - The SID of the account the model builds are associated with
-- `assistant_sid` - The SID of the assistant the model builds are associated with
+- `assistant_sid` - The SID of the assistant the model builds are associated with (Same as the `id`)
 - `model_builds` - A list of `model_build` blocks as documented below
 
 ---

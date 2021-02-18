@@ -29,8 +29,8 @@ N/A - This data source has no arguments
 
 The following attributes are exported:
 
-- `id` - The ID of the service (Same as the account SID)
-- `account_sid` - The account SID associated with the configuration (Same as the ID)
+- `id` - The ID of the service (Same as the `account_sid`)
+- `account_sid` - The account SID associated with the configuration (Same as the `id`)
 - `default_service_sid` - The default conversation service to associate newly created conversations with
 - `default_closed_timer` - The default ISO8601 duration before a conversation will be marked as closed
 - `default_inactive_timer` - The default ISO8601 duration before a conversation will be marked as inactive

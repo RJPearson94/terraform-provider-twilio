@@ -33,8 +33,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-- `id` - The ID of the service (Same as the SID)
-- `sid` - The SID of the service (Same as the ID)
+- `id` - The ID of the service (Same as the `sid`)
+- `sid` - The SID of the service (Same as the `id`)
 - `account_sid` - The account SID of the service is deployed into
 - `unique_name` - The unique name of the service
 - `friendly_name` - The name of the service
