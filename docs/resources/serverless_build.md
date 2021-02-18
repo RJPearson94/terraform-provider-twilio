@@ -68,7 +68,7 @@ The following arguments are supported:
 - `asset_version` - (Optional) A `asset_version` block as documented below. Changing this forces a new resource to be created
 - `function_version` - (Optional) A `function_version` block as documented below. Changing this forces a new resource to be created
 - `dependencies` - (Optional) Map of dependencies to be included in the build. Changing this forces a new resource to be created
-- `runtime` - (Optional) The target runtime of the serverless functions and assets. Changing this forces a new resource to be created
+- `runtime` - (Optional) The target runtime of the serverless functions and assets. Valid values are `node10` or `node12`. Changing this forces a new resource to be created
 - `polling` - (Optional) A `polling` block as documented below.
 - `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and redeployment is necessary. Changing this forces a new resource to be created
   ~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of Terraform.

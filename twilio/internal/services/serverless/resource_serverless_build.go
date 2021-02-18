@@ -15,6 +15,7 @@ import (
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceServerlessBuild() *schema.Resource {
@@ -182,6 +183,10 @@ func resourceServerlessBuild() *schema.Resource {
 				Optional: true,
 				Computed: true,
 				ForceNew: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"node10",
+					"node12",
+				}, false),
 			},
 			"status": {
 				Type:     schema.TypeString,

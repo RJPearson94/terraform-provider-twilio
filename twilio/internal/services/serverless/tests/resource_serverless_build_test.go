@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -81,6 +82,23 @@ func TestAccTwilioServerlessBuild_dependenciesAndRuntime(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessBuild_invalidRuntime(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	version := "3.6.2"
+	runtime := "python2"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessBuild_dependenciesAndRuntime(uniqueName, version, runtime),
+				ExpectError: regexp.MustCompile(`(?s)expected runtime to be one of \[node10 node12\], got python2`),
 			},
 		},
 	})
