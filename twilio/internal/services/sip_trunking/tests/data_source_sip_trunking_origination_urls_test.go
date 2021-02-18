@@ -24,7 +24,6 @@ func TestAccDataSourceTwilioSIPTrunkingOriginationURLs_complete(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioSIPTrunkingOriginationURLDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioSIPTrunkingOriginationURLs_complete(friendlyName, enabled, priority, sipURL, weight),

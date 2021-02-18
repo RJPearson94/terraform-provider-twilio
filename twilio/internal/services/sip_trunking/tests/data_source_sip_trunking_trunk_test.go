@@ -17,7 +17,6 @@ func TestAccDataSourceTwilioSIPTrunkingTrunk_complete(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioSIPTrunkingTrunk_complete(testData),

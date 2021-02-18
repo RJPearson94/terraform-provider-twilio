@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -35,6 +36,23 @@ func TestAccDataSourceTwilioSIPIPAddress_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_updated"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioSIPIPAddress_invalidIPAddress(t *testing.T) {
+	testData := acceptance.TestAccData
+	friendlyName := acctest.RandString(10)
+	ipAddress := "test"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioSIPIPAddress_basic(testData, friendlyName, ipAddress),
+				ExpectError: regexp.MustCompile(`(?s)expected ip_address to contain a valid IP, got: test`),
 			},
 		},
 	})

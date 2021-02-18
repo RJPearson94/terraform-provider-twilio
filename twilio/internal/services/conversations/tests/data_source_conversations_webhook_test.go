@@ -16,12 +16,10 @@ func TestAccDataSourceTwilioConversationsWebhook_basic(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioConversationsWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceTwilioConversationsWebhook_basic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioConversationsWebhookExists(stateDataSource),
 					resource.TestCheckResourceAttrSet(stateDataSource, "id"),
 					resource.TestCheckResourceAttrSet(stateDataSource, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateDataSource, "target"),

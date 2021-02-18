@@ -18,7 +18,6 @@ func TestAccDataSourceTwilioSIPTrunkingPhoneNumbers_complete(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioSIPTrunkingPhoneNumberDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioSIPTrunkingPhoneNumbers_complete(testData),

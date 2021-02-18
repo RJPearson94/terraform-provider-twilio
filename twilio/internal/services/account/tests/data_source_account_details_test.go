@@ -5,12 +5,9 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var accountDetailsDataSourceName = "twilio_account_details"
@@ -22,7 +19,6 @@ func TestAccDataSourceTwilioAccountDetails_complete(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioAccountDetailsSubAccountDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioAccountDetails_complete(friendlyName),
@@ -39,25 +35,6 @@ func TestAccDataSourceTwilioAccountDetails_complete(t *testing.T) {
 			},
 		},
 	})
-}
-
-func testAccCheckTwilioAccountDetailsSubAccountDestroy(s *terraform.State) error {
-	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).API
-
-	for _, rs := range s.RootModule().Resources {
-		if rs.Type != subAccountResourceName {
-			continue
-		}
-
-		if _, err := client.Account(rs.Primary.ID).Fetch(); err != nil {
-			if utils.IsNotFoundError(err) {
-				return nil
-			}
-			return fmt.Errorf("Error occurred when retrieving account information %s", err.Error())
-		}
-	}
-
-	return nil
 }
 
 // Create Sub Account to prevent leaking auth token of the parent account

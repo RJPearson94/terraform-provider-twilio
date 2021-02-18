@@ -5,12 +5,9 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 var dataSourceName = "twilio_studio_flow"
@@ -23,7 +20,6 @@ func TestAccDataSourceTwilioStudioFlow_complete(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioStudioFlowResourceDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTwilioStudioFlow_complete(friendlyName, status),
@@ -45,25 +41,6 @@ func TestAccDataSourceTwilioStudioFlow_complete(t *testing.T) {
 			},
 		},
 	})
-}
-
-func testAccCheckTwilioStudioFlowResourceDestroy(s *terraform.State) error {
-	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Studio
-
-	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "twilio_studio_flow" {
-			continue
-		}
-
-		if _, err := client.Flow(rs.Primary.ID).Fetch(); err != nil {
-			if utils.IsNotFoundError(err) {
-				return nil
-			}
-			return fmt.Errorf("Error occurred when retrieving flow information %s", err.Error())
-		}
-	}
-
-	return nil
 }
 
 func testAccTwilioStudioFlow_complete(friendlyName string, status string) string {

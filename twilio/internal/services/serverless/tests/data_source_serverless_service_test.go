@@ -23,7 +23,6 @@ func TestAccDataSourceTwilioServerlessService_basic(t *testing.T) {
 			{
 				Config: testAccDataSourceTwilioServerlessService_basic(uniqueName, friendlyName),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioServerlessServiceExists(stateDataSourceName),
 					resource.TestCheckResourceAttr(stateDataSourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateDataSourceName, "unique_name", uniqueName),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "include_credentials"),
