@@ -1,9 +1,10 @@
-## v0.8.0 (unreleased)
+## v0.8.0 (2021-02-19)
 
 NOTES
 
 Add deprecation warning to Programmable Chat resources and data sources
 Add deprecation warning to `twilio_sip_trunking_phone_number` `sid` argument
+Improved error messages when account or API Key credential validation failures occur (this is part of Go SDk v0.14.1 release)
 
 FIXES
 
