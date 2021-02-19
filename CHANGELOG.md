@@ -2,13 +2,13 @@
 
 NOTES
 
-Add deprecation warning to Programmable Chat resources and data sources
-Add deprecation warning to `twilio_sip_trunking_phone_number` `sid` argument
-Improved error messages when account or API Key credential validation failures occur (this is part of Go SDk v0.14.1 release)
+- Add deprecation warning to Programmable Chat resources and data sources
+- Add deprecation warning to `twilio_sip_trunking_phone_number` `sid` argument
+- Improved error messages when account or API Key credential validation failures occur (this is part of Go SDK v0.14.1 release)
 
 FIXES
 
-Programmable Chat Channel Member `LastConsumedTimestamp` was being set as a time.Time, this data type is incompatible with Terraform, so setting the value as a RFC3339 string if the value is not nil
+- Programmable Chat Channel Member `LastConsumedTimestamp` was being set as a time.Time, this data type is incompatible with Terraform, so setting the value as a RFC3339 string if the value is not nil
 
 FEATURES
 
