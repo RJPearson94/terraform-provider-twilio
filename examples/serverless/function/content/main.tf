@@ -12,9 +12,13 @@ resource "twilio_serverless_function" "function" {
   service_sid   = twilio_serverless_service.service.sid
   friendly_name = "test"
 
-  content           = file("${path.module}/helloWorld.js")
+  content           = <<EOF
+exports.handler = function (context, event, callback) {
+  callback(null, "Hello World");
+};
+EOF
   content_type      = "application/javascript"
-  content_file_name = "helloWorld4.js"
+  content_file_name = "helloWorld.js"
   path              = "/test-function"
   visibility        = "private"
 }

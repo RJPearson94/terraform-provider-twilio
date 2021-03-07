@@ -26,7 +26,7 @@ resource "twilio_serverless_asset" "asset" {
   service_sid   = twilio_serverless_service.service.sid
   friendly_name = "test"
   source        = "module.png"
-  source_hash   = filemd5("${path.module}/module.png")
+  source_hash   = filebase64sha256("${path.module}/module.png")
   content_type  = "image/png"
   path          = "/test-asset"
   visibility    = "public"
