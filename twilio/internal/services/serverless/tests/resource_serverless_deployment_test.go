@@ -18,7 +18,8 @@ func TestAccTwilioServerlessDeployment_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.deployment", deploymentResourceName)
 	uniqueName := acctest.RandString(10)
 
-	resource.ParallelTest(t, resource.TestCase{
+	// Run tests in parallel as I got rate limited when they ran in parallel
+	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioServerlessDeploymentDestroy,
@@ -43,6 +44,59 @@ func TestAccTwilioServerlessDeployment_basic(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: testAccTwilioServerlessDeploymentImportStateIdFunc(stateResourceName),
 				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessDeployment_createBeforeDestroy(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.deployment", deploymentResourceName)
+	uniqueName := acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioServerlessDeploymentDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessDeployment_createBeforeDestroy(uniqueName, "Hello World"),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessDeploymentExists(stateResourceName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "environment_sid"),
+					resource.TestCheckResourceAttr(stateResourceName, "is_latest_deployment", "true"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "build_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckNoResourceAttr(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessDeployment_createBeforeDestroy(uniqueName, "New Response"),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessDeploymentExists(stateResourceName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "environment_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "is_latest_deployment"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "build_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckNoResourceAttr(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				// apply to refresh state to verify the deployment is still latest
+				Config: testAccTwilioServerlessDeployment_createBeforeDestroy(uniqueName, "New Response"),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessDeploymentExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "is_latest_deployment", "true"),
+				),
 			},
 		},
 	})
@@ -138,4 +192,55 @@ resource "twilio_serverless_deployment" "deployment" {
   build_sid       = twilio_serverless_build.build.sid
 }
 `, uniqueName, uniqueName)
+}
+
+func testAccTwilioServerlessDeployment_createBeforeDestroy(uniqueName string, greetingMessage string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "service-%s"
+  friendly_name = "test"
+}
+
+resource "twilio_serverless_function" "function" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = <<EOF
+exports.handler = function (context, event, callback) {
+	callback(null, "%s");
+};
+EOF
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "private"
+}
+
+resource "twilio_serverless_build" "build" {
+  service_sid = twilio_serverless_service.service.sid
+  function_version {
+    sid = twilio_serverless_function.function.latest_version_sid
+  }
+  polling {
+    enabled = true
+  }
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "twilio_serverless_environment" "environment" {
+  service_sid = twilio_serverless_service.service.sid
+  unique_name = "%s"
+}
+
+resource "twilio_serverless_deployment" "deployment" {
+  service_sid     = twilio_serverless_service.service.sid
+  environment_sid = twilio_serverless_environment.environment.sid
+  build_sid       = twilio_serverless_build.build.sid
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+`, uniqueName, greetingMessage, uniqueName)
 }

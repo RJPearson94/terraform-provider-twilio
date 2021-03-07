@@ -7,9 +7,11 @@ subcategory: "Serverless"
 
 Manages a Serverless build. See the [API docs](https://www.twilio.com/docs/runtime/functions-assets-api/api/build) for more information
 
+For more information on Serverless (also known as Runtime), see the product [page](https://www.twilio.com/runtime)
+
 ~> If polling is enabled then the create step will poll until the build status is either `completed` or `failed` or the max attempts threshold is reached.
 
-For more information on Serverless (also known as Runtime), see the product [page](https://www.twilio.com/runtime)
+~> To allow terraform to correctly manage the lifecycle of the deployment, it is recommended that use the lifecycle meta-argument `create_before_destroy` with this resource. The docs can be found [here](https://www.terraform.io/docs/configuration/resources.html#create_before_destroy)
 
 !> This API used to manage this resource is currently in beta and is subject to change
 
@@ -54,6 +56,10 @@ resource "twilio_serverless_build" "build" {
 
   polling {
     enabled = true
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 ```

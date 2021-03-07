@@ -1,3 +1,9 @@
+## v0.9.0 (unreleased)
+
+FIXES
+
+- When using the lifecycle meta-argument `create_before_destroy` on the `twilio_serverless_deployment` resource and Terraform detected a change that forced a new resource to be created. Terraform created the new deployment and when the old deployment was being destroyed the provider was incorrectly removing the new build. Causing no active build to be deployed and causing an outage on the API. This has now been fixed by checking the environment to see if the build sid matches the active build on the environment. If they match the build will be superseded otherwise the state will be removed (as deployments can't be deleted)
+
 ## v0.8.0 (2021-02-19)
 
 NOTES

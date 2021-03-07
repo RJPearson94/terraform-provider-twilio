@@ -150,18 +150,17 @@ func resourceServerlessDeploymentRead(ctx context.Context, d *schema.ResourceDat
 }
 
 func resourceServerlessDeploymentDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	if d.Get("is_latest_deployment").(bool) {
-		if d.Get("build_sid") != nil {
-			log.Printf("[INFO] Serverless deployments cannot be deleted. So a new deployment will be create without a build sid as this will supersede the current deployment")
+	buildNeedsRemoving, err := doesBuildNeedsRemoving(ctx, d, meta)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 
-			if _, err := createServerlessDeployment(ctx, d, meta, nil); err != nil {
-				return diag.Errorf("Failed to create deployment without build sid: %s", err.Error())
-			}
-		} else {
-			log.Printf("[INFO] Serverless deployment build sid is already nil, so removing this resource from Terraform state as you cannot currently delete a serverless deployment")
+	if *buildNeedsRemoving {
+		log.Printf("[INFO] Serverless deployments cannot be deleted. So a new deployment will be created without a build sid as this will supersede the current deployment")
+
+		if _, err := createServerlessDeployment(ctx, d, meta, nil); err != nil {
+			return diag.Errorf("Failed to create deployment without build sid: %s", err.Error())
 		}
-	} else {
-		log.Printf("[INFO] Serverless deployment is not the latest deployments, so skipping creating a new deployment without a build sid")
 	}
 
 	d.SetId("")
@@ -176,4 +175,15 @@ func createServerlessDeployment(ctx context.Context, d *schema.ResourceData, met
 	}
 
 	return client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).Deployments.CreateWithContext(ctx, createInput)
+}
+
+func doesBuildNeedsRemoving(ctx context.Context, d *schema.ResourceData, meta interface{}) (*bool, error) {
+	client := meta.(*common.TwilioClient).Serverless
+
+	resp, err := client.Service(d.Get("service_sid").(string)).Environment(d.Get("environment_sid").(string)).FetchWithContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to read serverless environment during deletion of the deployment: %s", err.Error())
+	}
+
+	return sdkUtils.Bool(resp.BuildSid != nil && resp.BuildSid == sdkUtils.String(d.Get("build_sid").(string))), nil
 }

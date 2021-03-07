@@ -9,7 +9,7 @@ Manages an Autopilot model build. See the [API docs](https://www.twilio.com/docs
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
-~> To allow terraform to correctly manage the lifecycle of the model build you should use `create_before_destroy` argument in the lifecycle block. The docs can be found [here](https://www.terraform.io/docs/configuration/resources.html#create_before_destroy)
+~> To allow terraform to correctly manage the lifecycle of the model build, it is recommended that use the lifecycle meta-argument `create_before_destroy` with this resource. The docs can be found [here](https://www.terraform.io/docs/configuration/resources.html#create_before_destroy)
 
 ## Example Usage
 

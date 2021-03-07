@@ -9,7 +9,9 @@ Manages a Serverless deployment. See the [API docs](https://www.twilio.com/docs/
 
 For more information on Serverless (also known as Runtime), see the product [page](https://www.twilio.com/runtime)
 
-~> Serverless deployments cannot be removed, they can only be superseded. When a destroy is required Terraform will check if the resource is the latest deployment. If the resource is the latest deployment and the `build_sid` is not nil a new deployment will be created with a nil `build_sid` to remove this resource as the active deployment, this allows the build to be destroyed. If the `build_sid` is nil or if the resource is not the latest version then the resource will be removed from the Terraform state without a new deployment being created.
+~> Serverless deployments cannot be removed, they can only be superseded. To allow a build to be deleted, on the destruction of the resource, the provider will check if the `build_sid` is deployed to the environment. If the `build_sid` matches the environment config, a new deployment will be created without a `build_sid` to remove the active deployment. Once the deployment has been completed or if the `build_sid` doesn't match the environment, the state is removed and the deployment is orphaned.
+
+~> To allow terraform to correctly manage the lifecycle of the deployment, it is recommended that use the lifecycle meta-argument `create_before_destroy` with this resource. The docs can be found [here](https://www.terraform.io/docs/configuration/resources.html#create_before_destroy)
 
 !> This API used to manage this resource is currently in beta and is subject to change
 
@@ -55,6 +57,10 @@ resource "twilio_serverless_build" "build" {
   polling {
     enabled = true
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "twilio_serverless_environment" "environment" {
@@ -66,6 +72,10 @@ resource "twilio_serverless_deployment" "deployment" {
   service_sid     = twilio_serverless_service.service.sid
   environment_sid = twilio_serverless_environment.environment.sid
   build_sid       = twilio_serverless_build.build.sid
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 ```
 
@@ -76,8 +86,8 @@ The following arguments are supported:
 - `service_sid` - (Mandatory) The serverless service SID to associate the deployment with. Changing this forces a new resource to be created
 - `environment_sid` - (Mandatory) The serverless environment SID to associate the deployment with. Changing this forces a new resource to be created
 - `build_sid` - (Optional) The build SID to be deployed to the environment. Changing this forces a new resource to be created
-- `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary. Changing this forces a new resource to be created
-  ~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of terraform.
+- `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and redeployment is necessary. Changing this forces a new resource to be created
+  ~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of Terraform.
 
 ## Attributes Reference
 
@@ -91,7 +101,7 @@ The following attributes are exported:
 - `build_sid` - The build SID to be deployed to the environment
 - `is_latest_deployment` - Determine whether this deployment is the latest
   ~> This caters for when deployments are made and Terraform state is not aware of them
-- `triggers` - A map of key-value pairs which can be used to determine if changes have occurred and a redeployment is necessary.
+- `triggers` - A map of key-value pairs which can be used to determine if changes have occurred and redeployment is necessary.
 - `date_created` - The date in RFC3339 format that the deployment was created
 - `date_updated` - The date in RFC3339 format that the deployment was updated
 - `url` - The URL of the deployment
