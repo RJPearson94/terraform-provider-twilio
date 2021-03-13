@@ -33,4 +33,8 @@ resource "twilio_serverless_build" "build" {
     "xmldom"                  = "0.1.27"
     "@twilio/runtime-handler" = "1.0.1"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }

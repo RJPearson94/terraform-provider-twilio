@@ -55,6 +55,10 @@ resource "twilio_serverless_build" "build" {
   polling {
     enabled = true
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "twilio_serverless_environment" "environment" {
@@ -66,4 +70,8 @@ resource "twilio_serverless_deployment" "deployment" {
   service_sid     = twilio_serverless_service.service.sid
   environment_sid = twilio_serverless_environment.environment.sid
   build_sid       = twilio_serverless_build.build.sid
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
