@@ -185,5 +185,5 @@ func doesBuildNeedsRemoving(ctx context.Context, d *schema.ResourceData, meta in
 		return nil, fmt.Errorf("Failed to read serverless environment during deletion of the deployment: %s", err.Error())
 	}
 
-	return sdkUtils.Bool(resp.BuildSid != nil && resp.BuildSid == sdkUtils.String(d.Get("build_sid").(string))), nil
+	return sdkUtils.Bool(resp.BuildSid != nil && *resp.BuildSid == d.Get("build_sid").(string)), nil
 }

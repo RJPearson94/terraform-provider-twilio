@@ -1,3 +1,11 @@
+## v0.8.2 (unreleased)
+
+FIXES
+
+- When destroying a deployment resource. The `build_sid` was not being superseded correctly, this causes the following error `Failed to delete serverless build: Cannot delete Build because it's part of an active Deployment.` to be thrown when attempting to destroy a build.
+  This error was caused because the Terraform code was incorrectly comparing if the pointers for the environment `build_sid` and the deployment `build_sid` (which was created from the value that was held in Terraform state) were the same. This has since been updated to dereference the pointer for the environment build_sid, so the 2 values could be compared.
+  This was not caught by the pre-existing acceptance tests because the tests tore down all resources, the environment was being deleted before the build so no active deployments were preventing the build from being deleted. Additional acceptance tests have been added to ensure this functionality works as expected.
+
 ## v0.8.1 (2021-03-13)
 
 FIXES

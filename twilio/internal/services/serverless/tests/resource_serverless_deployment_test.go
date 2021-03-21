@@ -102,6 +102,41 @@ func TestAccTwilioServerlessDeployment_createBeforeDestroy(t *testing.T) {
 	})
 }
 
+func TestAccTwilioServerlessDeployment_removeBuildAndDeployment(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.deployment", deploymentResourceName)
+	uniqueName := acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioServerlessDeploymentDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessDeployment_createBeforeDestroy(uniqueName, "Hello World"),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessDeploymentExists(stateResourceName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "environment_sid"),
+					resource.TestCheckResourceAttr(stateResourceName, "is_latest_deployment", "true"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "build_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckNoResourceAttr(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessDeployment_removeBuildAndDeployment(uniqueName, "Hello World"),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessBuildIsDestroyed,
+				),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioServerlessDeploymentDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Serverless
 
@@ -119,6 +154,15 @@ func testAccCheckTwilioServerlessDeploymentDestroy(s *terraform.State) error {
 	}
 
 	return nil
+}
+
+func testAccCheckTwilioServerlessBuildIsDestroyed(s *terraform.State) error {
+	rs, ok := s.RootModule().Resources["twilio_serverless_build.build"]
+	if !ok {
+		return nil
+	}
+
+	return fmt.Errorf("Build resource with sid (%s) still exists after a destroy. This should have been deleted", rs.Primary.ID)
 }
 
 func testAccCheckTwilioServerlessDeploymentExists(name string) resource.TestCheckFunc {
@@ -241,6 +285,34 @@ resource "twilio_serverless_deployment" "deployment" {
   lifecycle {
     create_before_destroy = true
   }
+}
+`, uniqueName, greetingMessage, uniqueName)
+}
+
+func testAccTwilioServerlessDeployment_removeBuildAndDeployment(uniqueName string, greetingMessage string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "service-%s"
+  friendly_name = "test"
+}
+
+resource "twilio_serverless_function" "function" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = <<EOF
+exports.handler = function (context, event, callback) {
+	callback(null, "%s");
+};
+EOF
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "private"
+}
+
+resource "twilio_serverless_environment" "environment" {
+  service_sid = twilio_serverless_service.service.sid
+  unique_name = "%s"
 }
 `, uniqueName, greetingMessage, uniqueName)
 }
