@@ -15,8 +15,8 @@ For more information on SIP Trunking, see the product [page](https://www.twilio.
 resource "twilio_sip_trunking_trunk" "trunk" {}
 
 resource "twilio_sip_trunking_phone_number" "phone_number" {
-  trunk_sid = twilio_sip_trunking_trunk.trunk.sid
-  phone_number_sid       = "PNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  trunk_sid        = twilio_sip_trunking_trunk.trunk.sid
+  phone_number_sid = "PNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 ```
 

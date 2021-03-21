@@ -153,7 +153,7 @@ func resourceStudioFlowRead(ctx context.Context, d *schema.ResourceData, meta in
 
 	json, err := structure.FlattenJsonToString(getResponse.Definition)
 	if err != nil {
-		return diag.Errorf("Unable to flattern definition json to string")
+		return diag.Errorf("Unable to flatten definition json to string")
 	}
 	d.Set("definition", json)
 	d.Set("status", getResponse.Status)

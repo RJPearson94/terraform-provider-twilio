@@ -12,6 +12,7 @@ import (
 	studio "github.com/RJPearson94/twilio-sdk-go/service/studio/v2"
 	taskrouter "github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1"
 	trunking "github.com/RJPearson94/twilio-sdk-go/service/trunking/v1"
+	video "github.com/RJPearson94/twilio-sdk-go/service/video/v1"
 )
 
 type TwilioClient struct {
@@ -29,4 +30,5 @@ type TwilioClient struct {
 	SIPTrunking   *trunking.Trunking
 	Studio        *studio.Studio
 	TaskRouter    *taskrouter.TaskRouter
+	Video         *video.Video
 }

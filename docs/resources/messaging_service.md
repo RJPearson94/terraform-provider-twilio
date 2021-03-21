@@ -52,7 +52,7 @@ The following attributes are exported:
 - `inbound_request_url` - The URL which will be called when an inbound message is received for any associated short code or phone number
 - `mms_converter` - Whether to convert MMS messages to SMS messages and include a URL to the content when the carrier cannot receive MMS messages
 - `smart_encoding` - Whether to enable detection and replacement of Unicode characters that are easy to miss
-- `status_callback` - The URL which will be called when a message delivery status is changed
+- `status_callback_url` - The URL which will be called when a message delivery status is changed
 - `sticky_sender` - Whether to ensure the end-user receives messages from the same phone number
 - `validity_period` - How long (in seconds) messages sent from the messaging service are valid for
 - `date_created` - The date in RFC3339 format that the service was created

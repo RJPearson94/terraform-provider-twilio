@@ -1,3 +1,8 @@
+## v0.9.0 (unreleased)
+
+- **New Data Source:** `twilio_video_composition_hook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/video_composition_hook.md)
+- **New Resource:** `twilio_video_composition_hook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/video_composition_hook.md)
+
 ## v0.8.2 (2021-03-21)
 
 FIXES
