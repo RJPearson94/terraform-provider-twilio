@@ -8,10 +8,10 @@ output "function" {
   value       = twilio_serverless_function.function
 }
 
-# output "asset" {
-#   description = "The Generated Serverless Asset"
-#   value       = twilio_serverless_asset.asset
-# }
+output "asset" {
+  description = "The Generated Serverless Asset"
+  value       = twilio_serverless_asset.asset
+}
 
 output "build" {
   description = "The Generated Serverless Build"

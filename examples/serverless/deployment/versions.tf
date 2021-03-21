@@ -4,7 +4,7 @@ terraform {
   required_providers {
     twilio = {
       source  = "RJPearson94/twilio"
-      version = ">= 0.8.1"
+      version = ">= 0.8.2"
     }
   }
 }
