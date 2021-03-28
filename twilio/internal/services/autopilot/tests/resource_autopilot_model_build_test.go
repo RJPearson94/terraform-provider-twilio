@@ -189,11 +189,11 @@ resource "twilio_autopilot_model_build" "model_build" {
   unique_name_prefix = "%s"
 
   triggers = {
-    redeployment = sha1(join(",", list(
+    redeployment = sha1(join(",", tolist([
       twilio_autopilot_task_sample.task_sample.sid,
       twilio_autopilot_task_sample.task_sample.language,
       twilio_autopilot_task_sample.task_sample.tagged_text,
-    )))
+    ])))
   }
 
   lifecycle {
