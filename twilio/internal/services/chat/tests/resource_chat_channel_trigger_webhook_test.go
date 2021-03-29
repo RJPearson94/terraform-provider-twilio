@@ -18,7 +18,7 @@ var channelTriggerWebhookResourceName = "twilio_chat_channel_trigger_webhook"
 func TestAccTwilioChatChannelTriggerWebhook_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.trigger_webhook", channelTriggerWebhookResourceName)
 	friendlyName := acctest.RandString(10)
-	webhookURL := "http://localhost:3000/current"
+	webhookURL := "https://localhost.com/webhook"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -74,8 +74,8 @@ func TestAccTwilioChatChannelTriggerWebhook_invalidWebhookURL(t *testing.T) {
 func TestAccTwilioChatChannelTriggerWebhook_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.trigger_webhook", channelTriggerWebhookResourceName)
 	friendlyName := acctest.RandString(10)
-	webhookURL := "http://localhost:3000/current"
-	newWebhookURL := "http://localhost:3000/new"
+	webhookURL := "https://localhost.com/webhook"
+	newWebhookURL := "https://localhost.com/new"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },

@@ -14,7 +14,7 @@ var conversationWebhookDataSourceName = "twilio_conversations_conversation_webho
 func TestAccDataSourceTwilioConversationsConversationWebhook_basic(t *testing.T) {
 	stateDataSource := fmt.Sprintf("data.%s.webhook", conversationWebhookDataSourceName)
 	friendlyName := acctest.RandString(10)
-	webhookURL := "http://localhost:3000/current"
+	webhookURL := "https://localhost.com/webhook"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },

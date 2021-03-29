@@ -18,7 +18,7 @@ var conversationTriggerWebhookResourceName = "twilio_conversations_conversation_
 func TestAccTwilioConversationsConversationTriggerWebhook_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.trigger_webhook", conversationTriggerWebhookResourceName)
 	friendlyName := acctest.RandString(10)
-	webhookURL := "http://localhost:3000/current"
+	webhookURL := "https://localhost.com/webhook"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -57,8 +57,8 @@ func TestAccTwilioConversationsConversationTriggerWebhook_basic(t *testing.T) {
 func TestAccTwilioConversationsConversationTriggerWebhook_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.trigger_webhook", conversationTriggerWebhookResourceName)
 	friendlyName := acctest.RandString(10)
-	webhookURL := "http://localhost:3000/current"
-	newWebhookURL := "http://localhost:3000/new"
+	webhookURL := "https://localhost.com/webhook"
+	newWebhookURL := "https://localhost.com/new"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -126,7 +126,7 @@ func TestAccTwilioConversationsConversationTriggerWebhook_invalidWebhookURL(t *t
 func TestAccTwilioConversationsConversationTriggerWebhook_invalidMethod(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 	method := "DELETE"
-	webhookURL := "http://localhost:3000/current"
+	webhookURL := "https://localhost.com/webhook"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },

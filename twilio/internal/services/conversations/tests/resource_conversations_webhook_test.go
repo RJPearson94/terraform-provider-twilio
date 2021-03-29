@@ -43,11 +43,11 @@ func TestAccTwilioConversationsWebhook_basic(t *testing.T) {
 func TestAccTwilioConversationsWebhook_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.webhook", webhookResourceName)
 	method := "GET"
-	preWebhookUrl := "http://localhost:3000/preWebhookUrl"
-	postWebhookUrl := "http://localhost:3000/postWebhookUrl"
+	preWebhookUrl := "https://localhost.com/preWebhookUrl"
+	postWebhookUrl := "https://localhost.com/postWebhookUrl"
 	newMethod := "POST"
-	newPreWebhookUrl := "http://localhost:3000/newPreWebhookUrl"
-	newPostWebhookUrl := "http://localhost:3000/newPostWebhookUrl"
+	newPreWebhookUrl := "https://localhost.com/newPreWebhookUrl"
+	newPostWebhookUrl := "https://localhost.com/newPostWebhookUrl"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -88,8 +88,8 @@ func TestAccTwilioConversationsWebhook_update(t *testing.T) {
 
 func TestAccTwilioConversationsWebhook_invalidMethod(t *testing.T) {
 	method := "DELETE"
-	preWebhookUrl := "http://localhost:3000/preWebhookUrl"
-	postWebhookUrl := "http://localhost:3000/postWebhookUrl"
+	preWebhookUrl := "https://localhost.com/preWebhookUrl"
+	postWebhookUrl := "https://localhost.com/postWebhookUrl"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -106,7 +106,7 @@ func TestAccTwilioConversationsWebhook_invalidMethod(t *testing.T) {
 func TestAccTwilioConversationsWebhook_invalidPreWebhookUrl(t *testing.T) {
 	method := "GET"
 	preWebhookUrl := "preWebhookUrl"
-	postWebhookUrl := "http://localhost:3000/postWebhookUrl"
+	postWebhookUrl := "https://localhost.com/postWebhookUrl"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -122,7 +122,7 @@ func TestAccTwilioConversationsWebhook_invalidPreWebhookUrl(t *testing.T) {
 
 func TestAccTwilioConversationsWebhook_invalidPostWebhookUrl(t *testing.T) {
 	method := "GET"
-	preWebhookUrl := "http://localhost:3000/preWebhookUrl"
+	preWebhookUrl := "https://localhost.com/preWebhookUrl"
 	postWebhookUrl := "postWebhookUrl"
 
 	resource.ParallelTest(t, resource.TestCase{

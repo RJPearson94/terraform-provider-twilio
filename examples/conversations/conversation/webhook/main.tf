@@ -9,6 +9,6 @@ resource "twilio_conversations_conversation" "conversation" {
 resource "twilio_conversations_conversation_webhook" "webhook" {
   service_sid      = twilio_conversations_service.service.sid
   conversation_sid = twilio_conversations_conversation.conversation.sid
-  webhook_url      = "http://localhost/new"
+  webhook_url      = "https://test.com/new"
   filters          = ["onMessageAdded"]
 }
