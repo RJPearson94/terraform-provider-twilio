@@ -7,9 +7,9 @@ These instruction are here to help aid you in setting up your development enviro
 ## Prerequisites
 
 - [Terraform](https://www.terraform.io/downloads.html) 0.12+
-- [Go](https://golang.org/doc/install) 1.14 (to build the provider plugin)
+- [Go](https://golang.org/doc/install) 1.16 (to build the provider plugin)
 
-*Note:* This project uses [Go Modules](https://blog.golang.org/using-go-modules)
+**Note:** This project uses [Go Modules](https://blog.golang.org/using-go-modules)
 
 ## Getting started
 
@@ -47,7 +47,7 @@ make test
 
 In order to run the Acceptance tests, run the following command
 
-*Warning:* These test will provision real resources on Twilio and could cost money.
+**Warning:** These test will provision real resources on Twilio and could cost money.
 
 ```sh
 make testacc
