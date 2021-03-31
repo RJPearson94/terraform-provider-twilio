@@ -161,7 +161,7 @@ func resourceTaskRouterWorkspaceRead(ctx context.Context, d *schema.ResourceData
 	d.Set("friendly_name", getResponse.FriendlyName)
 	d.Set("event_callback_url", getResponse.EventCallbackURL)
 
-	if getResponse.EventsFilter != nil {
+	if getResponse.EventsFilter != nil && *getResponse.EventsFilter != "" {
 		d.Set("event_filters", strings.Split(*getResponse.EventsFilter, workspaceEventsSeperator))
 	}
 
