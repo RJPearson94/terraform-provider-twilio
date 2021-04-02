@@ -13,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-var resourceName = "twilio_studio_flow"
+const resourceName = "twilio_studio_flow"
 
 func TestAccTwilioStudio_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.flow", resourceName)
@@ -46,10 +46,11 @@ func TestAccTwilioStudio_basic(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      stateResourceName,
-				ImportState:       true,
-				ImportStateIdFunc: testAccTwilioStudioFlowImportStateIdFunc(stateResourceName),
-				ImportStateVerify: true,
+				ResourceName:            stateResourceName,
+				ImportState:             true,
+				ImportStateIdFunc:       testAccTwilioStudioFlowImportStateIdFunc(stateResourceName),
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"validate"},
 			},
 		},
 	})
@@ -181,28 +182,26 @@ func testAccTwilioStudioFlow_basic(friendlyName string, status string) string {
 resource "twilio_studio_flow" "flow" {
   friendly_name = "%s"
   status        = "%s"
-  definition    = <<EOF
-{
-	"description": "A New Flow",
-	"flags": {
-		"allow_concurrent_calls": true
-	},
-	"initial_state": "Trigger",
-	"states": [
-		{
-		"name": "Trigger",
-		"properties": {
-			"offset": {
-			"x": 0,
-			"y": 0
-			}
-		},
-		"transitions": [],
-		"type": "trigger"
-		}
-	]
-}
-EOF
+  definition = jsonencode({
+    "description" : "A New Flow",
+    "flags" : {
+      "allow_concurrent_calls" : true
+    },
+    "initial_state" : "Trigger",
+    "states" : [
+      {
+        "name" : "Trigger",
+        "properties" : {
+          "offset" : {
+            "x" : 0,
+            "y" : 0
+          }
+        },
+        "transitions" : [],
+        "type" : "trigger"
+      }
+    ]
+  })
 }
 `, friendlyName, status)
 }

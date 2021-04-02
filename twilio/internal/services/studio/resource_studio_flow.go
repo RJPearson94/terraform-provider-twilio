@@ -160,7 +160,6 @@ func resourceStudioFlowRead(ctx context.Context, d *schema.ResourceData, meta in
 	d.Set("revision", getResponse.Revision)
 	d.Set("commit_message", getResponse.CommitMessage)
 	d.Set("valid", getResponse.Valid)
-	d.Set("validate", d.Get("validate").(bool))
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {

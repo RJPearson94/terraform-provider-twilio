@@ -15,29 +15,27 @@ For more information on Studio, see the product [page](https://www.twilio.com/st
 resource "twilio_studio_flow" "flow" {
   friendly_name = "Test studio flow"
   status        = "draft"
-  definition    = <<EOF
-{
-  "description": "A New Flow",
-  "flags": {
-    "allow_concurrent_calls": true
-  },
-  "initial_state": "Trigger",
-  "states": [
-    {
-      "name": "Trigger",
-      "properties": {
-        "offset": {
-          "x": 0,
-          "y": 0
-        }
-      },
-      "transitions": [],
-      "type": "trigger"
-    }
-  ]
-}
-EOF
-  validate      = true
+  definition = jsonencode({
+    "description" : "A New Flow",
+    "flags" : {
+      "allow_concurrent_calls" : true
+    },
+    "initial_state" : "Trigger",
+    "states" : [
+      {
+        "name" : "Trigger",
+        "properties" : {
+          "offset" : {
+            "x" : 0,
+            "y" : 0
+          }
+        },
+        "transitions" : [],
+        "type" : "trigger"
+      }
+    ]
+  })
+  validate = true
 }
 ```
 
@@ -62,7 +60,6 @@ The following attributes are exported:
 - `status` - The status of the Studio flow
 - `revision` - The revision number of the Studio flow
 - `valid` - Whether the Studio flow is valid
-- `validate` - Whether the Studio flow has been validated on the creation and when updated
 - `date_created` - The date in RFC3339 format that the Studio flow was created
 - `date_updated` - The date in RFC3339 format that the Studio flow was updated
 - `url` - The URL of the Studio flow
@@ -86,3 +83,5 @@ A flow can be imported using the `/Flows/{sid}` format, e.g.
 ```shell
 terraform import twilio_studio_flow.flow /Flows/FWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
+
+!> "validate" cannot be imported

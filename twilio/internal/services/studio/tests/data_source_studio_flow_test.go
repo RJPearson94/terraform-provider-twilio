@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-var dataSourceName = "twilio_studio_flow"
+const dataSourceName = "twilio_studio_flow"
 
 func TestAccDataSourceTwilioStudioFlow_complete(t *testing.T) {
 	stateDataSourceName := fmt.Sprintf("data.%s.flow", dataSourceName)
@@ -22,9 +22,9 @@ func TestAccDataSourceTwilioStudioFlow_complete(t *testing.T) {
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioStudioFlow_complete(friendlyName, status),
+				Config: testAccDataSourceTwilioStudioFlow_complete(friendlyName, status),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestMatchResourceAttr(stateDataSourceName, "sid", regexp.MustCompile(`^FW(.+)$`)),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "friendly_name"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "status"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "definition"),
@@ -43,37 +43,56 @@ func TestAccDataSourceTwilioStudioFlow_complete(t *testing.T) {
 	})
 }
 
-func testAccTwilioStudioFlow_complete(friendlyName string, status string) string {
+func TestAccDataSourceTwilioAccountQueue_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioStudioFlow_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^FW\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
+func testAccDataSourceTwilioStudioFlow_complete(friendlyName string, status string) string {
 	return fmt.Sprintf(`
 resource "twilio_studio_flow" "flow" {
   friendly_name = "%s"
   status        = "%s"
-  definition    = <<EOF
-{
-	"description": "A New Flow",
-	"flags": {
-		"allow_concurrent_calls": true
-	},
-	"initial_state": "Trigger",
-	"states": [
-		{
-		"name": "Trigger",
-		"properties": {
-			"offset": {
-			"x": 0,
-			"y": 0
-			}
-		},
-		"transitions": [],
-		"type": "trigger"
-		}
-	]
-}
-EOF
+  definition = jsonencode({
+    "description" : "A New Flow",
+    "flags" : {
+      "allow_concurrent_calls" : true
+    },
+    "initial_state" : "Trigger",
+    "states" : [
+      {
+        "name" : "Trigger",
+        "properties" : {
+          "offset" : {
+            "x" : 0,
+            "y" : 0
+          }
+        },
+        "transitions" : [],
+        "type" : "trigger"
+      }
+    ]
+  })
 }
 
 data "twilio_studio_flow" "flow" {
   sid = twilio_studio_flow.flow.sid
 }
 `, friendlyName, status)
+}
+
+func testAccDataSourceTwilioStudioFlow_invalidSid() string {
+	return `
+data "twilio_studio_flow" "flow" {
+  sid = "sid"
+}
+`
 }
