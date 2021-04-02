@@ -31,7 +31,7 @@ The following arguments are supported:
 - `friendly_name` - (Mandatory) The name of the task queue
 - `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the task queue with. Changing this forces a new resource to be created
 - `assignment_activity_sid` - (Optional) The assignment activity SID for the task queue
-- `max_reserved_workers` - (Optional) The max number of workers to create a reservation for. The value must be between `1` and `50`. The default value is `1`
+- `max_reserved_workers` - (Optional) The max number of workers to create a reservation for. The value must be between `1` and `50` (inclusive). The default value is `1`
 - `target_workers` - (Optional) Worker selection criteria for any tasks that enter the task queue. The default value is `1==1`
 - `task_order` - (Optional) How TaskRouter will assign workers tasks on the queue. Valid values are `LIFO` or `FIFO`. Default value is `FIFO`
 - `reservation_activity_sid` - (Optional) The reservation activity SID for the task queue

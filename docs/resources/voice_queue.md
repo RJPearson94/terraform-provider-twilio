@@ -21,8 +21,8 @@ resource "twilio_voice_queue" "queue" {
 The following arguments are supported:
 
 - `account_sid` - (Mandatory) The account SID to associate the queue with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The friendly name of the queue
-- `max_size` - (Optional) The maximum number of calls which can be on the queue
+- `friendly_name` - (Mandatory) The friendly name of the queue. The length of the string must be between `1` and `64` characters (inclusive)
+- `max_size` - (Optional) The maximum number of calls which can be on the queue. The value must be between `1` and `5000` (inclusive). The default value is `100`
 
 ## Attributes Reference
 
