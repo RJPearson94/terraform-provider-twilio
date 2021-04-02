@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -12,10 +13,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-var activityResourceName = "twilio_taskrouter_activity"
+const activityResourceName = "twilio_taskrouter_activity"
 
 func TestAccTwilioTaskRouterActivity_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.activity", activityResourceName)
+	workspaceStateResourceName := "twilio_taskrouter_workspace.workspace"
+
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -28,11 +31,11 @@ func TestAccTwilioTaskRouterActivity_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioTaskRouterActivityExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "available", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "available", "false"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "workspace_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "workspace_sid", workspaceStateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -50,6 +53,7 @@ func TestAccTwilioTaskRouterActivity_basic(t *testing.T) {
 
 func TestAccTwilioTaskRouterActivity_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.activity", activityResourceName)
+	workspaceStateResourceName := "twilio_taskrouter_workspace.workspace"
 
 	friendlyName := acctest.RandString(10)
 	newFriendlyName := acctest.RandString(10)
@@ -64,11 +68,11 @@ func TestAccTwilioTaskRouterActivity_update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioTaskRouterActivityExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "available", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "available", "false"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "workspace_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "workspace_sid", workspaceStateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -79,15 +83,63 @@ func TestAccTwilioTaskRouterActivity_update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioTaskRouterActivityExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "available", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "available", "false"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "workspace_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "workspace_sid", workspaceStateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterActivity_available(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.activity", activityResourceName)
+
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioTaskRouterActivityDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioTaskRouterActivity_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterActivityExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "available", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioTaskRouterActivity_availableTrue(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterActivityExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "available", "true"),
+				),
+			},
+			{
+				Config: testAccTwilioTaskRouterActivity_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterActivityExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "available", "false"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterActivity_invalidWorkspaceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterActivity_invalidWorkspaceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of workspace_sid to match regular expression "\^WS\[0-9a-fA-F\]\{32\}\$", got workspace_sid`),
 			},
 		},
 	})
@@ -144,15 +196,39 @@ func testAccTwilioTaskRouterActivityImportStateIdFunc(name string) resource.Impo
 func testAccTwilioTaskRouterActivity_basic(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_taskrouter_workspace" "workspace" {
-  friendly_name          = "%s"
+  friendly_name          = "%[1]s"
   multi_task_enabled     = true
   prioritize_queue_order = "FIFO"
 }
 
 resource "twilio_taskrouter_activity" "activity" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
+}
+`, friendlyName)
+}
+
+func testAccTwilioTaskRouterActivity_availableTrue(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_taskrouter_workspace" "workspace" {
+  friendly_name          = "%[1]s"
+  multi_task_enabled     = true
+  prioritize_queue_order = "FIFO"
+}
+
+resource "twilio_taskrouter_activity" "activity" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s"
   available     = true
 }
-`, friendlyName, friendlyName)
+`, friendlyName)
+}
+
+func testAccTwilioTaskRouterActivity_invalidWorkspaceSid() string {
+	return `
+resource "twilio_taskrouter_activity" "activity" {
+  workspace_sid = "workspace_sid"
+  friendly_name = "invalid_workspace_sid"
+}
+`
 }

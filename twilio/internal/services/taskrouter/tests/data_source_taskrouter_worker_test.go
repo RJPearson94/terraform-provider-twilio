@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -9,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-var workerDataSourceName = "twilio_taskrouter_worker"
+const workerDataSourceName = "twilio_taskrouter_worker"
 
 func TestAccDataSourceTwilioTaskRouterWorker_basic(t *testing.T) {
 	stateDataSourceName := fmt.Sprintf("data.%s.worker", workerDataSourceName)
@@ -41,22 +42,66 @@ func TestAccDataSourceTwilioTaskRouterWorker_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioTaskRouterWorker_invalidWorkspaceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioTaskRouterWorker_invalidWorkspaceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of workspace_sid to match regular expression "\^WS\[0-9a-fA-F\]\{32\}\$", got workspace_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioTaskRouterWorker_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioTaskRouterWorker_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^WK\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioTaskRouterWorker_basic(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_taskrouter_workspace" "workspace" {
-  friendly_name          = "%s"
+  friendly_name          = "%[1]s"
   multi_task_enabled     = true
   prioritize_queue_order = "FIFO"
 }
 
 resource "twilio_taskrouter_worker" "worker" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 data "twilio_taskrouter_worker" "worker" {
   workspace_sid = twilio_taskrouter_worker.worker.workspace_sid
   sid           = twilio_taskrouter_worker.worker.sid
 }
-`, friendlyName, friendlyName)
+`, friendlyName)
+}
+
+func testAccDataSourceTwilioTaskRouterWorker_invalidWorkspaceSid() string {
+	return `
+data "twilio_taskrouter_worker" "worker" {
+  workspace_sid = "workspace_sid"
+  sid = "Wkaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioTaskRouterWorker_invalidSid() string {
+	return `
+data "twilio_taskrouter_worker" "worker" {
+  workspace_sid = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid = "sid"
+}
+`
 }

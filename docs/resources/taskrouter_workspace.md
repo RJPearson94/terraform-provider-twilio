@@ -13,10 +13,8 @@ For more information on TaskRouter, see the product [page](https://www.twilio.co
 
 ```hcl
 resource "twilio_taskrouter_workspace" "workspace" {
-  friendly_name          = "Test Workspace"
-  multi_task_enabled     = true
-  prioritize_queue_order = "FIFO"
-  template               = "FIFO"
+  friendly_name      = "Test Workspace"
+  multi_task_enabled = true
 }
 ```
 
@@ -26,10 +24,10 @@ The following arguments are supported:
 
 - `friendly_name` - (Mandatory) The name of the workspace
 - `event_callback_url` - (Optional) The event callback URL
-- `event_filters` - (Optional) list of event callback filters
+- `event_filters` - (Optional) list of event callback filters. Valid values are `task.created`,`task.completed`,`task.canceled`,`task.deleted`,`task.updated`,`task.wrapup`,`task-queue.entered`,`task-queue.moved`,`task-queue.timeout`,`reservation.created`,`reservation.accepted`,`reservation.rejected`,`reservation.timeout`,`reservation.canceled`,`reservation.rescinded`,`reservation.completed`,`workflow.entered`,`workflow.timeout`,`workflow.target-matched`,`worker.activity.update`,`worker.attributes.update`,`worker.capacity.update` or `worker.channel.availability.update`
 - `multi_task_enabled` - (Optional) Whether or not multitasking is enabled
-- `template` - (Optional) TaskRouter template to use
-- `prioritize_queue_order` - (Optional) Determine how TaskRouter prioritizes incoming tasks. Valid values are `LIFO` or `FIFO`
+- `template` - (Optional) TaskRouter template to use. Valid values are `NONE` or `FIFO`. The default value is `NONE`
+- `prioritize_queue_order` - (Optional) Determine how TaskRouter prioritizes incoming tasks. Valid values are `LIFO` or `FIFO`. The default value is `FIFO`
 
 ## Attributes Reference
 
@@ -42,7 +40,6 @@ The following attributes are exported:
 - `event_callback_url` - The event callback URL
 - `event_filters` - The event callback filter
 - `multi_task_enabled` - Whether or not multitasking is enabled
-- `template` - TaskRouter template to use
 - `prioritize_queue_order` - Determine how TaskRouter prioritizes incoming
 - `default_activity_name` - Name of default activity
 - `default_activity_sid` - SID of default activity
@@ -68,3 +65,5 @@ A workspace can be imported using the `/Workspaces/{sid}` format, e.g.
 ```shell
 terraform import twilio_taskrouter_workspace.workspace /Workspaces/WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
+
+!> "template" cannot be imported

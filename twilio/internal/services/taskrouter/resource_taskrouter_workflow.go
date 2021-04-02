@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/taskrouter/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/workflow"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/workflows"
@@ -57,9 +58,10 @@ func resourceTaskRouterWorkflow() *schema.Resource {
 				Computed: true,
 			},
 			"workspace_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: helper.WorkspaceSidValidation(),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,
@@ -76,9 +78,10 @@ func resourceTaskRouterWorkflow() *schema.Resource {
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"task_reservation_timeout": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeInt,
+				Optional:     true,
+				Default:      120,
+				ValidateFunc: validation.IntBetween(1, 86400),
 			},
 			"document_content_type": {
 				Type:     schema.TypeString,

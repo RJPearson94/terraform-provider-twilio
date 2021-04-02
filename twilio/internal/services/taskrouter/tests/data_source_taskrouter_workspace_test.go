@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -9,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-var workspaceDataSourceName = "twilio_taskrouter_workspace"
+const workspaceDataSourceName = "twilio_taskrouter_workspace"
 
 func TestAccDataSourceTwilioTaskRouterWorkspace_basic(t *testing.T) {
 	stateDataSourceName := fmt.Sprintf("data.%s.workspace", workspaceDataSourceName)
@@ -45,6 +46,19 @@ func TestAccDataSourceTwilioTaskRouterWorkspace_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioTaskRouterWorkspace_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioTaskRouterWorkspace_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^WS\[0-9a-fA-F\]\{32\}\$", got workspace_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioTaskRouterWorkspace_basic(friendlyName string, queueOrder string) string {
 	return fmt.Sprintf(`
 resource "twilio_taskrouter_workspace" "workspace" {
@@ -57,4 +71,12 @@ data "twilio_taskrouter_workspace" "workspace" {
   sid = twilio_taskrouter_workspace.workspace.sid
 }
 `, friendlyName, queueOrder)
+}
+
+func testAccDataSourceTwilioTaskRouterWorkspace_invalidSid() string {
+	return `
+data "twilio_taskrouter_workspace" "workspace" {
+  sid = "workspace_sid"
+}
+`
 }

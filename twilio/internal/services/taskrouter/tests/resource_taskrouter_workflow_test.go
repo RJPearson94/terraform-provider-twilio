@@ -13,10 +13,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-var workflowResourceName = "twilio_taskrouter_workflow"
+const workflowResourceName = "twilio_taskrouter_workflow"
 
 func TestAccTwilioTaskRouterWorkflow_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.workflow", workflowResourceName)
+	workspaceStateResourceName := "twilio_taskrouter_workspace.workspace"
+
 	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -36,7 +38,7 @@ func TestAccTwilioTaskRouterWorkflow_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "workspace_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "workspace_sid", workspaceStateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttr(stateResourceName, "document_content_type", ""),
@@ -55,6 +57,7 @@ func TestAccTwilioTaskRouterWorkflow_basic(t *testing.T) {
 
 func TestAccTwilioTaskRouterWorkflow_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.workflow", workflowResourceName)
+	workspaceStateResourceName := "twilio_taskrouter_workspace.workspace"
 
 	friendlyName := acctest.RandString(10)
 	newFriendlyName := acctest.RandString(10)
@@ -76,7 +79,7 @@ func TestAccTwilioTaskRouterWorkflow_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "workspace_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "workspace_sid", workspaceStateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttr(stateResourceName, "document_content_type", ""),
@@ -95,11 +98,51 @@ func TestAccTwilioTaskRouterWorkflow_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "workspace_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "workspace_sid", workspaceStateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttr(stateResourceName, "document_content_type", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterWorkflow_callbackURLs(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.workflow", workflowResourceName)
+
+	friendlyName := acctest.RandString(10)
+	callbackURL := "https://test.com/callback"
+	fallbackCallbackURL := "https://test.com/fallback-callback"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioTaskRouterWorkflowDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioTaskRouterWorkflow_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkflowExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_assignment_callback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "assignment_callback_url", ""),
+				),
+			},
+			{
+				Config: testAccTwilioTaskRouterWorkflow_assignmentCallback(friendlyName, callbackURL, fallbackCallbackURL),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkflowExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_assignment_callback_url", fallbackCallbackURL),
+					resource.TestCheckResourceAttr(stateResourceName, "assignment_callback_url", callbackURL),
+				),
+			},
+			{
+				Config: testAccTwilioTaskRouterWorkflow_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkflowExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_assignment_callback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "assignment_callback_url", ""),
 				),
 			},
 		},
@@ -164,6 +207,90 @@ func TestAccTwilioTaskRouterWorkflow_invalidAssignmentFallbackCallbackURL(t *tes
 	})
 }
 
+func TestAccTwilioTaskRouterWorkflow_taskReservationTimeout(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.workflow", workflowResourceName)
+
+	friendlyName := acctest.RandString(10)
+	taskReservationTimeout := 1
+	newTaskReservationTimeout := 86400
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioTaskRouterWorkflow_taskReservationTimeout(friendlyName, taskReservationTimeout),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkflowExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+					resource.TestCheckResourceAttr(stateResourceName, "task_reservation_timeout", "1"),
+				),
+			},
+			{
+				Config: testAccTwilioTaskRouterWorkflow_taskReservationTimeout(friendlyName, newTaskReservationTimeout),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkflowExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+					resource.TestCheckResourceAttr(stateResourceName, "task_reservation_timeout", "86400"),
+				),
+			},
+			{
+				Config: testAccTwilioTaskRouterWorkflow_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkflowExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+					resource.TestCheckResourceAttr(stateResourceName, "task_reservation_timeout", "120"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterWorkflow_invalidTaskReservationTimeoutOf0(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	taskReservationTimeout := 0
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterWorkflow_taskReservationTimeout(friendlyName, taskReservationTimeout),
+				ExpectError: regexp.MustCompile(`(?s)expected task_reservation_timeout to be in the range \(1 - 86400\), got 0`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterWorkflow_invalidTaskReservationTimeoutOf86401(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	taskReservationTimeout := 86401
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterWorkflow_taskReservationTimeout(friendlyName, taskReservationTimeout),
+				ExpectError: regexp.MustCompile(`(?s)expected task_reservation_timeout to be in the range \(1 - 86400\), got 86401`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterWorkflow_invalidWorkspaceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterWorkflow_invalidWorkspaceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of workspace_sid to match regular expression "\^WS\[0-9a-fA-F\]\{32\}\$", got workspace_sid`),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioTaskRouterWorkflowDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).TaskRouter
 
@@ -215,61 +342,103 @@ func testAccTwilioTaskRouterWorkflowImportStateIdFunc(name string) resource.Impo
 func testAccTwilioTaskRouterWorkflow_basic(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_taskrouter_workspace" "workspace" {
-  friendly_name          = "%s"
+  friendly_name          = "%[1]s"
   multi_task_enabled     = true
   prioritize_queue_order = "FIFO"
 }
 
 resource "twilio_taskrouter_task_queue" "task_queue" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%ss"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_taskrouter_workflow" "workflow" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%s"
-  configuration = <<EOF
-{
-  "task_routing": {
-    "filters": [],
-    "default_filter": {
-      "queue": "${twilio_taskrouter_task_queue.task_queue.sid}"
+  friendly_name = "%[1]s"
+  configuration = jsonencode({
+    "task_routing" : {
+      "filters" : [],
+      "default_filter" : {
+        "queue" : "${twilio_taskrouter_task_queue.task_queue.sid}"
+      }
     }
-  }
+  })
 }
-EOF
-}
-`, friendlyName, friendlyName, friendlyName)
+`, friendlyName)
 }
 
 func testAccTwilioTaskRouterWorkflow_assignmentCallback(friendlyName string, url string, fallbackURL string) string {
 	return fmt.Sprintf(`
 resource "twilio_taskrouter_workspace" "workspace" {
-  friendly_name          = "%s"
+  friendly_name          = "%[1]s"
   multi_task_enabled     = true
   prioritize_queue_order = "FIFO"
 }
 
 resource "twilio_taskrouter_task_queue" "task_queue" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_taskrouter_workflow" "workflow" {
-  workspace_sid                    = twilio_taskrouter_workspace.workspace.sid
-  friendly_name                    = "%s"
-  configuration                    = <<EOF
-{
-  "task_routing": {
-    "filters": [],
-    "default_filter": {
-      "queue": "${twilio_taskrouter_task_queue.task_queue.sid}"
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s"
+  configuration = jsonencode({
+    "task_routing" : {
+      "filters" : [],
+      "default_filter" : {
+        "queue" : twilio_taskrouter_task_queue.task_queue.sid
+      }
     }
-  }
+  })
+  assignment_callback_url          = "%[2]s"
+  fallback_assignment_callback_url = "%[3]s"
 }
-EOF
-  assignment_callback_url          = "%s"
-  fallback_assignment_callback_url = "%s"
+`, friendlyName, url, fallbackURL)
 }
-`, friendlyName, friendlyName, friendlyName, url, fallbackURL)
+
+func testAccTwilioTaskRouterWorkflow_taskReservationTimeout(friendlyName string, taskReservationTimeout int) string {
+	return fmt.Sprintf(`
+resource "twilio_taskrouter_workspace" "workspace" {
+  friendly_name          = "%[1]s"
+  multi_task_enabled     = true
+  prioritize_queue_order = "FIFO"
+}
+
+resource "twilio_taskrouter_task_queue" "task_queue" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s"
+}
+
+resource "twilio_taskrouter_workflow" "workflow" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s"
+  configuration = jsonencode({
+    "task_routing" : {
+      "filters" : [],
+      "default_filter" : {
+        "queue" : twilio_taskrouter_task_queue.task_queue.sid
+      }
+    }
+  })
+  task_reservation_timeout = "%[2]d"
+}
+`, friendlyName, taskReservationTimeout)
+}
+
+func testAccTwilioTaskRouterWorkflow_invalidWorkspaceSid() string {
+	return fmt.Sprintf(`
+resource "twilio_taskrouter_workflow" "workflow" {
+  workspace_sid = "workspace_sid"
+  friendly_name = "invalid_workspace_sid"
+  configuration = jsonencode({
+    "task_routing" : {
+      "filters" : [],
+      "default_filter" : {
+        "queue" : "test_queue"
+      }
+    }
+  })
+}
+`)
 }

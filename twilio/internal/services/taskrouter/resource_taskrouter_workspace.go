@@ -71,21 +71,51 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						"task.created",
+						"task.completed",
+						"task.canceled",
+						"task.deleted",
+						"task.updated",
+						"task.wrapup",
+						"task-queue.entered",
+						"task-queue.moved",
+						"task-queue.timeout",
+						"reservation.created",
+						"reservation.accepted",
+						"reservation.rejected",
+						"reservation.timeout",
+						"reservation.canceled",
+						"reservation.rescinded",
+						"reservation.completed",
+						"workflow.entered",
+						"workflow.timeout",
+						"workflow.target-matched",
+						"worker.activity.update",
+						"worker.attributes.update",
+						"worker.capacity.update",
+						"worker.channel.availability.update",
+					}, false),
 				},
 			},
 			"multi_task_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  true,
 			},
 			"template": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "NONE",
+				ValidateFunc: validation.StringInSlice([]string{
+					"NONE",
+					"FIFO",
+				}, false),
 			},
 			"prioritize_queue_order": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				Default:  "FIFO",
 				ValidateFunc: validation.StringInSlice([]string{
 					"LIFO",
 					"FIFO",
@@ -171,11 +201,6 @@ func resourceTaskRouterWorkspaceRead(ctx context.Context, d *schema.ResourceData
 	d.Set("prioritize_queue_order", getResponse.PrioritizeQueueOrder)
 	d.Set("timeout_activity_name", getResponse.TimeoutActivityName)
 	d.Set("timeout_activity_sid", getResponse.TimeoutActivitySid)
-
-	if value, ok := d.GetOk("template"); ok {
-		d.Set("template", value.(string))
-	}
-
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {

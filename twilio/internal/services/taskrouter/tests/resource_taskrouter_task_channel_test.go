@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -16,6 +17,8 @@ var taskChannelResourceName = "twilio_taskrouter_task_channel"
 
 func TestAccTwilioTaskRouterTaskChannel_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.task_channel", taskChannelResourceName)
+	workspaceStateResourceName := "twilio_taskrouter_workspace.workspace"
+
 	friendlyName := acctest.RandString(10)
 	uniqueName := acctest.RandString(10)
 
@@ -34,7 +37,7 @@ func TestAccTwilioTaskRouterTaskChannel_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "workspace_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "workspace_sid", workspaceStateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -52,6 +55,7 @@ func TestAccTwilioTaskRouterTaskChannel_basic(t *testing.T) {
 
 func TestAccTwilioTaskRouterTaskChannel_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.task_channel", taskChannelResourceName)
+	workspaceStateResourceName := "twilio_taskrouter_workspace.workspace"
 
 	friendlyName := acctest.RandString(10)
 	newFriendlyName := acctest.RandString(10)
@@ -72,7 +76,7 @@ func TestAccTwilioTaskRouterTaskChannel_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "workspace_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "workspace_sid", workspaceStateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -88,11 +92,24 @@ func TestAccTwilioTaskRouterTaskChannel_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "workspace_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "workspace_sid", workspaceStateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterTaskChannel_invalidWorkspaceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterTaskChannel_invalidWorkspaceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of workspace_sid to match regular expression "\^WS\[0-9a-fA-F\]\{32\}\$", got workspace_sid`),
 			},
 		},
 	})
@@ -149,15 +166,25 @@ func testAccTwilioTaskRouterTaskChannelImportStateIdFunc(name string) resource.I
 func testAccTwilioTaskRouterTaskChannel_basic(friendlyName string, uniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_taskrouter_workspace" "workspace" {
-  friendly_name          = "%s"
+  friendly_name          = "%[1]s"
   multi_task_enabled     = true
   prioritize_queue_order = "FIFO"
 }
 
 resource "twilio_taskrouter_task_channel" "task_channel" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%s"
-  unique_name   = "%s"
+  friendly_name = "%[1]s"
+  unique_name   = "%[2]s"
 }
-`, friendlyName, friendlyName, uniqueName)
+`, friendlyName, uniqueName)
+}
+
+func testAccTwilioTaskRouterTaskChannel_invalidWorkspaceSid() string {
+	return `
+resource "twilio_taskrouter_task_channel" "task_channel" {
+  workspace_sid = "workspace_sid"
+  friendly_name = "invalid_workspace_sid"
+  unique_name   = "invalid_workspace_sid"
+}
+`
 }

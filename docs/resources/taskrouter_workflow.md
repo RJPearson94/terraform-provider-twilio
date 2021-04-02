@@ -26,16 +26,14 @@ resource "twilio_taskrouter_task_queue" "task_queue" {
 resource "twilio_taskrouter_workflow" "workflow" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
   friendly_name = "Test Workflow"
-  configuration = <<EOF
-{
-  "task_routing": {
-    "filters": [],
-    "default_filter": {
-      "queue": "${twilio_taskrouter_task_queue.task_queue.sid}"
+  configuration = jsonencode({
+    "task_routing" : {
+      "filters" : [],
+      "default_filter" : {
+        "queue" : twilio_taskrouter_task_queue.task_queue.sid
+      }
     }
-  }
-}
-EOF
+  })
 }
 ```
 
@@ -48,7 +46,7 @@ The following arguments are supported:
 - `configuration` - (Mandatory) JSON string of workflow configuration
 - `assignment_callback_url` - (Optional) Assignment callback URL
 - `fallback_assignment_callback_url` - (Optional) Fallback assignment callback URL
-- `task_reservation_timeout` - (Optional) Maximum time the task can be unassigned for before it times out
+- `task_reservation_timeout` - (Optional) Maximum time the task can be unassigned for before it times out. The timeout must be between `1` and `86400` seconds. The default value is `120`
 
 ## Attributes Reference
 

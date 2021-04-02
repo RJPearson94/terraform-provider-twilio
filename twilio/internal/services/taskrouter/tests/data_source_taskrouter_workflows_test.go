@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -9,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-var workflowsDataSourceName = "twilio_taskrouter_workflows"
+const workflowsDataSourceName = "twilio_taskrouter_workflows"
 
 func TestAccDataSourceTwilioTaskRouterWorkflows_basic(t *testing.T) {
 	stateDataSourceName := fmt.Sprintf("data.%s.workflows", workflowsDataSourceName)
@@ -42,36 +43,55 @@ func TestAccDataSourceTwilioTaskRouterWorkflows_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioTaskRouterWorkflows_invalidWorkspaceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioTaskRouterWorkflows_invalidWorkflowSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of workspace_sid to match regular expression "\^WS\[0-9a-fA-F\]\{32\}\$", got workspace_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioTaskRouterWorkflows_basic(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_taskrouter_workspace" "workspace" {
-  friendly_name          = "%s"
+  friendly_name          = "%[1]s"
   multi_task_enabled     = true
   prioritize_queue_order = "FIFO"
 }
 
 resource "twilio_taskrouter_task_queue" "task_queue" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%ss"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_taskrouter_workflow" "workflow" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%s"
-  configuration = <<EOF
-{
-  "task_routing":{
-    "filters": [],
-    "default_filter":{
-      "queue": "${twilio_taskrouter_task_queue.task_queue.sid}"
+  friendly_name = "%[1]s"
+  configuration = jsonencode({
+    "task_routing" : {
+      "filters" : [],
+      "default_filter" : {
+        "queue" : twilio_taskrouter_task_queue.task_queue.sid
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 data "twilio_taskrouter_workflows" "workflows" {
   workspace_sid = twilio_taskrouter_workflow.workflow.workspace_sid
 }
-`, friendlyName, friendlyName, friendlyName)
+`, friendlyName)
+}
+
+func testAccDataSourceTwilioTaskRouterWorkflows_invalidWorkflowSid() string {
+	return `
+data "twilio_taskrouter_workflows" "workflows" {
+  workspace_sid = "workspace_sid"
+}
+`
 }

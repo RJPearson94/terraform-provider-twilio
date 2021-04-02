@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/taskrouter/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_channel"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_channels"
@@ -55,9 +56,10 @@ func resourceTaskRouterTaskChannel() *schema.Resource {
 				Computed: true,
 			},
 			"workspace_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: helper.WorkspaceSidValidation(),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,
@@ -71,7 +73,7 @@ func resourceTaskRouterTaskChannel() *schema.Resource {
 			"channel_optimized_routing": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  false,
 			},
 			"date_created": {
 				Type:     schema.TypeString,

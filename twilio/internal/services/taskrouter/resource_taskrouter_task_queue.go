@@ -7,11 +7,13 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/taskrouter/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_queue"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_queues"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceTaskRouterTaskQueue() *schema.Resource {
@@ -55,47 +57,57 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 				Computed: true,
 			},
 			"workspace_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: helper.WorkspaceSidValidation(),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"event_callback_url": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"assignment_activity_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"assignment_activity_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: helper.ActivitySidValidation(),
 			},
 			"reservation_activity_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"reservation_activity_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: helper.ActivitySidValidation(),
 			},
 			"max_reserved_workers": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeInt,
+				Optional:     true,
+				Default:      1,
+				ValidateFunc: validation.IntBetween(1, 50),
 			},
 			"target_workers": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "1==1",
 			},
 			"task_order": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				Default:  "FIFO",
+				ValidateFunc: validation.StringInSlice([]string{
+					"LIFO",
+					"FIFO",
+				}, false),
 			},
 			"date_created": {
 				Type:     schema.TypeString,

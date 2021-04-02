@@ -10,7 +10,7 @@ func OptionalString(d *schema.ResourceData, key string) *string {
 	if v, ok := d.GetOk(key); ok {
 		return sdkUtils.String(v.(string))
 	}
-	return nil
+	return defaultToEmptyStringIfChanged(d, key)
 }
 
 func OptionalJSONString(d *schema.ResourceData, key string) *string {
@@ -19,14 +19,14 @@ func OptionalJSONString(d *schema.ResourceData, key string) *string {
 		normalizedJSON, _ := structure.NormalizeJsonString(v.(string))
 		return sdkUtils.String(normalizedJSON)
 	}
-	return nil
+	return defaultToEmptyStringIfChanged(d, key)
 }
 
 func OptionalSeperatedString(d *schema.ResourceData, key string, separator string) *string {
 	if v, ok := d.GetOk(key); ok {
 		return sdkUtils.String(ConvertSliceToSeperatedString(v.([]interface{}), separator))
 	}
-	return nil
+	return defaultToEmptyStringIfChanged(d, key)
 }
 
 func OptionalStringSlice(d *schema.ResourceData, key string) *[]string {
@@ -47,6 +47,16 @@ func OptionalInt(d *schema.ResourceData, key string) *int {
 func OptionalBool(d *schema.ResourceData, key string) *bool {
 	if v, ok := d.GetOkExists(key); ok {
 		return sdkUtils.Bool(v.(bool))
+	}
+	return nil
+}
+
+// defaultToEmptyStringIfChanged caters for the scenario where Terraform previously had a value
+// but it has since been removed for the terraform configuration, so setting this to an empty
+// string to force the value to be unset in Twilio
+func defaultToEmptyStringIfChanged(d *schema.ResourceData, key string) *string {
+	if ok := d.HasChange(key); ok {
+		return sdkUtils.String("")
 	}
 	return nil
 }

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/taskrouter/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -21,8 +22,9 @@ func dataSourceTaskRouterWorkspace() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: helper.WorkspaceSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,
@@ -101,7 +103,7 @@ func dataSourceTaskRouterWorkspaceRead(ctx context.Context, d *schema.ResourceDa
 	d.Set("friendly_name", getResponse.FriendlyName)
 	d.Set("event_callback_url", getResponse.EventCallbackURL)
 
-	if getResponse.EventsFilter != nil {
+	if getResponse.EventsFilter != nil && *getResponse.EventsFilter != "" {
 		d.Set("event_filters", strings.Split(*getResponse.EventsFilter, ","))
 	}
 

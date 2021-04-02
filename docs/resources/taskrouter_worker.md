@@ -9,6 +9,8 @@ Manages a TaskRouter worker. See the [API docs](https://www.twilio.com/docs/task
 
 For more information on TaskRouter, see the product [page](https://www.twilio.com/taskrouter)
 
+!> Removing the `activity_sid` from you configuration will cause the SID to be set to workpace default activity SID
+
 ## Example Usage
 
 ```hcl
@@ -30,7 +32,7 @@ The following arguments are supported:
 
 - `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the worker with. Changing this forces a new resource to be created
 - `friendly_name` - (Mandatory) The name of the worker
-- `attributes` - (Optional) JSON string of worker attributes
+- `attributes` - (Optional) JSON string of worker attributes. The default value is `{}`
 - `activity_sid` - (Optional) Activity SID to be assigned to the worker
 
 ## Attributes Reference

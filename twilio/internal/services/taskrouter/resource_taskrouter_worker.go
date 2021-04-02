@@ -7,9 +7,11 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/taskrouter/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/worker"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/workers"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
@@ -57,23 +59,25 @@ func resourceTaskRouterWorker() *schema.Resource {
 				Computed: true,
 			},
 			"workspace_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: helper.WorkspaceSidValidation(),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"activity_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: helper.ActivitySidValidation(),
 			},
 			"attributes": {
 				Type:             schema.TypeString,
 				Optional:         true,
-				Computed:         true,
+				Default:          "{}",
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
@@ -161,9 +165,14 @@ func resourceTaskRouterWorkerRead(ctx context.Context, d *schema.ResourceData, m
 func resourceTaskRouterWorkerUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
 
+	workerActivitySid, workerActivitySidErr := optionalWorkerActivitySid(ctx, d, meta)
+	if workerActivitySidErr != nil {
+		return workerActivitySidErr
+	}
+
 	updateInput := &worker.UpdateWorkerInput{
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
-		ActivitySid:  utils.OptionalString(d, "activity_sid"),
+		ActivitySid:  workerActivitySid,
 		Attributes:   utils.OptionalJSONString(d, "attributes"),
 	}
 
@@ -184,4 +193,19 @@ func resourceTaskRouterWorkerDelete(ctx context.Context, d *schema.ResourceData,
 	}
 	d.SetId("")
 	return nil
+}
+
+func optionalWorkerActivitySid(ctx context.Context, d *schema.ResourceData, meta interface{}) (*string, diag.Diagnostics) {
+	activitySidSchemaKey := "activity_sid"
+	if v, ok := d.GetOk(activitySidSchemaKey); ok {
+		return sdkUtils.String(v.(string)), nil
+	}
+	if ok := d.HasChange(activitySidSchemaKey); ok {
+		getResponse, err := meta.(*common.TwilioClient).TaskRouter.Workspace(d.Get("workspace_sid").(string)).FetchWithContext(ctx)
+		if err != nil {
+			return nil, diag.Errorf("Failed to read taskrouter workspace to get default activity sid for worker: %s", err.Error())
+		}
+		return sdkUtils.String(getResponse.DefaultActivitySid), nil
+	}
+	return nil, nil
 }
