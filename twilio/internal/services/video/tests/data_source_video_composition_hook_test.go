@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -15,27 +16,26 @@ func TestAccDataSourceTwilioVideoCompositionHook_basic(t *testing.T) {
 	stateDataSourceName := fmt.Sprintf("data.%s.composition_hook", compositionHookDataSourceName)
 	friendlyName := acctest.RandString(10)
 	audioSource := "*"
-	format := "mp4"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceTwilioAccountCompositionHook_basic(friendlyName, audioSource, format),
+				Config: testAccDataSourceTwilioAccountCompositionHook_basic(friendlyName, audioSource),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(stateDataSourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateDataSourceName, "audio_sources.#", "1"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "audio_sources.0", audioSource),
-					resource.TestCheckResourceAttr(stateDataSourceName, "format", format),
+					resource.TestCheckResourceAttr(stateDataSourceName, "format", "webm"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateDataSourceName, "audio_sources_excluded.#"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "audio_sources_excluded.#", "0"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "enabled"),
-					resource.TestCheckResourceAttrSet(stateDataSourceName, "resolution"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "resolution", "640x480"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "status_callback_url", ""),
-					resource.TestCheckResourceAttrSet(stateDataSourceName, "status_callback_method"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "status_callback_method", "POST"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "trim"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "video_layout", ""),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_created"),
@@ -47,16 +47,36 @@ func TestAccDataSourceTwilioVideoCompositionHook_basic(t *testing.T) {
 	})
 }
 
-func testAccDataSourceTwilioAccountCompositionHook_basic(friendlyName string, audio_source string, format string) string {
+func TestAccDataSourceTwilioAccountCompositionHook_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAccountCompositionHook_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^HK\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
+func testAccDataSourceTwilioAccountCompositionHook_basic(friendlyName string, audio_source string) string {
 	return fmt.Sprintf(`
 resource "twilio_video_composition_hook" "composition_hook" {
   friendly_name = "%s"
   audio_sources = ["%s"]
-  format        = "%s"
 }
 
 data "twilio_video_composition_hook" "composition_hook" {
   sid = twilio_video_composition_hook.composition_hook.sid
 }
-`, friendlyName, audio_source, format)
+`, friendlyName, audio_source)
+}
+
+func testAccDataSourceTwilioAccountCompositionHook_invalidSid() string {
+	return `
+data "twilio_video_composition_hook" "composition_hook" {
+  sid = "sid"
+}
+`
 }

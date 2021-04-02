@@ -19,7 +19,6 @@ func TestAccTwilioVideoCompositionHook_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.composition_hook", compositionHookResourceName)
 	friendlyName := acctest.RandString(10)
 	audioSource := "*"
-	format := "mp4"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -27,21 +26,21 @@ func TestAccTwilioVideoCompositionHook_basic(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource, format),
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.0", audioSource),
-					resource.TestCheckResourceAttr(stateResourceName, "format", format),
+					resource.TestCheckResourceAttr(stateResourceName, "format", "webm"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "audio_sources_excluded.#", "0"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "enabled"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "resolution"),
+					resource.TestCheckResourceAttr(stateResourceName, "resolution", "640x480"),
 					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "status_callback_method"),
+					resource.TestCheckResourceAttr(stateResourceName, "status_callback_method", "POST"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "trim"),
 					resource.TestCheckResourceAttr(stateResourceName, "video_layout", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -64,7 +63,6 @@ func TestAccTwilioVideoCompositionHook_update(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 	newFriendlyName := acctest.RandString(10)
 	audioSource := "*"
-	format := "mp4"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -72,13 +70,13 @@ func TestAccTwilioVideoCompositionHook_update(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource, format),
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.0", audioSource),
-					resource.TestCheckResourceAttr(stateResourceName, "format", format),
+					resource.TestCheckResourceAttr(stateResourceName, "format", "webm"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
@@ -95,13 +93,13 @@ func TestAccTwilioVideoCompositionHook_update(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccTwilioVideoCompositionHook_basic(newFriendlyName, audioSource, format),
+				Config: testAccTwilioVideoCompositionHook_basic(newFriendlyName, audioSource),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.0", audioSource),
-					resource.TestCheckResourceAttr(stateResourceName, "format", format),
+					resource.TestCheckResourceAttr(stateResourceName, "format", "webm"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
@@ -125,7 +123,6 @@ func TestAccTwilioVideoCompositionHook_videoLayout(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.composition_hook", compositionHookResourceName)
 	friendlyName := acctest.RandString(10)
 	audioSource := "*"
-	format := "mp4"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -133,26 +130,17 @@ func TestAccTwilioVideoCompositionHook_videoLayout(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioVideoCompositionHook_videoLayout(friendlyName, audioSource, format),
+				Config: testAccTwilioVideoCompositionHook_videoLayout(friendlyName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.#", "1"),
-					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.0", audioSource),
-					resource.TestCheckResourceAttr(stateResourceName, "format", format),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "audio_sources_excluded.#", "0"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "enabled"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "resolution"),
-					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "status_callback_method"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "trim"),
 					resource.TestCheckResourceAttr(stateResourceName, "video_layout", "{\"grid\":{\"cells_excluded\":[],\"height\":null,\"max_columns\":null,\"max_rows\":null,\"reuse\":\"show_oldest\",\"video_sources\":[\"*\"],\"video_sources_excluded\":[],\"width\":null,\"x_pos\":0,\"y_pos\":0,\"z_pos\":0}}"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckNoResourceAttr(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "video_layout", ""),
 				),
 			},
 		},
@@ -162,7 +150,6 @@ func TestAccTwilioVideoCompositionHook_videoLayout(t *testing.T) {
 func TestAccTwilioVideoCompositionHook_invalidVideoLayout(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 	audioSource := "*"
-	format := "mp4"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -170,8 +157,44 @@ func TestAccTwilioVideoCompositionHook_invalidVideoLayout(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config:      testAccTwilioVideoCompositionHook_invalidVideoLayout(friendlyName, audioSource, format),
+				Config:      testAccTwilioVideoCompositionHook_invalidVideoLayout(friendlyName, audioSource),
 				ExpectError: regexp.MustCompile(`(?s)"video_layout" contains an invalid JSON`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioVideoCompositionHook_format(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.composition_hook", compositionHookResourceName)
+	friendlyName := acctest.RandString(10)
+	audioSource := "*"
+	newFormat := "mp4"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "format", "webm"),
+				),
+			},
+			{
+				Config: testAccTwilioVideoCompositionHook_format(friendlyName, audioSource, newFormat),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "format", newFormat),
+				),
+			},
+			{
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "format", "webm"),
+				),
 			},
 		},
 	})
@@ -188,8 +211,62 @@ func TestAccTwilioVideoCompositionHook_invalidFormat(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config:      testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource, format),
+				Config:      testAccTwilioVideoCompositionHook_format(friendlyName, audioSource, format),
 				ExpectError: regexp.MustCompile(`(?s)expected format to be one of \[mp4 webm\], got test`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioVideoCompositionHook_resolution(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.composition_hook", compositionHookResourceName)
+	friendlyName := acctest.RandString(10)
+	audioSource := "*"
+	newResolution := "1080x720"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "resolution", "640x480"),
+				),
+			},
+			{
+				Config: testAccTwilioVideoCompositionHook_resolution(friendlyName, audioSource, newResolution),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "resolution", newResolution),
+				),
+			},
+			{
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "resolution", "640x480"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioVideoCompositionHook_invalidResolution(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	audioSource := "*"
+	resolution := "HD"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioVideoCompositionHook_resolution(friendlyName, audioSource, resolution),
+				ExpectError: regexp.MustCompile(`(?s)expected value of resolution to match regular expression "\^\(\\\\d\)\+x\(\\\\d\)\+\$", got HD`),
 			},
 		},
 	})
@@ -199,7 +276,6 @@ func TestAccTwilioVideoCompositionHook_statusCallback(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.composition_hook", compositionHookResourceName)
 	friendlyName := acctest.RandString(10)
 	audioSource := "*"
-	format := "mp4"
 	callbackURL := "https://test.com/callback"
 	callbackMethod := "POST"
 
@@ -209,26 +285,27 @@ func TestAccTwilioVideoCompositionHook_statusCallback(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioVideoCompositionHook_statusCallback(friendlyName, audioSource, format, callbackURL, callbackMethod),
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.#", "1"),
-					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.0", audioSource),
-					resource.TestCheckResourceAttr(stateResourceName, "format", format),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "audio_sources_excluded.#", "0"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "enabled"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "resolution"),
+					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "status_callback_method", "POST"),
+				),
+			},
+			{
+				Config: testAccTwilioVideoCompositionHook_statusCallback(friendlyName, audioSource, callbackURL, callbackMethod),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", callbackURL),
 					resource.TestCheckResourceAttr(stateResourceName, "status_callback_method", callbackMethod),
-					resource.TestCheckResourceAttrSet(stateResourceName, "trim"),
-					resource.TestCheckResourceAttr(stateResourceName, "video_layout", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckNoResourceAttr(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "status_callback_method", "POST"),
 				),
 			},
 		},
@@ -238,7 +315,6 @@ func TestAccTwilioVideoCompositionHook_statusCallback(t *testing.T) {
 func TestAccTwilioVideoCompositionHook_invalidStatusCallbackURL(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 	audioSource := "*"
-	format := "mp4"
 	callbackURL := "test"
 	callbackMethod := "POST"
 
@@ -248,7 +324,7 @@ func TestAccTwilioVideoCompositionHook_invalidStatusCallbackURL(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config:      testAccTwilioVideoCompositionHook_statusCallback(friendlyName, audioSource, format, callbackURL, callbackMethod),
+				Config:      testAccTwilioVideoCompositionHook_statusCallback(friendlyName, audioSource, callbackURL, callbackMethod),
 				ExpectError: regexp.MustCompile(`(?s)expected "status_callback_url" to have a host, got test`),
 			},
 		},
@@ -258,7 +334,6 @@ func TestAccTwilioVideoCompositionHook_invalidStatusCallbackURL(t *testing.T) {
 func TestAccTwilioVideoCompositionHook_invalidStatusCallbackMethod(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 	audioSource := "*"
-	format := "mp4"
 	callbackURL := "https://test.com/callback"
 	callbackMethod := "test"
 
@@ -268,8 +343,106 @@ func TestAccTwilioVideoCompositionHook_invalidStatusCallbackMethod(t *testing.T)
 		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config:      testAccTwilioVideoCompositionHook_statusCallback(friendlyName, audioSource, format, callbackURL, callbackMethod),
+				Config:      testAccTwilioVideoCompositionHook_statusCallback(friendlyName, audioSource, callbackURL, callbackMethod),
 				ExpectError: regexp.MustCompile(`(?s)expected status_callback_method to be one of \[GET POST\], got test`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioVideoCompositionHook_enabled(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.composition_hook", compositionHookResourceName)
+	friendlyName := acctest.RandString(10)
+	audioSource := "*"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "enabled", "true"),
+				),
+			},
+			{
+				Config: testAccTwilioVideoCompositionHook_enabledFalse(friendlyName, audioSource),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "enabled", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "enabled", "true"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioVideoCompositionHook_swapAudioSourcesForVideoLayout(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.composition_hook", compositionHookResourceName)
+	friendlyName := acctest.RandString(10)
+	audioSource := "*"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.0", "*"),
+					resource.TestCheckResourceAttr(stateResourceName, "video_layout", ""),
+				),
+			},
+			{
+				Config: testAccTwilioVideoCompositionHook_videoLayout(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "audio_sources.#", "0"),
+					resource.TestCheckResourceAttr(stateResourceName, "video_layout", "{\"grid\":{\"cells_excluded\":[],\"height\":null,\"max_columns\":null,\"max_rows\":null,\"reuse\":\"show_oldest\",\"video_sources\":[\"*\"],\"video_sources_excluded\":[],\"width\":null,\"x_pos\":0,\"y_pos\":0,\"z_pos\":0}}"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioVideoCompositionHook_swapAudioSourcesExcludedForVideoLayout(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.composition_hook", compositionHookResourceName)
+	friendlyName := acctest.RandString(10)
+	audioSource := "*"
+	excludedAudioSource := "test"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioVideoCompositionHookDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioVideoCompositionHook_audioSourcesExcluded(friendlyName, audioSource, excludedAudioSource),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "audio_sources_excluded.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "audio_sources_excluded.0", excludedAudioSource),
+					resource.TestCheckResourceAttr(stateResourceName, "video_layout", ""),
+				),
+			},
+			{
+				Config: testAccTwilioVideoCompositionHook_videoLayout(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVideoCompositionHookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "audio_sources_excluded.#", "0"),
+					resource.TestCheckResourceAttr(stateResourceName, "video_layout", "{\"grid\":{\"cells_excluded\":[],\"height\":null,\"max_columns\":null,\"max_rows\":null,\"reuse\":\"show_oldest\",\"video_sources\":[\"*\"],\"video_sources_excluded\":[],\"width\":null,\"x_pos\":0,\"y_pos\":0,\"z_pos\":0}}"),
+				),
 			},
 		},
 	})
@@ -323,22 +496,29 @@ func testAccTwilioVideoCompositionHookImportStateIdFunc(name string) resource.Im
 	}
 }
 
-func testAccTwilioVideoCompositionHook_basic(friendlyName string, audio_source string, format string) string {
+func testAccTwilioVideoCompositionHook_basic(friendlyName string, audioSource string) string {
 	return fmt.Sprintf(`
 resource "twilio_video_composition_hook" "composition_hook" {
   friendly_name = "%s"
   audio_sources = ["%s"]
-  format        = "%s"
 }
-`, friendlyName, audio_source, format)
+`, friendlyName, audioSource)
 }
 
-func testAccTwilioVideoCompositionHook_videoLayout(friendlyName string, audio_source string, format string) string {
+func testAccTwilioVideoCompositionHook_format(friendlyName string, audioSource string, format string) string {
 	return fmt.Sprintf(`
 resource "twilio_video_composition_hook" "composition_hook" {
   friendly_name = "%s"
   audio_sources = ["%s"]
   format        = "%s"
+}
+`, friendlyName, audioSource, format)
+}
+
+func testAccTwilioVideoCompositionHook_videoLayout(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_video_composition_hook" "composition_hook" {
+  friendly_name = "%s"
   video_layout = jsonencode({
     "grid" : {
       "cells_excluded" : [],
@@ -355,28 +535,56 @@ resource "twilio_video_composition_hook" "composition_hook" {
     }
   })
 }
-`, friendlyName, audio_source, format)
+`, friendlyName)
 }
 
-func testAccTwilioVideoCompositionHook_invalidVideoLayout(friendlyName string, audio_source string, format string) string {
+func testAccTwilioVideoCompositionHook_audioSourcesExcluded(friendlyName string, audioSource string, excludedAudioSource string) string {
 	return fmt.Sprintf(`
 resource "twilio_video_composition_hook" "composition_hook" {
   friendly_name = "%s"
   audio_sources = ["%s"]
-  format        = "%s"
-  video_layout  = "test"
+  audio_sources_excluded = ["%s"]
 }
-`, friendlyName, audio_source, format)
+`, friendlyName, audioSource, excludedAudioSource)
 }
 
-func testAccTwilioVideoCompositionHook_statusCallback(friendlyName string, audio_source string, format string, callbackURL string, callbackMethod string) string {
+func testAccTwilioVideoCompositionHook_invalidVideoLayout(friendlyName string, audioSource string) string {
+	return fmt.Sprintf(`
+resource "twilio_video_composition_hook" "composition_hook" {
+  friendly_name = "%s"
+  audio_sources = ["%s"]
+  video_layout  = "test"
+}
+`, friendlyName, audioSource)
+}
+
+func testAccTwilioVideoCompositionHook_statusCallback(friendlyName string, audioSource string, callbackURL string, callbackMethod string) string {
 	return fmt.Sprintf(`
 resource "twilio_video_composition_hook" "composition_hook" {
   friendly_name          = "%s"
   audio_sources          = ["%s"]
-  format                 = "%s"
   status_callback_url    = "%s"
   status_callback_method = "%s"
 }
-`, friendlyName, audio_source, format, callbackURL, callbackMethod)
+`, friendlyName, audioSource, callbackURL, callbackMethod)
+}
+
+func testAccTwilioVideoCompositionHook_resolution(friendlyName string, audioSource string, resolution string) string {
+	return fmt.Sprintf(`
+resource "twilio_video_composition_hook" "composition_hook" {
+  friendly_name = "%s"
+  audio_sources = ["%s"]
+  resolution = "%s"
+}
+`, friendlyName, audioSource, resolution)
+}
+
+func testAccTwilioVideoCompositionHook_enabledFalse(friendlyName string, audioSource string) string {
+	return fmt.Sprintf(`
+resource "twilio_video_composition_hook" "composition_hook" {
+  friendly_name = "%s"
+  audio_sources = ["%s"]
+  enabled = false
+}
+`, friendlyName, audioSource)
 }

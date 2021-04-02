@@ -24,12 +24,12 @@ The following arguments are supported:
 - `friendly_name` - (Mandatory) The friendly name of the composition hook
 - `audio_sources` - (Optional) A list of audio sources to include in the compositions
 - `audio_sources_excluded` - (Optional) A List of audio sources to exclude from the compositions
-- `enabled` - (Optional) Whether the composition hook is enabled
-- `format` - (Optional) The media file format of the compositions. Valid values are `mp4` or `webm`
-- `resolution` - (Optional) The pixel dimensions for the video
+- `enabled` - (Optional) Whether the composition hook is enabled. The default value is `true`
+- `format` - (Optional) The media file format of the compositions. Valid values are `mp4` or `webm`. The default value is `webm`
+- `resolution` - (Optional) The pixel dimensions for the video. The value must be in the format `{height in pixels}x{width in pixels}`. The default value is `640x480`
 - `status_callback_url` - (Optional) The URL to call on each status change
-- `status_callback_method` - (Optional) The HTTP method should be used to call the status callback URL. Valid values are `GET` or `POST`
-- `trim` - (Optional) Whether sections with no audio or media content should be trimmed from the composition
+- `status_callback_method` - (Optional) The HTTP method should be used to call the status callback URL. Valid values are `GET` or `POST`. The default value is `POST`
+- `trim` - (Optional) Whether sections with no audio or media content should be trimmed from the composition. The default value is `true`
 - `video_layout` - (Optional) JSON string of the composition video layout
 
 ## Attributes Reference
