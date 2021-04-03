@@ -142,7 +142,7 @@ func resourceSIPDomain() *schema.Resource {
 			"byoc_trunk_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: helper.ByocSidValidation(),
+				ValidateFunc: utils.ByocSidValidation(),
 			},
 			"secure": {
 				Type:     schema.TypeBool,

@@ -22,7 +22,7 @@ func dataSourceSIPCredentialList() *schema.Resource {
 			"sid": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: utils.CredentialListSidValidation(),
+				ValidateFunc: utils.SIPCredentialListSidValidation(),
 			},
 			"account_sid": {
 				Type:         schema.TypeString,

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/sip/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -28,7 +27,7 @@ func dataSourceSIPDomainCredentialListMappings() *schema.Resource {
 			"domain_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: helper.DomainSidValidation(),
+				ValidateFunc: utils.SIPDomainSidValidation(),
 			},
 			"credential_list_mappings": {
 				Type:     schema.TypeList,

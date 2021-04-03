@@ -23,7 +23,7 @@ func dataSourceSIPDomain() *schema.Resource {
 			"sid": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: helper.DomainSidValidation(),
+				ValidateFunc: utils.SIPDomainSidValidation(),
 			},
 			"account_sid": {
 				Type:         schema.TypeString,

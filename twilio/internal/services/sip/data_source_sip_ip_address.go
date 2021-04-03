@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/sip/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -23,7 +22,7 @@ func dataSourceSIPIPAddress() *schema.Resource {
 			"sid": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: helper.IPAddressSidValidation(),
+				ValidateFunc: utils.SIPIPAddressSidValidation(),
 			},
 			"account_sid": {
 				Type:         schema.TypeString,
@@ -33,7 +32,7 @@ func dataSourceSIPIPAddress() *schema.Resource {
 			"ip_access_control_list_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: utils.IPAccessControlListSidValidation(),
+				ValidateFunc: utils.SIPIPAccessControlListSidValidation(),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,

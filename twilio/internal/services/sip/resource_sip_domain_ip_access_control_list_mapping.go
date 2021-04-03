@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/sip/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/sip/domain/auth/calls/ip_access_control_list_mappings"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -59,13 +58,13 @@ func resourceSIPDomainIPAccessControlListMapping() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
-				ValidateFunc: helper.DomainSidValidation(),
+				ValidateFunc: utils.SIPDomainSidValidation(),
 			},
 			"ip_access_control_list_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
-				ValidateFunc: utils.IPAccessControlListSidValidation(),
+				ValidateFunc: utils.SIPIPAccessControlListSidValidation(),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,

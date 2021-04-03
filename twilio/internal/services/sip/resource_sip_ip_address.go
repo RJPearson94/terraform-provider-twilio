@@ -62,7 +62,7 @@ func resourceSIPIPAddress() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
-				ValidateFunc: utils.IPAccessControlListSidValidation(),
+				ValidateFunc: utils.SIPIPAccessControlListSidValidation(),
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,

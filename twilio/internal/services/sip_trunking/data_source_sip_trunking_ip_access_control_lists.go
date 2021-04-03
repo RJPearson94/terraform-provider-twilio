@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/sip_trunking/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -23,7 +22,7 @@ func dataSourceSIPTrunkingIPAccessControlLists() *schema.Resource {
 			"trunk_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: helper.TrunkSidValidation(),
+				ValidateFunc: utils.SIPTrunkSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,

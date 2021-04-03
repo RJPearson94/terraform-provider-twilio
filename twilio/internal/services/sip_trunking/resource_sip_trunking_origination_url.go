@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/sip_trunking/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/trunking/v1/trunk/origination_url"
 	"github.com/RJPearson94/twilio-sdk-go/service/trunking/v1/trunk/origination_urls"
@@ -60,7 +59,7 @@ func resourceSIPTrunkingOriginationURL() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
-				ValidateFunc: helper.TrunkSidValidation(),
+				ValidateFunc: utils.SIPTrunkSidValidation(),
 			},
 			"enabled": {
 				Type:     schema.TypeBool,

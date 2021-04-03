@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/taskrouter/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_queue"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/task_queues"
@@ -60,7 +59,7 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
-				ValidateFunc: helper.WorkspaceSidValidation(),
+				ValidateFunc: utils.TaskRouterWorkspaceSidValidation(),
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
@@ -79,7 +78,7 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 			"assignment_activity_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: helper.ActivitySidValidation(),
+				ValidateFunc: utils.TaskRouterActivitySidValidation(),
 			},
 			"reservation_activity_name": {
 				Type:     schema.TypeString,
@@ -88,7 +87,7 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 			"reservation_activity_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: helper.ActivitySidValidation(),
+				ValidateFunc: utils.TaskRouterActivitySidValidation(),
 			},
 			"max_reserved_workers": {
 				Type:         schema.TypeInt,

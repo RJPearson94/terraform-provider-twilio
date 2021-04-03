@@ -56,7 +56,7 @@ func resourceSIPTrunkingPhoneNumber() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
-				ValidateFunc: helper.TrunkSidValidation(),
+				ValidateFunc: utils.SIPTrunkSidValidation(),
 			},
 			"phone_number_sid": {
 				Type:         schema.TypeString,

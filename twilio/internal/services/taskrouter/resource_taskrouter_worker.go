@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/taskrouter/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/worker"
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/workers"
@@ -62,7 +61,7 @@ func resourceTaskRouterWorker() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
-				ValidateFunc: helper.WorkspaceSidValidation(),
+				ValidateFunc: utils.TaskRouterWorkspaceSidValidation(),
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
@@ -73,7 +72,7 @@ func resourceTaskRouterWorker() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Computed:     true,
-				ValidateFunc: helper.ActivitySidValidation(),
+				ValidateFunc: utils.TaskRouterActivitySidValidation(),
 			},
 			"attributes": {
 				Type:             schema.TypeString,

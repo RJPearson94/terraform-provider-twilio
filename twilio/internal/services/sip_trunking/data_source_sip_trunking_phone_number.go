@@ -32,7 +32,7 @@ func dataSourceSIPTrunkingPhoneNumber() *schema.Resource {
 			"trunk_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: helper.TrunkSidValidation(),
+				ValidateFunc: utils.SIPTrunkSidValidation(),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,

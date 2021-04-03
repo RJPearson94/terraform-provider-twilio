@@ -62,7 +62,7 @@ func resourceSIPCredential() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
-				ValidateFunc: utils.CredentialListSidValidation(),
+				ValidateFunc: utils.SIPCredentialListSidValidation(),
 			},
 			"username": {
 				Type:         schema.TypeString,

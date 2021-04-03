@@ -22,7 +22,7 @@ func dataSourceSIPIPAccessControlList() *schema.Resource {
 			"sid": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: utils.IPAccessControlListSidValidation(),
+				ValidateFunc: utils.SIPIPAccessControlListSidValidation(),
 			},
 			"account_sid": {
 				Type:         schema.TypeString,
