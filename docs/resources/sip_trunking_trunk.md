@@ -21,21 +21,21 @@ resource "twilio_sip_trunking_trunk" "trunk" {
 
 The following arguments are supported:
 
-- `cnam_lookup_enabled` - (Optional) Whether Caller ID Name is enabled on the SIP trunk
+- `cnam_lookup_enabled` - (Optional) Whether Caller ID Name is enabled on the SIP trunk. The default value is `false`
 - `disaster_recovery_url` - (Optional) The URL to call in event of disaster recovery.Valid values are `POST` or `GET`
 - `disaster_recovery_method` - (Optional) The HTTP method which should be used to call the disaster recovery URL
 - `domain_name` - (Optional) The domain name of the SIP trunk
-- `friendly_name` - (Optional) The friendly name of the SIP trunk
+- `friendly_name` - (Optional) The friendly name of the SIP trunk. The length of the string must be between `1` and `64` characters (inclusive)
 - `recording` - (Optional) A `recording` block as documented below
-- `secure` - (Optional) Whether secure trunking is enabled on the SIP trunk
-- `transfer_mode` - (Optional) The call transfer configuration on the SIP trunk
+- `secure` - (Optional) Whether secure trunking is enabled on the SIP trunk. The default value is `false`
+- `transfer_mode` - (Optional) The call transfer configuration on the SIP trunk. Valid values are `enable-all`, `sip-only` or `disable-all`. The default value is `disable-all`
 
 ---
 
 A `recording` block supports the following:
 
-- `mode` - (Optional) The recording mode configuration for the SIP trunk. Valid values are `do-not-record`, `record-from-ringing`, `record-from-answer`, `record-from-ringing-dual` or `record-from-answer-dual`
-- `trim` - (Optional) The recording trim configuration for the SIP trunk. Valid values are `trim-silence` or `do-not-trim`
+- `mode` - (Optional) The recording mode configuration for the SIP trunk. Valid values are `do-not-record`, `record-from-ringing`, `record-from-answer`, `record-from-ringing-dual` or `record-from-answer-dual`. The default value is `do-not-record`
+- `trim` - (Optional) The recording trim configuration for the SIP trunk. Valid values are `trim-silence` or `do-not-trim`. The default value is `do-not-trim`
 
 ## Attributes Reference
 

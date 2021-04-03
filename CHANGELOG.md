@@ -1,5 +1,11 @@
 ## v0.9.0 (unreleased)
 
+NOTES
+
+- The deprecated `sid` argument on the `twilio_sip_trunking_phone_number` resources has now been removed and the `phone_number_sid` argument has now become mandatory.
+
+FEATURES
+
 - **New Data Source:** `twilio_video_composition_hook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/video_composition_hook.md)
 - **New Resource:** `twilio_video_composition_hook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/video_composition_hook.md)
 

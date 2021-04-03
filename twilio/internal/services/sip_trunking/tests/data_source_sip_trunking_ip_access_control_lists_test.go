@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -9,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-var ipAccessControlListsDataSourceName = "twilio_sip_trunking_ip_access_control_lists"
+const ipAccessControlListsDataSourceName = "twilio_sip_trunking_ip_access_control_lists"
 
 func TestAccDataSourceTwilioSIPTrunkingIPAccessControlLists_basic(t *testing.T) {
 	stateDataSourceName := fmt.Sprintf("data.%s.ip_access_control_lists", ipAccessControlListsDataSourceName)
@@ -39,6 +40,19 @@ func TestAccDataSourceTwilioSIPTrunkingIPAccessControlLists_basic(t *testing.T) 
 	})
 }
 
+func TestAccDataSourceTwilioSIPTrunkingIPAccessControlLists_invalidTrunkSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioSIPTrunkingIPAccessControlLists_invalidTrunkSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of trunk_sid to match regular expression "\^TK\[0-9a-fA-F\]\{32\}\$", got trunk_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioSIPTrunkingIPAccessControlLists_basic(testData *acceptance.TestData, friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_sip_ip_access_control_list" "ip_access_control_list" {
@@ -57,4 +71,12 @@ data "twilio_sip_trunking_ip_access_control_lists" "ip_access_control_lists" {
   trunk_sid = twilio_sip_trunking_ip_access_control_list.ip_access_control_list.trunk_sid
 }
 `, testData.AccountSid, friendlyName)
+}
+
+func testAccDataSourceTwilioSIPTrunkingIPAccessControlLists_invalidTrunkSid() string {
+	return `
+data "twilio_sip_trunking_ip_access_control_lists" "ip_access_control_lists" {
+  trunk_sid = "trunk_sid"
+}
+`
 }

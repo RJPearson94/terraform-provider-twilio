@@ -7,11 +7,13 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/sip_trunking/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/trunking/v1/trunk/origination_url"
 	"github.com/RJPearson94/twilio-sdk-go/service/trunking/v1/trunk/origination_urls"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceSIPTrunkingOriginationURL() *schema.Resource {
@@ -55,9 +57,10 @@ func resourceSIPTrunkingOriginationURL() *schema.Resource {
 				Computed: true,
 			},
 			"trunk_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: helper.TrunkSidValidation(),
 			},
 			"enabled": {
 				Type:     schema.TypeBool,
@@ -68,16 +71,19 @@ func resourceSIPTrunkingOriginationURL() *schema.Resource {
 				Required: true,
 			},
 			"priority": {
-				Type:     schema.TypeInt,
-				Required: true,
+				Type:         schema.TypeInt,
+				Required:     true,
+				ValidateFunc: validation.IntBetween(0, 65535),
 			},
 			"sip_url": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringMatch(regexp.MustCompile("^sip:.+$"), ""),
 			},
 			"weight": {
-				Type:     schema.TypeInt,
-				Required: true,
+				Type:         schema.TypeInt,
+				Required:     true,
+				ValidateFunc: validation.IntBetween(0, 65535),
 			},
 			"date_created": {
 				Type:     schema.TypeString,

@@ -45,28 +45,24 @@ func resourceSIPTrunkingPhoneNumber() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Computed:     true,
-				ForceNew:     true,
-				Deprecated:   "Using SID as an input argument is deprecated and support will be removed in a future version of the provider. Please use `phone_number_sid` instead",
-				ExactlyOneOf: []string{"sid", "phone_number_sid"},
+				Type:     schema.TypeString,
+				Computed: true,
 			},
 			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"trunk_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: helper.TrunkSidValidation(),
 			},
 			"phone_number_sid": {
 				Type:         schema.TypeString,
-				Optional:     true,
-				Computed:     true,
+				Required:     true,
 				ForceNew:     true,
-				ExactlyOneOf: []string{"sid", "phone_number_sid"},
+				ValidateFunc: utils.PhoneNumberSidValidation(),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,
@@ -223,12 +219,8 @@ func resourceSIPTrunkingPhoneNumber() *schema.Resource {
 func resourceSIPTrunkingPhoneNumberCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).SIPTrunking
 
-	createInput := &phone_numbers.CreatePhoneNumberInput{}
-
-	if v, ok := d.GetOk("phone_number_sid"); ok {
-		createInput.PhoneNumberSid = v.(string)
-	} else {
-		createInput.PhoneNumberSid = d.Get("sid").(string)
+	createInput := &phone_numbers.CreatePhoneNumberInput{
+		PhoneNumberSid: d.Get("phone_number_sid").(string),
 	}
 
 	createResult, err := client.Trunk(d.Get("trunk_sid").(string)).PhoneNumbers.CreateWithContext(ctx, createInput)

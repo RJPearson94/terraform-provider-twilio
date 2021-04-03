@@ -25,11 +25,7 @@ resource "twilio_sip_trunking_phone_number" "phone_number" {
 The following arguments are supported:
 
 - `trunk_sid` - (Mandatory) The trunk SID to associate the phone number with. Changing this forces a new resource to be created
-- `sid` - (Optional) The phone number SID to associate the resource with. Changing this forces a new resource to be created
-- `phone_number_sid` - (Optional) The phone number SID to associate the resource with. Changing this forces a new resource to be created
-
-!> `sid` input argument is deprecated, please use `phone_number_sid` instead
-~> Either `sid` or `phone_number_sid` need to be specified
+- `phone_number_sid` - (Mandatory) The phone number SID to associate the resource with. Changing this forces a new resource to be created
 
 ## Attributes Reference
 

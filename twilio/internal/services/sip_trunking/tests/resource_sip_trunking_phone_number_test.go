@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -11,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-var phoneNumberResourceName = "twilio_sip_trunking_phone_number"
+const phoneNumberResourceName = "twilio_sip_trunking_phone_number"
 
 func TestAccTwilioSIPTrunkingPhoneNumber_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.phone_number", phoneNumberResourceName)
@@ -93,6 +94,32 @@ func testAccCheckTwilioSIPTrunkingPhoneNumberExists(name string) resource.TestCh
 	}
 }
 
+func TestAccDataSourceTwilioSIPTrunkingTrunk_invalidTrunkSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingPhoneNumber_invalidTrunkSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of trunk_sid to match regular expression "\^TK\[0-9a-fA-F\]\{32\}\$", got trunk_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioSIPTrunkingTrunk_invalidPhoneNumberSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingPhoneNumber_invalidPhoneNumberSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of phone_number_sid to match regular expression "\^PN\[0-9a-fA-F\]\{32\}\$", got phone_number_sid`),
+			},
+		},
+	})
+}
+
 func testAccTwilioSIPTrunkingPhoneNumberImportStateIdFunc(name string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		rs, ok := s.RootModule().Resources[name]
@@ -110,7 +137,25 @@ resource "twilio_sip_trunking_trunk" "trunk" {}
 
 resource "twilio_sip_trunking_phone_number" "phone_number" {
   trunk_sid = twilio_sip_trunking_trunk.trunk.sid
-  sid       = "%s"
+  phone_number_sid       = "%s"
 }
 `, testData.PhoneNumberSid)
+}
+
+func testAccTwilioSIPTrunkingPhoneNumber_invalidTrunkSid() string {
+	return `
+resource "twilio_sip_trunking_phone_number" "phone_number" {
+  trunk_sid = "trunk_sid"
+  phone_number_sid       = "PNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccTwilioSIPTrunkingPhoneNumber_invalidPhoneNumberSid() string {
+	return `
+resource "twilio_sip_trunking_phone_number" "phone_number" {
+  trunk_sid = "TKaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  phone_number_sid       = "phone_number_sid"
+}
+`
 }

@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -44,6 +45,32 @@ func TestAccTwilioSIPTrunkingCredentialList_basic(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: testAccTwilioSIPTrunkingCredentialListImportStateIdFunc(stateResourceName),
 				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingCredentialList_invalidTrunkSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingCredentialList_invalidTrunkSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of trunk_sid to match regular expression "\^TK\[0-9a-fA-F\]\{32\}\$", got trunk_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingCredentialList_invalidCredentialListSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingCredentialList_invalidCredentialListSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of credential_list_sid to match regular expression "\^CL\[0-9a-fA-F\]\{32\}\$", got credential_list_sid`),
 			},
 		},
 	})
@@ -111,4 +138,22 @@ resource "twilio_sip_trunking_credential_list" "credential_list" {
   credential_list_sid = twilio_sip_credential_list.credential_list.sid
 }
 `, testData.AccountSid, friendlyName)
+}
+
+func testAccTwilioSIPTrunkingCredentialList_invalidTrunkSid() string {
+	return `
+resource "twilio_sip_trunking_credential_list" "credential_list" {
+  trunk_sid           = "trunk_sid"
+  credential_list_sid = "CLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccTwilioSIPTrunkingCredentialList_invalidCredentialListSid() string {
+	return `
+resource "twilio_sip_trunking_credential_list" "credential_list" {
+  trunk_sid           = "TKaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  credential_list_sid = "credential_list_sid"
+}
+`
 }

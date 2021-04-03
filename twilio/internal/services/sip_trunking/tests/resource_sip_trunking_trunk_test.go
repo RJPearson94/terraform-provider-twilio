@@ -13,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-var trunkResourceName = "twilio_sip_trunking_trunk"
+const trunkResourceName = "twilio_sip_trunking_trunk"
 
 func TestAccTwilioSIPTrunkingTrunk_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.trunk", trunkResourceName)
@@ -28,16 +28,16 @@ func TestAccTwilioSIPTrunkingTrunk_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "cnam_lookup_enabled"),
+					resource.TestCheckResourceAttr(stateResourceName, "cnam_lookup_enabled", "false"),
 					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_method", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_url", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "domain_name", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "recording.#"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.0.mode"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.0.trim"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.mode", "do-not-record"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.trim", "do-not-trim"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "transfer_mode"),
+					resource.TestCheckResourceAttr(stateResourceName, "transfer_mode", "disable-all"),
 					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "auth_type_set.#"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
@@ -52,147 +52,6 @@ func TestAccTwilioSIPTrunkingTrunk_basic(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: testAccTwilioSIPTrunkingTrunkImportStateIdFunc(stateResourceName),
 				ImportStateVerify: true,
-			},
-		},
-	})
-}
-
-func TestAccTwilioSIPTrunkingTrunk_recording(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.trunk", trunkResourceName)
-
-	mode := "record-from-answer"
-	trim := "trim-silence"
-
-	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccTwilioSIPTrunkingTrunk_recording(mode, trim),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "cnam_lookup_enabled"),
-					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_method", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_url", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "domain_name", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.#"),
-					resource.TestCheckResourceAttr(stateResourceName, "recording.0.mode", mode),
-					resource.TestCheckResourceAttr(stateResourceName, "recording.0.trim", trim),
-					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "transfer_mode"),
-					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "auth_type_set.#"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
-				),
-			},
-		},
-	})
-}
-
-func TestAccTwilioSIPTrunkingTrunk_recordingUpdate(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.trunk", trunkResourceName)
-
-	mode := "record-from-answer"
-	trim := "trim-silence"
-
-	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccTwilioSIPTrunkingTrunk_basic(),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "cnam_lookup_enabled"),
-					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_method", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_url", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "domain_name", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.#"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.0.mode"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.0.trim"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "transfer_mode"),
-					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "auth_type_set.#"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
-				),
-			},
-			{
-				Config: testAccTwilioSIPTrunkingTrunk_recording(mode, trim),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "cnam_lookup_enabled"),
-					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_method", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_url", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "domain_name", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.#"),
-					resource.TestCheckResourceAttr(stateResourceName, "recording.0.mode", mode),
-					resource.TestCheckResourceAttr(stateResourceName, "recording.0.trim", trim),
-					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "transfer_mode"),
-					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "auth_type_set.#"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
-				),
-			},
-		},
-	})
-}
-
-func TestAccTwilioSIPTrunkingTrunk_disasterRecovery(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.trunk", trunkResourceName)
-
-	method := "POST"
-	url := "https://test.com/disaster-recovery"
-
-	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccTwilioSIPTrunkingTrunk_disasterRecovery(method, url),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "cnam_lookup_enabled"),
-					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_method", method),
-					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_url", url),
-					resource.TestCheckResourceAttr(stateResourceName, "domain_name", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.#"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.0.mode"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.0.trim"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "transfer_mode"),
-					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "auth_type_set.#"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
-				),
 			},
 		},
 	})
@@ -219,10 +78,10 @@ func TestAccTwilioSIPTrunkingTrunk_update(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "domain_name", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "recording.#"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.0.mode"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.0.trim"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.mode", "do-not-record"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.trim", "do-not-trim"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "transfer_mode"),
+					resource.TestCheckResourceAttr(stateResourceName, "transfer_mode", "disable-all"),
 					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "auth_type_set.#"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
@@ -243,10 +102,10 @@ func TestAccTwilioSIPTrunkingTrunk_update(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_url", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "domain_name", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "recording.#"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.0.mode"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "recording.0.trim"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.mode", "do-not-record"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.trim", "do-not-trim"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "transfer_mode"),
+					resource.TestCheckResourceAttr(stateResourceName, "transfer_mode", "disable-all"),
 					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "auth_type_set.#"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
@@ -254,6 +113,57 @@ func TestAccTwilioSIPTrunkingTrunk_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingTrunk_recording(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.trunk", trunkResourceName)
+
+	mode := "record-from-answer"
+	trim := "trim-silence"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.mode", "do-not-record"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.trim", "do-not-trim"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_recording(mode, trim),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.mode", mode),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.trim", trim),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_emptyRecordingBlock(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.mode", "do-not-record"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.trim", "do-not-trim"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.mode", "do-not-record"),
+					resource.TestCheckResourceAttr(stateResourceName, "recording.0.trim", "do-not-trim"),
 				),
 			},
 		},
@@ -292,6 +202,45 @@ func TestAccTwilioSIPTrunkingTrunk_invalidRecordingTrim(t *testing.T) {
 	})
 }
 
+func TestAccTwilioSIPTrunkingTrunk_disasterRecovery(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.trunk", trunkResourceName)
+
+	method := "POST"
+	url := "https://test.com/disaster-recovery"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_method", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_url", ""),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_disasterRecovery(method, url),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_method", method),
+					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_url", url),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_method", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_url", ""),
+				),
+			},
+		},
+	})
+}
+
 func TestAccTwilioSIPTrunkingTrunk_invalidDisasterRecoveryMethod(t *testing.T) {
 	method := "DELETE"
 	url := "http://localhost/disaster-recovery"
@@ -319,6 +268,195 @@ func TestAccTwilioSIPTrunkingTrunk_invalidDisasterRecoveryURL(t *testing.T) {
 			{
 				Config:      testAccTwilioSIPTrunkingTrunk_disasterRecovery(method, url),
 				ExpectError: regexp.MustCompile(`(?s)expected "disaster_recovery_url" to have a host, got testURL`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingTrunk_friendlyName(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.trunk", trunkResourceName)
+
+	friendlyName := acctest.RandString(1)
+	newFriendlyName := acctest.RandString(64)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_friendlyName(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_friendlyName(newFriendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingTrunk_invalidFriendlyNameWithLengthOf0(t *testing.T) {
+	friendlyName := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingTrunk_friendlyName(friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 64\), got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingTrunk_invalidFriendlyNameWithLengthOf65(t *testing.T) {
+	friendlyName := "7y80krlx0npe98jtdhahyvx8jvfz09x21x226uxj8gowkun6dgl2p1xj819qjzgtt"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingTrunk_friendlyName(friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 64\), got 7y80krlx0npe98jtdhahyvx8jvfz09x21x226uxj8gowkun6dgl2p1xj819qjzgtt`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingTrunk_secure(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.trunk", trunkResourceName)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "secure", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_secureTrue(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "secure", "true"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "secure", "false"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingTrunk_transferMode(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.trunk", trunkResourceName)
+
+	newTransferMode := "sip-only"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "transfer_mode", "disable-all"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_transferMode(newTransferMode),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "transfer_mode", newTransferMode),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "transfer_mode", "disable-all"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingTrunk_invalidTransferMode(t *testing.T) {
+	transferMode := "test"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingTrunk_transferMode(transferMode),
+				ExpectError: regexp.MustCompile(`(?s)expected transfer_mode to be one of \[enable-all sip-only disable-all\], got test`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingTrunk_cnamLookupEnabled(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.trunk", trunkResourceName)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "cnam_lookup_enabled", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_cnamLookupEnabledTrue(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "cnam_lookup_enabled", "true"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingTrunk_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "cnam_lookup_enabled", "false"),
+				),
 			},
 		},
 	})
@@ -389,6 +527,14 @@ resource "twilio_sip_trunking_trunk" "trunk" {
 `, mode, trim)
 }
 
+func testAccTwilioSIPTrunkingTrunk_emptyRecordingBlock() string {
+	return `
+resource "twilio_sip_trunking_trunk" "trunk" {
+  recording {}
+}
+`
+}
+
 func testAccTwilioSIPTrunkingTrunk_disasterRecovery(method string, url string) string {
 	return fmt.Sprintf(`
 resource "twilio_sip_trunking_trunk" "trunk" {
@@ -404,4 +550,28 @@ resource "twilio_sip_trunking_trunk" "trunk" {
   friendly_name = "%s"
 }
 `, friendlyName)
+}
+
+func testAccTwilioSIPTrunkingTrunk_secureTrue() string {
+	return `
+resource "twilio_sip_trunking_trunk" "trunk" {
+  secure = true
+}
+`
+}
+
+func testAccTwilioSIPTrunkingTrunk_transferMode(transferMode string) string {
+	return fmt.Sprintf(`
+resource "twilio_sip_trunking_trunk" "trunk" {
+  transfer_mode = "%s"
+}
+`, transferMode)
+}
+
+func testAccTwilioSIPTrunkingTrunk_cnamLookupEnabledTrue() string {
+	return `
+resource "twilio_sip_trunking_trunk" "trunk" {
+	cnam_lookup_enabled = true
+}
+`
 }

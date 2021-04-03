@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -20,7 +21,7 @@ func TestAccDataSourceTwilioSIPTrunkingPhoneNumbers_complete(t *testing.T) {
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioSIPTrunkingPhoneNumbers_complete(testData),
+				Config: testAccDataSourceTwilioSIPTrunkingPhoneNumbers_complete(testData),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "account_sid"),
@@ -46,17 +47,38 @@ func TestAccDataSourceTwilioSIPTrunkingPhoneNumbers_complete(t *testing.T) {
 	})
 }
 
-func testAccTwilioSIPTrunkingPhoneNumbers_complete(testData *acceptance.TestData) string {
+func TestAccDataSourceTwilioSIPTrunkingPhoneNumbers_invalidTrunkSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioSIPTrunkingPhoneNumbers_invalidTrunkSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of trunk_sid to match regular expression "\^TK\[0-9a-fA-F\]\{32\}\$", got trunk_sid`),
+			},
+		},
+	})
+}
+
+func testAccDataSourceTwilioSIPTrunkingPhoneNumbers_complete(testData *acceptance.TestData) string {
 	return fmt.Sprintf(`
 resource "twilio_sip_trunking_trunk" "trunk" {}
 
 resource "twilio_sip_trunking_phone_number" "phone_number" {
   trunk_sid = twilio_sip_trunking_trunk.trunk.sid
-  sid       = "%s"
+  phone_number_sid       = "%s"
 }
 
 data "twilio_sip_trunking_phone_numbers" "phone_numbers" {
   trunk_sid = twilio_sip_trunking_phone_number.phone_number.trunk_sid
 }
 `, testData.PhoneNumberSid)
+}
+
+func testAccDataSourceTwilioSIPTrunkingPhoneNumbers_invalidTrunkSid() string {
+	return `
+data "twilio_sip_trunking_phone_numbers" "phone_numbers" {
+  trunk_sid = "trunk_sid"
+}
+`
 }

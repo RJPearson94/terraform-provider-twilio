@@ -36,9 +36,7 @@ func (config *Config) Client() (interface{}, diag.Diagnostics) {
 	}
 
 	sess := session.New(creds)
-	sdkConfig := &client.Config{
-		// DebugEnabled: utils.Bool(true),
-	}
+	sdkConfig := &client.Config{}
 
 	client := &common.TwilioClient{
 		AccountSid:       config.AccountSid,

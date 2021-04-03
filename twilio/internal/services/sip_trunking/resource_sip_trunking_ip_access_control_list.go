@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/sip_trunking/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/trunking/v1/trunk/ip_access_control_lists"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -52,14 +53,16 @@ func resourceSIPTrunkingIPAccessControlList() *schema.Resource {
 				Computed: true,
 			},
 			"trunk_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: helper.TrunkSidValidation(),
 			},
 			"ip_access_control_list_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.IPAccessControlListSidValidation(),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,

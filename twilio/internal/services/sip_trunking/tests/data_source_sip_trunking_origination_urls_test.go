@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"testing"
 
@@ -10,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-var originationURLsDataSourceName = "twilio_sip_trunking_origination_urls"
+const originationURLsDataSourceName = "twilio_sip_trunking_origination_urls"
 
 func TestAccDataSourceTwilioSIPTrunkingOriginationURLs_complete(t *testing.T) {
 	stateDataSourceName := fmt.Sprintf("data.%s.origination_urls", originationURLsDataSourceName)
@@ -26,7 +27,7 @@ func TestAccDataSourceTwilioSIPTrunkingOriginationURLs_complete(t *testing.T) {
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioSIPTrunkingOriginationURLs_complete(friendlyName, enabled, priority, sipURL, weight),
+				Config: testAccDataSourceTwilioSIPTrunkingOriginationURLs_complete(friendlyName, enabled, priority, sipURL, weight),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "account_sid"),
@@ -47,7 +48,20 @@ func TestAccDataSourceTwilioSIPTrunkingOriginationURLs_complete(t *testing.T) {
 	})
 }
 
-func testAccTwilioSIPTrunkingOriginationURLs_complete(friendlyName string, enabled bool, priority int, sipURL string, weight int) string {
+func TestAccDataSourceTwilioSIPTrunkingOriginationURLs_invalidTrunkSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioSIPTrunkingOriginationURLs_invalidTrunkSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of trunk_sid to match regular expression "\^TK\[0-9a-fA-F\]\{32\}\$", got trunk_sid`),
+			},
+		},
+	})
+}
+
+func testAccDataSourceTwilioSIPTrunkingOriginationURLs_complete(friendlyName string, enabled bool, priority int, sipURL string, weight int) string {
 	return fmt.Sprintf(`
 resource "twilio_sip_trunking_trunk" "trunk" {}
 
@@ -64,4 +78,12 @@ data "twilio_sip_trunking_origination_urls" "origination_urls" {
   trunk_sid = twilio_sip_trunking_origination_url.origination_url.trunk_sid
 }
 `, friendlyName, enabled, priority, sipURL, weight)
+}
+
+func testAccDataSourceTwilioSIPTrunkingOriginationURLs_invalidTrunkSid() string {
+	return `
+data "twilio_sip_trunking_origination_urls" "origination_urls" {
+  trunk_sid = "trunk_sid"
+}
+`
 }

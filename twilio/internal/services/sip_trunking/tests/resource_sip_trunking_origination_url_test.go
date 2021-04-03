@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"testing"
 
@@ -112,6 +113,180 @@ func TestAccTwilioSIPTrunkingOriginationURL_update(t *testing.T) {
 	})
 }
 
+func TestAccTwilioSIPTrunkingOriginationURL_priority(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.origination_url", originationURLResourceName)
+
+	friendlyName := acctest.RandString(10)
+	weight := 0
+	priority := 0
+	newPriority := 65535
+	enabled := false
+	sipURL := "sip:test@test.com"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioSIPTrunkingOriginationURLDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioSIPTrunkingOriginationURL_basic(friendlyName, enabled, priority, sipURL, weight),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingOriginationURLExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "priority", strconv.Itoa(priority)),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingOriginationURL_basic(friendlyName, enabled, newPriority, sipURL, weight),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingOriginationURLExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "priority", strconv.Itoa(newPriority)),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingOriginationURL_invalidPriorityOf0(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	weight := 0
+	priority := -1
+	enabled := false
+	sipURL := "sip:test@test.com"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingOriginationURL_basic(friendlyName, enabled, priority, sipURL, weight),
+				ExpectError: regexp.MustCompile(`(?s)expected priority to be in the range \(0 - 65535\), got -1`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingOriginationURL_invalidPriorityOf65536(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	weight := 0
+	priority := 65536
+	enabled := false
+	sipURL := "sip:test@test.com"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingOriginationURL_basic(friendlyName, enabled, priority, sipURL, weight),
+				ExpectError: regexp.MustCompile(`(?s)expected priority to be in the range \(0 - 65535\), got 65536`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingOriginationURL_weight(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.origination_url", originationURLResourceName)
+
+	friendlyName := acctest.RandString(10)
+	weight := 0
+	priority := 0
+	newWeight := 65535
+	enabled := false
+	sipURL := "sip:test@test.com"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioSIPTrunkingOriginationURLDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioSIPTrunkingOriginationURL_basic(friendlyName, enabled, priority, sipURL, weight),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingOriginationURLExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "weight", strconv.Itoa(weight)),
+				),
+			},
+			{
+				Config: testAccTwilioSIPTrunkingOriginationURL_basic(friendlyName, enabled, priority, sipURL, newWeight),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPTrunkingOriginationURLExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "weight", strconv.Itoa(newWeight)),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingOriginationURL_invalidWeightOf0(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	priority := 0
+	weight := -1
+	enabled := false
+	sipURL := "sip:test@test.com"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingOriginationURL_basic(friendlyName, enabled, priority, sipURL, weight),
+				ExpectError: regexp.MustCompile(`(?s)expected weight to be in the range \(0 - 65535\), got -1`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingOriginationURL_invalidWeightOf65536(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	priority := 0
+	weight := 65536
+	enabled := false
+	sipURL := "sip:test@test.com"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingOriginationURL_basic(friendlyName, enabled, priority, sipURL, weight),
+				ExpectError: regexp.MustCompile(`(?s)expected weight to be in the range \(0 - 65535\), got 65536`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingOriginationURL_invalidSipURL(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	priority := 0
+	weight := 0
+	enabled := false
+	sipURL := "test.com"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingOriginationURL_basic(friendlyName, enabled, priority, sipURL, weight),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sip_url to match regular expression "\^sip:\.\+\$", got test\.com`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPTrunkingOriginationURL_invalidTrunkSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingOriginationURL_invalidTrunkSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of trunk_sid to match regular expression "\^TK\[0-9a-fA-F\]\{32\}\$", got trunk_sid`),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioSIPTrunkingOriginationURLDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).SIPTrunking
 
@@ -173,4 +348,17 @@ resource "twilio_sip_trunking_origination_url" "origination_url" {
   weight        = %d
 }
 `, friendlyName, enabled, priority, sipURL, weight)
+}
+
+func testAccTwilioSIPTrunkingOriginationURL_invalidTrunkSid() string {
+	return `
+resource "twilio_sip_trunking_origination_url" "origination_url" {
+  trunk_sid     = "trunk_sid"
+  friendly_name = "invalid_trunk_sid"
+  enabled       = false
+  priority      = 0
+  sip_url       = "sip:test@test.com"
+  weight        = 0
+}
+`
 }

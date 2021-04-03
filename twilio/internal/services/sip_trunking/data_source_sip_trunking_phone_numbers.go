@@ -21,8 +21,9 @@ func dataSourceSIPTrunkingPhoneNumbers() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"trunk_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: helper.TrunkSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,

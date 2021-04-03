@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -19,19 +20,19 @@ func TestAccDataSourceTwilioSIPTrunkingTrunk_complete(t *testing.T) {
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioSIPTrunkingTrunk_complete(testData),
+				Config: testAccDataSourceTwilioSIPTrunkingTrunk_complete(testData),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateDataSourceName, "cnam_lookup_enabled"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "cnam_lookup_enabled", "false"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "disaster_recovery_method", ""),
 					resource.TestCheckResourceAttr(stateDataSourceName, "disaster_recovery_url", ""),
 					resource.TestCheckResourceAttr(stateDataSourceName, "domain_name", ""),
 					resource.TestCheckResourceAttr(stateDataSourceName, "friendly_name", ""),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "recording.#"),
-					resource.TestCheckResourceAttrSet(stateDataSourceName, "recording.0.mode"),
-					resource.TestCheckResourceAttrSet(stateDataSourceName, "recording.0.trim"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "recording.0.mode", "do-not-record"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "recording.0.trim", "do-not-trim"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateDataSourceName, "transfer_mode"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "transfer_mode", "disable-all"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "auth_type", ""),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "auth_type_set.#"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "sid"),
@@ -45,12 +46,33 @@ func TestAccDataSourceTwilioSIPTrunkingTrunk_complete(t *testing.T) {
 	})
 }
 
-func testAccTwilioSIPTrunkingTrunk_complete(testData *acceptance.TestData) string {
+func TestAccDataSourceTwilioSIPTrunkingTrunk_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioSIPTrunkingTrunk_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^TK\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
+func testAccDataSourceTwilioSIPTrunkingTrunk_complete(testData *acceptance.TestData) string {
 	return `
 resource "twilio_sip_trunking_trunk" "trunk" {}
 
 data "twilio_sip_trunking_trunk" "trunk" {
 	sid = twilio_sip_trunking_trunk.trunk.sid
+}
+`
+}
+
+func testAccDataSourceTwilioSIPTrunkingTrunk_invalidSid() string {
+	return `
+data "twilio_sip_trunking_trunk" "trunk" {
+  sid       = "sid"
 }
 `
 }

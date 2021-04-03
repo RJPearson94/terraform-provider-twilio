@@ -31,9 +31,9 @@ The following arguments are supported:
 - `trunk_sid` - (Mandatory) The trunk SID to associate the origination URL with. Changing this forces a new resource to be created
 - `enabled` - (Mandatory) Whether the origination URL is enabled
 - `friendly_name` - (Mandatory) The friendly name of the origination URL
-- `priority` - (Mandatory) The priority/ importance of the origination URL
-- `sip_url` - (Mandatory) The SIP address to route origination calls to
-- `weight` - (Mandatory) The weight/ share which is used to determine where the traffic is routed with origination URL of the same priority
+- `priority` - (Mandatory) The priority/ importance of the origination URL. The value must be between `0` and `65535` (inclusive)
+- `sip_url` - (Mandatory) The SIP address to route origination calls to. The SIP address must start with `sip:`
+- `weight` - (Mandatory) The weight/ share which is used to determine where the traffic is routed with origination URL of the same priority. The value must be between `0` and `65535` (inclusive)
 
 ## Attributes Reference
 

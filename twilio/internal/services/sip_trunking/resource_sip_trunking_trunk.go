@@ -59,12 +59,11 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 			"cnam_lookup_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  false,
 			},
 			"disaster_recovery_method": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"GET",
 					"POST",
@@ -80,8 +79,9 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 				Optional: true,
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringLenBetween(1, 64),
 			},
 			"recording": {
 				Type:     schema.TypeList,
@@ -93,7 +93,7 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 						"mode": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "do-not-record",
 							ValidateFunc: validation.StringInSlice([]string{
 								"do-not-record",
 								"record-from-ringing",
@@ -105,7 +105,7 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 						"trim": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "do-not-trim",
 							ValidateFunc: validation.StringInSlice([]string{
 								"trim-silence",
 								"do-not-trim",
@@ -117,12 +117,17 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 			"secure": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  false,
 			},
 			"transfer_mode": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				Default:  "disable-all",
+				ValidateFunc: validation.StringInSlice([]string{
+					"enable-all",
+					"sip-only",
+					"disable-all",
+				}, false),
 			},
 			"auth_type": {
 				Type:     schema.TypeString,
@@ -250,7 +255,7 @@ func resourceSIPTrunkingTrunkDelete(ctx context.Context, d *schema.ResourceData,
 }
 
 func updateRecording(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	if !d.HasChanges("recording", "recording.0.trim", "recording.0.mode") {
+	if !d.HasChanges("recording.#", "recording.0.trim", "recording.0.mode") {
 		return nil
 	}
 
