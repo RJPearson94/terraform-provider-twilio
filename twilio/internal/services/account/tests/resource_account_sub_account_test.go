@@ -205,7 +205,7 @@ resource "twilio_account_sub_account" "sub_account" {
 func testAccTwilioAccountSubAccount_status(status string) string {
 	return fmt.Sprintf(`
 resource "twilio_account_sub_account" "sub_account" {
-	status = "%s"
+  status = "%s"
 }
 `, status)
 }

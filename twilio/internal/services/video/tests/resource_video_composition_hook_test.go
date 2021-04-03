@@ -557,8 +557,8 @@ resource "twilio_video_composition_hook" "composition_hook" {
 func testAccTwilioVideoCompositionHook_audioSourcesExcluded(friendlyName string, audioSource string, excludedAudioSource string) string {
 	return fmt.Sprintf(`
 resource "twilio_video_composition_hook" "composition_hook" {
-  friendly_name = "%s"
-  audio_sources = ["%s"]
+  friendly_name          = "%s"
+  audio_sources          = ["%s"]
   audio_sources_excluded = ["%s"]
 }
 `, friendlyName, audioSource, excludedAudioSource)
@@ -590,7 +590,7 @@ func testAccTwilioVideoCompositionHook_resolution(friendlyName string, audioSour
 resource "twilio_video_composition_hook" "composition_hook" {
   friendly_name = "%s"
   audio_sources = ["%s"]
-  resolution = "%s"
+  resolution    = "%s"
 }
 `, friendlyName, audioSource, resolution)
 }
@@ -600,7 +600,7 @@ func testAccTwilioVideoCompositionHook_enabledFalse(friendlyName string, audioSo
 resource "twilio_video_composition_hook" "composition_hook" {
   friendly_name = "%s"
   audio_sources = ["%s"]
-  enabled = false
+  enabled       = false
 }
 `, friendlyName, audioSource)
 }

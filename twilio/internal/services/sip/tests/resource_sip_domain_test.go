@@ -674,7 +674,7 @@ func testAccTwilioSIPDomain_secureTrue(testData *acceptance.TestData, domainName
 resource "twilio_sip_domain" "domain" {
   account_sid = "%s"
   domain_name = "%s"
-  secure = true
+  secure      = true
 }
 `, testData.AccountSid, domainName)
 }
@@ -682,8 +682,8 @@ resource "twilio_sip_domain" "domain" {
 func testAccTwilioSIPDomain_sipRegistrationTrue(testData *acceptance.TestData, domainName string) string {
 	return fmt.Sprintf(`
 resource "twilio_sip_domain" "domain" {
-  account_sid = "%s"
-  domain_name = "%s"
+  account_sid      = "%s"
+  domain_name      = "%s"
   sip_registration = true
 }
 `, testData.AccountSid, domainName)
