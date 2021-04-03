@@ -9,6 +9,8 @@ Manages a Twilio sub-account. See the [API docs](https://www.twilio.com/docs/iam
 
 ~> Currently only sub-accounts can be created via the API. Parent accounts have to be created via the Twilio console
 
+!> If the `friendly_name` is managed via Terraform and the `friendly_name` is removed from the configuration file. The old value will be retained on the next apply.
+
 ## Example Usage
 
 ```hcl
@@ -21,8 +23,8 @@ resource "twilio_account_sub_account" "sub_account" {
 
 The following arguments are supported:
 
-- `friendly_name` - (Mandatory) The friendly name of the account
-- `status` - (Optional) The status of the account
+- `friendly_name` - (Optional) The friendly name of the account
+- `status` - (Optional) The status of the account. Valid values are `closed`, `suspended` or `active`. The default value is `active`
 
 ## Attributes Reference
 

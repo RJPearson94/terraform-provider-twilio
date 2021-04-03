@@ -20,7 +20,7 @@ func TestAccDataSourceTwilioAccountBalance_complete(t *testing.T) {
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioAccountBalance_complete(testData),
+				Config: testAccDataSourceTwilioAccountBalance_complete(testData),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestMatchResourceAttr(stateDataSourceName, "account_sid", regexp.MustCompile(`^AC(.+)$`)),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "balance"),
@@ -31,10 +31,31 @@ func TestAccDataSourceTwilioAccountBalance_complete(t *testing.T) {
 	})
 }
 
-func testAccTwilioAccountBalance_complete(testData *acceptance.TestData) string {
+func TestAccDataSourceTwilioAccountBalance_invalidAccountSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAccountBalance_invalidAccountSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of account_sid to match regular expression "\^AC\[0-9a-fA-F\]\{32\}\$", got account_sid`),
+			},
+		},
+	})
+}
+
+func testAccDataSourceTwilioAccountBalance_complete(testData *acceptance.TestData) string {
 	return fmt.Sprintf(`
 data "twilio_account_balance" "balance" {
   account_sid = "%s"
 }
 `, testData.AccountSid)
+}
+
+func testAccDataSourceTwilioAccountBalance_invalidAccountSid() string {
+	return `
+data "twilio_account_balance" "balance" {
+  account_sid = "account_sid"
+}
+`
 }

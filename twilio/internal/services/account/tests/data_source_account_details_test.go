@@ -21,7 +21,7 @@ func TestAccDataSourceTwilioAccountDetails_complete(t *testing.T) {
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioAccountDetails_complete(friendlyName),
+				Config: testAccDataSourceTwilioAccountDetails_complete(friendlyName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestMatchResourceAttr(stateDataSourceName, "sid", regexp.MustCompile(`^AC(.+)$`)),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "owner_account_sid"),
@@ -37,8 +37,21 @@ func TestAccDataSourceTwilioAccountDetails_complete(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioAccountDetails_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAccountDetails_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^AC\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 // Create Sub Account to prevent leaking auth token of the parent account
-func testAccTwilioAccountDetails_complete(friendlyName string) string {
+func testAccDataSourceTwilioAccountDetails_complete(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_account_sub_account" "sub_account" {
   friendly_name = "%s"
@@ -48,4 +61,12 @@ data "twilio_account_details" "details" {
   sid = twilio_account_sub_account.sub_account.sid
 }
 `, friendlyName)
+}
+
+func testAccDataSourceTwilioAccountDetails_invalidSid() string {
+	return `
+data "twilio_account_details" "details" {
+  sid = "sid"
+}
+`
 }

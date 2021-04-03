@@ -14,6 +14,7 @@ import (
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceAccountSubAccount() *schema.Resource {
@@ -58,6 +59,7 @@ func resourceAccountSubAccount() *schema.Resource {
 			"friendly_name": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 			},
 			"auth_token": {
 				Type:      schema.TypeString,
@@ -67,7 +69,12 @@ func resourceAccountSubAccount() *schema.Resource {
 			"status": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				Default:  "active",
+				ValidateFunc: validation.StringInSlice([]string{
+					"closed",
+					"suspended",
+					"active",
+				}, false),
 			},
 			"type": {
 				Type:     schema.TypeString,

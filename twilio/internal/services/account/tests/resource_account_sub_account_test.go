@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -16,7 +17,6 @@ var subAccountResourceName = "twilio_account_sub_account"
 
 func TestAccTwilioAccountSubAccount_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.sub_account", subAccountResourceName)
-	friendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -24,14 +24,14 @@ func TestAccTwilioAccountSubAccount_basic(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioAccountSubAccountDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioAccountSubAccount_basic(friendlyName),
+				Config: testAccTwilioAccountSubAccount_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioAccountSubAccountExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "friendly_name"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "owner_account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "status"),
+					resource.TestCheckResourceAttr(stateResourceName, "status", "active"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "type"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "auth_token"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -50,7 +50,6 @@ func TestAccTwilioAccountSubAccount_basic(t *testing.T) {
 
 func TestAccTwilioAccountSubAccount_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.sub_account", subAccountResourceName)
-	friendlyName := acctest.RandString(10)
 	newFriendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -59,14 +58,14 @@ func TestAccTwilioAccountSubAccount_update(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioAccountSubAccountDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioAccountSubAccount_basic(friendlyName),
+				Config: testAccTwilioAccountSubAccount_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioAccountSubAccountExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "friendly_name"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "owner_account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "status"),
+					resource.TestCheckResourceAttr(stateResourceName, "status", "active"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "type"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "auth_token"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -74,19 +73,68 @@ func TestAccTwilioAccountSubAccount_update(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccTwilioAccountSubAccount_basic(newFriendlyName),
+				Config: testAccTwilioAccountSubAccount_friendlyName(newFriendlyName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioAccountSubAccountExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "owner_account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "status"),
+					resource.TestCheckResourceAttr(stateResourceName, "status", "active"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "type"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "auth_token"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAccountSubAccount_status(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.sub_account", subAccountResourceName)
+	newStatus := "suspended"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioAccountSubAccountDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioAccountSubAccount_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAccountSubAccountExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "status", "active"),
+				),
+			},
+			{
+				Config: testAccTwilioAccountSubAccount_status(newStatus),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAccountSubAccountExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "status", newStatus),
+				),
+			},
+			{
+				Config: testAccTwilioAccountSubAccount_basic(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAccountSubAccountExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "status", "active"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAccountSubAccount_invalidStatus(t *testing.T) {
+	status := "test"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAccountSubAccount_status(status),
+				ExpectError: regexp.MustCompile(`(?s)expected status to be one of \[closed suspended active\], got test`),
 			},
 		},
 	})
@@ -140,10 +188,24 @@ func testAccTwilioAccountSubAccountImportStateIdFunc(name string) resource.Impor
 	}
 }
 
-func testAccTwilioAccountSubAccount_basic(friendlyName string) string {
+func testAccTwilioAccountSubAccount_basic() string {
+	return `
+resource "twilio_account_sub_account" "sub_account" {}
+`
+}
+
+func testAccTwilioAccountSubAccount_friendlyName(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_account_sub_account" "sub_account" {
   friendly_name = "%s"
 }
 `, friendlyName)
+}
+
+func testAccTwilioAccountSubAccount_status(status string) string {
+	return fmt.Sprintf(`
+resource "twilio_account_sub_account" "sub_account" {
+	status = "%s"
+}
+`, status)
 }
