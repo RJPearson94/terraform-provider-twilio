@@ -56,8 +56,9 @@ func resourceVideoCompositionHook() *schema.Resource {
 				Computed: true,
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"audio_sources": {
 				Type:     schema.TypeList,

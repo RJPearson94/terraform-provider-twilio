@@ -145,6 +145,19 @@ func TestAccTwilioTaskRouterActivity_invalidWorkspaceSid(t *testing.T) {
 	})
 }
 
+func TestAccTwilioTaskRouterActivity_blankFriendlyName(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterActivity_blankFriendlyName(),
+				ExpectError: regexp.MustCompile(`(?s)expected \"friendly_name\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioTaskRouterActivityDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).TaskRouter
 
@@ -229,6 +242,15 @@ func testAccTwilioTaskRouterActivity_invalidWorkspaceSid() string {
 resource "twilio_taskrouter_activity" "activity" {
   workspace_sid = "workspace_sid"
   friendly_name = "invalid_workspace_sid"
+}
+`
+}
+
+func testAccTwilioTaskRouterActivity_blankFriendlyName() string {
+	return `
+resource "twilio_taskrouter_activity" "activity" {
+  workspace_sid = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  friendly_name = ""
 }
 `
 }

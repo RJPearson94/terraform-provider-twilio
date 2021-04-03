@@ -448,6 +448,22 @@ func TestAccTwilioVideoCompositionHook_swapAudioSourcesExcludedForVideoLayout(t 
 	})
 }
 
+func TestAccTwilioVideoCompositionHook_blankFriendlyName(t *testing.T) {
+	friendlyName := ""
+	audioSource := "*"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioVideoCompositionHook_basic(friendlyName, audioSource),
+				ExpectError: regexp.MustCompile(`(?s)expected \"friendly_name\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioVideoCompositionHookDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Video
 

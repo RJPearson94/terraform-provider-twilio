@@ -64,8 +64,9 @@ func resourceTaskRouterWorkflow() *schema.Resource {
 				ValidateFunc: helper.WorkspaceSidValidation(),
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"fallback_assignment_callback_url": {
 				Type:         schema.TypeString,

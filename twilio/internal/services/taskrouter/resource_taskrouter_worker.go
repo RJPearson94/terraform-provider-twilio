@@ -65,8 +65,9 @@ func resourceTaskRouterWorker() *schema.Resource {
 				ValidateFunc: helper.WorkspaceSidValidation(),
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"activity_sid": {
 				Type:         schema.TypeString,

@@ -30,8 +30,8 @@ resource "twilio_taskrouter_task_channel" "task_channel" {
 The following arguments are supported:
 
 - `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the task channel with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The name of the task channel
-- `unique_name` - (Mandatory) The unique name of the task channel. Changing this forces a new resource to be created
+- `friendly_name` - (Mandatory) The name of the task channel. The value cannot be an empty string
+- `unique_name` - (Mandatory) The unique name of the task channel. The value cannot be an empty string. Changing this forces a new resource to be created
 - `channel_optimized_routing` - (Optional) Whether the task channel should prioritise idle workers. The default value is `false`
 
 ## Attributes Reference

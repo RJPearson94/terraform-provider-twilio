@@ -183,7 +183,7 @@ func TestAccTwilioTaskRouterWorkspace_updateEventCallbackToEmptyList(t *testing.
 				),
 			},
 			{
-				Config: testAccTwilioTaskRouterWorkspace_empyEventCallbackArray(friendlyName, callbackURL),
+				Config: testAccTwilioTaskRouterWorkspace_emptyEventCallbackArray(friendlyName, callbackURL),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioTaskRouterWorkspaceExists(stateResourceName),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
@@ -303,6 +303,19 @@ func TestAccTwilioTaskRouterWorkspace_invalidEventCallbackURL(t *testing.T) {
 	})
 }
 
+func TestAccTwilioTaskRouterWorkspace_blankFriendlyName(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterWorkspace_blankFriendlyName(),
+				ExpectError: regexp.MustCompile(`(?s)expected \"friendly_name\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioTaskRouterWorkspaceDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).TaskRouter
 
@@ -371,7 +384,7 @@ resource "twilio_taskrouter_workspace" "workspace" {
 `, friendlyName, `["`+strings.Join(eventFilters[:], `", "`)+`"]`, callbackURL)
 }
 
-func testAccTwilioTaskRouterWorkspace_empyEventCallbackArray(friendlyName string, callbackURL string) string {
+func testAccTwilioTaskRouterWorkspace_emptyEventCallbackArray(friendlyName string, callbackURL string) string {
 	return fmt.Sprintf(`
 resource "twilio_taskrouter_workspace" "workspace" {
   friendly_name      = "%s"
@@ -388,4 +401,13 @@ resource "twilio_taskrouter_workspace" "workspace" {
   event_filters = %s
 }
 `, friendlyName, `["`+strings.Join(eventFilters[:], `", "`)+`"]`)
+}
+
+func testAccTwilioTaskRouterWorkspace_blankFriendlyName() string {
+	return `
+resource "twilio_taskrouter_workspace" "workspace" {
+  friendly_name = ""
+  event_filters = ["task.created"]
+}
+`
 }

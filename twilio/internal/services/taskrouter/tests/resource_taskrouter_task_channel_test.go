@@ -102,6 +102,32 @@ func TestAccTwilioTaskRouterTaskChannel_update(t *testing.T) {
 	})
 }
 
+func TestAccTwilioTaskRouterTaskChannel_blankFriendlyName(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterTaskChannel_blankFriendlyName(),
+				ExpectError: regexp.MustCompile(`(?s)expected \"friendly_name\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioTaskRouterTaskChannel_blankUniqueName(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioTaskRouterTaskChannel_blankUniqueName(),
+				ExpectError: regexp.MustCompile(`(?s)expected \"unique_name\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
 func TestAccTwilioTaskRouterTaskChannel_invalidWorkspaceSid(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -185,6 +211,26 @@ resource "twilio_taskrouter_task_channel" "task_channel" {
   workspace_sid = "workspace_sid"
   friendly_name = "invalid_workspace_sid"
   unique_name   = "invalid_workspace_sid"
+}
+`
+}
+
+func testAccTwilioTaskRouterTaskChannel_blankFriendlyName() string {
+	return `
+resource "twilio_taskrouter_task_channel" "task_channel" {
+  workspace_sid = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  friendly_name = ""
+  unique_name   = "invalid_friendly_name"
+}
+`
+}
+
+func testAccTwilioTaskRouterTaskChannel_blankUniqueName() string {
+	return `
+resource "twilio_taskrouter_task_channel" "task_channel" {
+  workspace_sid = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  friendly_name = "invalid_unique_name"
+  unique_name   = ""
 }
 `
 }

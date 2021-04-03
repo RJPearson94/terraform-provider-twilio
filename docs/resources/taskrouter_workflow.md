@@ -42,7 +42,7 @@ resource "twilio_taskrouter_workflow" "workflow" {
 The following arguments are supported:
 
 - `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the workflow with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The name of the workflow
+- `friendly_name` - (Mandatory) The name of the workflow. The value cannot be an empty string
 - `configuration` - (Mandatory) JSON string of workflow configuration
 - `assignment_callback_url` - (Optional) Assignment callback URL
 - `fallback_assignment_callback_url` - (Optional) Fallback assignment callback URL

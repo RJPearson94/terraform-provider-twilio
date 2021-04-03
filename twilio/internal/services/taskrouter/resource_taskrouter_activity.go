@@ -13,6 +13,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/activity"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceTaskRouterActivity() *schema.Resource {
@@ -62,8 +63,9 @@ func resourceTaskRouterActivity() *schema.Resource {
 				ValidateFunc: helper.WorkspaceSidValidation(),
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"available": {
 				Type:     schema.TypeBool,

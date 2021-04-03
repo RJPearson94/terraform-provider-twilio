@@ -129,6 +129,22 @@ func TestAccTwilioStudioFlow_update(t *testing.T) {
 	})
 }
 
+func TestAccTwilioStudioFlow_blankFriendlyName(t *testing.T) {
+	friendlyName := ""
+	status := "draft"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioStudioFlow_basic(friendlyName, status),
+				ExpectError: regexp.MustCompile(`(?s)expected \"friendly_name\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioStudioFlowDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Studio
 

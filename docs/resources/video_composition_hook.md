@@ -21,7 +21,7 @@ resource "twilio_video_composition_hook" "composition_hook" {
 
 The following arguments are supported:
 
-- `friendly_name` - (Mandatory) The friendly name of the composition hook
+- `friendly_name` - (Mandatory) The friendly name of the composition hook. The value cannot be an empty string
 - `audio_sources` - (Optional) A list of audio sources to include in the compositions
 - `audio_sources_excluded` - (Optional) A List of audio sources to exclude from the compositions
 - `enabled` - (Optional) Whether the composition hook is enabled. The default value is `true`
