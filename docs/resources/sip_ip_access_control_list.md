@@ -21,7 +21,7 @@ resource "twilio_sip_ip_access_control_list" "ip_access_control_list" {
 The following arguments are supported:
 
 - `account_sid` - (Mandatory) The account SID to associate the IP access control list with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The friendly name of the IP access control list
+- `friendly_name` - (Mandatory) The friendly name of the IP access control list. The value cannot be an empty string
 
 ## Attributes Reference
 

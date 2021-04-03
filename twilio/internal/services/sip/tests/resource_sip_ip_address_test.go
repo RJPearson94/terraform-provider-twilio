@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -33,7 +34,7 @@ func TestAccTwilioSIPIPAddress_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "ip_address", ipAddress),
-					resource.TestCheckResourceAttrSet(stateResourceName, "cidr_length_prefix"),
+					resource.TestCheckResourceAttr(stateResourceName, "cidr_length_prefix", "32"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "ip_access_control_list_sid"),
@@ -57,7 +58,7 @@ func TestAccTwilioSIPIPAddress_update(t *testing.T) {
 	testData := acceptance.TestAccData
 	friendlyName := acctest.RandString(10)
 	ipAddress := "127.0.0.1"
-	newCidrLengthPrefix := 8
+	newIPAddress := "0.0.0.0"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -71,7 +72,7 @@ func TestAccTwilioSIPIPAddress_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "ip_address", ipAddress),
-					resource.TestCheckResourceAttrSet(stateResourceName, "cidr_length_prefix"),
+					resource.TestCheckResourceAttr(stateResourceName, "cidr_length_prefix", "32"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "ip_access_control_list_sid"),
@@ -80,19 +81,100 @@ func TestAccTwilioSIPIPAddress_update(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccTwilioSIPIPAddress_cidrLengthPrefix(testData, friendlyName, ipAddress, newCidrLengthPrefix),
+				Config: testAccTwilioSIPIPAddress_basic(testData, friendlyName, newIPAddress),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioSIPIPAddressExists(stateResourceName),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "ip_address", ipAddress),
-					resource.TestCheckResourceAttr(stateResourceName, "cidr_length_prefix", "8"),
+					resource.TestCheckResourceAttr(stateResourceName, "ip_address", newIPAddress),
+					resource.TestCheckResourceAttr(stateResourceName, "cidr_length_prefix", "32"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "ip_access_control_list_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPIPAddress_cidrLengthPrefix(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.ip_address", ipAddressResourceName)
+
+	testData := acceptance.TestAccData
+	friendlyName := acctest.RandString(10)
+	ipAddress := "127.0.0.1"
+	newCidrLengthPrefix := 8
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioSIPIPAddressDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioSIPIPAddress_basic(testData, friendlyName, ipAddress),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPIPAddressExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "cidr_length_prefix", "32"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPIPAddress_cidrLengthPrefix(testData, friendlyName, ipAddress, newCidrLengthPrefix),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPIPAddressExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "cidr_length_prefix", "8"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPIPAddress_basic(testData, friendlyName, ipAddress),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPIPAddressExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "cidr_length_prefix", "32"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPIPAddress_blankFriendlyName(t *testing.T) {
+	testData := acceptance.TestAccData
+	friendlyName := ""
+	ipAddress := "127.0.0.1"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPIPAddress_basic(testData, friendlyName, ipAddress),
+				ExpectError: regexp.MustCompile(`(?s)expected \"friendly_name\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPIPAddress_invalidAccountSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPIPAddress_invalidAccountSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of account_sid to match regular expression "\^AC\[0-9a-fA-F\]\{32\}\$", got account_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPIPAddress_invalidIPAccessControlListSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPIPAddress_invalidIPAccessControlListSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of ip_access_control_list_sid to match regular expression "\^AL\[0-9a-fA-F\]\{32\}\$", got ip_access_control_list_sid`),
 			},
 		},
 	})
@@ -149,32 +231,54 @@ func testAccTwilioSIPIPAddressImportStateIdFunc(name string) resource.ImportStat
 func testAccTwilioSIPIPAddress_basic(testData *acceptance.TestData, friendlyName string, ipAddress string) string {
 	return fmt.Sprintf(`
 resource "twilio_sip_ip_access_control_list" "ip_access_control_list" {
-  account_sid   = "%s"
-  friendly_name = "%s"
+  account_sid   = "%[1]s"
+  friendly_name = "%[2]s"
 }
 
 resource "twilio_sip_ip_address" "ip_address" {
   account_sid                = twilio_sip_ip_access_control_list.ip_access_control_list.account_sid
   ip_access_control_list_sid = twilio_sip_ip_access_control_list.ip_access_control_list.sid
-  friendly_name              = "%s"
-  ip_address                 = "%s"
+  friendly_name              = "%[2]s"
+  ip_address                 = "%[3]s"
 }
-`, testData.AccountSid, friendlyName, friendlyName, ipAddress)
+`, testData.AccountSid, friendlyName, ipAddress)
 }
 
 func testAccTwilioSIPIPAddress_cidrLengthPrefix(testData *acceptance.TestData, friendlyName string, ipAddress string, cidrLengthPrefix int) string {
 	return fmt.Sprintf(`
 resource "twilio_sip_ip_access_control_list" "ip_access_control_list" {
-  account_sid   = "%s"
-  friendly_name = "%s"
+  account_sid   = "%[1]s"
+  friendly_name = "%[2]s"
 }
 
 resource "twilio_sip_ip_address" "ip_address" {
   account_sid                = twilio_sip_ip_access_control_list.ip_access_control_list.account_sid
   ip_access_control_list_sid = twilio_sip_ip_access_control_list.ip_access_control_list.sid
-  friendly_name              = "%s"
-  ip_address                 = "%s"
-  cidr_length_prefix         = %d
+  friendly_name              = "%[2]s"
+  ip_address                 = "%[3]s"
+  cidr_length_prefix         = %[4]d
 }
-`, testData.AccountSid, friendlyName, friendlyName, ipAddress, cidrLengthPrefix)
+`, testData.AccountSid, friendlyName, ipAddress, cidrLengthPrefix)
+}
+
+func testAccTwilioSIPIPAddress_invalidAccountSid() string {
+	return `
+resource "twilio_sip_ip_address" "ip_address" {
+  account_sid                = "account_sid"
+  ip_access_control_list_sid = "ALaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  friendly_name              = "invalid_account_sid"
+  ip_address                 = "127.0.0.1"
+}
+`
+}
+
+func testAccTwilioSIPIPAddress_invalidIPAccessControlListSid() string {
+	return `
+resource "twilio_sip_ip_address" "ip_address" {
+  account_sid                = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ip_access_control_list_sid = "ip_access_control_list_sid"
+  friendly_name              = "invalid_account_sid"
+  ip_address                 = "127.0.0.1"
+}
+`
 }

@@ -20,12 +20,14 @@ func dataSourceSIPIPAddresses() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.AccountSidValidation(),
 			},
 			"ip_access_control_list_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.IPAccessControlListSidValidation(),
 			},
 			"ip_addresses": {
 				Type:     schema.TypeList,

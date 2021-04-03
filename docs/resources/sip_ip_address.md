@@ -29,9 +29,9 @@ The following arguments are supported:
 
 - `account_sid` - (Mandatory) The account SID to associate the IP address with. Changing this forces a new resource to be created
 - `ip_access_control_list_sid` - (Mandatory) The IP access control list SID to associate the IP address with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The friendly name of the IP address
+- `friendly_name` - (Mandatory) The friendly name of the IP address. The value cannot be an empty string
 - `ip_address` - (Mandatory) The IP address of the resource
-- `cidr_length_prefix` - (Optional) The CIDR length prefix to use with the IP address
+- `cidr_length_prefix` - (Optional) The CIDR length prefix to use with the IP address. The default value ia `32`
 
 ## Attributes Reference
 

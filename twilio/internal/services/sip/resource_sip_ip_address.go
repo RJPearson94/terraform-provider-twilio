@@ -53,18 +53,21 @@ func resourceSIPIPAddress() *schema.Resource {
 				Computed: true,
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.AccountSidValidation(),
 			},
 			"ip_access_control_list_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.IPAccessControlListSidValidation(),
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"ip_address": {
 				Type:         schema.TypeString,
@@ -74,7 +77,7 @@ func resourceSIPIPAddress() *schema.Resource {
 			"cidr_length_prefix": {
 				Type:     schema.TypeInt,
 				Optional: true,
-				Computed: true,
+				Default:  32,
 			},
 			"date_created": {
 				Type:     schema.TypeString,

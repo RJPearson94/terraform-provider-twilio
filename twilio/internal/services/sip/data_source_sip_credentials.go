@@ -20,12 +20,14 @@ func dataSourceSIPCredentials() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.AccountSidValidation(),
 			},
 			"credential_list_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.CredentialListSidValidation(),
 			},
 			"credentials": {
 				Type:     schema.TypeList,

@@ -41,18 +41,40 @@ func TestAccDataSourceTwilioSIPIPAddress_basic(t *testing.T) {
 	})
 }
 
-func TestAccDataSourceTwilioSIPIPAddress_invalidIPAddress(t *testing.T) {
-	testData := acceptance.TestAccData
-	friendlyName := acctest.RandString(10)
-	ipAddress := "test"
-
+func TestAccDataSourceTwilioSIPIPAddress_invalidAccountSid(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:      testAccDataSourceTwilioSIPIPAddress_basic(testData, friendlyName, ipAddress),
-				ExpectError: regexp.MustCompile(`(?s)expected ip_address to contain a valid IP, got: test`),
+				Config:      testAccDataSourceTwilioSIPIPAddress_invalidAccountSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of account_sid to match regular expression "\^AC\[0-9a-fA-F\]\{32\}\$", got account_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioSIPIPAddress_invalidIPAccessControlListSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioSIPIPAddress_invalidIPAccessControlList(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of ip_access_control_list_sid to match regular expression "\^AL\[0-9a-fA-F\]\{32\}\$", got ip_access_control_list_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioSIPIPAddress_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioSIPIPAddress_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^IP\[0-9a-fA-F\]\{32\}\$", got sid`),
 			},
 		},
 	})
@@ -78,4 +100,34 @@ data "twilio_sip_ip_address" "ip_address" {
   sid                        = twilio_sip_ip_address.ip_address.sid
 }
 `, testData.AccountSid, friendlyName, friendlyName, ipAddress)
+}
+
+func testAccDataSourceTwilioSIPIPAddress_invalidAccountSid() string {
+	return `
+data "twilio_sip_ip_address" "ip_address" {
+  account_sid                = "account_sid"
+  ip_access_control_list_sid = "ALaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid                        = "IPaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioSIPIPAddress_invalidIPAccessControlList() string {
+	return `
+data "twilio_sip_ip_address" "ip_address" {
+  account_sid                = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ip_access_control_list_sid = "ip_access_control_list_sid"
+  sid                        = "IPaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioSIPIPAddress_invalidSid() string {
+	return `
+data "twilio_sip_ip_address" "ip_address" {
+  account_sid                = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ip_access_control_list_sid = "ALaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid                        = "sid"
+}
+`
 }

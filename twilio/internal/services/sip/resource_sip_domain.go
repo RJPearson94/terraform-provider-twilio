@@ -53,13 +53,15 @@ func resourceSIPDomain() *schema.Resource {
 				Computed: true,
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.AccountSidValidation(),
 			},
 			"domain_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringMatch(regexp.MustCompile(`^[a-zA-Z0-9-.]+\.sip\.twilio\.com$`), ""),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,
@@ -80,7 +82,7 @@ func resourceSIPDomain() *schema.Resource {
 						"status_callback_method": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "POST",
 							ValidateFunc: validation.StringInSlice([]string{
 								"GET",
 								"POST",
@@ -89,7 +91,7 @@ func resourceSIPDomain() *schema.Resource {
 						"fallback_method": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "POST",
 							ValidateFunc: validation.StringInSlice([]string{
 								"GET",
 								"POST",
@@ -103,7 +105,7 @@ func resourceSIPDomain() *schema.Resource {
 						"method": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "POST",
 							ValidateFunc: validation.StringInSlice([]string{
 								"GET",
 								"POST",
@@ -112,7 +114,6 @@ func resourceSIPDomain() *schema.Resource {
 						"url": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							Computed:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 					},
@@ -128,28 +129,30 @@ func resourceSIPDomain() *schema.Resource {
 						"calling_enabled": {
 							Type:     schema.TypeBool,
 							Optional: true,
-							Computed: true,
+							Default:  false,
 						},
 						"caller_sid": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: utils.PhoneNumberSidValidation(),
 						},
 					},
 				},
 			},
 			"byoc_trunk_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: helper.ByocSidValidation(),
 			},
 			"secure": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  false,
 			},
 			"sip_registration": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  false,
 			},
 			"auth_type": {
 				Type:     schema.TypeString,
@@ -244,12 +247,12 @@ func resourceSIPDomainUpdate(ctx context.Context, d *schema.ResourceData, meta i
 	}
 
 	if _, ok := d.GetOk("voice"); ok {
-		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.voice_fallback_method")
-		updateInput.VoiceFallbackURL = utils.OptionalString(d, "voice.0.voice_fallback_url")
-		updateInput.VoiceMethod = utils.OptionalString(d, "voice.0.voice_method")
-		updateInput.VoiceStatusCallbackMethod = utils.OptionalString(d, "voice.0.voice_status_callback_method")
-		updateInput.VoiceStatusCallbackURL = utils.OptionalString(d, "voice.0.voice_status_callback_url")
-		updateInput.VoiceURL = utils.OptionalString(d, "voice.0.voice_url")
+		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
+		updateInput.VoiceFallbackURL = utils.OptionalString(d, "voice.0.fallback_url")
+		updateInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
+		updateInput.VoiceStatusCallbackMethod = utils.OptionalString(d, "voice.0.status_callback_method")
+		updateInput.VoiceStatusCallbackURL = utils.OptionalString(d, "voice.0.status_callback_url")
+		updateInput.VoiceURL = utils.OptionalString(d, "voice.0.url")
 	}
 
 	if _, ok := d.GetOk("emergency"); ok {

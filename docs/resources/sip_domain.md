@@ -26,25 +26,25 @@ The following arguments are supported:
 - `voice` - (Optional) A `voice` block as documented below
 - `emergency` - (Optional) A `emergency` block as documented below
 - `byoc_trunk_sid` - (Optional) The BYOC trunk SID to associate the domain with
-- `secure` - (Optional) Whether secure SIP is enabled
-- `sip_registration` - (Optional) Whether the SIP endpoint is allowed to register with the domain
+- `secure` - (Optional) Whether secure SIP is enabled. The default value is `false`
+- `sip_registration` - (Optional) Whether the SIP endpoint is allowed to register with the domain. The default value is `false`
 
 ---
 
 A `voice` block supports the following:
 
 - `url` - (Optional) The URL which should be called on each incoming call
-- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`
+- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`. The default value is `POST`
 - `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`
+- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`. The default value is `POST`
 - `status_callback_url` - (Optional) The URL to call on each status change
-- `status_callback_method` - (Optional) The HTTP method which should be used to call the status callback URL. Valid values are `GET` or `POST`
+- `status_callback_method` - (Optional) The HTTP method which should be used to call the status callback URL. Valid values are `GET` or `POST`. The default value is `POST`
 
 ---
 
 An `emergency` block supports the following:
 
-- `calling_enabled` - (Optional) Whether emergency calling is enabled for the domain
+- `calling_enabled` - (Optional) Whether emergency calling is enabled for the domain. The default value is `false`
 - `caller_sid` - (Optional) The caller SID to associate with the domain
 
 ## Attributes Reference

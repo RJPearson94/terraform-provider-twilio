@@ -37,10 +37,18 @@ func TestAccTwilioSIPDomain_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "byoc_trunk_sid", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "emergency.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "emergency.0.calling_enabled", "false"),
+					resource.TestCheckResourceAttr(stateResourceName, "emergency.0.caller_sid", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sip_registration"),
+					resource.TestCheckResourceAttr(stateResourceName, "sip_registration", "false"),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.url", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 				),
@@ -78,10 +86,18 @@ func TestAccTwilioSIPDomain_update(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "byoc_trunk_sid", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "emergency.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "emergency.0.calling_enabled", "false"),
+					resource.TestCheckResourceAttr(stateResourceName, "emergency.0.caller_sid", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sip_registration"),
+					resource.TestCheckResourceAttr(stateResourceName, "sip_registration", "false"),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.url", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 				),
@@ -97,10 +113,18 @@ func TestAccTwilioSIPDomain_update(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "byoc_trunk_sid", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "emergency.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "emergency.0.calling_enabled", "false"),
+					resource.TestCheckResourceAttr(stateResourceName, "emergency.0.caller_sid", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sip_registration"),
+					resource.TestCheckResourceAttr(stateResourceName, "sip_registration", "false"),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.url", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 				),
@@ -115,7 +139,7 @@ func TestAccTwilioSIPDomain_voiceURLAndMethod(t *testing.T) {
 	testData := acceptance.TestAccData
 	domainName := acctest.RandString(10) + ".sip.twilio.com"
 	url := "https://demo.twilio.com/welcome/voice/"
-	method := "POST"
+	method := "GET"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -126,21 +150,27 @@ func TestAccTwilioSIPDomain_voiceURLAndMethod(t *testing.T) {
 				Config: testAccTwilioSIPDomain_voiceURLAndMethod(testData, domainName, url, method),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioSIPDomainExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttr(stateResourceName, "domain_name", domainName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "byoc_trunk_sid", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "emergency.#", "1"),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sip_registration"),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.0.url", url),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.0.method", method),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPDomain_emptyVoiceBlock(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.method", "POST"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPDomain_basic(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.method", "POST"),
 				),
 			},
 		},
@@ -191,7 +221,7 @@ func TestAccTwilioSIPDomain_voiceFallbackURLAndMethod(t *testing.T) {
 	testData := acceptance.TestAccData
 	domainName := acctest.RandString(10) + ".sip.twilio.com"
 	url := "https://demo.twilio.com/welcome/voice/"
-	method := "POST"
+	method := "GET"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -202,21 +232,27 @@ func TestAccTwilioSIPDomain_voiceFallbackURLAndMethod(t *testing.T) {
 				Config: testAccTwilioSIPDomain_voiceFallbackURLAndMethod(testData, domainName, url, method),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioSIPDomainExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttr(stateResourceName, "domain_name", domainName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "byoc_trunk_sid", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "emergency.#", "1"),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sip_registration"),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_url", url),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_method", method),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPDomain_emptyVoiceBlock(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_method", "POST"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPDomain_basic(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.fallback_method", "POST"),
 				),
 			},
 		},
@@ -267,7 +303,7 @@ func TestAccTwilioSIPDomain_voiceStatusCallbackURLAndMethod(t *testing.T) {
 	testData := acceptance.TestAccData
 	domainName := acctest.RandString(10) + ".sip.twilio.com"
 	url := "https://demo.twilio.com/welcome/voice/"
-	method := "POST"
+	method := "GET"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -278,21 +314,27 @@ func TestAccTwilioSIPDomain_voiceStatusCallbackURLAndMethod(t *testing.T) {
 				Config: testAccTwilioSIPDomain_voiceStatusCallbackURLAndMethod(testData, domainName, url, method),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioSIPDomainExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttr(stateResourceName, "domain_name", domainName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "byoc_trunk_sid", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "emergency.#", "1"),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sip_registration"),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_url", url),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_method", method),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPDomain_emptyVoiceBlock(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_method", "POST"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPDomain_basic(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "voice.0.status_callback_method", "POST"),
 				),
 			},
 		},
@@ -353,22 +395,134 @@ func TestAccTwilioSIPDomain_emergency(t *testing.T) {
 				Config: testAccTwilioSIPDomain_emergency(testData, domainName, emergencyCallingEnabled),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioSIPDomainExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttr(stateResourceName, "domain_name", domainName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "auth_type", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "byoc_trunk_sid", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "emergency.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "emergency.0.calling_enabled", "false"),
 					resource.TestCheckResourceAttr(stateResourceName, "emergency.0.caller_sid", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "secure"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sip_registration"),
-					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPDomain_invalidEmergencyCallerSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPDomain_invalidEmergencyCallerSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of emergency.0.caller_sid to match regular expression "\^PN\[0-9a-fA-F\]\{32\}\$", got caller_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPDomain_invalidByocTrunkSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPDomain_invalidByocTrunkSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of byoc_trunk_sid to match regular expression "\^BY\[0-9a-fA-F\]\{32\}\$", got byoc_trunk_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPDomain_secure(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.domain", domainResourceName)
+
+	testData := acceptance.TestAccData
+	domainName := acctest.RandString(10) + ".sip.twilio.com"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioSIPDomainDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioSIPDomain_basic(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "secure", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPDomain_secureTrue(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "secure", "true"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPDomain_basic(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "secure", "false"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPDomain_sipRegistration(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.domain", domainResourceName)
+
+	testData := acceptance.TestAccData
+	domainName := acctest.RandString(10) + ".sip.twilio.com"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioSIPDomainDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioSIPDomain_basic(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "sip_registration", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPDomain_sipRegistrationTrue(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "sip_registration", "true"),
+				),
+			},
+			{
+				Config: testAccTwilioSIPDomain_basic(testData, domainName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioSIPDomainExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "sip_registration", "false"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPDomain_invalidDomainName(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPDomain_invalidDomainName(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of domain_name to match regular expression "\^\[a\-zA\-Z0\-9\-\.\]\+\\\\.sip\\\\.twilio\\\\.com\$", got domain_name`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPDomain_invalidAccountSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPDomain_invalidAccountSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of account_sid to match regular expression "\^AC\[0-9a-fA-F\]\{32\}\$", got account_sid`),
 			},
 		},
 	})
@@ -470,6 +624,16 @@ resource "twilio_sip_domain" "domain" {
 `, testData.AccountSid, domainName, url, method)
 }
 
+func testAccTwilioSIPDomain_emptyVoiceBlock(testData *acceptance.TestData, domainName string) string {
+	return fmt.Sprintf(`
+resource "twilio_sip_domain" "domain" {
+  account_sid = "%s"
+  domain_name = "%s"
+  voice {}
+}
+`, testData.AccountSid, domainName)
+}
+
 func testAccTwilioSIPDomain_emergency(testData *acceptance.TestData, domainName string, emergencyCallingEnabled bool) string {
 	return fmt.Sprintf(`
 resource "twilio_sip_domain" "domain" {
@@ -480,4 +644,66 @@ resource "twilio_sip_domain" "domain" {
   }
 }
 `, testData.AccountSid, domainName, emergencyCallingEnabled)
+}
+
+func testAccTwilioSIPDomain_invalidEmergencyCallerSid() string {
+	return `
+resource "twilio_sip_domain" "domain" {
+  account_sid = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  domain_name = "invalid-caller-sid.sip.twilio.com"
+  emergency {
+    calling_enabled = false
+	caller_sid = "caller_sid"
+  }
+}
+`
+}
+
+func testAccTwilioSIPDomain_invalidByocTrunkSid() string {
+	return `
+resource "twilio_sip_domain" "domain" {
+  account_sid = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  domain_name = "invalid-byoc-trunk-sid.sip.twilio.com"
+  byoc_trunk_sid = "byoc_trunk_sid"
+}
+`
+}
+
+func testAccTwilioSIPDomain_secureTrue(testData *acceptance.TestData, domainName string) string {
+	return fmt.Sprintf(`
+resource "twilio_sip_domain" "domain" {
+  account_sid = "%s"
+  domain_name = "%s"
+  secure = true
+}
+`, testData.AccountSid, domainName)
+}
+
+func testAccTwilioSIPDomain_sipRegistrationTrue(testData *acceptance.TestData, domainName string) string {
+	return fmt.Sprintf(`
+resource "twilio_sip_domain" "domain" {
+  account_sid = "%s"
+  domain_name = "%s"
+  sip_registration = true
+}
+`, testData.AccountSid, domainName)
+}
+
+func testAccTwilioSIPDomain_invalidAccountSid() string {
+	return `
+resource "twilio_sip_domain" "domain" {
+  account_sid = "account_sid"
+  domain_name = "invalid-account-sid.sip.twilio.com"
+  byoc_trunk_sid = "BYaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccTwilioSIPDomain_invalidDomainName() string {
+	return `
+resource "twilio_sip_domain" "domain" {
+  account_sid = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  domain_name = "domain_name"
+}
+`
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/sip/credential_list/credentials"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceSIPCredential() *schema.Resource {
@@ -52,24 +53,33 @@ func resourceSIPCredential() *schema.Resource {
 				Computed: true,
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.AccountSidValidation(),
 			},
 			"credential_list_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.CredentialListSidValidation(),
 			},
 			"username": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringLenBetween(1, 32),
 			},
 			"password": {
 				Type:      schema.TypeString,
 				Required:  true,
 				Sensitive: true,
+				ValidateFunc: validation.All(
+					validation.StringMatch(regexp.MustCompile("^.{12,}$"), "Must contain at least 12 characters"),
+					validation.StringMatch(regexp.MustCompile("^.*[A-Z].*$"), "Must contain a uppercase letter"),
+					validation.StringMatch(regexp.MustCompile("^.*[a-z].*$"), "Must contain a lowercase letter"),
+					validation.StringMatch(regexp.MustCompile("^.*[0-9].*$"), "Must contain a number"),
+				),
 			},
 			"date_created": {
 				Type:     schema.TypeString,

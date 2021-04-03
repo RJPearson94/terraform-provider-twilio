@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -87,6 +88,35 @@ func TestAccTwilioSIPIPAccessControlList_update(t *testing.T) {
 	})
 }
 
+func TestAccTwilioSIPIPAccessControlList_invalidAccountSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPIPAccessControlList_invalidAccountSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of account_sid to match regular expression "\^AC\[0-9a-fA-F\]\{32\}\$", got account_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPIPAccessControlList_blankFriendlyName(t *testing.T) {
+	testData := acceptance.TestAccData
+	friendlyName := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPIPAccessControlList_basic(testData, friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected \"friendly_name\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioSIPIPAccessControlListDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).API
 
@@ -142,4 +172,13 @@ resource "twilio_sip_ip_access_control_list" "ip_access_control_list" {
   friendly_name = "%s"
 }
 `, testData.AccountSid, friendlyName)
+}
+
+func testAccTwilioSIPIPAccessControlList_invalidAccountSid() string {
+	return `
+resource "twilio_sip_ip_access_control_list" "ip_access_control_list" {
+  account_sid   = "account_sid"
+  friendly_name = "invalid_account_sid"
+}
+`
 }

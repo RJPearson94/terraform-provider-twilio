@@ -29,8 +29,8 @@ The following arguments are supported:
 
 - `account_sid` - (Mandatory) The account SID to associate the credential with. Changing this forces a new resource to be created
 - `credential_list_sid` - (Mandatory) The credential list SID to associate the credential with. Changing this forces a new resource to be created
-- `username` - (Mandatory) The credential username. Changing this forces a new resource to be created
-- `password` - (Mandatory) The credential password
+- `username` - (Mandatory) The credential username. Changing this forces a new resource to be created. The length of the string must be between `1` and `64` characters (inclusive)
+- `password` - (Mandatory) The credential password. The length of the string must be between at least `12` characters and contain at least 1 `uppercase character`, 1 `lowercase character` and 1 `number`.
 
 ## Attributes Reference
 

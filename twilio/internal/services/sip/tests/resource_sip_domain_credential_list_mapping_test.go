@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -45,6 +46,45 @@ func TestAccTwilioSIPDomainCredentialListMapping_basic(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: testAccTwilioSIPDomainCredentialListMappingImportStateIdFunc(stateResourceName),
 				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPDomainCredentialListMapping_invalidAccountSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPDomainCredentialListMapping_invalidAccountSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of account_sid to match regular expression "\^AC\[0-9a-fA-F\]\{32\}\$", got account_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPDomainCredentialListMapping_invalidDomainSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPDomainCredentialListMapping_invalidDomainSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of domain_sid to match regular expression "\^SD\[0-9a-fA-F\]\{32\}\$", got domain_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPDomainCredentialListMapping_invalidCredentialListSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPDomainCredentialListMapping_invalidCredentialListSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of credential_list_sid to match regular expression "\^CL\[0-9a-fA-F\]\{32\}\$", got credential_list_sid`),
 			},
 		},
 	})
@@ -101,13 +141,13 @@ func testAccTwilioSIPDomainCredentialListMappingImportStateIdFunc(name string) r
 func testAccTwilioSIPDomainCredentialListMapping_basic(testData *acceptance.TestData, friendlyName string, domainName string) string {
 	return fmt.Sprintf(`
 resource "twilio_sip_credential_list" "credential_list" {
-  account_sid   = "%s"
-  friendly_name = "%s"
+  account_sid   = "%[1]s"
+  friendly_name = "%[2]s"
 }
 
 resource "twilio_sip_domain" "domain" {
-  account_sid = "%s"
-  domain_name = "%s"
+  account_sid = "%[1]s"
+  domain_name = "%[3]s"
 }
 
 resource "twilio_sip_domain_credential_list_mapping" "domain_credential_list_mapping" {
@@ -115,5 +155,35 @@ resource "twilio_sip_domain_credential_list_mapping" "domain_credential_list_map
   domain_sid          = twilio_sip_domain.domain.sid
   credential_list_sid = twilio_sip_credential_list.credential_list.sid
 }
-`, testData.AccountSid, friendlyName, testData.AccountSid, domainName)
+`, testData.AccountSid, friendlyName, domainName)
+}
+
+func testAccTwilioSIPDomainCredentialListMapping_invalidAccountSid() string {
+	return `
+resource "twilio_sip_domain_credential_list_mapping" "domain_credential_list_mapping" {
+  account_sid         = "account_sid"
+  domain_sid          = "SDaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  credential_list_sid = "CLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccTwilioSIPDomainCredentialListMapping_invalidDomainSid() string {
+	return `
+resource "twilio_sip_domain_credential_list_mapping" "domain_credential_list_mapping" {
+  account_sid         = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  domain_sid          = "domain_sid"
+  credential_list_sid = "CLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccTwilioSIPDomainCredentialListMapping_invalidCredentialListSid() string {
+	return `
+resource "twilio_sip_domain_credential_list_mapping" "domain_credential_list_mapping" {
+  account_sid         = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  domain_sid          = "SDaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  credential_list_sid = "credential_list_sid"
+}
+`
 }

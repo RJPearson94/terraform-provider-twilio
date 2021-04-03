@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -32,7 +33,7 @@ func TestAccTwilioSIPCredentialList_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttr(stateResourceName, "account_sid", testData.AccountSid),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 				),
@@ -66,7 +67,7 @@ func TestAccTwilioSIPCredentialList_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttr(stateResourceName, "account_sid", testData.AccountSid),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 				),
@@ -78,10 +79,39 @@ func TestAccTwilioSIPCredentialList_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttr(stateResourceName, "account_sid", testData.AccountSid),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPCredentialList_blankFriendlyName(t *testing.T) {
+	testData := acceptance.TestAccData
+	friendlyName := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPCredentialList_basic(testData, friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected \"friendly_name\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioSIPCredentialList_invalidAccountSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPCredentialList_invalidAccountSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of account_sid to match regular expression "\^AC\[0-9a-fA-F\]\{32\}\$", got account_sid`),
 			},
 		},
 	})
@@ -142,4 +172,13 @@ resource "twilio_sip_credential_list" "credential_list" {
   friendly_name = "%s"
 }
 `, testData.AccountSid, friendlyName)
+}
+
+func testAccTwilioSIPCredentialList_invalidAccountSid() string {
+	return `
+resource "twilio_sip_credential_list" "credential_list" {
+  account_sid   = "account_sid"
+  friendly_name = "invalid_account_sid"
+}
+`
 }
