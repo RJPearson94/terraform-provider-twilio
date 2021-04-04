@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -51,12 +52,12 @@ func TestAccTwilioServerlessVariable_basic(t *testing.T) {
 	})
 }
 
-func TestAccTwilioServerlessVariableKey_update(t *testing.T) {
+func TestAccTwilioServerlessVariable_key(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.variable", variableResourceName)
 
 	uniqueName := acctest.RandString(10)
-	key := "test-key"
-	newKey := "test-key-2"
+	key := acctest.RandString(1)
+	newKey := acctest.RandString(128)
 	value := "test-value"
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -69,15 +70,6 @@ func TestAccTwilioServerlessVariableKey_update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessVariableExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "key", key),
-					resource.TestCheckResourceAttr(stateResourceName, "value", value),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "environment_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
 			{
@@ -85,28 +77,53 @@ func TestAccTwilioServerlessVariableKey_update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessVariableExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "key", newKey),
-					resource.TestCheckResourceAttr(stateResourceName, "value", value),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "environment_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
 		},
 	})
 }
 
-func TestAccTwilioServerlessVariableValue_update(t *testing.T) {
+func TestAccTwilioServerlessVariable_invalidKeyWith0Characters(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	key := ""
+	value := "test-value"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessVariable_basic(uniqueName, key, value),
+				ExpectError: regexp.MustCompile(`(?s)expected length of key to be in the range \(1 - 128\), got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessVariable_invalidKeyWith129Characters(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	key := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	value := "test-value"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessVariable_basic(uniqueName, key, value),
+				ExpectError: regexp.MustCompile(`(?s)expected length of key to be in the range \(1 - 128\), got aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessVariable_value(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.variable", variableResourceName)
 
 	uniqueName := acctest.RandString(10)
 	key := "test-key"
-	value := "test-value"
-	newValue := "test-value-2"
+	value := acctest.RandString(1)
+	newValue := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -117,33 +134,58 @@ func TestAccTwilioServerlessVariableValue_update(t *testing.T) {
 				Config: testAccTwilioServerlessVariable_basic(uniqueName, key, value),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessVariableExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "key", key),
 					resource.TestCheckResourceAttr(stateResourceName, "value", value),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "environment_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
 			{
 				Config: testAccTwilioServerlessVariable_basic(uniqueName, key, newValue),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessVariableExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "key", key),
 					resource.TestCheckResourceAttr(stateResourceName, "value", newValue),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "environment_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessFunction_invalidValue(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	key := "test-key"
+	value := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessVariable_basic(uniqueName, key, value),
+				ExpectError: regexp.MustCompile(`(?s)expected \"value\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessVariable_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessVariable_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^ZS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessVariable_invalidEnvironmentSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessVariable_invalidEnvironmentSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of environment_sid to match regular expression "\^ZE\[0-9a-fA-F\]\{32\}\$", got environment_sid`),
 			},
 		},
 	})
@@ -216,4 +258,26 @@ resource "twilio_serverless_variable" "variable" {
   value           = "%s"
 }
 `, uniqueName, uniqueName, key, value)
+}
+
+func testAccTwilioServerlessVariable_invalidServiceSid() string {
+	return `
+resource "twilio_serverless_variable" "variable" {
+  service_sid     = "service_sid"
+  environment_sid = "ZEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  key             = "test"
+  value           = "test"
+}
+`
+}
+
+func testAccTwilioServerlessVariable_invalidEnvironmentSid() string {
+	return `
+resource "twilio_serverless_variable" "variable" {
+  service_sid     = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  environment_sid = "environment_sid"
+  key             = "test"
+  value           = "test"
+}
+`
 }

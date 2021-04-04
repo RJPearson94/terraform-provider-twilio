@@ -25,6 +25,44 @@ func ByocSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^BY[0-9a-fA-F]{32}$"), "")
 }
 
+// Serverless
+
+func ServerlessServiceSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^ZS[0-9a-fA-F]{32}$"), "")
+}
+
+func ServerlessAssetSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^ZH[0-9a-fA-F]{32}$"), "")
+}
+
+func ServerlessAssetVersionSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^ZN[0-9a-fA-F]{32}$"), "")
+}
+
+func ServerlessFunctionSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^ZH[0-9a-fA-F]{32}$"), "")
+}
+
+func ServerlessFunctionVersionSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^ZN[0-9a-fA-F]{32}$"), "")
+}
+
+func ServerlessEnvironmentSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^ZE[0-9a-fA-F]{32}$"), "")
+}
+
+func ServerlessBuildSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^ZB[0-9a-fA-F]{32}$"), "")
+}
+
+func ServerlessDeploymentSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^ZD[0-9a-fA-F]{32}$"), "")
+}
+
+func ServerlessVariableSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^ZV[0-9a-fA-F]{32}$"), "")
+}
+
 // SIP
 
 func SIPDomainSidValidation() schema.SchemaValidateFunc {

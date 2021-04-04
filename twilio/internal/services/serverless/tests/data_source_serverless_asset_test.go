@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -41,6 +42,32 @@ func TestAccDataSourceTwilioServerlessAsset_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioServerlessAsset_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessAsset_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^ZS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioServerlessAsset_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessAsset_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^ZH\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioServerlessAsset_basic(uniqueName string, friendlyName string, visibility string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
@@ -63,4 +90,22 @@ data "twilio_serverless_asset" "asset" {
   sid         = twilio_serverless_asset.asset.sid
 }
 `, uniqueName, friendlyName, visibility)
+}
+
+func testAccDataSourceTwilioServerlessAsset_invalidServiceSid() string {
+	return `
+data "twilio_serverless_asset" "asset" {
+  service_sid = "service_sid"
+  sid         = "ZHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioServerlessAsset_invalidSid() string {
+	return `
+data "twilio_serverless_asset" "asset" {
+  service_sid = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid         = "sid"
+}
+`
 }

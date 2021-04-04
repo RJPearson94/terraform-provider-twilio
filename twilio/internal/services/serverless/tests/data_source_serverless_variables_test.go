@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -41,6 +42,32 @@ func TestAccDataSourceTwilioServerlessVariables_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioServerlessVariables_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessVariables_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^ZS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioServerlessVariables_invalidEnvironmentSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessVariables_invalidEnvironmentSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of environment_sid to match regular expression "\^ZE\[0-9a-fA-F\]\{32\}\$", got environment_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioServerlessVariables_basic(uniqueName string, key string, value string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
@@ -65,4 +92,22 @@ data "twilio_serverless_variables" "variables" {
   environment_sid = twilio_serverless_variable.variable.environment_sid
 }
 `, uniqueName, uniqueName, key, value)
+}
+
+func testAccDataSourceTwilioServerlessVariables_invalidServiceSid() string {
+	return `
+data "twilio_serverless_variables" "variables" {
+  service_sid     = "service_sid"
+  environment_sid = "ZEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioServerlessVariables_invalidEnvironmentSid() string {
+	return `
+data "twilio_serverless_variables" "variables" {
+  service_sid     = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  environment_sid = "environment_sid"
+}
+`
 }

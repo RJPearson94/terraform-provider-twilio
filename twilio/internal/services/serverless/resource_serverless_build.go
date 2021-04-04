@@ -58,9 +58,10 @@ func resourceServerlessBuild() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ServerlessServiceSidValidation(),
 			},
 			"asset_version": {
 				Type:     schema.TypeList,
@@ -69,9 +70,10 @@ func resourceServerlessBuild() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"sid": {
-							Type:     schema.TypeString,
-							Required: true,
-							ForceNew: true,
+							Type:         schema.TypeString,
+							Required:     true,
+							ForceNew:     true,
+							ValidateFunc: utils.ServerlessAssetVersionSidValidation(),
 						},
 						"account_sid": {
 							Type:     schema.TypeString,
@@ -107,9 +109,10 @@ func resourceServerlessBuild() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"sid": {
-							Type:     schema.TypeString,
-							Required: true,
-							ForceNew: true,
+							Type:         schema.TypeString,
+							Required:     true,
+							ForceNew:     true,
+							ValidateFunc: utils.ServerlessFunctionVersionSidValidation(),
 						},
 						"account_sid": {
 							Type:     schema.TypeString,

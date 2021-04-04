@@ -80,7 +80,7 @@ func TestAccTwilioServerlessFunction_multipleFunctions(t *testing.T) {
 	})
 }
 
-func TestAccTwilioServerlessAssetFunction_invalidVisibility(t *testing.T) {
+func TestAccTwilioServerlessFunctionFunction_invalidVisibility(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 	friendlyName := acctest.RandString(10)
 	visibility := "test"
@@ -155,6 +155,153 @@ func TestAccTwilioServerlessFunction_update(t *testing.T) {
 	})
 }
 
+func TestAccTwilioServerlessFunction_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessFunction_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^ZS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessFunction_friendlyName(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.function", functionResourceName)
+
+	uniqueName := acctest.RandString(10)
+	friendlyName := acctest.RandString(1)
+	newFriendlyName := acctest.RandString(255)
+	visibility := "private"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioServerlessFunctionDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessFunction_basic(uniqueName, friendlyName, visibility),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessFunctionExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessFunction_basic(uniqueName, newFriendlyName, visibility),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessFunctionExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessFunction_invalidFriendlyNameWith0Characters(t *testing.T) {
+	friendlyName := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessFunction_friendlyNameWithStubbedServiceSid(friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 255\), got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessFunction_invalidFriendlyNameWith256Characters(t *testing.T) {
+	friendlyName := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessFunction_friendlyNameWithStubbedServiceSid(friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 255\), got aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessFunction_path(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.function", functionResourceName)
+
+	uniqueName := acctest.RandString(10)
+	friendlyName := acctest.RandString(1)
+	visibility := "private"
+	path := "/a"
+	newPath := "/" + acctest.RandString(254)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioServerlessFunctionDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessFunction_path(uniqueName, friendlyName, visibility, path),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessFunctionExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "path", path),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessFunction_path(uniqueName, friendlyName, visibility, newPath),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessFunctionExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "path", newPath),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessFunction_invalidPathWith0Characters(t *testing.T) {
+	path := ""
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessFunction_pathWithWithStubbedServiceSid(path),
+				ExpectError: regexp.MustCompile(`(?s)expected length of path to be in the range \(1 - 255\), got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessFunction_invalidPathWith256Characters(t *testing.T) {
+	path := "/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessFunction_pathWithWithStubbedServiceSid(path),
+				ExpectError: regexp.MustCompile(`(?s)expected length of path to be in the range \(1 - 255\), got /aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessFunction_invalidContentType(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessFunction_blankContentType(),
+				ExpectError: regexp.MustCompile(`(?s)expected \"content_type\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioServerlessFunctionDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Serverless
 
@@ -217,7 +364,7 @@ func testAccTwilioServerlessFunctionImportStateIdFunc(name string) resource.Impo
 func testAccTwilioServerlessFunction_basic(uniqueName string, friendlyName string, visibility string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
-  unique_name   = "service-%s"
+  unique_name   = "%s"
   friendly_name = "test"
 }
 
@@ -236,7 +383,36 @@ resource "twilio_serverless_function" "function" {
 func testAccTwilioServerlessFunction_multipleFunctions(uniqueName string, friendlyName string, visibility string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
-  unique_name   = "service-%s"
+  unique_name   = "%[1]s"
+  friendly_name = "test"
+}
+
+resource "twilio_serverless_function" "function" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "%[2]s"
+  content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "%[3]s"
+}
+
+resource "twilio_serverless_function" "function2" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "%[2]s-2"
+  content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function-2"
+  visibility        = "%[3]s"
+}
+`, uniqueName, friendlyName, visibility)
+}
+
+func testAccTwilioServerlessFunction_path(uniqueName string, friendlyName string, visibility string, path string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "%s"
   friendly_name = "test"
 }
 
@@ -246,18 +422,64 @@ resource "twilio_serverless_function" "function" {
   content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
   content_type      = "application/javascript"
   content_file_name = "helloWorld.js"
-  path              = "/test-function"
+  path              = "%s"
   visibility        = "%s"
 }
+`, uniqueName, friendlyName, path, visibility)
+}
 
+func testAccTwilioServerlessFunction_invalidServiceSid() string {
+	return `
 resource "twilio_serverless_function" "function2" {
-  service_sid       = twilio_serverless_service.service.sid
-  friendly_name     = "%s-2"
+  service_sid       = "service_sid"
+  friendly_name     = "invalid_service_sid"
   content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
   content_type      = "application/javascript"
   content_file_name = "helloWorld.js"
-  path              = "/test-function-2"
-  visibility        = "%s"
+  path              = "/invalid-service-sid"
+  visibility        = "private"
 }
-`, uniqueName, friendlyName, visibility, friendlyName, visibility)
+`
+}
+
+func testAccTwilioServerlessFunction_pathWithWithStubbedServiceSid(path string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_function" "function" {
+  service_sid       = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  friendly_name     = "invalid_path"
+  content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "%s"
+  visibility        = "private"
+}
+`, path)
+}
+
+func testAccTwilioServerlessFunction_friendlyNameWithStubbedServiceSid(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_function" "function" {
+  service_sid       = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  friendly_name     = "%s"
+  content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/friendly-name"
+  visibility        = "private"
+}
+`, friendlyName)
+}
+
+func testAccTwilioServerlessFunction_blankContentType() string {
+	return `
+resource "twilio_serverless_function" "function" {
+  service_sid       = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  friendly_name     = "invalid_content_type"
+  content           = "ZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50LCBjYWxsYmFjaykgewogIGNhbGxiYWNrKG51bGwsICJIZWxsbyBXb3JsZCIpOwp9Owo="
+  content_type      = ""
+  content_file_name = "helloWorld.js"
+  path              = "/invalid-content-type"
+  visibility        = "private"
+}
+`
 }

@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -40,23 +41,62 @@ func TestAccDataSourceTwilioServerlessVariable_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioServerlessVariable_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessVariable_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^ZS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioServerlessVariable_invalidEnvironmentSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessVariable_invalidEnvironmentSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of environment_sid to match regular expression "\^ZE\[0-9a-fA-F\]\{32\}\$", got environment_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioServerlessVariable_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessVariable_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^ZV\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioServerlessVariable_basic(uniqueName string, key string, value string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
-  unique_name   = "service-%s"
+  unique_name   = "service-%[1]s"
   friendly_name = "test"
 }
 
 resource "twilio_serverless_environment" "environment" {
   service_sid = twilio_serverless_service.service.sid
-  unique_name = "%s"
+  unique_name = "%[1]s"
 }
 
 resource "twilio_serverless_variable" "variable" {
   service_sid     = twilio_serverless_service.service.sid
   environment_sid = twilio_serverless_environment.environment.sid
-  key             = "%s"
-  value           = "%s"
+  key             = "%[2]s"
+  value           = "%[3]s"
 }
 
 data "twilio_serverless_variable" "variable" {
@@ -64,5 +104,35 @@ data "twilio_serverless_variable" "variable" {
   environment_sid = twilio_serverless_variable.variable.environment_sid
   sid             = twilio_serverless_variable.variable.sid
 }
-`, uniqueName, uniqueName, key, value)
+`, uniqueName, key, value)
+}
+
+func testAccDataSourceTwilioServerlessVariable_invalidServiceSid() string {
+	return `
+data "twilio_serverless_variable" "variable" {
+  service_sid     = "service_sid"
+  environment_sid = "ZEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid             = "ZVaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioServerlessVariable_invalidEnvironmentSid() string {
+	return `
+data "twilio_serverless_variable" "variable" {
+  service_sid     = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  environment_sid = "environment_sid"
+  sid             = "ZVaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioServerlessVariable_invalidSid() string {
+	return `
+data "twilio_serverless_variable" "variable" {
+  service_sid     = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  environment_sid = "ZEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid             = "sid"
+}
+`
 }

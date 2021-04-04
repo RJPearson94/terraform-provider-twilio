@@ -13,6 +13,10 @@ For more information on Serverless (also known as Runtime), see the product [pag
 
 ~> To allow terraform to correctly manage the lifecycle of the deployment, it is recommended that use the lifecycle meta-argument `create_before_destroy` with this resource. The docs can be found [here](https://www.terraform.io/docs/configuration/resources.html#create_before_destroy)
 
+!> If the `dependencies` are managed via Terraform and the `dependencies` are removed from the configuration file. The old value will be retained on the next apply
+
+!> If the `runtime` is managed via Terraform and the `runtime` is removed from the configuration file. The old value will be retained on the next apply.
+
 !> This API used to manage this resource is currently in beta and is subject to change
 
 ## Example Usage

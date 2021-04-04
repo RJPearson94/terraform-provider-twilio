@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -42,6 +43,32 @@ func TestAccDataSourceTwilioServerlessFunction_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioServerlessFunction_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessFunction_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^ZS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioServerlessFunction_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessFunction_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^ZH\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioServerlessFunction_basic(uniqueName string, friendlyName string, visibility string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
@@ -64,4 +91,22 @@ data "twilio_serverless_function" "function" {
   sid         = twilio_serverless_function.function.sid
 }
 `, uniqueName, friendlyName, visibility)
+}
+
+func testAccDataSourceTwilioServerlessFunction_invalidServiceSid() string {
+	return `
+data "twilio_serverless_function" "function" {
+  service_sid = "service_sid"
+  sid         = "ZHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioServerlessFunction_invalidSid() string {
+	return `
+data "twilio_serverless_function" "function" {
+  service_sid = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid         = "sid"
+}
+`
 }

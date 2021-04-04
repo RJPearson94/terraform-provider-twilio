@@ -40,13 +40,13 @@ EOF
 The following arguments are supported:
 
 - `service_sid` - (Mandatory) The serverless service SID to associate the function with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The name of the function
+- `friendly_name` - (Mandatory) The name of the function. The length of the string must be between `1` and `255` characters (inclusive)
 - `content_file_name` - (Optional) The name of the file. Conflicts with `source`
 - `content` - (Optional) The file contents as string. Conflicts with `source`
 - `source` - (Optional) The relative path to the function file. Conflicts with `content`
 - `source_hash` - (Optional) A hash of the function file to trigger deployments. Conflicts with `content`
-- `content_type` - (Mandatory) The file MIME-type
-- `path` - (Mandatory) The request URI path
+- `content_type` - (Mandatory) The file MIME-type. The value cannot be an empty string
+- `path` - (Mandatory) The request URI path. The length of the string must be between `1` and `255` characters (inclusive)
 - `visibility` - (Mandatory) The visibility of the function. Valid values are `public` or `protected` or `private`
 
 ~> Either source or content need to be specified

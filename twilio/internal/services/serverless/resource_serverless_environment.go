@@ -11,6 +11,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/service/environments"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceServerlessEnvironment() *schema.Resource {
@@ -52,23 +53,26 @@ func resourceServerlessEnvironment() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ServerlessServiceSidValidation(),
 			},
 			"build_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"unique_name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringLenBetween(1, 100),
 			},
 			"domain_suffix": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringLenBetween(1, 16),
 			},
 			"domain_name": {
 				Type:     schema.TypeString,

@@ -17,6 +17,8 @@ var buildResourceName = "twilio_serverless_build"
 
 func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.build", buildResourceName)
+	assetResourceName := "twilio_serverless_asset.asset"
+	functionResourceName := "twilio_serverless_function.function"
 	uniqueName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -33,7 +35,9 @@ func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "asset_version.#", "1"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "asset_version.0.sid", assetResourceName, "latest_version_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "function_version.#", "1"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "function_version.0.sid", functionResourceName, "latest_version_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "dependencies.%"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "runtime"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "status"),
@@ -68,19 +72,9 @@ func TestAccTwilioServerlessBuild_dependenciesAndRuntime(t *testing.T) {
 				Config: testAccTwilioServerlessBuild_dependenciesAndRuntime(uniqueName, version, runtime),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioServerlessBuildExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "asset_version.#", "1"),
-					resource.TestCheckResourceAttr(stateResourceName, "function_version.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "dependencies.%", "6"),
 					resource.TestCheckResourceAttr(stateResourceName, "dependencies.twilio", version),
 					resource.TestCheckResourceAttr(stateResourceName, "runtime", runtime),
-					resource.TestCheckResourceAttrSet(stateResourceName, "status"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
 		},
@@ -99,6 +93,45 @@ func TestAccTwilioServerlessBuild_invalidRuntime(t *testing.T) {
 			{
 				Config:      testAccTwilioServerlessBuild_dependenciesAndRuntime(uniqueName, version, runtime),
 				ExpectError: regexp.MustCompile(`(?s)expected runtime to be one of \[node10 node12\], got python2`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessBuild_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessBuild_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^ZS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessBuild_invalidFunctionVersionSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessBuild_invalidFunctionVersionSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of function_version.0.sid to match regular expression "\^ZN\[0-9a-fA-F\]\{32\}\$", got function_version_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessBuild_invalidAssetVersionSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessBuild_invalidAssetVersionSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of asset_version.0.sid to match regular expression "\^ZN\[0-9a-fA-F\]\{32\}\$", got asset_version_sid`),
 			},
 		},
 	})
@@ -251,4 +284,64 @@ resource "twilio_serverless_build" "build" {
   }
 }
 `, uniqueName, twilioVersion, runtime)
+}
+
+func testAccTwilioServerlessBuild_invalidServiceSid() string {
+	return `
+resource "twilio_serverless_build" "build" {
+  service_sid = "service_sid"
+  function_version {
+    sid = "ZHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+  dependencies = {
+    "twilio"                  = "3.6.2",
+    "fs"                      = "0.0.1-security"
+    "lodash"                  = "4.17.11"
+    "util"                    = "0.11.0"
+    "xmldom"                  = "0.1.27"
+    "@twilio/runtime-handler" = "1.0.1"
+  }
+  runtime = "node12"
+}
+`
+}
+
+func testAccTwilioServerlessBuild_invalidFunctionVersionSid() string {
+	return `
+resource "twilio_serverless_build" "build" {
+  service_sid = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  function_version {
+    sid = "function_version_sid"
+  }
+  dependencies = {
+    "twilio"                  = "3.6.2",
+    "fs"                      = "0.0.1-security"
+    "lodash"                  = "4.17.11"
+    "util"                    = "0.11.0"
+    "xmldom"                  = "0.1.27"
+    "@twilio/runtime-handler" = "1.0.1"
+  }
+  runtime = "node12"
+}
+`
+}
+
+func testAccTwilioServerlessBuild_invalidAssetVersionSid() string {
+	return `
+resource "twilio_serverless_build" "build" {
+  service_sid = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  asset_version {
+    sid = "asset_version_sid"
+  }
+  dependencies = {
+    "twilio"                  = "3.6.2",
+    "fs"                      = "0.0.1-security"
+    "lodash"                  = "4.17.11"
+    "util"                    = "0.11.0"
+    "xmldom"                  = "0.1.27"
+    "@twilio/runtime-handler" = "1.0.1"
+  }
+  runtime = "node12"
+}
+`
 }

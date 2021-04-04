@@ -30,8 +30,8 @@ resource "twilio_serverless_environment" "environment" {
 The following arguments are supported:
 
 - `service_sid` - (Mandatory) The serverless service SID to associate the environment with. Changing this forces a new resource to be created
-- `unique_name` - (Mandatory) The unique name of the environment
-- `domain_suffix` - (Optional) The domain suffix of the environment
+- `unique_name` - (Mandatory) The unique name of the environment. The length of the string must be between `1` and `100` characters (inclusive)
+- `domain_suffix` - (Optional) The domain suffix of the environment. The length of the string must be between `1` and `16` characters (inclusive)
 
 ## Attributes Reference
 

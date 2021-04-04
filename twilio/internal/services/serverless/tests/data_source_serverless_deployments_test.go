@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -33,6 +34,32 @@ func TestAccDataSourceTwilioServerlessDeployments_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(stateDataSourceName, "deployments.0.date_updated", ""),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "deployments.0.url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioServerlessDeployments_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessDeployments_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^ZS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioServerlessDeployments_invalidEnvironmentSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessDeployments_invalidEnvironmentSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of environment_sid to match regular expression "\^ZE\[0-9a-fA-F\]\{32\}\$", got environment_sid`),
 			},
 		},
 	})
@@ -85,4 +112,22 @@ data "twilio_serverless_deployments" "deployments" {
   environment_sid = twilio_serverless_deployment.deployment.environment_sid
 }
 `, uniqueName, uniqueName)
+}
+
+func testAccDataSourceTwilioServerlessDeployments_invalidServiceSid() string {
+	return `
+data "twilio_serverless_deployments" "deployments" {
+  service_sid     = "service_sid"
+  environment_sid = "ZEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioServerlessDeployments_invalidEnvironmentSid() string {
+	return `
+data "twilio_serverless_deployments" "deployments" {
+  service_sid     = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  environment_sid = "environment_sid"
+}
+`
 }

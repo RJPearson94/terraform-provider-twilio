@@ -24,10 +24,10 @@ resource "twilio_serverless_service" "service" {
 
 The following arguments are supported:
 
-- `unique_name` - (Mandatory) The unique name of the service
-- `friendly_name` - (Mandatory) The name of the service
-- `include_credentials` - (Optional) Whether or not credentials are included in the service runtime
-- `ui_editable` - (Optional) Whether or not the service is editable in the console
+- `unique_name` - (Mandatory) The unique name of the service. The length of the string must be between `1` and `50` characters (inclusive)
+- `friendly_name` - (Mandatory) The name of the service. The length of the string must be between `1` and `255` characters (inclusive)
+- `include_credentials` - (Optional) Whether or not credentials are included in the service runtime. The default value is `true`
+- `ui_editable` - (Optional) Whether or not the service is editable in the console. The default value is `false`
 
 ## Attributes Reference
 

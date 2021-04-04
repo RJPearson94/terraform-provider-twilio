@@ -12,6 +12,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/serverless/v1/services"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceServerlessService() *schema.Resource {
@@ -54,23 +55,25 @@ func resourceServerlessService() *schema.Resource {
 				Computed: true,
 			},
 			"unique_name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringLenBetween(1, 50),
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringLenBetween(1, 255),
 			},
 			"include_credentials": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  true,
 			},
 			"ui_editable": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  false,
 			},
 			"date_created": {
 				Type:     schema.TypeString,

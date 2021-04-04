@@ -65,13 +65,15 @@ func resourceServerlessFunction() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ServerlessServiceSidValidation(),
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringLenBetween(1, 255),
 			},
 			"latest_version_sid": {
 				Type:     schema.TypeString,
@@ -99,12 +101,14 @@ func resourceServerlessFunction() *schema.Resource {
 				ConflictsWith: []string{"source"},
 			},
 			"content_type": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"path": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringLenBetween(1, 255),
 			},
 			"visibility": {
 				Type:     schema.TypeString,

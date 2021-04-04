@@ -20,16 +20,19 @@ func dataSourceServerlessVariable() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ServerlessVariableSidValidation(),
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ServerlessServiceSidValidation(),
 			},
 			"environment_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ServerlessEnvironmentSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,

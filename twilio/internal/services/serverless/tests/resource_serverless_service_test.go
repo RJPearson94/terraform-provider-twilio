@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -30,8 +31,8 @@ func TestAccTwilioServerlessService_basic(t *testing.T) {
 					testAccCheckTwilioServerlessServiceExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "include_credentials"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "ui_editable"),
+					resource.TestCheckResourceAttr(stateResourceName, "include_credentials", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "ui_editable", "false"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
@@ -68,8 +69,8 @@ func TestAccTwilioServerlessService_update(t *testing.T) {
 					testAccCheckTwilioServerlessServiceExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "include_credentials"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "ui_editable"),
+					resource.TestCheckResourceAttr(stateResourceName, "include_credentials", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "ui_editable", "false"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
@@ -84,8 +85,8 @@ func TestAccTwilioServerlessService_update(t *testing.T) {
 					testAccCheckTwilioServerlessServiceExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
 					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "include_credentials"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "ui_editable"),
+					resource.TestCheckResourceAttr(stateResourceName, "include_credentials", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "ui_editable", "false"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
@@ -93,6 +94,202 @@ func TestAccTwilioServerlessService_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessService_uiEditable(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+
+	uniqueName := acctest.RandString(10)
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioServerlessServiceDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessService_basic(uniqueName, friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "ui_editable", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessService_uiEditableTrue(uniqueName, friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "ui_editable", "true"),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessService_basic(uniqueName, friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "ui_editable", "false"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessService_includeCredentials(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+
+	uniqueName := acctest.RandString(10)
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioServerlessServiceDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessService_basic(uniqueName, friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "include_credentials", "true"),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessService_includeCredentialsFalse(uniqueName, friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "include_credentials", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessService_basic(uniqueName, friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "include_credentials", "true"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessService_uniqueName(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+
+	uniqueName := acctest.RandString(1)
+	newUniqueName := acctest.RandString(50)
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioServerlessServiceDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessService_basic(uniqueName, friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessService_basic(newUniqueName, friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", newUniqueName),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessService_invalidUniqueNameWith0Characters(t *testing.T) {
+	uniqueName := ""
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessService_basic(uniqueName, friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of unique_name to be in the range \(1 - 50\), got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessService_invalidUniqueNameWith51Characters(t *testing.T) {
+	uniqueName := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessService_basic(uniqueName, friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of unique_name to be in the range \(1 - 50\), got aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessService_friendlyName(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+
+	uniqueName := acctest.RandString(10)
+	friendlyName := acctest.RandString(1)
+	newFriendlyName := acctest.RandString(255)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioServerlessServiceDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessService_basic(uniqueName, friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessService_basic(uniqueName, newFriendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessService_invalidFriendlyNameWith0Characters(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	friendlyName := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessService_basic(uniqueName, friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 255\), got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessService_invalidFriendlyNameWith256Characters(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	friendlyName := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioServerlessService_basic(uniqueName, friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 255\), got aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`),
 			},
 		},
 	})
@@ -151,6 +348,26 @@ func testAccTwilioServerlessService_basic(uniqueName string, friendlyName string
 resource "twilio_serverless_service" "service" {
   unique_name   = "%s"
   friendly_name = "%s"
+}
+`, uniqueName, friendlyName)
+}
+
+func testAccTwilioServerlessService_uiEditableTrue(uniqueName string, friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "%s"
+  friendly_name = "%s"
+  ui_editable = true
+}
+`, uniqueName, friendlyName)
+}
+
+func testAccTwilioServerlessService_includeCredentialsFalse(uniqueName string, friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "%s"
+  friendly_name = "%s"
+  include_credentials = false
 }
 `, uniqueName, friendlyName)
 }

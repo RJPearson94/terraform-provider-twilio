@@ -38,8 +38,8 @@ The following arguments are supported:
 
 - `service_sid` - (Mandatory) The serverless service SID to associate the environment variable with. Changing this forces a new resource to be created
 - `environment_sid` - (Mandatory) The serverless environment SID to associate the environment variable with. Changing this forces a new resource to be created
-- `key` - (Mandatory) The environment variable key
-- `value` - (Mandatory) The environment variable value
+- `key` - (Mandatory) The environment variable key. The length of the string must be between `1` and `128` characters (inclusive)
+- `value` - (Mandatory) The environment variable value. The value cannot be an empty string
 
 ## Attributes Reference
 

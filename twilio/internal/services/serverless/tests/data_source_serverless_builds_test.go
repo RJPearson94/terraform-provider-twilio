@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -38,6 +39,19 @@ func TestAccDataSourceTwilioServerlessBuilds_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "builds.0.date_updated"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "builds.0.url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioServerlessBuilds_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioServerlessBuilds_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^ZS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
 			},
 		},
 	})
@@ -96,4 +110,12 @@ data "twilio_serverless_builds" "builds" {
   service_sid = twilio_serverless_build.build.service_sid
 }
 `, uniqueName, twilioVersion)
+}
+
+func testAccDataSourceTwilioServerlessBuilds_invalidServiceSid() string {
+	return `
+data "twilio_serverless_builds" "builds" {
+  service_sid = "service_sid"
+}
+`
 }
