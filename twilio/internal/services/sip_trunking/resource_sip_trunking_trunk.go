@@ -64,7 +64,9 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 			"disaster_recovery_method": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "",
 				ValidateFunc: validation.StringInSlice([]string{
+					"",
 					"GET",
 					"POST",
 				}, false),
@@ -72,16 +74,19 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 			"disaster_recovery_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"domain_name": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: validation.StringLenBetween(1, 64),
+				Default:      "",
+				ValidateFunc: validation.StringLenBetween(0, 64),
 			},
 			"recording": {
 				Type:     schema.TypeList,
@@ -161,10 +166,10 @@ func resourceSIPTrunkingTrunkCreate(ctx context.Context, d *schema.ResourceData,
 
 	createInput := &trunks.CreateTrunkInput{
 		CnamLookupEnabled:      utils.OptionalBool(d, "cnam_lookup_enabled"),
-		DisasterRecoveryMethod: utils.OptionalString(d, "disaster_recovery_method"),
-		DisasterRecoveryURL:    utils.OptionalString(d, "disaster_recovery_url"),
-		DomainName:             utils.OptionalString(d, "domain_name"),
-		FriendlyName:           utils.OptionalString(d, "friendly_name"),
+		DisasterRecoveryMethod: utils.OptionalStringWithEmptyStringDefault(d, "disaster_recovery_method"),
+		DisasterRecoveryURL:    utils.OptionalStringWithEmptyStringDefault(d, "disaster_recovery_url"),
+		DomainName:             utils.OptionalStringWithEmptyStringDefault(d, "domain_name"),
+		FriendlyName:           utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 		Secure:                 utils.OptionalBool(d, "secure"),
 		TransferMode:           utils.OptionalString(d, "transfer_mode"),
 	}
@@ -223,10 +228,10 @@ func resourceSIPTrunkingTrunkUpdate(ctx context.Context, d *schema.ResourceData,
 
 	updateInput := &trunk.UpdateTrunkInput{
 		CnamLookupEnabled:      utils.OptionalBool(d, "cnam_lookup_enabled"),
-		DisasterRecoveryMethod: utils.OptionalString(d, "disaster_recovery_method"),
-		DisasterRecoveryURL:    utils.OptionalString(d, "disaster_recovery_url"),
-		DomainName:             utils.OptionalString(d, "domain_name"),
-		FriendlyName:           utils.OptionalString(d, "friendly_name"),
+		DisasterRecoveryMethod: utils.OptionalStringWithEmptyStringDefault(d, "disaster_recovery_method"),
+		DisasterRecoveryURL:    utils.OptionalStringWithEmptyStringDefault(d, "disaster_recovery_url"),
+		DomainName:             utils.OptionalStringWithEmptyStringDefault(d, "domain_name"),
+		FriendlyName:           utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 		Secure:                 utils.OptionalBool(d, "secure"),
 		TransferMode:           utils.OptionalString(d, "transfer_mode"),
 	}

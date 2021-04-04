@@ -92,11 +92,12 @@ func resourceVideoCompositionHook() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Default:      "640x480",
-				ValidateFunc: validation.StringMatch(regexp.MustCompile("^(\\d)+x(\\d)+$"), ""),
+				ValidateFunc: validation.StringMatch(regexp.MustCompile(`^(\d)+x(\d)+$`), ""),
 			},
 			"status_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"status_callback_method": {
@@ -116,6 +117,7 @@ func resourceVideoCompositionHook() *schema.Resource {
 			"video_layout": {
 				Type:             schema.TypeString,
 				Optional:         true,
+				Default:          "",
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
@@ -140,15 +142,15 @@ func resourceVideoCompositionHookCreate(ctx context.Context, d *schema.ResourceD
 
 	createInput := &composition_hooks.CreateCompositionHookInput{
 		FriendlyName:         d.Get("friendly_name").(string),
-		AudioSources:         utils.LegacyOptionalStringSlice(d, "audio_sources"),
-		AudioSourcesExcluded: utils.LegacyOptionalStringSlice(d, "audio_sources_excluded"),
-		Enabled:              utils.LegacyOptionalBool(d, "enabled"),
-		Format:               utils.LegacyOptionalString(d, "format"),
-		Resolution:           utils.LegacyOptionalString(d, "resolution"),
-		StatusCallback:       utils.LegacyOptionalString(d, "status_callback_url"),
-		StatusCallbackMethod: utils.LegacyOptionalString(d, "status_callback_method"),
-		Trim:                 utils.LegacyOptionalBool(d, "trim"),
-		VideoLayout:          utils.LegacyOptionalJSONString(d, "video_layout"),
+		AudioSources:         utils.OptionalStringSlice(d, "audio_sources"),
+		AudioSourcesExcluded: utils.OptionalStringSlice(d, "audio_sources_excluded"),
+		Enabled:              utils.OptionalBool(d, "enabled"),
+		Format:               utils.OptionalString(d, "format"),
+		Resolution:           utils.OptionalString(d, "resolution"),
+		StatusCallback:       utils.OptionalStringWithEmptyStringDefault(d, "status_callback_url"),
+		StatusCallbackMethod: utils.OptionalString(d, "status_callback_method"),
+		Trim:                 utils.OptionalBool(d, "trim"),
+		VideoLayout:          utils.OptionalStringWithEmptyStringDefault(d, "video_layout"),
 	}
 
 	createResult, err := client.CompositionHooks.CreateWithContext(ctx, createInput)
@@ -204,15 +206,15 @@ func resourceVideoCompositionHookUpdate(ctx context.Context, d *schema.ResourceD
 
 	updateInput := &composition_hook.UpdateCompositionHookInput{
 		FriendlyName:         d.Get("friendly_name").(string),
-		AudioSources:         utils.LegacyOptionalStringSlice(d, "audio_sources"),
-		AudioSourcesExcluded: utils.LegacyOptionalStringSlice(d, "audio_sources_excluded"),
-		Enabled:              utils.LegacyOptionalBool(d, "enabled"),
-		Format:               utils.LegacyOptionalString(d, "format"),
-		Resolution:           utils.LegacyOptionalString(d, "resolution"),
-		StatusCallback:       utils.LegacyOptionalString(d, "status_callback_url"),
-		StatusCallbackMethod: utils.LegacyOptionalString(d, "status_callback_method"),
-		Trim:                 utils.LegacyOptionalBool(d, "trim"),
-		VideoLayout:          utils.LegacyOptionalJSONString(d, "video_layout"),
+		AudioSources:         utils.OptionalStringSlice(d, "audio_sources"),
+		AudioSourcesExcluded: utils.OptionalStringSlice(d, "audio_sources_excluded"),
+		Enabled:              utils.OptionalBool(d, "enabled"),
+		Format:               utils.OptionalString(d, "format"),
+		Resolution:           utils.OptionalString(d, "resolution"),
+		StatusCallback:       utils.OptionalStringWithEmptyStringDefault(d, "status_callback_url"),
+		StatusCallbackMethod: utils.OptionalString(d, "status_callback_method"),
+		Trim:                 utils.OptionalBool(d, "trim"),
+		VideoLayout:          utils.OptionalStringWithEmptyStringDefault(d, "video_layout"),
 	}
 
 	updateResp, err := client.CompositionHook(d.Id()).UpdateWithContext(ctx, updateInput)

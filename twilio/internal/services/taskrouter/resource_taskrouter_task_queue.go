@@ -66,11 +66,6 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
 			},
-			"event_callback_url": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
-			},
 			"assignment_activity_name": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -78,6 +73,7 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 			"assignment_activity_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "",
 				ValidateFunc: utils.TaskRouterActivitySidValidation(),
 			},
 			"reservation_activity_name": {
@@ -87,6 +83,7 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 			"reservation_activity_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "",
 				ValidateFunc: utils.TaskRouterActivitySidValidation(),
 			},
 			"max_reserved_workers": {
@@ -130,11 +127,11 @@ func resourceTaskRouterTaskQueueCreate(ctx context.Context, d *schema.ResourceDa
 
 	createInput := &task_queues.CreateTaskQueueInput{
 		FriendlyName:           d.Get("friendly_name").(string),
-		AssignmentActivitySid:  utils.OptionalString(d, "assignment_activity_sid"),
+		AssignmentActivitySid:  utils.OptionalStringWithEmptyStringDefault(d, "assignment_activity_sid"),
 		MaxReservedWorkers:     utils.OptionalInt(d, "max_reserved_workers"),
 		TargetWorkers:          utils.OptionalString(d, "target_workers"),
 		TaskOrder:              utils.OptionalString(d, "task_order"),
-		ReservationActivitySid: utils.OptionalString(d, "reservation_activity_sid"),
+		ReservationActivitySid: utils.OptionalStringWithEmptyStringDefault(d, "reservation_activity_sid"),
 	}
 
 	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueues.CreateWithContext(ctx, createInput)
@@ -162,7 +159,6 @@ func resourceTaskRouterTaskQueueRead(ctx context.Context, d *schema.ResourceData
 	d.Set("workspace_sid", getResponse.WorkspaceSid)
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("friendly_name", getResponse.FriendlyName)
-	d.Set("event_callback_url", getResponse.EventCallbackURL)
 	d.Set("task_order", getResponse.TaskOrder)
 	d.Set("assignment_activity_name", getResponse.AssignmentActivityName)
 	d.Set("assignment_activity_sid", getResponse.AssignmentActivitySid)
@@ -186,11 +182,11 @@ func resourceTaskRouterTaskQueueUpdate(ctx context.Context, d *schema.ResourceDa
 
 	updateInput := &task_queue.UpdateTaskQueueInput{
 		FriendlyName:           utils.OptionalString(d, "friendly_name"),
-		AssignmentActivitySid:  utils.OptionalString(d, "assignment_activity_sid"),
+		AssignmentActivitySid:  utils.OptionalStringWithEmptyStringDefault(d, "assignment_activity_sid"),
 		MaxReservedWorkers:     utils.OptionalInt(d, "max_reserved_workers"),
 		TargetWorkers:          utils.OptionalString(d, "target_workers"),
 		TaskOrder:              utils.OptionalString(d, "task_order"),
-		ReservationActivitySid: utils.OptionalString(d, "reservation_activity_sid"),
+		ReservationActivitySid: utils.OptionalStringWithEmptyStringDefault(d, "reservation_activity_sid"),
 	}
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).UpdateWithContext(ctx, updateInput)

@@ -23,7 +23,7 @@ resource "twilio_taskrouter_workspace" "workspace" {
 The following arguments are supported:
 
 - `friendly_name` - (Mandatory) The name of the workspace. The value cannot be an empty string
-- `event_callback_url` - (Optional) The event callback URL
+- `event_callback_url` - (Optional) The event callback URL. The default value is an empty string/ no configuration specified
 - `event_filters` - (Optional) list of event callback filters. Valid values are `task.created`,`task.completed`,`task.canceled`,`task.deleted`,`task.updated`,`task.wrapup`,`task-queue.entered`,`task-queue.moved`,`task-queue.timeout`,`reservation.created`,`reservation.accepted`,`reservation.rejected`,`reservation.timeout`,`reservation.canceled`,`reservation.rescinded`,`reservation.completed`,`workflow.entered`,`workflow.timeout`,`workflow.target-matched`,`worker.activity.update`,`worker.attributes.update`,`worker.capacity.update` or `worker.channel.availability.update`
 - `multi_task_enabled` - (Optional) Whether or not multitasking is enabled
 - `template` - (Optional) TaskRouter template to use. Valid values are `NONE` or `FIFO`. The default value is `NONE`

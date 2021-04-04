@@ -70,11 +70,13 @@ func resourceTaskRouterWorkflow() *schema.Resource {
 			"fallback_assignment_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"assignment_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"task_reservation_timeout": {
@@ -117,8 +119,8 @@ func resourceTaskRouterWorkflowCreate(ctx context.Context, d *schema.ResourceDat
 	createInput := &workflows.CreateWorkflowInput{
 		FriendlyName:                  d.Get("friendly_name").(string),
 		Configuration:                 configurationJSONString,
-		AssignmentCallbackURL:         utils.OptionalString(d, "assignment_callback_url"),
-		FallbackAssignmentCallbackURL: utils.OptionalString(d, "fallback_assignment_callback_url"),
+		AssignmentCallbackURL:         utils.OptionalStringWithEmptyStringDefault(d, "assignment_callback_url"),
+		FallbackAssignmentCallbackURL: utils.OptionalStringWithEmptyStringDefault(d, "fallback_assignment_callback_url"),
 		TaskReservationTimeout:        utils.OptionalInt(d, "task_reservation_timeout"),
 	}
 
@@ -169,8 +171,8 @@ func resourceTaskRouterWorkflowUpdate(ctx context.Context, d *schema.ResourceDat
 	updateInput := &workflow.UpdateWorkflowInput{
 		FriendlyName:                  utils.OptionalString(d, "friendly_name"),
 		Configuration:                 utils.OptionalJSONString(d, "configuration"),
-		AssignmentCallbackURL:         utils.OptionalString(d, "assignment_callback_url"),
-		FallbackAssignmentCallbackURL: utils.OptionalString(d, "fallback_assignment_callback_url"),
+		AssignmentCallbackURL:         utils.OptionalStringWithEmptyStringDefault(d, "assignment_callback_url"),
+		FallbackAssignmentCallbackURL: utils.OptionalStringWithEmptyStringDefault(d, "fallback_assignment_callback_url"),
 		TaskReservationTimeout:        utils.OptionalInt(d, "task_reservation_timeout"),
 	}
 

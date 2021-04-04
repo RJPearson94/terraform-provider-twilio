@@ -9,9 +9,11 @@ Manages a TaskRouter worker. See the [API docs](https://www.twilio.com/docs/task
 
 For more information on TaskRouter, see the product [page](https://www.twilio.com/taskrouter)
 
-!> Removing the `activity_sid` from you configuration will cause the SID to be set to workpace default activity SID
+!> Removing the `activity_sid` from your configuration will cause the value to be retained after a Terraform apply. If you want to change the `activity_sid` value you will need to either create a new `twilio_taskrouter_activity` resource and set the `activity_sid` to the generated `sid` alternatively you can set the `activity_sid` to be the workspace default by using the `default_activity_sid` attribute on the `twilio_taskrouter_workspace` resource
 
 ## Example Usage
+
+### Basic
 
 ```hcl
 resource "twilio_taskrouter_workspace" "workspace" {
@@ -23,6 +25,44 @@ resource "twilio_taskrouter_workspace" "workspace" {
 resource "twilio_taskrouter_worker" "worker" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
   friendly_name = "Test Worker"
+}
+```
+
+### Custom activity
+
+```hcl
+resource "twilio_taskrouter_workspace" "workspace" {
+  friendly_name          = "Test Workspace"
+  multi_task_enabled     = true
+  prioritize_queue_order = "FIFO"
+}
+
+resource "twilio_taskrouter_activity" "activity" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "test"
+  available     = true
+}
+
+resource "twilio_taskrouter_worker" "worker" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "Test Worker"
+  activity_sid  = twilio_taskrouter_activity.activity.sid
+}
+```
+
+### Explicitly set the workspace default activity SID
+
+```hcl
+resource "twilio_taskrouter_workspace" "workspace" {
+  friendly_name          = "Test Workspace"
+  multi_task_enabled     = true
+  prioritize_queue_order = "FIFO"
+}
+
+resource "twilio_taskrouter_worker" "worker" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "Test Worker"
+  activity_sid  = twilio_taskrouter_workspace.workspace.default_activity_sid
 }
 ```
 

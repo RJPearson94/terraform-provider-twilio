@@ -66,6 +66,7 @@ func resourceSIPDomain() *schema.Resource {
 			"friendly_name": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "",
 			},
 			"voice": {
 				Type:     schema.TypeList,
@@ -77,6 +78,7 @@ func resourceSIPDomain() *schema.Resource {
 						"status_callback_url": {
 							Type:         schema.TypeString,
 							Optional:     true,
+							Default:      "",
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 						"status_callback_method": {
@@ -88,21 +90,13 @@ func resourceSIPDomain() *schema.Resource {
 								"POST",
 							}, false),
 						},
-						"fallback_method": {
-							Type:     schema.TypeString,
-							Optional: true,
-							Default:  "POST",
-							ValidateFunc: validation.StringInSlice([]string{
-								"GET",
-								"POST",
-							}, false),
-						},
 						"fallback_url": {
 							Type:         schema.TypeString,
 							Optional:     true,
+							Default:      "",
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
-						"method": {
+						"fallback_method": {
 							Type:     schema.TypeString,
 							Optional: true,
 							Default:  "POST",
@@ -114,7 +108,17 @@ func resourceSIPDomain() *schema.Resource {
 						"url": {
 							Type:         schema.TypeString,
 							Optional:     true,
+							Default:      "",
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+						},
+						"method": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Default:  "POST",
+							ValidateFunc: validation.StringInSlice([]string{
+								"GET",
+								"POST",
+							}, false),
 						},
 					},
 				},
@@ -134,6 +138,7 @@ func resourceSIPDomain() *schema.Resource {
 						"caller_sid": {
 							Type:         schema.TypeString,
 							Optional:     true,
+							Default:      "",
 							ValidateFunc: utils.PhoneNumberSidValidation(),
 						},
 					},
@@ -142,6 +147,7 @@ func resourceSIPDomain() *schema.Resource {
 			"byoc_trunk_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "",
 				ValidateFunc: utils.ByocSidValidation(),
 			},
 			"secure": {
@@ -175,23 +181,23 @@ func resourceSIPDomainCreate(ctx context.Context, d *schema.ResourceData, meta i
 
 	createInput := &domains.CreateDomainInput{
 		DomainName:      d.Get("domain_name").(string),
-		ByocTrunkSid:    utils.OptionalString(d, "byoc_trunk_sid"),
-		FriendlyName:    utils.OptionalString(d, "friendly_name"),
+		ByocTrunkSid:    utils.OptionalStringWithEmptyStringDefault(d, "byoc_trunk_sid"),
+		FriendlyName:    utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 		Secure:          utils.OptionalBool(d, "secure"),
 		SipRegistration: utils.OptionalBool(d, "sip_registration"),
 	}
 
 	if _, ok := d.GetOk("voice"); ok {
 		createInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
-		createInput.VoiceFallbackURL = utils.OptionalString(d, "voice.0.fallback_url")
-		createInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
+		createInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.fallback_url")
 		createInput.VoiceStatusCallbackMethod = utils.OptionalString(d, "voice.0.status_callback_method")
-		createInput.VoiceStatusCallbackURL = utils.OptionalString(d, "voice.0.status_callback_url")
-		createInput.VoiceURL = utils.OptionalString(d, "voice.0.url")
+		createInput.VoiceStatusCallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.status_callback_url")
+		createInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
+		createInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.url")
 	}
 
 	if _, ok := d.GetOk("emergency"); ok {
-		createInput.EmergencyCallerSid = utils.OptionalString(d, "emergency.0.caller_sid")
+		createInput.EmergencyCallerSid = utils.OptionalStringWithEmptyStringDefault(d, "emergency.0.caller_sid")
 		createInput.EmergencyCallingEnabled = utils.OptionalBool(d, "emergency.0.calling_enabled")
 	}
 
@@ -240,23 +246,23 @@ func resourceSIPDomainUpdate(ctx context.Context, d *schema.ResourceData, meta i
 
 	updateInput := &domain.UpdateDomainInput{
 		DomainName:      utils.OptionalString(d, "domain_name"),
-		ByocTrunkSid:    utils.OptionalString(d, "byoc_trunk_sid"),
-		FriendlyName:    utils.OptionalString(d, "friendly_name"),
+		ByocTrunkSid:    utils.OptionalStringWithEmptyStringDefault(d, "byoc_trunk_sid"),
+		FriendlyName:    utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 		Secure:          utils.OptionalBool(d, "secure"),
 		SipRegistration: utils.OptionalBool(d, "sip_registration"),
 	}
 
 	if _, ok := d.GetOk("voice"); ok {
 		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
-		updateInput.VoiceFallbackURL = utils.OptionalString(d, "voice.0.fallback_url")
-		updateInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
+		updateInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.fallback_url")
 		updateInput.VoiceStatusCallbackMethod = utils.OptionalString(d, "voice.0.status_callback_method")
-		updateInput.VoiceStatusCallbackURL = utils.OptionalString(d, "voice.0.status_callback_url")
-		updateInput.VoiceURL = utils.OptionalString(d, "voice.0.url")
+		updateInput.VoiceStatusCallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.status_callback_url")
+		updateInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
+		updateInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.url")
 	}
 
 	if _, ok := d.GetOk("emergency"); ok {
-		updateInput.EmergencyCallerSid = utils.OptionalString(d, "emergency.0.caller_sid")
+		updateInput.EmergencyCallerSid = utils.OptionalStringWithEmptyStringDefault(d, "emergency.0.caller_sid")
 		updateInput.EmergencyCallingEnabled = utils.OptionalBool(d, "emergency.0.calling_enabled")
 	}
 

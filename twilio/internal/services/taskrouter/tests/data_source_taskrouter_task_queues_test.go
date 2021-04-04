@@ -29,7 +29,6 @@ func TestAccDataSourceTwilioTaskRouterTaskQueues_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(stateDataSourceName, "task_queues.#", "1"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "task_queues.0.sid"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "task_queues.0.friendly_name", friendlyName),
-					resource.TestCheckResourceAttr(stateDataSourceName, "task_queues.0.event_callback_url", ""),
 					resource.TestCheckResourceAttr(stateDataSourceName, "task_queues.0.assignment_activity_name", ""),
 					resource.TestCheckResourceAttr(stateDataSourceName, "task_queues.0.assignment_activity_sid", ""),
 					resource.TestCheckResourceAttr(stateDataSourceName, "task_queues.0.reservation_activity_name", ""),

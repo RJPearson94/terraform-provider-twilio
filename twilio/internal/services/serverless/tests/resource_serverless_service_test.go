@@ -357,7 +357,7 @@ func testAccTwilioServerlessService_uiEditableTrue(uniqueName string, friendlyNa
 resource "twilio_serverless_service" "service" {
   unique_name   = "%s"
   friendly_name = "%s"
-  ui_editable = true
+  ui_editable   = true
 }
 `, uniqueName, friendlyName)
 }
@@ -365,8 +365,8 @@ resource "twilio_serverless_service" "service" {
 func testAccTwilioServerlessService_includeCredentialsFalse(uniqueName string, friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_service" "service" {
-  unique_name   = "%s"
-  friendly_name = "%s"
+  unique_name         = "%s"
+  friendly_name       = "%s"
   include_credentials = false
 }
 `, uniqueName, friendlyName)

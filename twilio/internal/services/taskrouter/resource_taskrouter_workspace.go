@@ -65,6 +65,7 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 			"event_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"event_filters": {
@@ -159,8 +160,8 @@ func resourceTaskRouterWorkspaceCreate(ctx context.Context, d *schema.ResourceDa
 
 	createInput := &workspaces.CreateWorkspaceInput{
 		FriendlyName:         d.Get("friendly_name").(string),
-		EventCallbackURL:     utils.OptionalString(d, "event_callback_url"),
-		EventsFilter:         utils.OptionalSeperatedString(d, "event_filters", workspaceEventsSeperator),
+		EventCallbackURL:     utils.OptionalStringWithEmptyStringDefault(d, "event_callback_url"),
+		EventsFilter:         utils.OptionalSeperatedStringWithEmptyStringDefault(d, "event_filters", workspaceEventsSeperator),
 		MultiTaskEnabled:     utils.OptionalBool(d, "multi_task_enabled"),
 		Template:             utils.OptionalString(d, "template"),
 		PrioritizeQueueOrder: utils.OptionalString(d, "prioritize_queue_order"),
@@ -218,8 +219,8 @@ func resourceTaskRouterWorkspaceUpdate(ctx context.Context, d *schema.ResourceDa
 
 	updateInput := &workspace.UpdateWorkspaceInput{
 		FriendlyName:         utils.OptionalString(d, "friendly_name"),
-		EventCallbackURL:     utils.OptionalString(d, "event_callback_url"),
-		EventsFilter:         utils.OptionalSeperatedString(d, "event_filters", workspaceEventsSeperator),
+		EventCallbackURL:     utils.OptionalStringWithEmptyStringDefault(d, "event_callback_url"),
+		EventsFilter:         utils.OptionalSeperatedStringWithEmptyStringDefault(d, "event_filters", workspaceEventsSeperator),
 		MultiTaskEnabled:     utils.OptionalBool(d, "multi_task_enabled"),
 		Template:             utils.OptionalString(d, "template"),
 		PrioritizeQueueOrder: utils.OptionalString(d, "prioritize_queue_order"),

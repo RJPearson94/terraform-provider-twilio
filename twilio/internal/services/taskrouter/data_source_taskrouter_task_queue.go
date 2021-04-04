@@ -37,10 +37,6 @@ func dataSourceTaskRouterTaskQueue() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"event_callback_url": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
 			"assignment_activity_name": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -103,7 +99,6 @@ func dataSourceTaskRouterTaskQueueRead(ctx context.Context, d *schema.ResourceDa
 	d.Set("workspace_sid", getResponse.WorkspaceSid)
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("friendly_name", getResponse.FriendlyName)
-	d.Set("event_callback_url", getResponse.EventCallbackURL)
 	d.Set("task_order", getResponse.TaskOrder)
 	d.Set("assignment_activity_name", getResponse.AssignmentActivityName)
 	d.Set("assignment_activity_sid", getResponse.AssignmentActivitySid)

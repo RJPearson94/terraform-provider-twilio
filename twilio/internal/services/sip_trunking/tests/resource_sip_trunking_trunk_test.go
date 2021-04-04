@@ -251,7 +251,7 @@ func TestAccTwilioSIPTrunkingTrunk_invalidDisasterRecoveryMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioSIPTrunkingTrunk_disasterRecovery(method, url),
-				ExpectError: regexp.MustCompile(`(?s)expected disaster_recovery_method to be one of \[GET POST\], got DELETE`),
+				ExpectError: regexp.MustCompile(`(?s)expected disaster_recovery_method to be one of \[ GET POST\], got DELETE`),
 			},
 		},
 	})
@@ -276,7 +276,7 @@ func TestAccTwilioSIPTrunkingTrunk_invalidDisasterRecoveryURL(t *testing.T) {
 func TestAccTwilioSIPTrunkingTrunk_friendlyName(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.trunk", trunkResourceName)
 
-	friendlyName := acctest.RandString(1)
+	friendlyName := ""
 	newFriendlyName := acctest.RandString(64)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -284,13 +284,6 @@ func TestAccTwilioSIPTrunkingTrunk_friendlyName(t *testing.T) {
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
 		Steps: []resource.TestStep{
-			{
-				Config: testAccTwilioSIPTrunkingTrunk_basic(),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-				),
-			},
 			{
 				Config: testAccTwilioSIPTrunkingTrunk_friendlyName(friendlyName),
 				Check: resource.ComposeTestCheckFunc(
@@ -316,21 +309,6 @@ func TestAccTwilioSIPTrunkingTrunk_friendlyName(t *testing.T) {
 	})
 }
 
-func TestAccTwilioSIPTrunkingTrunk_invalidFriendlyNameWithLengthOf0(t *testing.T) {
-	friendlyName := ""
-
-	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config:      testAccTwilioSIPTrunkingTrunk_friendlyName(friendlyName),
-				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 64\), got `),
-			},
-		},
-	})
-}
-
 func TestAccTwilioSIPTrunkingTrunk_invalidFriendlyNameWithLengthOf65(t *testing.T) {
 	friendlyName := "7y80krlx0npe98jtdhahyvx8jvfz09x21x226uxj8gowkun6dgl2p1xj819qjzgtt"
 
@@ -340,7 +318,7 @@ func TestAccTwilioSIPTrunkingTrunk_invalidFriendlyNameWithLengthOf65(t *testing.
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioSIPTrunkingTrunk_friendlyName(friendlyName),
-				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 64\), got 7y80krlx0npe98jtdhahyvx8jvfz09x21x226uxj8gowkun6dgl2p1xj819qjzgtt`),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(0 - 64\), got 7y80krlx0npe98jtdhahyvx8jvfz09x21x226uxj8gowkun6dgl2p1xj819qjzgtt`),
 			},
 		},
 	})

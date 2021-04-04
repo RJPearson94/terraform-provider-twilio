@@ -38,7 +38,6 @@ The following attributes are exported:
 - `account_sid` - The account SID of the task queue is deployed into
 - `workspace_sid` - The workspace SID to create the task queue under
 - `friendly_name` - The name of the task queue
-- `event_callback_url` - The callback URL for task queue Events
 - `task_order` - How TaskRouter will assign workers tasks on the queue
 - `assignment_activity_name` - The assignment activity name for the task queue
 - `assignment_activity_sid` - The assignment activity SID for the task queue

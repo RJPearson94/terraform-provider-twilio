@@ -30,12 +30,11 @@ The following arguments are supported:
 
 - `friendly_name` - (Mandatory) The name of the task queue. The value cannot be an empty string
 - `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the task queue with. Changing this forces a new resource to be created
-- `assignment_activity_sid` - (Optional) The assignment activity SID for the task queue
+- `assignment_activity_sid` - (Optional) The assignment activity SID for the task queue. The default value is an empty string/ no configuration specified
 - `max_reserved_workers` - (Optional) The max number of workers to create a reservation for. The value must be between `1` and `50` (inclusive). The default value is `1`
 - `target_workers` - (Optional) Worker selection criteria for any tasks that enter the task queue. The default value is `1==1`
 - `task_order` - (Optional) How TaskRouter will assign workers tasks on the queue. Valid values are `LIFO` or `FIFO`. Default value is `FIFO`
-- `reservation_activity_sid` - (Optional) The reservation activity SID for the task queue
-- `event_callback_url` - (Optional) The callback URL for task queue events
+- `reservation_activity_sid` - (Optional) The reservation activity SID for the task queue. The default value is an empty string/ no configuration specified
 
 ## Attributes Reference
 
@@ -46,7 +45,6 @@ The following attributes are exported:
 - `account_sid` - The account SID of the task queue is deployed into
 - `workspace_sid` - The workspace SID to create the task queue under
 - `friendly_name` - The name of the task queue
-- `event_callback_url` - The callback URL for task queue events
 - `task_order` - How TaskRouter will assign workers tasks on the queue
 - `assignment_activity_name` - The assignment activity name for the task queue
 - `assignment_activity_sid` - The assignment activity SID for the task queue

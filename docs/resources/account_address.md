@@ -26,10 +26,10 @@ resource "twilio_account_address" "address" {
 The following arguments are supported:
 
 - `account_sid` - (Mandatory) The account SID to associate the address with. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The friendly name of the address
+- `friendly_name` - (Optional) The friendly name of the address. The default value is an empty string/ no configuration specified
 - `customer_name` - (Mandatory) The customer/ business name. The value cannot be an empty string
 - `street` - (Mandatory) The address street. The value cannot be an empty string
-- `street_secondary` - (Optional) The address secondary street
+- `street_secondary` - (Optional) The address secondary street. The default value is an empty string/ no configuration specified
 - `city` - (Mandatory) The address city. The value cannot be an empty string
 - `region` - (Mandatory) The address region. The value cannot be an empty string
 - `postal_code` - (Mandatory) The address postal code. The value cannot be an empty string

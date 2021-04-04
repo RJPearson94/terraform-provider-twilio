@@ -118,8 +118,8 @@ func TestAccTwilioSIPTrunkingOriginationURL_priority(t *testing.T) {
 
 	friendlyName := acctest.RandString(10)
 	weight := 0
-	priority := 0
-	newPriority := 65535
+	priority := 65535
+	newPriority := 0
 	enabled := false
 	sipURL := "sip:test@test.com"
 
@@ -146,7 +146,7 @@ func TestAccTwilioSIPTrunkingOriginationURL_priority(t *testing.T) {
 	})
 }
 
-func TestAccTwilioSIPTrunkingOriginationURL_invalidPriorityOf0(t *testing.T) {
+func TestAccTwilioSIPTrunkingOriginationURL_invalidPriorityOfNegative1(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 	weight := 0
 	priority := -1
@@ -188,9 +188,9 @@ func TestAccTwilioSIPTrunkingOriginationURL_weight(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.origination_url", originationURLResourceName)
 
 	friendlyName := acctest.RandString(10)
-	weight := 0
-	priority := 0
-	newWeight := 65535
+	weight := 65535
+	priority := 10
+	newWeight := 0
 	enabled := false
 	sipURL := "sip:test@test.com"
 
@@ -217,7 +217,7 @@ func TestAccTwilioSIPTrunkingOriginationURL_weight(t *testing.T) {
 	})
 }
 
-func TestAccTwilioSIPTrunkingOriginationURL_invalidWeightOf0(t *testing.T) {
+func TestAccTwilioSIPTrunkingOriginationURL_invalidWeightOfNegative1(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 	priority := 0
 	weight := -1

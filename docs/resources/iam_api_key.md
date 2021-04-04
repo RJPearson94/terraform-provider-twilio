@@ -23,7 +23,7 @@ resource "twilio_iam_api_key" "api_key" {
 The following arguments are supported:
 
 - `account_sid` - (Mandatory) The Account SID associated with the API Key. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The name of the API Key
+- `friendly_name` - (Optional) The name of the API Key. The default value is an empty string/ no configuration specified
 
 ## Attributes Reference
 

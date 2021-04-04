@@ -112,6 +112,7 @@ func TestAccTwilioTaskRouterWorker_update(t *testing.T) {
 func TestAccTwilioTaskRouterWorker_customActivity(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.worker", workerResourceName)
 	activityStateResourceName := "twilio_taskrouter_activity.activity"
+	workspaceStateResourceName := "twilio_taskrouter_workspace.workspace"
 
 	friendlyName := acctest.RandString(10)
 
@@ -125,6 +126,27 @@ func TestAccTwilioTaskRouterWorker_customActivity(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioTaskRouterWorkerExists(stateResourceName),
 					resource.TestCheckResourceAttrPair(stateResourceName, "activity_sid", activityStateResourceName, "sid"),
+				),
+			},
+			{
+				Config: testAccTwilioTaskRouterWorker_detachCustomActivity(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkerExists(stateResourceName),
+					resource.TestCheckResourceAttrPair(stateResourceName, "activity_sid", activityStateResourceName, "sid"),
+				),
+			},
+			{
+				Config: testAccTwilioTaskRouterWorker_updateActivitySidToWorkspaceDefault(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkerExists(stateResourceName),
+					resource.TestCheckResourceAttrPair(stateResourceName, "activity_sid", workspaceStateResourceName, "default_activity_sid"),
+				),
+			},
+			{
+				Config: testAccTwilioTaskRouterWorker_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkerExists(stateResourceName),
+					resource.TestCheckResourceAttrPair(stateResourceName, "activity_sid", workspaceStateResourceName, "default_activity_sid"),
 				),
 			},
 		},
@@ -238,6 +260,50 @@ resource "twilio_taskrouter_worker" "worker" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
   friendly_name = "%[1]s"
   activity_sid  = twilio_taskrouter_activity.activity.sid
+}
+`, friendlyName)
+}
+
+func testAccTwilioTaskRouterWorker_detachCustomActivity(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_taskrouter_workspace" "workspace" {
+  friendly_name          = "%[1]s"
+  multi_task_enabled     = true
+  prioritize_queue_order = "FIFO"
+}
+
+resource "twilio_taskrouter_activity" "activity" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s"
+  available     = false
+}
+
+resource "twilio_taskrouter_worker" "worker" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s"
+}
+`, friendlyName)
+}
+
+func testAccTwilioTaskRouterWorker_updateActivitySidToWorkspaceDefault(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_taskrouter_workspace" "workspace" {
+  friendly_name          = "%[1]s"
+  multi_task_enabled     = true
+  prioritize_queue_order = "FIFO"
+}
+
+# Activity has to be retained whilst the worker activity is updated
+resource "twilio_taskrouter_activity" "activity" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s"
+  available     = false
+}
+
+resource "twilio_taskrouter_worker" "worker" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s"
+  activity_sid  = twilio_taskrouter_workspace.workspace.default_activity_sid
 }
 `, friendlyName)
 }

@@ -84,7 +84,7 @@ func TestAccTwilioIAMAPIKey_friendlyName(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.api_key", resourceName)
 
 	testData := acceptance.TestAccData
-	friendlyName := acctest.RandString(1)
+	friendlyName := ""
 	newFriendlyName := acctest.RandString(64)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -92,13 +92,6 @@ func TestAccTwilioIAMAPIKey_friendlyName(t *testing.T) {
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		CheckDestroy:      testAccCheckTwilioAPIKeyDestroy,
 		Steps: []resource.TestStep{
-			{
-				Config: testAccTwilioAPIKey_basic(testData),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioAPIKeyExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-				),
-			},
 			{
 				Config: testAccTwilioAPIKey_friendlyName(testData, friendlyName),
 				Check: resource.ComposeTestCheckFunc(
@@ -124,22 +117,6 @@ func TestAccTwilioIAMAPIKey_friendlyName(t *testing.T) {
 	})
 }
 
-func TestAccTwilioIAMAPIKey_invalidFriendlyNameWithLengthOf0(t *testing.T) {
-	testData := acceptance.TestAccData
-	friendlyName := ""
-
-	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config:      testAccTwilioAPIKey_friendlyName(testData, friendlyName),
-				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 64\), got `),
-			},
-		},
-	})
-}
-
 func TestAccTwilioIAMAPIKey_invalidFriendlyNameWithLengthOf65(t *testing.T) {
 	testData := acceptance.TestAccData
 	friendlyName := "7y80krlx0npe98jtdhahyvx8jvfz09x21x226uxj8gowkun6dgl2p1xj819qjzgtt"
@@ -150,7 +127,7 @@ func TestAccTwilioIAMAPIKey_invalidFriendlyNameWithLengthOf65(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAPIKey_friendlyName(testData, friendlyName),
-				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 64\), got 7y80krlx0npe98jtdhahyvx8jvfz09x21x226uxj8gowkun6dgl2p1xj819qjzgtt`),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(0 - 64\), got 7y80krlx0npe98jtdhahyvx8jvfz09x21x226uxj8gowkun6dgl2p1xj819qjzgtt`),
 			},
 		},
 	})

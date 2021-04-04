@@ -260,8 +260,8 @@ resource "twilio_serverless_service" "service" {
 }
 
 resource "twilio_serverless_environment" "environment" {
-  service_sid = twilio_serverless_service.service.sid
-  unique_name = "%[1]s"
+  service_sid   = twilio_serverless_service.service.sid
+  unique_name   = "%[1]s"
   domain_suffix = "%[2]s"
 }
 `, uniqueName, domainSuffix)
@@ -279,8 +279,8 @@ resource "twilio_serverless_environment" "environment" {
 func testAccTwilioServerlessEnvironment_domainSuffixWithStubbedServiceSid(domainSuffix string) string {
 	return fmt.Sprintf(`
 resource "twilio_serverless_environment" "environment" {
-  service_sid = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  unique_name = "test"
+  service_sid   = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  unique_name   = "test"
   domain_suffix = "%s"
 }
 `, domainSuffix)

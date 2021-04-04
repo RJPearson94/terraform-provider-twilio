@@ -78,6 +78,7 @@ func resourceStudioFlow() *schema.Resource {
 			"commit_message": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "",
 			},
 			"validate": {
 				Type:     schema.TypeBool,
@@ -124,7 +125,7 @@ func resourceStudioFlowCreate(ctx context.Context, d *schema.ResourceData, meta 
 		FriendlyName:  d.Get("friendly_name").(string),
 		Status:        d.Get("status").(string),
 		Definition:    definitionJSONString,
-		CommitMessage: utils.OptionalString(d, "commit_message"),
+		CommitMessage: utils.OptionalStringWithEmptyStringDefault(d, "commit_message"),
 	}
 
 	createResult, err := client.Flows.CreateWithContext(ctx, createInput)
@@ -184,7 +185,7 @@ func resourceStudioFlowUpdate(ctx context.Context, d *schema.ResourceData, meta 
 		FriendlyName:  utils.OptionalString(d, "friendly_name"),
 		Status:        d.Get("status").(string),
 		Definition:    utils.OptionalJSONString(d, "definition"),
-		CommitMessage: utils.OptionalString(d, "commit_message"),
+		CommitMessage: utils.OptionalStringWithEmptyStringDefault(d, "commit_message"),
 	}
 
 	updateResp, err := client.Flow(d.Id()).UpdateWithContext(ctx, updateInput)
@@ -215,7 +216,7 @@ func validateRequest(ctx context.Context, d *schema.ResourceData, meta interface
 			FriendlyName:  d.Get("friendly_name").(string),
 			Status:        d.Get("status").(string),
 			Definition:    definitionJSONString,
-			CommitMessage: utils.OptionalString(d, "commit_message"),
+			CommitMessage: utils.OptionalStringWithEmptyStringDefault(d, "commit_message"),
 		}
 
 		resp, err := client.FlowValidation.ValidateWithContext(ctx, validateInput)

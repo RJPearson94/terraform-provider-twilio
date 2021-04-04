@@ -42,7 +42,6 @@ A `task_queue` block supports the following:
 
 - `sid` - The SID of the task queue
 - `friendly_name` - The name of the task queue
-- `event_callback_url` - The callback URL for task queue Events
 - `task_order` - How TaskRouter will assign workers tasks on the queue
 - `assignment_activity_name` - The assignment activity name for the task queue
 - `assignment_activity_sid` - The assignment activity SID for the task queue
