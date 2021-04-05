@@ -189,7 +189,7 @@ func resourceVideoCompositionHookRead(ctx context.Context, d *schema.ResourceDat
 
 	videoLayout, err := helper.FlattenJsonToStringOrEmptyObjectString(getResponse.VideoLayout)
 	if err != nil {
-		return diag.Errorf("Unable to flatten video layout json to string. Error ", err.Error())
+		return diag.Errorf("Unable to flatten video layout json to string. Error %s", err.Error())
 	}
 	d.Set("video_layout", videoLayout)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
