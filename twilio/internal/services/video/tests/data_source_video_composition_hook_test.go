@@ -37,7 +37,7 @@ func TestAccDataSourceTwilioVideoCompositionHook_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(stateDataSourceName, "status_callback_url", ""),
 					resource.TestCheckResourceAttr(stateDataSourceName, "status_callback_method", "POST"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "trim"),
-					resource.TestCheckResourceAttr(stateDataSourceName, "video_layout", ""),
+					resource.TestCheckResourceAttr(stateDataSourceName, "video_layout", "{}"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_created"),
 					resource.TestCheckNoResourceAttr(stateDataSourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "url"),

@@ -117,7 +117,7 @@ func resourceVideoCompositionHook() *schema.Resource {
 			"video_layout": {
 				Type:             schema.TypeString,
 				Optional:         true,
-				Default:          "",
+				Default:          "{}",
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
@@ -186,10 +186,16 @@ func resourceVideoCompositionHookRead(ctx context.Context, d *schema.ResourceDat
 	d.Set("status_callback_method", getResponse.StatusCallbackMethod)
 	d.Set("trim", getResponse.Trim)
 
-	videoLayout, err := structure.FlattenJsonToString(getResponse.VideoLayout)
-	if err != nil {
-		return diag.Errorf("Unable to flatten video layout json to string")
+	var videoLayout string
+	if len(getResponse.VideoLayout) != 0 {
+		videoLayout, err = structure.FlattenJsonToString(getResponse.VideoLayout)
+		if err != nil {
+			return diag.Errorf("Unable to flatten video layout json to string")
+		}
+	} else {
+		videoLayout = "{}"
 	}
+
 	d.Set("video_layout", videoLayout)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 

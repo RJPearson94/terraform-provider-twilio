@@ -30,7 +30,7 @@ The following arguments are supported:
 - `status_callback_url` - (Optional) The URL to call on each status change
 - `status_callback_method` - (Optional) The HTTP method should be used to call the status callback URL. Valid values are `GET` or `POST`. The default value is `POST`
 - `trim` - (Optional) Whether sections with no audio or media content should be trimmed from the composition. The default value is `true`
-- `video_layout` - (Optional) JSON string of the composition video layout
+- `video_layout` - (Optional) JSON string of the composition video layout. The default value is `{}`
 
 ## Attributes Reference
 
