@@ -56,22 +56,25 @@ func resourceConversationsConversationStudioWebhook() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ConversationServiceSidValidation(),
 			},
 			"conversation_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ConversationSidValidation(),
 			},
 			"target": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"flow_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.FlowSidValidation(),
 			},
 			"replay_after": {
 				Type:     schema.TypeInt,

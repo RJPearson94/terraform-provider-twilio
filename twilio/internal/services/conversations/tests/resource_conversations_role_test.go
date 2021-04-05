@@ -105,9 +105,26 @@ func TestAccTwilioConversationsRole_update(t *testing.T) {
 	})
 }
 
-func TestAccTwilioConversationsRole_invalidType(t *testing.T) {
-	friendlyName := acctest.RandString(10)
-	typeName := "test"
+func TestAccTwilioConversationsRole_invalidPermission(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioConversationsRoleDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsRole_invalidPermission(),
+				ExpectError: regexp.MustCompile(`(?s)expected permissions.0 to be one of \[editOwnMessage deleteAnyMessage addParticipant editConversationAttributes editAnyParticipantAttributes editAnyMessage editConversationName editAnyMessageAttributes deleteOwnMessage editOwnMessageAttributes removeParticipant addNonChatParticipant editOwnParticipantAttributes deleteConversation editNotificationLevel sendMessage leaveConversation sendMediaMessage editAnyUserInfo removeParticipant createConversation editOwnUserInfo joinConversation\], got test`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsRole_friendlyName(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.role", roleResourceName)
+
+	friendlyName := acctest.RandString(1)
+	newFriendlyName := acctest.RandString(256)
+	typeName := "conversation"
 	permissions := []string{"sendMessage"}
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -116,8 +133,75 @@ func TestAccTwilioConversationsRole_invalidType(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioConversationsRoleDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config:      testAccTwilioConversationsRole_basic(friendlyName, typeName, permissions),
+				Config: testAccTwilioConversationsRole_basic(friendlyName, typeName, permissions),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioConversationsRoleExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+				),
+			},
+			{
+				Config: testAccTwilioConversationsRole_basic(newFriendlyName, typeName, permissions),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioConversationsRoleExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsRole_invalidFriendlyNameWith0Characters(t *testing.T) {
+	friendlyName := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsRole_friendlyNameWithStubbedService(friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 256\), got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsRole_invalidFriendlyNameWith257Characters(t *testing.T) {
+	friendlyName := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsRole_friendlyNameWithStubbedService(friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 256\), got aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsRole_invalidType(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioConversationsRoleDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsRole_invalidType(),
 				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \[conversation service\], got test`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsRole_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsRole_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
 			},
 		},
 	})
@@ -184,4 +268,48 @@ resource "twilio_conversations_role" "role" {
   permissions   = %s
 }
 `, friendlyName, friendlyName, typeName, `["`+strings.Join(permissions, `","`)+`"]`)
+}
+
+func testAccTwilioConversationsRole_invalidType() string {
+	return `
+resource "twilio_conversations_role" "role" {
+  service_sid   = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  friendly_name = "invalid_type"
+  type          = "test"
+  permissions   = ["sendMessage"]
+}
+`
+}
+
+func testAccTwilioConversationsRole_invalidPermission() string {
+	return `
+resource "twilio_conversations_role" "role" {
+  service_sid   = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  friendly_name = "invalid_permission"
+  type          = "conversation"
+  permissions   = ["test"]
+}
+`
+}
+
+func testAccTwilioConversationsRole_friendlyNameWithStubbedService(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_conversations_role" "role" {
+  service_sid   = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  friendly_name = "%s"
+  type          = "conversation"
+  permissions   = ["sendMessage"]
+}
+`, friendlyName)
+}
+
+func testAccTwilioConversationsRole_invalidServiceSid() string {
+	return `
+resource "twilio_conversations_role" "role" {
+  service_sid   = "service_sid"
+  friendly_name = "invalid_service_sid"
+  type          = "conversation"
+  permissions   = ["sendMessage"]
+}
+`
 }

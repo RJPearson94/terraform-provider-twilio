@@ -3,17 +3,18 @@ package helper
 import (
 	"time"
 
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/conversations/v1/service/configuration/notification"
 	"github.com/RJPearson94/twilio-sdk-go/service/conversations/v1/service/conversation"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func FlattenTimers(d *schema.ResourceData, timers conversation.FetchConversationTimersResponse) *[]interface{} {
-	timerMap := make(map[string]interface{}, 0)
+	timerMap := make(map[string]interface{})
 
 	if _, ok := d.GetOk("timers"); ok {
-		timerMap["closed"] = d.Get("timers.0.closed").(string)
-		timerMap["inactive"] = d.Get("timers.0.inactive").(string)
+		timerMap["closed"] = utils.OptionalStringWithEmptyStringDefault(d, "timers.0.closed")
+		timerMap["inactive"] = utils.OptionalStringWithEmptyStringDefault(d, "timers.0.inactive")
 	}
 
 	if timers.DateClosed != nil {

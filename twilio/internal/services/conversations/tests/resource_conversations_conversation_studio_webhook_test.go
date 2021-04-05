@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -100,6 +101,45 @@ func TestAccTwilioConversationsConversationStudioWebhook_update(t *testing.T) {
 	})
 }
 
+func TestAccTwilioConversationsConversationStudioWebhook_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsConversationStudioWebhook_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsConversationStudioWebhook_invalidConversationSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsConversationStudioWebhook_invalidConversationSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of conversation_sid to match regular expression "\^CH\[0-9a-fA-F\]\{32\}\$", got conversation_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsConversationStudioWebhook_invalidFlowSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsConversationStudioWebhook_invalidFlowSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of flow_sid to match regular expression "\^FW\[0-9a-fA-F\]\{32\}\$", got flow_sid`),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioConversationsConversationStudioWebhookDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Conversations
 
@@ -164,4 +204,34 @@ resource "twilio_conversations_conversation_studio_webhook" "studio_webhook" {
   flow_sid         = "%s"
 }
 `, friendlyName, flowSid)
+}
+
+func testAccTwilioConversationsConversationStudioWebhook_invalidServiceSid() string {
+	return `
+resource "twilio_conversations_conversation_studio_webhook" "studio_webhook" {
+  service_sid      = "service_sid"
+  conversation_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  flow_sid         = "FWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccTwilioConversationsConversationStudioWebhook_invalidConversationSid() string {
+	return `
+resource "twilio_conversations_conversation_studio_webhook" "studio_webhook" {
+  service_sid      = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  conversation_sid = "conversation_sid"
+  flow_sid         = "FWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccTwilioConversationsConversationStudioWebhook_invalidFlowSid() string {
+	return `
+resource "twilio_conversations_conversation_studio_webhook" "studio_webhook" {
+  service_sid      = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  conversation_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  flow_sid         = "flow_sid"
+}
+`
 }

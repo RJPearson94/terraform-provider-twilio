@@ -3,6 +3,7 @@ package tests
 import (
 	"fmt"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -32,7 +33,7 @@ func TestAccTwilioConversationsWebhook_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "method"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "pre_webhook_url"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "post_webhook_url"),
-					resource.TestCheckResourceAttr(stateResourceName, "filters.#", "0"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "filters.#"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
@@ -42,6 +43,7 @@ func TestAccTwilioConversationsWebhook_basic(t *testing.T) {
 
 func TestAccTwilioConversationsWebhook_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.webhook", webhookResourceName)
+
 	method := "GET"
 	preWebhookUrl := "https://localhost.com/preWebhookUrl"
 	postWebhookUrl := "https://localhost.com/postWebhookUrl"
@@ -64,7 +66,7 @@ func TestAccTwilioConversationsWebhook_update(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "method", method),
 					resource.TestCheckResourceAttr(stateResourceName, "pre_webhook_url", preWebhookUrl),
 					resource.TestCheckResourceAttr(stateResourceName, "post_webhook_url", postWebhookUrl),
-					resource.TestCheckResourceAttr(stateResourceName, "filters.#", "0"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "filters.#"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
@@ -78,7 +80,7 @@ func TestAccTwilioConversationsWebhook_update(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "method", newMethod),
 					resource.TestCheckResourceAttr(stateResourceName, "pre_webhook_url", newPreWebhookUrl),
 					resource.TestCheckResourceAttr(stateResourceName, "post_webhook_url", newPostWebhookUrl),
-					resource.TestCheckResourceAttr(stateResourceName, "filters.#", "0"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "filters.#"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
@@ -152,6 +154,53 @@ func TestAccTwilioConversationsWebhook_invalidTarget(t *testing.T) {
 	})
 }
 
+func TestAccTwilioConversationsWebhook_filters(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.webhook", webhookResourceName)
+
+	filters := []string{"onConversationAdd"}
+	newFilters := []string{"onConversationAdd", "onConversationRemove"}
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioConversationsWebhookDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioConversationsWebhook_filters(filters),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioConversationsWebhookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "filters.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "filters.0", filters[0]),
+				),
+			},
+			{
+				Config: testAccTwilioConversationsWebhook_filters(newFilters),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioConversationsWebhookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "filters.#", "2"),
+					resource.TestCheckResourceAttr(stateResourceName, "filters.0", newFilters[0]),
+					resource.TestCheckResourceAttr(stateResourceName, "filters.1", newFilters[1]),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsWebhook_invalidFilter(t *testing.T) {
+	filters := []string{"test"}
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsWebhook_filters(filters),
+				ExpectError: regexp.MustCompile(`(?s)expected filters.0 to be one of \[onConversationAdd onConversationAdded onConversationRemove onConversationRemoved onConversationStateUpdated onConversationUpdate onConversationUpdated onDeliveryUpdated onMessageAdd onMessageAdded onMessageRemove onMessageRemoved onMessageUpdate onMessageUpdated onParticipantAdd onParticipantAdded onParticipantRemove onParticipantRemoved onParticipantUpdate onParticipantUpdated onUserAdded onUserUpdate onUserUpdated\], got test`),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioConversationsWebhookDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Conversations
 
@@ -211,4 +260,12 @@ resource "twilio_conversations_webhook" "webhook" {
   post_webhook_url = "%s"
 }
 `, method, preWebhookUrl, postWebhookUrl)
+}
+
+func testAccTwilioConversationsWebhook_filters(filter []string) string {
+	return fmt.Sprintf(`
+resource "twilio_conversations_webhook" "webhook" {
+  filters = %s
+}
+`, "[\""+strings.Join(filter, "\",\"")+"\"]")
 }

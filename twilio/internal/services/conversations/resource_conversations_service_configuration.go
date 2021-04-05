@@ -26,29 +26,33 @@ func resourceConversationsServiceConfiguration() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ConversationServiceSidValidation(),
 			},
 			"default_chat_service_role_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: utils.ConversationRoleSidValidation(),
 			},
 			"default_conversation_creator_role_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: utils.ConversationRoleSidValidation(),
 			},
 			"default_conversation_role_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: utils.ConversationRoleSidValidation(),
 			},
 			"reachability_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  false,
 			},
 			"url": {
 				Type:     schema.TypeString,

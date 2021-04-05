@@ -123,6 +123,32 @@ func TestAccTwilioConversationsConversationWebhook_invalidWebhookURL(t *testing.
 	})
 }
 
+func TestAccTwilioConversationsConversationWebhook_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsConversationWebhook_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsConversationWebhook_invalidConversationSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsConversationWebhook_invalidConversationSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of conversation_sid to match regular expression "\^CH\[0-9a-fA-F\]\{32\}\$", got conversation_sid`),
+			},
+		},
+	})
+}
+
 func TestAccTwilioConversationsConversationWebhook_invalidMethod(t *testing.T) {
 	friendlyName := acctest.RandString(10)
 	method := "DELETE"
@@ -225,4 +251,28 @@ resource "twilio_conversations_conversation_webhook" "webhook" {
   filters          = ["onMessageAdded"]
 }
 `, friendlyName, method, webhookUrl)
+}
+
+func testAccTwilioConversationsConversationWebhook_invalidServiceSid() string {
+	return `
+resource "twilio_conversations_conversation_webhook" "webhook" {
+  service_sid      = "service_sid"
+  conversation_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  method           = "POST"
+  webhook_url      = "https://localhost.com/webhook"
+  filters         = ["onMessageAdded"]
+}
+`
+}
+
+func testAccTwilioConversationsConversationWebhook_invalidConversationSid() string {
+	return `
+resource "twilio_conversations_conversation_webhook" "webhook" {
+  service_sid      = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  conversation_sid = "conversation_sid"
+  method           = "POST"
+  webhook_url      = "https://localhost.com/webhook"
+  filters         = ["onMessageAdded"]
+}
+`
 }

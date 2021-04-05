@@ -58,39 +58,44 @@ func resourceConversationsConversation() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ConversationServiceSidValidation(),
 			},
 			"unique_name": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "",
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				Default:      "",
+				ValidateFunc: validation.StringLenBetween(0, 256),
 			},
 			"attributes": {
 				Type:             schema.TypeString,
 				Optional:         true,
-				Computed:         true,
+				Default:          "{}",
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
 			"messaging_service_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: utils.MessagingServiceSidValidation(),
 			},
 			"state": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "active",
 				ValidateFunc: validation.StringInSlice([]string{
 					"active",
 					"inactive",
 					"closed",
 				}, false),
-				Computed: true,
 			},
 			"timers": {
 				Type:     schema.TypeList,
@@ -139,8 +144,8 @@ func resourceConversationsConversationCreate(ctx context.Context, d *schema.Reso
 
 	createInput := &conversations.CreateConversationInput{
 		Attributes:          utils.OptionalJSONString(d, "attributes"),
-		UniqueName:          utils.OptionalString(d, "unique_name"),
-		FriendlyName:        utils.OptionalString(d, "friendly_name"),
+		UniqueName:          utils.OptionalStringWithEmptyStringDefault(d, "unique_name"),
+		FriendlyName:        utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 		MessagingServiceSid: utils.OptionalString(d, "messaging_service_sid"),
 		State:               utils.OptionalString(d, "state"),
 	}
@@ -198,8 +203,8 @@ func resourceConversationsConversationUpdate(ctx context.Context, d *schema.Reso
 
 	updateInput := &conversation.UpdateConversationInput{
 		Attributes:          utils.OptionalJSONString(d, "attributes"),
-		UniqueName:          utils.OptionalString(d, "unique_name"),
-		FriendlyName:        utils.OptionalString(d, "friendly_name"),
+		UniqueName:          utils.OptionalStringWithEmptyStringDefault(d, "unique_name"),
+		FriendlyName:        utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 		MessagingServiceSid: utils.OptionalString(d, "messaging_service_sid"),
 		State:               utils.OptionalString(d, "state"),
 	}

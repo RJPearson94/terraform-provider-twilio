@@ -26,7 +26,7 @@ func TestAccDataSourceTwilioConversationsWebhook_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateDataSource, "method"),
 					resource.TestCheckResourceAttrSet(stateDataSource, "pre_webhook_url"),
 					resource.TestCheckResourceAttrSet(stateDataSource, "post_webhook_url"),
-					resource.TestCheckResourceAttr(stateDataSource, "filters.#", "0"),
+					resource.TestCheckResourceAttrSet(stateDataSource, "filters.#"),
 					resource.TestCheckResourceAttrSet(stateDataSource, "url"),
 				),
 			},

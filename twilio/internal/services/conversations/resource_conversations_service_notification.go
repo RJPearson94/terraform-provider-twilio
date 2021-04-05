@@ -33,9 +33,10 @@ func resourceConversationsServiceNotification() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ConversationServiceSidValidation(),
 			},
 			"new_message": {
 				Type:     schema.TypeList,
@@ -47,19 +48,22 @@ func resourceConversationsServiceNotification() *schema.Resource {
 						"enabled": {
 							Type:     schema.TypeBool,
 							Optional: true,
-							Computed: true,
+							Default:  false,
 						},
 						"template": {
 							Type:     schema.TypeString,
 							Optional: true,
+							Default:  "",
 						},
 						"sound": {
 							Type:     schema.TypeString,
 							Optional: true,
+							Default:  "",
 						},
 						"badge_count_enabled": {
 							Type:     schema.TypeBool,
 							Optional: true,
+							Default:  false,
 						},
 					},
 				},
@@ -74,15 +78,17 @@ func resourceConversationsServiceNotification() *schema.Resource {
 						"enabled": {
 							Type:     schema.TypeBool,
 							Optional: true,
-							Computed: true,
+							Default:  false,
 						},
 						"template": {
 							Type:     schema.TypeString,
 							Optional: true,
+							Default:  "",
 						},
 						"sound": {
 							Type:     schema.TypeString,
 							Optional: true,
+							Default:  "",
 						},
 					},
 				},
@@ -97,15 +103,17 @@ func resourceConversationsServiceNotification() *schema.Resource {
 						"enabled": {
 							Type:     schema.TypeBool,
 							Optional: true,
-							Computed: true,
+							Default:  false,
 						},
 						"template": {
 							Type:     schema.TypeString,
 							Optional: true,
+							Default:  "",
 						},
 						"sound": {
 							Type:     schema.TypeString,
 							Optional: true,
+							Default:  "",
 						},
 					},
 				},
@@ -113,7 +121,7 @@ func resourceConversationsServiceNotification() *schema.Resource {
 			"log_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  false,
 			},
 			"url": {
 				Type:     schema.TypeString,
@@ -161,8 +169,8 @@ func resourceConversationsServiceNotificationUpdate(ctx context.Context, d *sche
 	if _, ok := d.GetOk("new_message"); ok {
 		updateInput.NewMessage = &notification.UpdateNotificationNewMessageInput{
 			Enabled:           utils.OptionalBool(d, "new_message.0.enabled"),
-			Template:          utils.OptionalString(d, "new_message.0.template"),
-			Sound:             utils.OptionalString(d, "new_message.0.sound"),
+			Template:          utils.OptionalStringWithEmptyStringDefault(d, "new_message.0.template"),
+			Sound:             utils.OptionalStringWithEmptyStringDefault(d, "new_message.0.sound"),
 			BadgeCountEnabled: utils.OptionalBool(d, "new_message.0.badge_count_enabled"),
 		}
 	}
@@ -170,16 +178,16 @@ func resourceConversationsServiceNotificationUpdate(ctx context.Context, d *sche
 	if _, ok := d.GetOk("added_to_conversation"); ok {
 		updateInput.AddedToConversation = &notification.UpdateNotificationConversationActionInput{
 			Enabled:  utils.OptionalBool(d, "added_to_conversation.0.enabled"),
-			Template: utils.OptionalString(d, "added_to_conversation.0.template"),
-			Sound:    utils.OptionalString(d, "added_to_conversation.0.sound"),
+			Template: utils.OptionalStringWithEmptyStringDefault(d, "added_to_conversation.0.template"),
+			Sound:    utils.OptionalStringWithEmptyStringDefault(d, "added_to_conversation.0.sound"),
 		}
 	}
 
 	if _, ok := d.GetOk("removed_from_conversation"); ok {
 		updateInput.RemovedFromConversation = &notification.UpdateNotificationConversationActionInput{
 			Enabled:  utils.OptionalBool(d, "removed_from_conversation.0.enabled"),
-			Template: utils.OptionalString(d, "removed_from_conversation.0.template"),
-			Sound:    utils.OptionalString(d, "removed_from_conversation.0.sound"),
+			Template: utils.OptionalStringWithEmptyStringDefault(d, "removed_from_conversation.0.template"),
+			Sound:    utils.OptionalStringWithEmptyStringDefault(d, "removed_from_conversation.0.sound"),
 		}
 	}
 

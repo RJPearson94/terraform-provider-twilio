@@ -30,9 +30,10 @@ func resourceConversationsConfiguration() *schema.Resource {
 				Computed: true,
 			},
 			"default_service_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: utils.ConversationServiceSidValidation(),
 			},
 			"default_closed_timer": {
 				Type:     schema.TypeString,
@@ -45,9 +46,10 @@ func resourceConversationsConfiguration() *schema.Resource {
 				Computed: true,
 			},
 			"default_messaging_service_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: utils.MessagingServiceSidValidation(),
 			},
 			"url": {
 				Type:     schema.TypeString,

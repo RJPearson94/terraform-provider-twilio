@@ -29,7 +29,7 @@ The following attributes are exported:
 
 - `id` - The ID of the service (Same as the `sid`)
 - `sid` - The SID of the service (Same as the `id`)
-- `friendly_name` - The friendly name of the service. Changing this forces a new resource to be created
+- `friendly_name` - The friendly name of the service. Changing this forces a new resource to be created. The length of the string must be between `1` and `256` characters (inclusive)
 - `date_created` - The date in RFC3339 format that the service was created
 - `date_updated` - The date in RFC3339 format that the service was updated
 - `url` - The URL of the service

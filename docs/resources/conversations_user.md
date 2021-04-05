@@ -27,10 +27,10 @@ resource "twilio_conversations_user" "user" {
 The following arguments are supported:
 
 - `service_sid` - (Mandatory) The SID of the service to associate the user with. Changing this forces a new resource to be created
-- `identity` - (Mandatory) The identity of the user. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The friendly name of the user
+- `identity` - (Mandatory) The identity of the user. Changing this forces a new resource to be created. The value cannot be an empty string
+- `friendly_name` - (Optional) The friendly name of the user. The length of the string must be between `0` and `256` characters (inclusive). The default value is an empty string/ no configuration specified
 - `role_sid` - (Optional) The SID of the role to associate with the user
-- `attributes` - (Optional) JSON string of user attributes
+- `attributes` - (Optional) JSON string of user attributes. The default value is `{}`
 
 ## Attributes Reference
 

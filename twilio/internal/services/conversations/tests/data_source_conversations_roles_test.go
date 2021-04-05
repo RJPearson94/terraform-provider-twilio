@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -42,6 +43,19 @@ func TestAccDataSourceTwilioConversationsRoles_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioConversationsRoles_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioConversationsRoles_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioConversationsRoles_basic(friendlyName string, typeName string, permissions []string) string {
 	return fmt.Sprintf(`
 resource "twilio_conversations_service" "service" {
@@ -59,4 +73,12 @@ data "twilio_conversations_roles" "roles" {
   service_sid = twilio_conversations_service.service.sid
 }
 `, friendlyName, friendlyName, typeName, `["`+strings.Join(permissions, `","`)+`"]`)
+}
+
+func testAccDataSourceTwilioConversationsRoles_invalidServiceSid() string {
+	return `
+data "twilio_conversations_roles" "rolse" {
+  service_sid = "service_sid"
+}
+`
 }

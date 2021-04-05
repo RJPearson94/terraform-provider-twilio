@@ -12,6 +12,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/conversations/v1/credentials"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceConversationsPushCredentialFCM() *schema.Resource {
@@ -54,12 +55,15 @@ func resourceConversationsPushCredentialFCM() *schema.Resource {
 				Computed: true,
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringLenBetween(1, 64),
 			},
 			"secret": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				Sensitive:    true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"type": {
 				Type:     schema.TypeString,

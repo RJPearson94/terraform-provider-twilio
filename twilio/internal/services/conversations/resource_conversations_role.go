@@ -56,14 +56,16 @@ func resourceConversationsRole() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ConversationServiceSidValidation(),
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringLenBetween(1, 256),
 			},
 			"type": {
 				Type:     schema.TypeString,
@@ -79,6 +81,35 @@ func resourceConversationsRole() *schema.Resource {
 				Required: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						"editOwnMessage",
+						"deleteAnyMessage",
+						"addParticipant",
+						"editConversationAttributes",
+						"editAnyParticipantAttributes",
+						"editAnyMessage",
+						"editConversationName",
+						"editAnyMessageAttributes",
+						"deleteOwnMessage",
+						"editOwnMessageAttributes",
+						"removeParticipant",
+						"addNonChatParticipant",
+						"editOwnParticipantAttributes",
+						"deleteConversation",
+
+						// Conversation
+						"editNotificationLevel",
+						"sendMessage",
+						"leaveConversation",
+						"sendMediaMessage",
+
+						// Service
+						"editAnyUserInfo",
+						"removeParticipant",
+						"createConversation",
+						"editOwnUserInfo",
+						"joinConversation",
+					}, false),
 				},
 			},
 			"date_created": {

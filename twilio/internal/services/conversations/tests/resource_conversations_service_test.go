@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -40,6 +41,64 @@ func TestAccTwilioConversationsService_basic(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: testAccTwilioConversationsServiceImportStateIdFunc(stateResourceName),
 				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsService_friendlyName(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+	friendlyName := acctest.RandString(1)
+	newFriendlyName := acctest.RandString(256)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioConversationsServiceDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioConversationsService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioConversationsServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+				),
+			},
+			{
+				Config: testAccTwilioConversationsService_basic(newFriendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioConversationsServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsService_invalidFriendlyNameWith0Characters(t *testing.T) {
+	friendlyName := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsService_basic(friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 256\), got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsService_invalidFriendlyNameWith257Characters(t *testing.T) {
+	friendlyName := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsService_basic(friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 256\), got aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`),
 			},
 		},
 	})

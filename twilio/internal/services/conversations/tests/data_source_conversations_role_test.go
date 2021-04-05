@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -42,6 +43,32 @@ func TestAccDataSourceTwilioConversationsRole_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioConversationsRole_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioConversationsRole_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioConversationsRole_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioConversationsRole_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^RL\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioConversationsRole_basic(friendlyName string, typeName string, permissions []string) string {
 	return fmt.Sprintf(`
 resource "twilio_conversations_service" "service" {
@@ -60,4 +87,22 @@ data "twilio_conversations_role" "role" {
   sid         = twilio_conversations_role.role.sid
 }
 `, friendlyName, friendlyName, typeName, `["`+strings.Join(permissions, `","`)+`"]`)
+}
+
+func testAccDataSourceTwilioConversationsRole_invalidServiceSid() string {
+	return `
+data "twilio_conversations_role" "role" {
+  service_sid = "service_sid"
+  sid         = "RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioConversationsRole_invalidSid() string {
+	return `
+data "twilio_conversations_role" "role" {
+  service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid         = "sid"
+}
+`
 }

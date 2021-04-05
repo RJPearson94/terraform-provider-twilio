@@ -20,8 +20,9 @@ func dataSourceConversationsServiceConfiguration() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ConversationServiceSidValidation(),
 			},
 			"default_chat_service_role_sid": {
 				Type:     schema.TypeString,

@@ -32,9 +32,11 @@ resource "twilio_conversations_role" "role" {
 The following arguments are supported:
 
 - `service_sid` - (Mandatory) The service SID to associate the role with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The friendly name of the role. Changing this forces a new resource to be created
+- `friendly_name` - (Mandatory) The friendly name of the role. Changing this forces a new resource to be created. The length of the string must be between `1` and `256` characters (inclusive)
 - `type` - (Mandatory) The type of role. Valid values are `service` or `conversation`. Changing this forces a new resource to be created
-- `permissions` - (Mandatory) The list of permissions the role has
+- `permissions` - (Mandatory) The list of permissions the role has. Valid values are `editOwnMessage`, `deleteAnyMessage`, `addParticipant`, `editConversationAttributes`, `editAnyParticipantAttributes`, `editAnyMessage`, `editConversationName`, `editAnyMessageAttributes`, `deleteOwnMessage`, `editOwnMessageAttributes`, `removeParticipant`, `addNonChatParticipant`, `editOwnParticipantAttributes`, `deleteConversation`, `editNotificationLevel`, `sendMessage`, `leaveConversation`, `sendMediaMessage`, `editAnyUserInfo`, `removeParticipant`, `createConversation`, `editOwnUserInfo` or `joinConversation`
+
+~> Some of these permissions are only appliable to a specific role type. Please see the documentation or the Twilio console to see what permissions apply to a given role type
 
 ## Attributes Reference
 

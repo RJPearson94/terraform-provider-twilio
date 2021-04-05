@@ -9,6 +9,8 @@ Manages a Twilio Conversations conversation resource. See the [API docs](https:/
 
 For more information on conversations, see the product [page](https://www.twilio.com/conversations)
 
+!> Removing the `messaging_service_sid` from your configuration will cause the `messaging_service_sid` value to be retained after a Terraform apply. If you want to change any of the value you will need to either create a new `twilio_messaging_service` resource and set the argument to the generated `sid` or you can set the argument to the `default_messaging_service_sid` which is on the `twilio_conversations_configuration` resource and data source
+
 ## Example Usage
 
 ```hcl
@@ -26,11 +28,11 @@ resource "twilio_conversations_conversation" "conversation" {
 The following arguments are supported:
 
 - `service_sid` - (Mandatory) The service SID to associate the conversation with. Changing this forces a new resource to be created
-- `unique_name` - (Optional) The unique name of the conversation
-- `friendly_name` - (Optional) The friendly name of the conversation
-- `attributes` - (Optional) JSON string of attributes
+- `unique_name` - (Optional) The unique name of the conversation. The default value is an empty string/ no configuration specified
+- `friendly_name` - (Optional) The friendly name of the conversation. The length of the string must be between `0` and `256` characters (inclusive). The default value is an empty string/ no configuration specified
+- `attributes` - (Optional) JSON string of attributes. The default value is `{}`
 - `messaging_service_sid` - (Optional) The messaging service SID to associate the conversation with
-- `state` - (Optional) The state of the conversation. Valid values are `active`, `inactive` or `closed`.
+- `state` - (Optional) The state of the conversation. Valid values are `active`, `inactive` or `closed`. The default value is `active`
 - `timers` - (Optional) A `timer` block as documented below.
 
 ---
@@ -82,4 +84,4 @@ A conversation can be imported using the `/Services/{serviceSid}/Conversations/{
 terraform import twilio_conversations_conversation.conversation /Services/ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Conversations/CHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
-!> The following arguments `timers.closed` and `timers.inactive` cannot be imported
+!> The following arguments `timers.0.closed` and `timers.0.inactive` cannot be imported

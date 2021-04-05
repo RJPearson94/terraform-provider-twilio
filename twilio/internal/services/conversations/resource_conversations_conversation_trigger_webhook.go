@@ -57,14 +57,16 @@ func resourceConversationsConversationTriggerWebhook() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ConversationServiceSidValidation(),
 			},
 			"conversation_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ConversationSidValidation(),
 			},
 			"target": {
 				Type:     schema.TypeString,
@@ -73,11 +75,11 @@ func resourceConversationsConversationTriggerWebhook() *schema.Resource {
 			"method": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "POST",
 				ValidateFunc: validation.StringInSlice([]string{
 					"GET",
 					"POST",
 				}, false),
-				Computed: true,
 			},
 			"webhook_url": {
 				Type:         schema.TypeString,

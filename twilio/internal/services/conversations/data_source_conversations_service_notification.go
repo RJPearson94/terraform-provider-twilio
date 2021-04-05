@@ -25,8 +25,9 @@ func dataSourceConversationsServiceNotification() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ConversationServiceSidValidation(),
 			},
 			"new_message": {
 				Type:     schema.TypeList,

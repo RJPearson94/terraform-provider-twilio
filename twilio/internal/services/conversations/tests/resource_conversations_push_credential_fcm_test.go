@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -90,6 +91,104 @@ func TestAccTwilioConversationsPushCredentialsFCM_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsPushCredentialsFCM_friendlyName(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.push_credential_fcm", pushCredentialsFCMResourceName)
+	friendlyName := acctest.RandString(1)
+	newFriendlyName := acctest.RandString(64)
+	secret := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioConversationsPushCredentialsFCMDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioConversationsPushCredentialsFCM_basic(friendlyName, secret),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioConversationsPushCredentialsFCMExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+				),
+			},
+			{
+				Config: testAccTwilioConversationsPushCredentialsFCM_basic(newFriendlyName, secret),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioConversationsPushCredentialsFCMExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsPushCredentialsFCM_invalidFriendlyNameWith0Characters(t *testing.T) {
+	friendlyName := ""
+	secret := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsPushCredentialsFCM_basic(friendlyName, secret),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 64\), got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsPushCredentialsFCM_invalidFriendlyNameWith65Characters(t *testing.T) {
+	friendlyName := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	secret := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsPushCredentialsFCM_basic(friendlyName, secret),
+				ExpectError: regexp.MustCompile(`(?s)expected length of friendly_name to be in the range \(1 - 64\), got aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsPushCredentialsFCM_secret(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.push_credential_fcm", pushCredentialsFCMResourceName)
+	friendlyName := acctest.RandString(1)
+	secret := acctest.RandString(1)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioConversationsPushCredentialsFCMDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioConversationsPushCredentialsFCM_basic(friendlyName, secret),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioConversationsPushCredentialsFCMExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "secret", secret),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioConversationsPushCredentialsFCM_blankSecret(t *testing.T) {
+	friendlyName := "test"
+	secret := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioConversationsPushCredentialsFCM_basic(friendlyName, secret),
+				ExpectError: regexp.MustCompile(`(?s)expected \"secret\" to not be an empty string, got `),
 			},
 		},
 	})

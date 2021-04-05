@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -42,6 +43,19 @@ func TestAccDataSourceTwilioConversationsConversations_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioConversationsConversations_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioConversationsConversations_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioConversationsConversations_basic(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_conversations_service" "service" {
@@ -56,4 +70,12 @@ data "twilio_conversations_conversations" "conversations" {
   service_sid = twilio_conversations_conversation.conversation.service_sid
 }
 `, friendlyName)
+}
+
+func testAccDataSourceTwilioConversationsConversations_invalidServiceSid() string {
+	return `
+data "twilio_conversations_conversations" "conversations" {
+  service_sid = "service_sid"
+}
+`
 }

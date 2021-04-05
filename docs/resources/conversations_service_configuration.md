@@ -11,6 +11,8 @@ For more information on conversations, see the product [page](https://www.twilio
 
 !> This resource modifies the Twilio conversations service configuration. No new resources will be provisioned. Instead, the configuration will be updated upon creation and the configuration will remain after the destruction of the resource.
 
+!> Removing the `default_chat_service_role_sid`, `default_conversation_creator_role_sid` or `default_conversation_role_sid` from your configuration will cause the corresponding value to be retained after a Terraform apply. If you want to change any of the value you will need to either create a new `twilio_conversations_role` resource and set the argument to the generated `sid`. Alternatively, you can set the role sid to one of the roles that were created when the service was created
+
 ## Example Usage
 
 ```hcl
@@ -31,7 +33,7 @@ The following arguments are supported:
 - `default_chat_service_role_sid` - (Optional) The default role to assign users when they are added to the service
 - `default_conversation_creator_role_sid` - (Optional) The default role to assign creator users when they join a new conversation
 - `default_conversation_role_sid` - (Optional) The default role to assign users when they join a new conversation
-- `reachability_enabled` - (Optional) Whether Programmable Chat's reachability indicator is enabled or not
+- `reachability_enabled` - (Optional) Whether Programmable Chat's reachability indicator is enabled or not. The default value is `false`
 
 ## Attributes Reference
 

@@ -24,12 +24,14 @@ func dataSourceConversationsConversationWebhooks() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ConversationServiceSidValidation(),
 			},
 			"conversation_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ConversationSidValidation(),
 			},
 			"webhooks": {
 				Type:     schema.TypeList,

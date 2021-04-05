@@ -31,32 +31,32 @@ The following arguments are supported:
 - `new_message` - (Optional) A `new_message` block as documented below.
 - `added_to_conversation` - (Optional) An `added_to_conversation` block as documented below.
 - `removed_from_conversation` - (Optional) A `removed_from_conversation` block as documented below.
-- `log_enabled` - (Optional) Whether notification logging is enabled
+- `log_enabled` - (Optional) Whether notification logging is enabled. The default value is `false`
 
 ---
 
 A `new_message` block supports the following:
 
-- `enabled` - (Optional) Whether new message notifications are enabled
-- `template` - (Optional) The message template which is used when a new message is added to the conversation
-- `sound` - (Optional) The sound played when a new message is added to the conversation
-- `badge_count_enabled` - (Optional) Whether message badges are enabled for the conversation
+- `enabled` - (Optional) Whether new message notifications are enabled. The default value is `false`
+- `template` - (Optional) The message template which is used when a new message is added to the conversation. The default value is an empty string/ no configuration specified
+- `sound` - (Optional) The sound played when a new message is added to the conversation. The default value is an empty string/ no configuration specified
+- `badge_count_enabled` - (Optional) Whether message badges are enabled for the conversation. The default value is `false`
 
 ---
 
 An `added_to_conversation` block supports the following:
 
-- `enabled` - (Optional) Whether notifications for users being added to the conversation are enabled
-- `template` - (Optional) The message template which is used when a user is added to the conversation
-- `sound` - (Optional) The sound played when a user is added to the conversation
+- `enabled` - (Optional) Whether notifications for users being added to the conversation are enabled. The default value is `false`
+- `template` - (Optional) The message template which is used when a user is added to the conversation. The default value is an empty string/ no configuration specified
+- `sound` - (Optional) The sound played when a user is added to the conversation. The default value is an empty string/ no configuration specified
 
 ---
 
 A `removed_from_conversation` block supports the following:
 
-- `enabled` - (Optional) Whether notifications for users being removed from the conversation are enabled
-- `template` - (Optional) The message template which is used when a user is removed from the conversation
-- `sound` - (Optional) The sound played when a user is removed from the conversation
+- `enabled` - (Optional) Whether notifications for users being removed from the conversation are enabled. The default value is `false`
+- `template` - (Optional) The message template which is used when a user is removed from the conversation. The default value is an empty string/ no configuration specified
+- `sound` - (Optional) The sound played when a user is removed from the conversation. The default value is an empty string/ no configuration specified
 
 ## Attributes Reference
 

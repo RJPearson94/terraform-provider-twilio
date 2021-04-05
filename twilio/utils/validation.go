@@ -25,6 +25,40 @@ func ByocSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^BY[0-9a-fA-F]{32}$"), "")
 }
 
+// Conversations
+
+func ConversationServiceSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^IS[0-9a-fA-F]{32}$"), "")
+}
+
+func ConversationRoleSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^RL[0-9a-fA-F]{32}$"), "")
+}
+
+func ConversationSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^CH[0-9a-fA-F]{32}$"), "")
+}
+
+func ConversationWebhookSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^WH[0-9a-fA-F]{32}$"), "")
+}
+
+func ConversationUserSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^US[0-9a-fA-F]{32}$"), "")
+}
+
+// Flex
+
+func FlowSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^FW[0-9a-fA-F]{32}$"), "")
+}
+
+// Messaging
+
+func MessagingServiceSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^MG[0-9a-fA-F]{32}$"), "")
+}
+
 // Serverless
 
 func ServerlessServiceSidValidation() schema.SchemaValidateFunc {

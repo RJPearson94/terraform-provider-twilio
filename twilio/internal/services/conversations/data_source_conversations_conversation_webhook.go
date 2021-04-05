@@ -20,20 +20,23 @@ func dataSourceConversationsConversationWebhook() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ConversationWebhookSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ConversationServiceSidValidation(),
 			},
 			"conversation_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ConversationSidValidation(),
 			},
 			"target": {
 				Type:     schema.TypeString,

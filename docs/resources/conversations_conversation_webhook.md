@@ -36,7 +36,7 @@ The following arguments are supported:
 - `conversation_sid` - (Mandatory) The conversation SID to associate the webhook with. Changing this forces a new resource to be created
 - `webhook_url` - (Mandatory) The webhook URL
 - `filters` - (Mandatory) The filter conditions that trigger the webhook
-- `method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`
+- `method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`. The default value is `POST`
 - `replay_after` - (Optional) Message Index to replay messages from
 
 ## Attributes Reference

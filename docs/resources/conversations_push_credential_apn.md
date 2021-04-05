@@ -23,10 +23,10 @@ resource "twilio_conversations_push_credential_apn" "push_credential_apn" {
 
 The following arguments are supported:
 
-- `friendly_name` - (Mandatory) The friendly name of the push credentials
-- `certificate` - (Mandatory) The APN certificate
-- `private_key` - (Mandatory) The APN private key
-- `sandbox` - (Optional) Whether to use the sandbox APN
+- `friendly_name` - (Mandatory) The friendly name of the push credentials. The length of the string must be between `1` and `64` characters (inclusive)
+- `certificate` - (Mandatory) The APN certificate. The value cannot be an empty string
+- `private_key` - (Mandatory) The APN private key. The value cannot be an empty string
+- `sandbox` - (Optional) Whether to use the sandbox APN. The default value is `false`
 
 ## Attributes Reference
 
