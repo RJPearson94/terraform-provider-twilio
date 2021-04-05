@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/video/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
 func dataSourceVideoCompositionHook() *schema.Resource {
@@ -116,14 +116,9 @@ func dataSourceVideoCompositionHookRead(ctx context.Context, d *schema.ResourceD
 	d.Set("status_callback_method", getResponse.StatusCallbackMethod)
 	d.Set("trim", getResponse.Trim)
 
-	var videoLayout string
-	if len(getResponse.VideoLayout) != 0 {
-		videoLayout, err = structure.FlattenJsonToString(getResponse.VideoLayout)
-		if err != nil {
-			return diag.Errorf("Unable to flatten video layout json to string")
-		}
-	} else {
-		videoLayout = "{}"
+	videoLayout, err := helper.FlattenJsonToStringOrEmptyObjectString(getResponse.VideoLayout)
+	if err != nil {
+		return diag.Errorf("Unable to flatten video layout json to string. Error ", err.Error())
 	}
 	d.Set("video_layout", videoLayout)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
