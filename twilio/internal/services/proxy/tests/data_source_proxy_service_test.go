@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -27,7 +28,6 @@ func TestAccDataSourceTwilioProxyService_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "account_sid"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "chat_instance_sid", ""),
-					resource.TestCheckResourceAttr(stateDataSourceName, "chat_service_sid", ""),
 					resource.TestCheckResourceAttr(stateDataSourceName, "default_ttl", "0"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "callback_url", ""),
 					resource.TestCheckResourceAttr(stateDataSourceName, "geo_match_level", "country"),
@@ -43,6 +43,19 @@ func TestAccDataSourceTwilioProxyService_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioProxyService_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioProxyService_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^KS\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioProxyService_basic(uniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_proxy_service" "service" {
@@ -53,4 +66,12 @@ data "twilio_proxy_service" "service" {
   sid = twilio_proxy_service.service.sid
 }
 `, uniqueName)
+}
+
+func testAccDataSourceTwilioProxyService_invalidSid() string {
+	return `
+data "twilio_proxy_service" "service" {
+  sid = "sid"
+}
+`
 }

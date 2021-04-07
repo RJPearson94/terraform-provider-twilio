@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -60,6 +61,19 @@ func TestAccDataSourceTwilioProxyPhoneNumbers_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioProxyPhoneNumbers_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioProxyPhoneNumbers_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^KS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioProxyPhoneNumbers_basic(testData *acceptance.TestData, uniqueName string, isReserved bool) string {
 	return fmt.Sprintf(`
 resource "twilio_proxy_service" "service" {
@@ -76,4 +90,12 @@ data "twilio_proxy_phone_numbers" "phone_numbers" {
   service_sid = twilio_proxy_phone_number.phone_number.service_sid
 }
 `, uniqueName, testData.PhoneNumberSid, isReserved)
+}
+
+func testAccDataSourceTwilioProxyPhoneNumbers_invalidServiceSid() string {
+	return `
+data "twilio_proxy_phone_numbers" "phone_numbers" {
+  service_sid = "service_sid"
+}
+`
 }

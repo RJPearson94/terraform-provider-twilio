@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -59,6 +60,32 @@ func TestAccDataSourceTwilioProxyPhoneNumber_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioProxyPhoneNumber_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioProxyPhoneNumber_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^KS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioProxyPhoneNumber_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioProxyPhoneNumber_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^PN\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioProxyPhoneNumber_basic(testData *acceptance.TestData, uniqueName string, isReserved bool) string {
 	return fmt.Sprintf(`
 resource "twilio_proxy_service" "service" {
@@ -76,4 +103,22 @@ data "twilio_proxy_phone_number" "phone_number" {
   sid         = twilio_proxy_phone_number.phone_number.sid
 }
 `, uniqueName, testData.PhoneNumberSid, isReserved)
+}
+
+func testAccDataSourceTwilioProxyPhoneNumber_invalidServiceSid() string {
+	return `
+data "twilio_proxy_phone_number" "phone_number" {
+  service_sid = "service_sid"
+  sid         = "PNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioProxyPhoneNumber_invalidSid() string {
+	return `
+data "twilio_proxy_phone_number" "phone_number" {
+  service_sid = "KSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid         = "sid"
+}
+`
 }

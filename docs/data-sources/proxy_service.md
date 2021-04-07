@@ -37,7 +37,6 @@ The following attributes are exported:
 - `sid` - The SID of the service (Same as the `id`)
 - `account_sid` - The account SID of the service is deployed into
 - `chat_instance_sid` - The chat instance SID of the service
-- `chat_service_sid` - The chat service SID of the service
 - `unique_name` - The unique name of the service
 - `default_ttl` - The default TTL of the service
 - `geo_match_level` - Where the proxy number and participant must be relatively located

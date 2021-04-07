@@ -53,19 +53,20 @@ func resourceProxyShortCode() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ProxyServiceSidValidation(),
 			},
 			"sid": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ShortCodeSidValidation(),
 			},
 			"is_reserved": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
 			},
 			"capabilities": {
 				Type:     schema.TypeList,

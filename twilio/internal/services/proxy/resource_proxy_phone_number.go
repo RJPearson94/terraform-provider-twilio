@@ -13,6 +13,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/proxy/v1/service/phone_numbers"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceProxyPhoneNumber() *schema.Resource {
@@ -52,9 +53,10 @@ func resourceProxyPhoneNumber() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ProxyServiceSidValidation(),
 			},
 			"sid": {
 				Type:          schema.TypeString,
@@ -62,6 +64,7 @@ func resourceProxyPhoneNumber() *schema.Resource {
 				Computed:      true,
 				ForceNew:      true,
 				ConflictsWith: []string{"phone_number"},
+				ValidateFunc:  utils.PhoneNumberSidValidation(),
 			},
 			"phone_number": {
 				Type:          schema.TypeString,
@@ -69,6 +72,7 @@ func resourceProxyPhoneNumber() *schema.Resource {
 				Computed:      true,
 				ForceNew:      true,
 				ConflictsWith: []string{"sid"},
+				ValidateFunc:  validation.StringMatch(regexp.MustCompile(`^\+[1-9]\d{1,14}$`), ""),
 			},
 			"is_reserved": {
 				Type:     schema.TypeBool,

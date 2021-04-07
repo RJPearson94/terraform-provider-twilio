@@ -25,6 +25,12 @@ func ByocSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^BY[0-9a-fA-F]{32}$"), "")
 }
 
+// Chat
+
+func ChatInstanceSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^IS[0-9a-fA-F]{32}$"), "")
+}
+
 // Conversations
 
 func ConversationServiceSidValidation() schema.SchemaValidateFunc {
@@ -57,6 +63,18 @@ func FlowSidValidation() schema.SchemaValidateFunc {
 
 func MessagingServiceSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^MG[0-9a-fA-F]{32}$"), "")
+}
+
+// Phone Number
+
+func PhoneNumberSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^PN[0-9a-fA-F]{32}$"), "")
+}
+
+// Proxy
+
+func ProxyServiceSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^KS[0-9a-fA-F]{32}$"), "")
 }
 
 // Serverless
@@ -97,6 +115,12 @@ func ServerlessVariableSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^ZV[0-9a-fA-F]{32}$"), "")
 }
 
+// Short Code
+
+func ShortCodeSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^SC[0-9a-fA-F]{32}$"), "")
+}
+
 // SIP
 
 func SIPDomainSidValidation() schema.SchemaValidateFunc {
@@ -125,12 +149,6 @@ func SIPTrunkSidValidation() schema.SchemaValidateFunc {
 
 func SIPOriginationURLValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^OU[0-9a-fA-F]{32}$"), "")
-}
-
-// Phone Number
-
-func PhoneNumberSidValidation() schema.SchemaValidateFunc {
-	return validation.StringMatch(regexp.MustCompile("^PN[0-9a-fA-F]{32}$"), "")
 }
 
 // Studio

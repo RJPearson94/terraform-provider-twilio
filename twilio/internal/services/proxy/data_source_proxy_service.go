@@ -20,18 +20,15 @@ func dataSourceProxyService() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ProxyServiceSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"chat_instance_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"chat_service_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -95,7 +92,6 @@ func dataSourceProxyServiceRead(ctx context.Context, d *schema.ResourceData, met
 	d.Set("sid", getResponse.Sid)
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("chat_instance_sid", getResponse.ChatInstanceSid)
-	d.Set("chat_service_sid", getResponse.ChatServiceSid)
 	d.Set("unique_name", getResponse.UniqueName)
 	d.Set("default_ttl", getResponse.DefaultTtl)
 	d.Set("callback_url", getResponse.CallbackURL)

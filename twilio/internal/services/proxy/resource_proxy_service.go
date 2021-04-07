@@ -55,45 +55,56 @@ func resourceProxyService() *schema.Resource {
 				Computed: true,
 			},
 			"chat_instance_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"chat_service_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				Default:      "",
+				ValidateFunc: utils.ChatInstanceSidValidation(),
 			},
 			"unique_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringLenBetween(1, 191),
 			},
 			"default_ttl": {
 				Type:     schema.TypeInt,
 				Optional: true,
-				Computed: true,
+				Default:  0,
 			},
 			"callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"geo_match_level": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				Default:  "country",
+				ValidateFunc: validation.StringInSlice([]string{
+					"area-code",
+					"country",
+					"extended-area-code",
+				}, false),
 			},
 			"number_selection_behavior": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				Default:  "prefer-sticky",
+				ValidateFunc: validation.StringInSlice([]string{
+					"avoid-sticky",
+					"prefer-sticky",
+				}, false),
 			},
 			"intercept_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"out_of_session_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"date_created": {
@@ -117,13 +128,13 @@ func resourceProxyServiceCreate(ctx context.Context, d *schema.ResourceData, met
 
 	createInput := &services.CreateServiceInput{
 		UniqueName:              d.Get("unique_name").(string),
-		DefaultTtl:              utils.OptionalInt(d, "default_ttl"),
-		CallbackURL:             utils.OptionalString(d, "callback_url"),
+		DefaultTtl:              utils.OptionalIntWith0Default(d, "default_ttl"),
+		CallbackURL:             utils.OptionalStringWithEmptyStringDefault(d, "callback_url"),
 		GeoMatchLevel:           utils.OptionalString(d, "geo_match_level"),
 		NumberSelectionBehavior: utils.OptionalString(d, "number_selection_behavior"),
-		InterceptCallbackURL:    utils.OptionalString(d, "intercept_callback_url"),
-		OutOfSessionCallbackURL: utils.OptionalString(d, "out_of_session_callback_url"),
-		ChatInstanceSid:         utils.OptionalString(d, "chat_instance_sid"),
+		InterceptCallbackURL:    utils.OptionalStringWithEmptyStringDefault(d, "intercept_callback_url"),
+		OutOfSessionCallbackURL: utils.OptionalStringWithEmptyStringDefault(d, "out_of_session_callback_url"),
+		ChatInstanceSid:         utils.OptionalStringWithEmptyStringDefault(d, "chat_instance_sid"),
 	}
 
 	createResult, err := client.Services.CreateWithContext(ctx, createInput)
@@ -150,7 +161,6 @@ func resourceProxyServiceRead(ctx context.Context, d *schema.ResourceData, meta 
 	d.Set("sid", getResponse.Sid)
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("chat_instance_sid", getResponse.ChatInstanceSid)
-	d.Set("chat_service_sid", getResponse.ChatServiceSid)
 	d.Set("unique_name", getResponse.UniqueName)
 	d.Set("default_ttl", getResponse.DefaultTtl)
 	d.Set("callback_url", getResponse.CallbackURL)
@@ -174,13 +184,13 @@ func resourceProxyServiceUpdate(ctx context.Context, d *schema.ResourceData, met
 
 	updateInput := &service.UpdateServiceInput{
 		UniqueName:              utils.OptionalString(d, "unique_name"),
-		DefaultTtl:              utils.OptionalInt(d, "default_ttl"),
-		CallbackURL:             utils.OptionalString(d, "callback_url"),
+		DefaultTtl:              utils.OptionalIntWith0Default(d, "default_ttl"),
+		CallbackURL:             utils.OptionalStringWithEmptyStringDefault(d, "callback_url"),
 		GeoMatchLevel:           utils.OptionalString(d, "geo_match_level"),
 		NumberSelectionBehavior: utils.OptionalString(d, "number_selection_behavior"),
-		InterceptCallbackURL:    utils.OptionalString(d, "intercept_callback_url"),
-		OutOfSessionCallbackURL: utils.OptionalString(d, "out_of_session_callback_url"),
-		ChatInstanceSid:         utils.OptionalString(d, "chat_instance_sid"),
+		InterceptCallbackURL:    utils.OptionalStringWithEmptyStringDefault(d, "intercept_callback_url"),
+		OutOfSessionCallbackURL: utils.OptionalStringWithEmptyStringDefault(d, "out_of_session_callback_url"),
+		ChatInstanceSid:         utils.OptionalStringWithEmptyStringDefault(d, "chat_instance_sid"),
 	}
 
 	updateResp, err := client.Service(d.Id()).UpdateWithContext(ctx, updateInput)
