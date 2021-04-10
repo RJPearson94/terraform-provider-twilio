@@ -22,10 +22,10 @@ The following arguments are supported:
 
 - `account_sid` - (Mandatory) The account SID to associate the domain with. Changing this forces a new resource to be created
 - `domain_name` - (Mandatory) The domain name of the resource. The domain name must end with `.sip.twilio.com`
-- `friendly_name` - (Optional) The friendly name of the domain. The default value is an empty string/ no configuration specified
+- `friendly_name` - (Optional) The friendly name of the domain
 - `voice` - (Optional) A `voice` block as documented below
 - `emergency` - (Optional) A `emergency` block as documented below
-- `byoc_trunk_sid` - (Optional) The BYOC trunk SID to associate the domain with. The default value is an empty string/ no configuration specified
+- `byoc_trunk_sid` - (Optional) The BYOC trunk SID to associate the domain with
 - `secure` - (Optional) Whether secure SIP is enabled. The default value is `false`
 - `sip_registration` - (Optional) Whether the SIP endpoint is allowed to register with the domain. The default value is `false`
 
@@ -33,11 +33,11 @@ The following arguments are supported:
 
 A `voice` block supports the following:
 
-- `url` - (Optional) The URL which should be called on each incoming call. The default value is an empty string/ no configuration specified
+- `url` - (Optional) The URL which should be called on each incoming call
 - `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `fallback_url` - (Optional) The URL which should be called when the URL request fails. The default value is an empty string/ no configuration specified
+- `fallback_url` - (Optional) The URL which should be called when the URL request fails
 - `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `status_callback_url` - (Optional) The URL to call on each status change. The default value is an empty string/ no configuration specified
+- `status_callback_url` - (Optional) The URL to call on each status change
 - `status_callback_method` - (Optional) The HTTP method which should be used to call the status callback URL. Valid values are `GET` or `POST`. The default value is `POST`
 
 ---
@@ -45,7 +45,7 @@ A `voice` block supports the following:
 An `emergency` block supports the following:
 
 - `calling_enabled` - (Optional) Whether emergency calling is enabled for the domain. The default value is `false`
-- `caller_sid` - (Optional) The caller SID to associate with the domain. The default value is an empty string/ no configuration specified
+- `caller_sid` - (Optional) The caller SID to associate with the domain
 
 ## Attributes Reference
 

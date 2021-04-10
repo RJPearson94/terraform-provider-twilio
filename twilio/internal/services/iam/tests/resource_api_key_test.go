@@ -41,45 +41,6 @@ func TestAccTwilioIAMAPIKey_basic(t *testing.T) {
 	})
 }
 
-func TestAccTwilioIAMAPIKey_update(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.api_key", resourceName)
-
-	testData := acceptance.TestAccData
-	friendlyName := acctest.RandString(10)
-
-	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioAPIKeyDestroy,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccTwilioAPIKey_basic(testData),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioAPIKeyExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "account_sid", testData.AccountSid),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-				),
-			},
-			{
-				Config: testAccTwilioAPIKey_friendlyName(testData, friendlyName),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioAPIKeyExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "account_sid", testData.AccountSid),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-				),
-			},
-		},
-	})
-}
-
 func TestAccTwilioIAMAPIKey_friendlyName(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.api_key", resourceName)
 

@@ -57,7 +57,6 @@ func resourceProxyService() *schema.Resource {
 			"chat_instance_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: utils.ChatInstanceSidValidation(),
 			},
 			"unique_name": {
@@ -73,7 +72,6 @@ func resourceProxyService() *schema.Resource {
 			"callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"geo_match_level": {
@@ -98,13 +96,11 @@ func resourceProxyService() *schema.Resource {
 			"intercept_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"out_of_session_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"date_created": {

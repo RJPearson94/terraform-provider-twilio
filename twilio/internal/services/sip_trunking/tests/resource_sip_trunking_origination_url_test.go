@@ -113,6 +113,19 @@ func TestAccTwilioSIPTrunkingOriginationURL_update(t *testing.T) {
 	})
 }
 
+func TestAccTwilioSIPTrunkingOriginationURL_blankFriendlyName(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioSIPTrunkingOriginationURL_blankFriendlyName(),
+				ExpectError: regexp.MustCompile(`(?s)expected \"friendly_name\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
 func TestAccTwilioSIPTrunkingOriginationURL_priority(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.origination_url", originationURLResourceName)
 
@@ -355,6 +368,19 @@ func testAccTwilioSIPTrunkingOriginationURL_invalidTrunkSid() string {
 resource "twilio_sip_trunking_origination_url" "origination_url" {
   trunk_sid     = "trunk_sid"
   friendly_name = "invalid_trunk_sid"
+  enabled       = false
+  priority      = 0
+  sip_url       = "sip:test@test.com"
+  weight        = 0
+}
+`
+}
+
+func testAccTwilioSIPTrunkingOriginationURL_blankFriendlyName() string {
+	return `
+resource "twilio_sip_trunking_origination_url" "origination_url" {
+  trunk_sid     = "TKaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  friendly_name = ""
   enabled       = false
   priority      = 0
   sip_url       = "sip:test@test.com"

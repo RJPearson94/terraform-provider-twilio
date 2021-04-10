@@ -78,7 +78,6 @@ func resourceStudioFlow() *schema.Resource {
 			"commit_message": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "",
 			},
 			"validate": {
 				Type:     schema.TypeBool,

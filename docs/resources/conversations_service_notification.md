@@ -38,8 +38,8 @@ The following arguments are supported:
 A `new_message` block supports the following:
 
 - `enabled` - (Optional) Whether new message notifications are enabled. The default value is `false`
-- `template` - (Optional) The message template which is used when a new message is added to the conversation. The default value is an empty string/ no configuration specified
-- `sound` - (Optional) The sound played when a new message is added to the conversation. The default value is an empty string/ no configuration specified
+- `template` - (Optional) The message template which is used when a new message is added to the conversation
+- `sound` - (Optional) The sound played when a new message is added to the conversation
 - `badge_count_enabled` - (Optional) Whether message badges are enabled for the conversation. The default value is `false`
 
 ---
@@ -47,16 +47,16 @@ A `new_message` block supports the following:
 An `added_to_conversation` block supports the following:
 
 - `enabled` - (Optional) Whether notifications for users being added to the conversation are enabled. The default value is `false`
-- `template` - (Optional) The message template which is used when a user is added to the conversation. The default value is an empty string/ no configuration specified
-- `sound` - (Optional) The sound played when a user is added to the conversation. The default value is an empty string/ no configuration specified
+- `template` - (Optional) The message template which is used when a user is added to the conversation
+- `sound` - (Optional) The sound played when a user is added to the conversation
 
 ---
 
 A `removed_from_conversation` block supports the following:
 
 - `enabled` - (Optional) Whether notifications for users being removed from the conversation are enabled. The default value is `false`
-- `template` - (Optional) The message template which is used when a user is removed from the conversation. The default value is an empty string/ no configuration specified
-- `sound` - (Optional) The sound played when a user is removed from the conversation. The default value is an empty string/ no configuration specified
+- `template` - (Optional) The message template which is used when a user is removed from the conversation
+- `sound` - (Optional) The sound played when a user is removed from the conversation
 
 ## Attributes Reference
 

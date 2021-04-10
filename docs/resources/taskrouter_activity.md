@@ -29,7 +29,7 @@ resource "twilio_taskrouter_activity" "activity" {
 
 The following arguments are supported:
 
-- `friendly_name` - (Mandatory) The name of the activity. The value cannot be an empty string
+- `friendly_name` - (Mandatory) The name of the activity
 - `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the activity with. Changing this forces a new resource to be created
 - `available` - (Optional) Whether the activity is available to accept tasks in TaskRouter. Changing this forces a new resource to be created
 

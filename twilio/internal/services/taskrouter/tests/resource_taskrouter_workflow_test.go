@@ -109,46 +109,6 @@ func TestAccTwilioTaskRouterWorkflow_update(t *testing.T) {
 	})
 }
 
-func TestAccTwilioTaskRouterWorkflow_callbackURLs(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.workflow", workflowResourceName)
-
-	friendlyName := acctest.RandString(10)
-	callbackURL := "https://test.com/callback"
-	fallbackCallbackURL := "https://test.com/fallback-callback"
-
-	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioTaskRouterWorkflowDestroy,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccTwilioTaskRouterWorkflow_basic(friendlyName),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioTaskRouterWorkflowExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "fallback_assignment_callback_url", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "assignment_callback_url", ""),
-				),
-			},
-			{
-				Config: testAccTwilioTaskRouterWorkflow_assignmentCallback(friendlyName, callbackURL, fallbackCallbackURL),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioTaskRouterWorkflowExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "fallback_assignment_callback_url", fallbackCallbackURL),
-					resource.TestCheckResourceAttr(stateResourceName, "assignment_callback_url", callbackURL),
-				),
-			},
-			{
-				Config: testAccTwilioTaskRouterWorkflow_basic(friendlyName),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioTaskRouterWorkflowExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "fallback_assignment_callback_url", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "assignment_callback_url", ""),
-				),
-			},
-		},
-	})
-}
-
 func TestAccTwilioTaskRouterWorkflow_assignmentCallback(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.workflow", workflowResourceName)
 
@@ -167,6 +127,14 @@ func TestAccTwilioTaskRouterWorkflow_assignmentCallback(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttr(stateResourceName, "assignment_callback_url", callbackURL),
 					resource.TestCheckResourceAttr(stateResourceName, "fallback_assignment_callback_url", fallbackCallbackURL),
+				),
+			},
+			{
+				Config: testAccTwilioTaskRouterWorkflow_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioTaskRouterWorkflowExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_assignment_callback_url", ""),
+					resource.TestCheckResourceAttr(stateResourceName, "assignment_callback_url", ""),
 				),
 			},
 		},

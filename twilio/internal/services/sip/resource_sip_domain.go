@@ -66,7 +66,6 @@ func resourceSIPDomain() *schema.Resource {
 			"friendly_name": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "",
 			},
 			"voice": {
 				Type:     schema.TypeList,
@@ -78,7 +77,6 @@ func resourceSIPDomain() *schema.Resource {
 						"status_callback_url": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							Default:      "",
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 						"status_callback_method": {
@@ -93,7 +91,6 @@ func resourceSIPDomain() *schema.Resource {
 						"fallback_url": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							Default:      "",
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 						"fallback_method": {
@@ -108,7 +105,6 @@ func resourceSIPDomain() *schema.Resource {
 						"url": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							Default:      "",
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 						"method": {
@@ -138,7 +134,6 @@ func resourceSIPDomain() *schema.Resource {
 						"caller_sid": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							Default:      "",
 							ValidateFunc: utils.PhoneNumberSidValidation(),
 						},
 					},
@@ -147,7 +142,6 @@ func resourceSIPDomain() *schema.Resource {
 			"byoc_trunk_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: utils.ByocSidValidation(),
 			},
 			"secure": {

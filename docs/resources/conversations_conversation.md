@@ -28,8 +28,8 @@ resource "twilio_conversations_conversation" "conversation" {
 The following arguments are supported:
 
 - `service_sid` - (Mandatory) The service SID to associate the conversation with. Changing this forces a new resource to be created
-- `unique_name` - (Optional) The unique name of the conversation. The default value is an empty string/ no configuration specified
-- `friendly_name` - (Optional) The friendly name of the conversation. The length of the string must be between `0` and `256` characters (inclusive). The default value is an empty string/ no configuration specified
+- `unique_name` - (Optional) The unique name of the conversation
+- `friendly_name` - (Optional) The friendly name of the conversation. The length of the string must be between `0` and `256` characters (inclusive)
 - `attributes` - (Optional) JSON string of attributes. The default value is `{}`
 - `messaging_service_sid` - (Optional) The messaging service SID to associate the conversation with
 - `state` - (Optional) The state of the conversation. Valid values are `active`, `inactive` or `closed`. The default value is `active`

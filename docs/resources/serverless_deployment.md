@@ -122,4 +122,4 @@ A deployment can be imported using the `/Services/{serviceSid}/Environments/{env
 terraform import twilio_serverless_deployment.deployment /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Environments/ZEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Deployments/ZDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
-!> "triggers" cannot be imported
+!> `triggers` cannot be imported

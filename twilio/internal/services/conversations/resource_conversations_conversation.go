@@ -66,12 +66,10 @@ func resourceConversationsConversation() *schema.Resource {
 			"unique_name": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.StringLenBetween(0, 256),
 			},
 			"attributes": {

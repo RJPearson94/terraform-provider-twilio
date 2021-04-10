@@ -53,12 +53,10 @@ func resourceConversationsServiceNotification() *schema.Resource {
 						"template": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Default:  "",
 						},
 						"sound": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Default:  "",
 						},
 						"badge_count_enabled": {
 							Type:     schema.TypeBool,
@@ -83,12 +81,10 @@ func resourceConversationsServiceNotification() *schema.Resource {
 						"template": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Default:  "",
 						},
 						"sound": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Default:  "",
 						},
 					},
 				},
@@ -108,12 +104,10 @@ func resourceConversationsServiceNotification() *schema.Resource {
 						"template": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Default:  "",
 						},
 						"sound": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Default:  "",
 						},
 					},
 				},

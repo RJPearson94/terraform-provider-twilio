@@ -43,7 +43,7 @@ resource "twilio_studio_flow" "flow" {
 
 The following arguments are supported:
 
-- `friendly_name` - (Mandatory) The name of the Studio flow. The value cannot be an empty string
+- `friendly_name` - (Mandatory) The name of the Studio flow
 - `status` - (Mandatory) The status of the Studio flow. Valid values include `draft` and `published`
 - `definition` - (Mandatory) The flow definition JSON
 - `validate` - (Optional) Whether to validate the flow definition JSON before creating a new revision. The default is `false`
@@ -84,4 +84,4 @@ A flow can be imported using the `/Flows/{sid}` format, e.g.
 terraform import twilio_studio_flow.flow /Flows/FWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
-!> "validate" cannot be imported
+!> `validate` cannot be imported

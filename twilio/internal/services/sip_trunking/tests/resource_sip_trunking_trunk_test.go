@@ -214,14 +214,6 @@ func TestAccTwilioSIPTrunkingTrunk_disasterRecovery(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioSIPTrunkingTrunkDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioSIPTrunkingTrunk_basic(),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_method", ""),
-					resource.TestCheckResourceAttr(stateResourceName, "disaster_recovery_url", ""),
-				),
-			},
-			{
 				Config: testAccTwilioSIPTrunkingTrunk_disasterRecovery(method, url),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioSIPTrunkingTrunkExists(stateResourceName),
@@ -251,7 +243,7 @@ func TestAccTwilioSIPTrunkingTrunk_invalidDisasterRecoveryMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioSIPTrunkingTrunk_disasterRecovery(method, url),
-				ExpectError: regexp.MustCompile(`(?s)expected disaster_recovery_method to be one of \[ GET POST\], got DELETE`),
+				ExpectError: regexp.MustCompile(`(?s)expected disaster_recovery_method to be one of \[GET POST\], got DELETE`),
 			},
 		},
 	})

@@ -65,7 +65,6 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 			"event_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"event_filters": {

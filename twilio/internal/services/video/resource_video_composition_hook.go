@@ -98,7 +98,6 @@ func resourceVideoCompositionHook() *schema.Resource {
 			"status_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"status_callback_method": {

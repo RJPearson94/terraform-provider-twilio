@@ -71,7 +71,7 @@ resource "twilio_taskrouter_worker" "worker" {
 The following arguments are supported:
 
 - `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the worker with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The name of the worker. The value cannot be an empty string
+- `friendly_name` - (Mandatory) The name of the worker
 - `attributes` - (Optional) JSON string of worker attributes. The default value is `{}`
 - `activity_sid` - (Optional) Activity SID to be assigned to the worker
 

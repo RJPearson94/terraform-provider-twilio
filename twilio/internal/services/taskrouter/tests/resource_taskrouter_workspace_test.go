@@ -262,7 +262,6 @@ func TestAccTwilioTaskRouterWorkspace_removeEventCallback(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttr(stateResourceName, "event_callback_url", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "event_filters.#", "0"),
-					resource.TestCheckResourceAttr(stateResourceName, "prioritize_queue_order", queueOrder),
 				),
 			},
 		},

@@ -81,7 +81,6 @@ func resourceMessagingService() *schema.Resource {
 			"fallback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"inbound_method": {
@@ -96,7 +95,6 @@ func resourceMessagingService() *schema.Resource {
 			"inbound_request_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"mms_converter": {
@@ -112,7 +110,6 @@ func resourceMessagingService() *schema.Resource {
 			"status_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"sticky_sender": {

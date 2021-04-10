@@ -41,7 +41,6 @@ func resourceIamApiKey() *schema.Resource {
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.StringLenBetween(0, 64),
 			},
 			"secret": {

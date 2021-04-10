@@ -64,9 +64,7 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 			"disaster_recovery_method": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "",
 				ValidateFunc: validation.StringInSlice([]string{
-					"",
 					"GET",
 					"POST",
 				}, false),
@@ -74,18 +72,15 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 			"disaster_recovery_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"domain_name": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.StringLenBetween(0, 64),
 			},
 			"recording": {

@@ -70,13 +70,11 @@ func resourceTaskRouterWorkflow() *schema.Resource {
 			"fallback_assignment_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"assignment_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"task_reservation_timeout": {

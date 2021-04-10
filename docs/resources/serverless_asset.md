@@ -40,7 +40,7 @@ The following arguments are supported:
 - `content` - (Optional) The file contents as string. Conflicts with `source`
 - `source` - (Optional) The relative path to the asset file. Conflicts with `content`
 - `source_hash` - (Optional) A hash of the asset file to trigger deployments. Conflicts with `content`
-- `content_type` - (Mandatory) The file MIME-type. The value cannot be an empty string
+- `content_type` - (Mandatory) The file MIME-type
 - `path` - (Mandatory) The request URI path. The length of the string must be between `1` and `255` characters (inclusive)
 - `visibility` - (Mandatory) The visibility of the asset. Valid values are `public` or `protected` or `private`
 
@@ -83,4 +83,4 @@ A asset can be imported using the `/Services/{serviceSid}/Assets/{sid}` format, 
 terraform import twilio_serverless_asset.asset /Services/ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Assets/ZHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
-!> The following arguments "content", "content_file_name", "content_type" and "source_hash" cannot be imported, as the API doesn't return this data
+!> The following arguments `content`, `content_file_name`, `content_type` and `source_hash` cannot be imported, as the API doesn't return this data

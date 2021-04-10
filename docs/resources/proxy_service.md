@@ -24,13 +24,13 @@ resource "twilio_proxy_service" "service" {
 The following arguments are supported:
 
 - `unique_name` - (Mandatory) The unique name of the service. The length of the string must be between `1` and `191` characters (inclusive)
-- `chat_instance_sid` - (Optional) The chat instance SID of the service. The default value is an empty string/ no configuration specified
+- `chat_instance_sid` - (Optional) The chat instance SID of the service
 - `default_ttl` - (Optional) The default TTL of the service. The default value is `0`
 - `geo_match_level` - (Optional) Where the proxy number and participant must be relatively located. Valid values are `area-code`, `country` or `extended-area-code`. The default value is `country`
 - `number_selection_behavior` - (Optional) How the proxy service selects proxy numbers. Valid values are `avoid-sticky` or `prefer-sticky`. The default value is `prefer-sticky`
-- `callback_url` - (Optional) The callback URL for the service. The default value is an empty string/ no configuration specified
-- `intercept_callback_url` - (Optional) The intercept callback URL for the service. The default value is an empty string/ no configuration specified
-- `out_of_session_callback_url` - (Optional) The out of session callback URL for the service. The default value is an empty string/ no configuration specified
+- `callback_url` - (Optional) The callback URL for the service
+- `intercept_callback_url` - (Optional) The intercept callback URL for the service
+- `out_of_session_callback_url` - (Optional) The out of session callback URL for the service
 
 ## Attributes Reference
 

@@ -11,6 +11,8 @@ For more information on conversations, see the product [page](https://www.twilio
 
 !> This resource modifies the Twilio conversation webhook configuration for the account. No new resources will be provisioned. Instead, the webhook configuration will be updated upon creation and the webhook configuration will remain after the destruction of the resource.
 
+!> Removing any argument from your configuration will cause the corresponding value to be retained after a Terraform apply. If you want to change any of the values you will need to set the argument to the appropiate value
+
 ## Example Usage
 
 ```hcl

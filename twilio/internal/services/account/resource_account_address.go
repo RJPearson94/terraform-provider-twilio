@@ -65,7 +65,6 @@ func resourceAccountAddress() *schema.Resource {
 			"friendly_name": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "",
 			},
 			"street": {
 				Type:         schema.TypeString,
@@ -75,7 +74,6 @@ func resourceAccountAddress() *schema.Resource {
 			"street_secondary": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "",
 			},
 			"city": {
 				Type:         schema.TypeString,

@@ -23,7 +23,7 @@ resource "twilio_conversations_push_credential_fcm" "push_credential_fcm" {
 The following arguments are supported:
 
 - `friendly_name` - (Mandatory) The friendly name of the push credentials. The length of the string must be between `1` and `64` characters (inclusive)
-- `secret` - (Mandatory) The FCM secret. The value cannot be an empty string
+- `secret` - (Mandatory) The FCM secret
 
 ## Attributes Reference
 

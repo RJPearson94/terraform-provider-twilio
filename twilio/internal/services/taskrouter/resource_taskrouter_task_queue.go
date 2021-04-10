@@ -73,7 +73,6 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 			"assignment_activity_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: utils.TaskRouterActivitySidValidation(),
 			},
 			"reservation_activity_name": {
@@ -83,7 +82,6 @@ func resourceTaskRouterTaskQueue() *schema.Resource {
 			"reservation_activity_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      "",
 				ValidateFunc: utils.TaskRouterActivitySidValidation(),
 			},
 			"max_reserved_workers": {

@@ -107,4 +107,4 @@ A model build can be imported using the `/Assistants/{assistantSid}/ModelBuilds/
 terraform import twilio_autopilot_model_build.model_build /Assistants/UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/ModelBuilds/UGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
-!> The following arguments "unique_name_prefix", "triggers" and "polling" cannot be imported
+!> The following arguments `unique_name_prefix`, `triggers` and `polling` cannot be imported

@@ -30,7 +30,7 @@ The following attributes are exported:
 - `id` - The ID of the credential list (Same as the `sid` )
 - `sid` - The SID of the credential list (Same as the `id`)
 - `account_sid` - The account SID associated with the credential list
-- `friendly_name` - The friendly name of the credential list. The value cannot be an empty string
+- `friendly_name` - The friendly name of the credential list
 - `date_created` - The date in RFC3339 format that the credential list was created
 - `date_updated` - The date in RFC3339 format that the credential list was updated
 

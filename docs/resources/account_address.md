@@ -26,14 +26,14 @@ resource "twilio_account_address" "address" {
 The following arguments are supported:
 
 - `account_sid` - (Mandatory) The account SID to associate the address with. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The friendly name of the address. The default value is an empty string/ no configuration specified
-- `customer_name` - (Mandatory) The customer/ business name. The value cannot be an empty string
-- `street` - (Mandatory) The address street. The value cannot be an empty string
-- `street_secondary` - (Optional) The address secondary street. The default value is an empty string/ no configuration specified
-- `city` - (Mandatory) The address city. The value cannot be an empty string
-- `region` - (Mandatory) The address region. The value cannot be an empty string
-- `postal_code` - (Mandatory) The address postal code. The value cannot be an empty string
-- `iso_country` - (Mandatory) The address ISO country. The value cannot be an empty string
+- `friendly_name` - (Optional) The friendly name of the address
+- `customer_name` - (Mandatory) The customer/ business name
+- `street` - (Mandatory) The address street
+- `street_secondary` - (Optional) The address secondary street
+- `city` - (Mandatory) The address city
+- `region` - (Mandatory) The address region
+- `postal_code` - (Mandatory) The address postal code
+- `iso_country` - (Mandatory) The address ISO country
 - `emergency_enabled` - (Optional) Whether emergency calling is enabled for the address. The default value is `false`
 
 ## Attributes Reference

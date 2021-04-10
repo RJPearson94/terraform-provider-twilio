@@ -22,10 +22,10 @@ resource "twilio_sip_trunking_trunk" "trunk" {
 The following arguments are supported:
 
 - `cnam_lookup_enabled` - (Optional) Whether Caller ID Name is enabled on the SIP trunk. The default value is `false`
-- `disaster_recovery_url` - (Optional) The URL to call in event of disaster recovery. The default value is an empty string/ no configuration specified
-- `disaster_recovery_method` - (Optional) The HTTP method which should be used to call the disaster recovery URL. Valid values are "" (empty string), `POST` or `GET`. The default value is an empty string/ no configuration specified
-- `domain_name` - (Optional) The domain name of the SIP trunk. The default value is an empty string/ no configuration specified
-- `friendly_name` - (Optional) The friendly name of the SIP trunk. The length of the string must be between `0` and `64` characters (inclusive). The default value is an empty string/ no configuration specified
+- `disaster_recovery_url` - (Optional) The URL to call in event of disaster recovery
+- `disaster_recovery_method` - (Optional) The HTTP method which should be used to call the disaster recovery URL. Valid values are `POST` or `GET`
+- `domain_name` - (Optional) The domain name of the SIP trunk
+- `friendly_name` - (Optional) The friendly name of the SIP trunk. The length of the string must be between `0` and `64` characters (inclusive)
 - `recording` - (Optional) A `recording` block as documented below
 - `secure` - (Optional) Whether secure trunking is enabled on the SIP trunk. The default value is `false`
 - `transfer_mode` - (Optional) The call transfer configuration on the SIP trunk. Valid values are `enable-all`, `sip-only` or `disable-all`. The default value is `disable-all`
