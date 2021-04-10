@@ -20,8 +20,9 @@ func dataSourceMessagingPhoneNumbers() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.MessagingServiceSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,

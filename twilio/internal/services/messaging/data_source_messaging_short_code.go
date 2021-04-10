@@ -20,12 +20,14 @@ func dataSourceMessagingShortCode() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ShortCodeSidValidation(),
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.MessagingServiceSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,

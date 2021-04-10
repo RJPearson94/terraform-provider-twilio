@@ -31,20 +31,18 @@ func TestAccTwilioMessagingService_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "area_code_geomatch"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "fallback_method"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "fallback_to_long_code"),
+					resource.TestCheckResourceAttr(stateResourceName, "area_code_geomatch", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_to_long_code", "true"),
 					resource.TestCheckResourceAttr(stateResourceName, "fallback_url", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "friendly_name"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "inbound_method"),
+					resource.TestCheckResourceAttr(stateResourceName, "inbound_method", "POST"),
 					resource.TestCheckResourceAttr(stateResourceName, "inbound_request_url", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "mms_converter"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "smart_encoding"),
+					resource.TestCheckResourceAttr(stateResourceName, "mms_converter", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "smart_encoding", "true"),
 					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sticky_sender"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "validity_period"),
+					resource.TestCheckResourceAttr(stateResourceName, "sticky_sender", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "validity_period", "14400"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -63,7 +61,7 @@ func TestAccTwilioMessagingService_basic(t *testing.T) {
 func TestAccTwilioMessagingService_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
 
-	friendlyName := acctest.RandString(10)
+	friendlyName := acctest.RandString(1)
 	newFriendlyName := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -76,21 +74,20 @@ func TestAccTwilioMessagingService_update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioMessagingServiceExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", friendlyName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "area_code_geomatch"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "fallback_method"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "fallback_to_long_code"),
+					resource.TestCheckResourceAttr(stateResourceName, "area_code_geomatch", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_to_long_code", "true"),
 					resource.TestCheckResourceAttr(stateResourceName, "fallback_url", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "friendly_name"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "inbound_method"),
+					resource.TestCheckResourceAttr(stateResourceName, "inbound_method", "POST"),
 					resource.TestCheckResourceAttr(stateResourceName, "inbound_request_url", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "mms_converter"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "smart_encoding"),
+					resource.TestCheckResourceAttr(stateResourceName, "mms_converter", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "smart_encoding", "true"),
 					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sticky_sender"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "validity_period"),
+					resource.TestCheckResourceAttr(stateResourceName, "sticky_sender", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "validity_period", "14400"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -101,25 +98,39 @@ func TestAccTwilioMessagingService_update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioMessagingServiceExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newFriendlyName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "area_code_geomatch"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "fallback_method"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "fallback_to_long_code"),
+					resource.TestCheckResourceAttr(stateResourceName, "area_code_geomatch", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_to_long_code", "true"),
 					resource.TestCheckResourceAttr(stateResourceName, "fallback_url", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "friendly_name"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "inbound_method"),
+					resource.TestCheckResourceAttr(stateResourceName, "inbound_method", "POST"),
 					resource.TestCheckResourceAttr(stateResourceName, "inbound_request_url", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "mms_converter"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "smart_encoding"),
+					resource.TestCheckResourceAttr(stateResourceName, "mms_converter", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "smart_encoding", "true"),
 					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sticky_sender"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "validity_period"),
+					resource.TestCheckResourceAttr(stateResourceName, "sticky_sender", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "validity_period", "14400"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioMessagingService_blankFriendlyName(t *testing.T) {
+	friendlyName := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioMessagingService_basic(friendlyName),
+				ExpectError: regexp.MustCompile(`(?s)expected \"friendly_name\" to not be an empty string, got `),
 			},
 		},
 	})
@@ -140,9 +151,16 @@ func TestAccTwilioMessagingService_fallback(t *testing.T) {
 				Config: testAccTwilioMessagingService_fallback(friendlyName, fallbackMethod, fallbackURL),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioMessagingServiceExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttr(stateResourceName, "fallback_method", fallbackMethod),
 					resource.TestCheckResourceAttr(stateResourceName, "fallback_url", fallbackURL),
+				),
+			},
+			{
+				Config: testAccTwilioMessagingService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_url", ""),
 				),
 			},
 		},
@@ -198,9 +216,16 @@ func TestAccTwilioMessagingService_inbound(t *testing.T) {
 				Config: testAccTwilioMessagingService_inbound(friendlyName, inboundMethod, inboundURL),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioMessagingServiceExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttr(stateResourceName, "inbound_method", inboundMethod),
 					resource.TestCheckResourceAttr(stateResourceName, "inbound_request_url", inboundURL),
+				),
+			},
+			{
+				Config: testAccTwilioMessagingService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "inbound_method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "inbound_request_url", ""),
 				),
 			},
 		},
@@ -255,8 +280,14 @@ func TestAccTwilioMessagingService_statusCallback(t *testing.T) {
 				Config: testAccTwilioMessagingService_statusCallback(friendlyName, statusCallbackURL),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioMessagingServiceExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", statusCallbackURL),
+				),
+			},
+			{
+				Config: testAccTwilioMessagingService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
 				),
 			},
 		},
@@ -274,6 +305,209 @@ func TestAccTwilioMessagingService_invalidStatusCallbackURL(t *testing.T) {
 			{
 				Config:      testAccTwilioMessagingService_statusCallback(friendlyName, statusCallbackURL),
 				ExpectError: regexp.MustCompile(`(?s)expected "status_callback_url" to have a host, got status`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioMessagingService_validityPeriod(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+
+	friendlyName := acctest.RandString(10)
+	validityPeriod := 14400
+	newValidityPeriod := 1
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioMessagingService_validityPeriod(friendlyName, validityPeriod),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "validity_period", "14400"),
+				),
+			},
+			{
+				Config: testAccTwilioMessagingService_validityPeriod(friendlyName, newValidityPeriod),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "validity_period", "1"),
+				),
+			},
+			{
+				Config: testAccTwilioMessagingService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "validity_period", "14400"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioMessagingService_invalidValidityPeriodOf0(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	validityPeriod := 0
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioMessagingService_validityPeriod(friendlyName, validityPeriod),
+				ExpectError: regexp.MustCompile(`(?s)expected validity_period to be in the range \(1 - 14400\), got 0`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioMessagingService_invalidValidityPeriodOf14401(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	validityPeriod := 14401
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioMessagingService_validityPeriod(friendlyName, validityPeriod),
+				ExpectError: regexp.MustCompile(`(?s)expected validity_period to be in the range \(1 - 14400\), got 14401`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioMessagingService_stickySender(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioMessagingService_stickySenderFalse(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "sticky_sender", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioMessagingService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "sticky_sender", "true"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioMessagingService_smartEncoding(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioMessagingService_smartEncodingFalse(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "smart_encoding", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioMessagingService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "smart_encoding", "true"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioMessagingService_mmsConverter(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioMessagingService_mmsConverterFalse(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "mms_converter", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioMessagingService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "mms_converter", "true"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioMessagingService_fallbackToLongCode(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioMessagingService_fallbackToLongCodeFalse(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_to_long_code", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioMessagingService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "fallback_to_long_code", "true"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioMessagingService_areaCodeGeomatch(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioMessagingService_areaCodeGeomatchFalse(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "area_code_geomatch", "false"),
+				),
+			},
+			{
+				Config: testAccTwilioMessagingService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "area_code_geomatch", "true"),
+				),
 			},
 		},
 	})
@@ -362,4 +596,58 @@ resource "twilio_messaging_service" "service" {
   status_callback_url = "%s"
 }
 `, friendlyName, url)
+}
+
+func testAccTwilioMessagingService_validityPeriod(friendlyName string, validityPeriod int) string {
+	return fmt.Sprintf(`
+resource "twilio_messaging_service" "service" {
+  friendly_name = "%s"
+  validity_period = %d
+}
+`, friendlyName, validityPeriod)
+}
+
+func testAccTwilioMessagingService_stickySenderFalse(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_messaging_service" "service" {
+  friendly_name = "%s"
+  sticky_sender = false
+}
+`, friendlyName)
+}
+
+func testAccTwilioMessagingService_smartEncodingFalse(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_messaging_service" "service" {
+  friendly_name = "%s"
+  smart_encoding = false
+}
+`, friendlyName)
+}
+
+func testAccTwilioMessagingService_mmsConverterFalse(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_messaging_service" "service" {
+  friendly_name = "%s"
+  mms_converter = false
+}
+`, friendlyName)
+}
+
+func testAccTwilioMessagingService_fallbackToLongCodeFalse(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_messaging_service" "service" {
+  friendly_name = "%s"
+  fallback_to_long_code = false
+}
+`, friendlyName)
+}
+
+func testAccTwilioMessagingService_areaCodeGeomatchFalse(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_messaging_service" "service" {
+  friendly_name = "%s"
+  area_code_geomatch = false
+}
+`, friendlyName)
 }

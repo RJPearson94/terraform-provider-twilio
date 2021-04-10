@@ -48,14 +48,16 @@ func resourceMessagingPhoneNumber() *schema.Resource {
 				Computed: true,
 			},
 			"sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.PhoneNumberSidValidation(),
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.MessagingServiceSidValidation(),
 			},
 			"capabilities": {
 				Type:     schema.TypeList,

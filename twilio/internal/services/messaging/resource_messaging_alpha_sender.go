@@ -11,6 +11,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/messaging/v1/service/alpha_senders"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceMessagingAlphaSender() *schema.Resource {
@@ -52,14 +53,16 @@ func resourceMessagingAlphaSender() *schema.Resource {
 				Computed: true,
 			},
 			"alpha_sender": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.MessagingServiceSidValidation(),
 			},
 			"capabilities": {
 				Type:     schema.TypeList,

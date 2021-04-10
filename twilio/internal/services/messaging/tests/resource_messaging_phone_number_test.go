@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -45,6 +46,32 @@ func TestAccTwilioMessagingPhoneNumber_basic(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: testAccTwilioMessagingPhoneNumberImportStateIdFunc(stateResourceName),
 				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+func TestAccTwilioMessagingPhoneNumber_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioMessagingPhoneNumber_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^MG\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioMessagingPhoneNumber_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioMessagingPhoneNumber_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^PN\[0-9a-fA-F\]\{32\}\$", got sid`),
 			},
 		},
 	})
@@ -109,4 +136,22 @@ resource "twilio_messaging_phone_number" "phone_number" {
   sid         = "%s"
 }
 `, friendlyName, testData.PhoneNumberSid)
+}
+
+func testAccTwilioMessagingPhoneNumber_invalidServiceSid() string {
+	return `
+resource "twilio_messaging_phone_number" "phone_number" {
+  service_sid = "service_sid"
+  sid         = "PNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccTwilioMessagingPhoneNumber_invalidSid() string {
+	return `
+resource "twilio_messaging_phone_number" "phone_number" {
+  service_sid = "MGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid         = "sid"
+}
+`
 }

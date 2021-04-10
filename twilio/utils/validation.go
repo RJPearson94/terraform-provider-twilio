@@ -65,6 +65,10 @@ func MessagingServiceSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^MG[0-9a-fA-F]{32}$"), "")
 }
 
+func MessagingAlphaSenderSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^AI[0-9a-fA-F]{32}$"), "")
+}
+
 // Phone Number
 
 func PhoneNumberSidValidation() schema.SchemaValidateFunc {
