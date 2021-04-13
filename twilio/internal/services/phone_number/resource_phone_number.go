@@ -54,9 +54,10 @@ func resourcePhoneNumber() *schema.Resource {
 				Computed: true,
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.AccountSidValidation(),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,
@@ -69,6 +70,7 @@ func resourcePhoneNumber() *schema.Resource {
 				Computed:     true,
 				ForceNew:     true,
 				ExactlyOneOf: []string{"phone_number", "area_code"},
+				ValidateFunc: utils.PhoneNumberValidation(),
 			},
 			"area_code": {
 				Type:         schema.TypeString,
@@ -77,8 +79,9 @@ func resourcePhoneNumber() *schema.Resource {
 				ExactlyOneOf: []string{"phone_number", "area_code"},
 			},
 			"address_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: utils.AddressSidValidation(),
 			},
 			"address_requirements": {
 				Type:     schema.TypeString,
@@ -113,13 +116,18 @@ func resourcePhoneNumber() *schema.Resource {
 				},
 			},
 			"emergency_address_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: utils.AddressSidValidation(),
 			},
 			"emergency_status": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"Active",
+					"Inactive",
+				}, false),
 			},
 			"messaging": {
 				Type:     schema.TypeList,
@@ -129,13 +137,14 @@ func resourcePhoneNumber() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"application_sid": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: utils.ApplicationSidValidation(),
 						},
 						"fallback_method": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "POST",
 							ValidateFunc: validation.StringInSlice([]string{
 								"GET",
 								"POST",
@@ -149,7 +158,7 @@ func resourcePhoneNumber() *schema.Resource {
 						"method": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "POST",
 							ValidateFunc: validation.StringInSlice([]string{
 								"GET",
 								"POST",
@@ -158,15 +167,15 @@ func resourcePhoneNumber() *schema.Resource {
 						"url": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							Computed:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 					},
 				},
 			},
 			"trunk_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: utils.SIPTrunkSidValidation(),
 			},
 			"voice": {
 				Type:          schema.TypeList,
@@ -177,18 +186,19 @@ func resourcePhoneNumber() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"application_sid": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: utils.ApplicationSidValidation(),
 						},
 						"caller_id_lookup": {
 							Type:     schema.TypeBool,
 							Optional: true,
-							Computed: true,
+							Default:  false,
 						},
 						"fallback_method": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "POST",
 							ValidateFunc: validation.StringInSlice([]string{
 								"GET",
 								"POST",
@@ -202,7 +212,7 @@ func resourcePhoneNumber() *schema.Resource {
 						"method": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "POST",
 							ValidateFunc: validation.StringInSlice([]string{
 								"GET",
 								"POST",
@@ -211,7 +221,6 @@ func resourcePhoneNumber() *schema.Resource {
 						"url": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							Computed:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 					},
@@ -226,13 +235,14 @@ func resourcePhoneNumber() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"application_sid": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: utils.ApplicationSidValidation(),
 						},
 						"fallback_method": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "POST",
 							ValidateFunc: validation.StringInSlice([]string{
 								"GET",
 								"POST",
@@ -246,7 +256,7 @@ func resourcePhoneNumber() *schema.Resource {
 						"method": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "POST",
 							ValidateFunc: validation.StringInSlice([]string{
 								"GET",
 								"POST",
@@ -255,19 +265,20 @@ func resourcePhoneNumber() *schema.Resource {
 						"url": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							Computed:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 						},
 					},
 				},
 			},
 			"identity_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: utils.IdentitySidValidation(),
 			},
 			"bundle_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: utils.BundleSidValidation(),
 			},
 			"status": {
 				Type:     schema.TypeString,
@@ -281,7 +292,7 @@ func resourcePhoneNumber() *schema.Resource {
 			"status_callback_method": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				Default:  "POST",
 				ValidateFunc: validation.StringInSlice([]string{
 					"GET",
 					"POST",
@@ -307,44 +318,44 @@ func resourcePhoneNumberCreate(ctx context.Context, d *schema.ResourceData, meta
 	client := meta.(*common.TwilioClient).API
 
 	createInput := &incoming_phone_numbers.CreateIncomingPhoneNumberInput{
-		AddressSid:           utils.OptionalString(d, "address_sid"),
-		AreaCode:             utils.OptionalString(d, "area_code"),
-		BundleSid:            utils.OptionalString(d, "bundle_sid"),
-		EmergencyAddressSid:  utils.OptionalString(d, "emergency_address_sid"),
+		AddressSid:           utils.OptionalStringWithEmptyStringDefault(d, "address_sid"),
+		AreaCode:             utils.OptionalStringWithEmptyStringDefault(d, "area_code"),
+		BundleSid:            utils.OptionalStringWithEmptyStringDefault(d, "bundle_sid"),
+		EmergencyAddressSid:  utils.OptionalStringWithEmptyStringDefault(d, "emergency_address_sid"),
 		EmergencyStatus:      utils.OptionalString(d, "emergency_status"),
 		FriendlyName:         utils.OptionalString(d, "friendly_name"),
-		IdentitySid:          utils.OptionalString(d, "identity_sid"),
+		IdentitySid:          utils.OptionalStringWithEmptyStringDefault(d, "identity_sid"),
 		PhoneNumber:          utils.OptionalString(d, "phone_number"),
-		StatusCallback:       utils.OptionalString(d, "status_callback_url"),
+		StatusCallback:       utils.OptionalStringWithEmptyStringDefault(d, "status_callback_url"),
 		StatusCallbackMethod: utils.OptionalString(d, "status_callback_method"),
-		TrunkSid:             utils.OptionalString(d, "trunk_sid"),
+		TrunkSid:             utils.OptionalStringWithEmptyStringDefault(d, "trunk_sid"),
 	}
 
 	if _, ok := d.GetOk("messaging"); ok {
-		createInput.SmsApplicationSid = utils.OptionalString(d, "messaging.0.application_sid")
+		createInput.SmsApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.application_sid")
 		createInput.SmsFallbackMethod = utils.OptionalString(d, "messaging.0.fallback_method")
-		createInput.SmsFallbackURL = utils.OptionalString(d, "messaging.0.fallback_url")
+		createInput.SmsFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.fallback_url")
 		createInput.SmsMethod = utils.OptionalString(d, "messaging.0.method")
-		createInput.SmsURL = utils.OptionalString(d, "messaging.0.url")
+		createInput.SmsURL = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.url")
 	}
 
 	if _, ok := d.GetOk("voice"); ok {
 		createInput.VoiceReceiveMode = sdkUtils.String("voice")
-		createInput.VoiceApplicationSid = utils.OptionalString(d, "voice.0.application_sid")
+		createInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.application_sid")
 		createInput.VoiceCallerIDLookup = utils.OptionalBool(d, "voice.0.caller_id_lookup")
 		createInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
-		createInput.VoiceFallbackURL = utils.OptionalString(d, "voice.0.fallback_url")
+		createInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.fallback_url")
 		createInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
-		createInput.VoiceURL = utils.OptionalString(d, "voice.0.url")
+		createInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.url")
 	}
 
 	if _, ok := d.GetOk("fax"); ok {
 		createInput.VoiceReceiveMode = sdkUtils.String("fax")
-		createInput.VoiceApplicationSid = utils.OptionalString(d, "fax.0.application_sid")
+		createInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.application_sid")
 		createInput.VoiceFallbackMethod = utils.OptionalString(d, "fax.0.fallback_method")
-		createInput.VoiceFallbackURL = utils.OptionalString(d, "fax.0.fallback_url")
+		createInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.fallback_url")
 		createInput.VoiceMethod = utils.OptionalString(d, "fax.0.method")
-		createInput.VoiceURL = utils.OptionalString(d, "fax.0.url")
+		createInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.url")
 	}
 
 	createResult, err := client.Account(d.Get("account_sid").(string)).IncomingPhoneNumbers.CreateWithContext(ctx, createInput)
@@ -408,42 +419,42 @@ func resourcePhoneNumberUpdate(ctx context.Context, d *schema.ResourceData, meta
 	client := meta.(*common.TwilioClient).API
 
 	updateInput := &incoming_phone_number.UpdateIncomingPhoneNumberInput{
-		AddressSid:           utils.OptionalString(d, "address_sid"),
-		BundleSid:            utils.OptionalString(d, "bundle_sid"),
-		EmergencyAddressSid:  utils.OptionalString(d, "emergency_address_sid"),
+		AddressSid:           utils.OptionalStringWithEmptyStringDefault(d, "address_sid"),
+		BundleSid:            utils.OptionalStringWithEmptyStringDefault(d, "bundle_sid"),
+		EmergencyAddressSid:  utils.OptionalStringWithEmptyStringDefault(d, "emergency_address_sid"),
 		EmergencyStatus:      utils.OptionalString(d, "emergency_status"),
 		FriendlyName:         utils.OptionalString(d, "friendly_name"),
-		IdentitySid:          utils.OptionalString(d, "identity_sid"),
-		StatusCallback:       utils.OptionalString(d, "status_callback_url"),
+		IdentitySid:          utils.OptionalStringWithEmptyStringDefault(d, "identity_sid"),
+		StatusCallback:       utils.OptionalStringWithEmptyStringDefault(d, "status_callback_url"),
 		StatusCallbackMethod: utils.OptionalString(d, "status_callback_method"),
-		TrunkSid:             utils.OptionalString(d, "trunk_sid"),
+		TrunkSid:             utils.OptionalStringWithEmptyStringDefault(d, "trunk_sid"),
 	}
 
 	if _, ok := d.GetOk("messaging"); ok {
-		updateInput.SmsApplicationSid = utils.OptionalString(d, "messaging.0.application_sid")
+		updateInput.SmsApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.application_sid")
 		updateInput.SmsFallbackMethod = utils.OptionalString(d, "messaging.0.fallback_method")
-		updateInput.SmsFallbackURL = utils.OptionalString(d, "messaging.0.fallback_url")
+		updateInput.SmsFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.fallback_url")
 		updateInput.SmsMethod = utils.OptionalString(d, "messaging.0.method")
-		updateInput.SmsURL = utils.OptionalString(d, "messaging.0.url")
+		updateInput.SmsURL = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.url")
 	}
 
 	if _, ok := d.GetOk("voice"); ok {
 		updateInput.VoiceReceiveMode = sdkUtils.String("voice")
-		updateInput.VoiceApplicationSid = utils.OptionalString(d, "voice.0.application_sid")
+		updateInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.application_sid")
 		updateInput.VoiceCallerIDLookup = utils.OptionalBool(d, "voice.0.caller_id_lookup")
 		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
-		updateInput.VoiceFallbackURL = utils.OptionalString(d, "voice.0.fallback_url")
+		updateInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.fallback_url")
 		updateInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
-		updateInput.VoiceURL = utils.OptionalString(d, "voice.0.url")
+		updateInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.url")
 	}
 
 	if _, ok := d.GetOk("fax"); ok {
 		updateInput.VoiceReceiveMode = sdkUtils.String("fax")
-		updateInput.VoiceApplicationSid = utils.OptionalString(d, "fax.0.application_sid")
+		updateInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.application_sid")
 		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "fax.0.fallback_method")
-		updateInput.VoiceFallbackURL = utils.OptionalString(d, "fax.0.fallback_url")
+		updateInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.fallback_url")
 		updateInput.VoiceMethod = utils.OptionalString(d, "fax.0.method")
-		updateInput.VoiceURL = utils.OptionalString(d, "fax.0.url")
+		updateInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.url")
 	}
 
 	updateResp, err := client.Account(d.Get("account_sid").(string)).IncomingPhoneNumber(d.Id()).UpdateWithContext(ctx, updateInput)

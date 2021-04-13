@@ -19,6 +19,18 @@ func AddressSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^AD[0-9a-fA-F]{32}$"), "")
 }
 
+// Application
+
+func ApplicationSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^AP[0-9a-fA-F]{32}$"), "")
+}
+
+// Bundle
+
+func BundleSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^BU[0-9a-fA-F]{32}$"), "")
+}
+
 // BYOC
 
 func ByocSidValidation() schema.SchemaValidateFunc {
@@ -59,6 +71,12 @@ func FlowSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^FW[0-9a-fA-F]{32}$"), "")
 }
 
+// Identity
+
+func IdentitySidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^RI[0-9a-fA-F]{32}$"), "")
+}
+
 // Messaging
 
 func MessagingServiceSidValidation() schema.SchemaValidateFunc {
@@ -73,6 +91,10 @@ func MessagingAlphaSenderSidValidation() schema.SchemaValidateFunc {
 
 func PhoneNumberSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^PN[0-9a-fA-F]{32}$"), "")
+}
+
+func PhoneNumberValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile(`^\+[1-9]\d{1,14}$`), "")
 }
 
 // Proxy

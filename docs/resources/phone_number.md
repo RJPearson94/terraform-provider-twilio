@@ -7,6 +7,8 @@ subcategory: "Phone Numbers"
 
 Manages a phone number. See the [API docs](https://www.twilio.com/docs/phone-numbers/api/incomingphonenumber-resource) for more information
 
+!> Removing the `friendly_name` or `emergency_status` from your configuration will cause the corresponding value to be retained after a Terraform apply. If you want to change any of the value you will need to update your configuration to set an appropriate value
+
 ## Example Usage
 
 ```hcl
@@ -30,7 +32,7 @@ The following arguments are supported:
 - `area_code` - (Optional) The area code to purchase a phone number in. Changing this forces a new resource to be created. Conflicts with `phone_number`.
 - `address_sid` - (Optional) The address SID the phone number is associated with
 - `emergency_address_sid` - (Optional) The emergency address SID the phone number is associated with
-- `emergency_status` - (Optional) The emergency status of the phone number
+- `emergency_status` - (Optional) The emergency status of the phone number. Valid values are `Active` or `Inactive`
 - `messaging` - (Optional) A `messaging` block as documented below
 - `trunk_sid` - (Optional) The trunk SID the phone number is associated with
 - `voice` - (Optional) A `voice` block as documented below. Conflicts with `fax`.
@@ -38,7 +40,7 @@ The following arguments are supported:
 - `identity_sid` - (Optional) The identity SID the phone number is associated with
 - `bundle_sid` - (Optional) The bundle SID the phone number is associated with
 - `status_callback_url` - (Optional) The URL to call on each status change
-- `status_callback_method` - (Optional) The HTTP method which should be used to call the status callback URL
+- `status_callback_method` - (Optional) The HTTP method which should be used to call the status callback URL. The default value is `POST`
 
 ~> Either the phone number or area code must be set
 
@@ -50,9 +52,9 @@ A `messaging` block supports the following:
 
 - `application_sid` - (Optional) The application SID which should be called on each incoming message
 - `url` - (Optional) The URL which should be called on each incoming message
-- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`
+- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`. The default value is `POST`
 - `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`
+- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`. The default value is `POST`
 
 ---
 
@@ -60,10 +62,10 @@ A `voice` block supports the following:
 
 - `application_sid` - (Optional) The application SID which should be called on each incoming call
 - `url` - (Optional) The URL which should be called on each incoming call
-- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`
+- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`. The default value is `POST`
 - `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`
-- `caller_id_lookup` - (Optional) Whether caller ID lookup is enabled for the phone number
+- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`. The default value is `POST`
+- `caller_id_lookup` - (Optional) Whether caller ID lookup is enabled for the phone number. The default value is `false`
 
 ---
 
@@ -71,9 +73,9 @@ A `fax` block supports the following:
 
 - `application_sid` - (Optional) The application SID which should be called on each incoming fax
 - `url` - (Optional) The URL which should be called on each incoming fax
-- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`
+- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`. The default value is `POST`
 - `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`
+- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`. The default value is `POST`
 
 ## Attributes Reference
 

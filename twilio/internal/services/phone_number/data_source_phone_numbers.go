@@ -6,6 +6,7 @@ import (
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/phone_number/helper"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -20,8 +21,9 @@ func dataSourcePhoneNumbers() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.AccountSidValidation(),
 			},
 			"phone_numbers": {
 				Type:     schema.TypeList,

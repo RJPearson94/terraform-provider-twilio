@@ -9,6 +9,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/available_phone_number/local"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func dataSourcePhoneNumberAvailableLocalNumbers() *schema.Resource {
@@ -21,12 +22,14 @@ func dataSourcePhoneNumberAvailableLocalNumbers() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.AccountSidValidation(),
 			},
 			"iso_country": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"limit": {
 				Type:     schema.TypeInt,
