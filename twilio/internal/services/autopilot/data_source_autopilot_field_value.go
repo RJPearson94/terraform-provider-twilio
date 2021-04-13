@@ -20,16 +20,19 @@ func dataSourceAutopilotFieldValue() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.AutopilotFieldValueSidValidation(),
 			},
 			"assistant_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.AutopilotAssistantSidValidation(),
 			},
 			"field_type_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.AutopilotFieldTypeSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,

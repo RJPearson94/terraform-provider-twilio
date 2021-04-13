@@ -37,7 +37,7 @@ The following arguments are supported:
 - `task_sid` - (Mandatory) The SID of the task to associate the sample with. Changing this forces a new resource to be created
 - `language` - (Mandatory) The language of the sample
 - `tagged_text` - (Mandatory) The labelled/ tagged sample text
-- `source_channel` - (Optional) The channel the sample was captured on
+- `source_channel` - (Optional) The channel the sample was captured on. Valid values are `voice`, `sms`, `chat`, `alexa`, `google-assistant` or `slack`
 
 ## Attributes Reference
 

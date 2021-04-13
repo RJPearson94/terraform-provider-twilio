@@ -11,6 +11,8 @@ For more information on Autopilot, see the product [page](https://www.twilio.com
 
 ## Example Usage
 
+### Basic
+
 ```hcl
 resource "twilio_autopilot_assistant" "assistant" {
   friendly_name = "test"
@@ -28,6 +30,36 @@ resource "twilio_autopilot_field_value" "field_value" {
   value          = "test"
 }
 ```
+
+### With Synonym
+
+```hcl
+resource "twilio_autopilot_assistant" "assistant" {
+  friendly_name = "test"
+}
+
+resource "twilio_autopilot_field_type" "field_type" {
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "test"
+}
+
+resource "twilio_autopilot_field_value" "field_value_hello" {
+  assistant_sid  = twilio_autopilot_field_type.field_type.assistant_sid
+  field_type_sid = twilio_autopilot_field_type.field_type.sid
+  language       = "en-US"
+  value          = "hello"
+}
+
+resource "twilio_autopilot_field_value" "field_value_hi" {
+  assistant_sid  = twilio_autopilot_field_type.field_type.assistant_sid
+  field_type_sid = twilio_autopilot_field_type.field_type.sid
+  language       = "en-US"
+  value          = "hi"
+  synonym_of     = twilio_autopilot_field_value.field_value_hello.value
+}
+```
+
+!> The `synonym_of` argument can be set to the `sid` or the `value` of the field value. The API currently returns the synonym value so if the `sid` is supplied Terraform will show a difference
 
 ## Argument Reference
 

@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -39,20 +40,41 @@ func TestAccDataSourceTwilioAutopilotFieldTypes_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioAutopilotFieldTypes_invalidAssistantSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAutopilotFieldTypes_invalidAssistantSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of assistant_sid to match regular expression "\^UA\[0-9a-fA-F\]\{32\}\$", got assistant_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioAutopilotFieldTypes_basic(uniqueName string, fieldTypeFriendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
 }
 
 resource "twilio_autopilot_field_type" "field_type" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
-  unique_name   = "%s"
-  friendly_name = "%s"
+  unique_name   = "%[1]s"
+  friendly_name = "%[2]s"
 }
 
 data "twilio_autopilot_field_types" "field_types" {
   assistant_sid = twilio_autopilot_field_type.field_type.assistant_sid
 }
-`, uniqueName, uniqueName, fieldTypeFriendlyName)
+`, uniqueName, fieldTypeFriendlyName)
+}
+
+func testAccDataSourceTwilioAutopilotFieldTypes_invalidAssistantSid() string {
+	return `
+data "twilio_autopilot_field_types" "field_types" {
+  assistant_sid = "assistant_sid"
+}
+`
 }

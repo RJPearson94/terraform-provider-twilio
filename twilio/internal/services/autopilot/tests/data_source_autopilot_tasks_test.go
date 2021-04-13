@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -40,19 +41,40 @@ func TestAccDataSourceTwilioAutopilotTasks_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioAutopilotTasks_invalidAssistantSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAutopilotTasks_invalidAssistantSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of assistant_sid to match regular expression "\^UA\[0-9a-fA-F\]\{32\}\$", got assistant_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioAutopilotTasks_basic(uniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
 }
 
 resource "twilio_autopilot_task" "task" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
-  unique_name   = "%s"
+  unique_name   = "%[1]s"
 }
 
 data "twilio_autopilot_tasks" "tasks" {
   assistant_sid = twilio_autopilot_task.task.assistant_sid
 }
-`, uniqueName, uniqueName)
+`, uniqueName)
+}
+
+func testAccDataSourceTwilioAutopilotTasks_invalidAssistantSid() string {
+	return `
+data "twilio_autopilot_tasks" "tasks" {
+  assistant_sid = "assistant_sid"
+}
+`
 }

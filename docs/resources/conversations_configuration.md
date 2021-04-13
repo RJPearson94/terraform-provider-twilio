@@ -11,7 +11,7 @@ For more information on conversations, see the product [page](https://www.twilio
 
 !> This resource modifies the Twilio conversation configuration for the account. No new resources will be provisioned. Instead, the configuration will be updated upon creation and the configuration will remain after the destruction of the resource.
 
-!> Removing the `default_service_sid`, `default_closed_timer` or `default_inactive_timer` or `default_messaging_service_sid` from your configuration will cause the corresponding value to be retained after a Terraform apply. If you want to change any of the value you will need to update your configuration to set an appropiate value
+!> Removing the `default_service_sid`, `default_closed_timer`, `default_inactive_timer` or `default_messaging_service_sid` from your configuration will cause the corresponding value to be retained after a Terraform apply. If you want to change any of the value you will need to update your configuration to set an appropriate value
 
 ## Example Usage
 

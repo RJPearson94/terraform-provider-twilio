@@ -9,29 +9,27 @@ Manages an Autopilot assistant. See the [API docs](https://www.twilio.com/docs/a
 
 For more information on Autopilot, see the product [page](https://www.twilio.com/autopilot)
 
+!> Removing the `unique_name`, `development_stage`, `defaults` or `stylesheet` from your configuration will cause the corresponding value to be retained after a Terraform apply. If you want to change any of the value you will need to update your configuration to set an appropriate value
+
 ## Example Usage
 
 ```hcl
 resource "twilio_autopilot_assistant" "assistant" {
   friendly_name = "twilio-test"
-  defaults      = <<EOF
-{
- "defaults": {
-  "assistant_initiation": "",
-  "fallback": "http://localhost/fallback"
- }
-}
-EOF
+  defaults = jsonencode({
+    "defaults" : {
+      "assistant_initiation" : "",
+      "fallback" : "http://localhost/fallback"
+    }
+  })
 
-  stylesheet = <<EOF
-{
- "style_sheet": {
-  "voice": {
-   "say_voice": "Polly.Matthew"
-  }
- }
-}
-EOF
+  stylesheet = jsonencode({
+    "style_sheet" : {
+      "voice" : {
+        "say_voice" : "Polly.Matthew"
+      }
+    }
+  })
 }
 ```
 
@@ -39,9 +37,9 @@ EOF
 
 The following arguments are supported:
 
-- `friendly_name` - (Optional) The friendly name of the assistant
-- `unique_name` - (Optional) The unique name of the assistant
-- `log_queries` - (Optional) Whether or not queries are recorded/ logged
+- `friendly_name` - (Optional) The friendly name of the assistant. The length of the string must be between `0` and `255` characters (inclusive)
+- `unique_name` - (Optional) The unique name of the assistant. The length of the string must be between `0` and `64` characters (inclusive)
+- `log_queries` - (Optional) Whether or not queries are recorded/ logged. The default value is `false`
 - `development_stage` - (Optional) The stage description for the assistant. Valid values are `in-development` or `in-production`.
 - `callback_url` - (Optional) The URL the assistant will call back to when an event is fired
 - `callback_events` - (Optional) A list of callback events strings which trigger the callback webhook

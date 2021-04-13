@@ -63,13 +63,15 @@ func resourceAutopilotAssistant() *schema.Resource {
 				Computed: true,
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringLenBetween(0, 255),
 			},
 			"unique_name": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringLenBetween(0, 64),
 			},
 			"callback_events": {
 				Type:     schema.TypeList,
@@ -86,7 +88,7 @@ func resourceAutopilotAssistant() *schema.Resource {
 			"log_queries": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  true,
 			},
 			"development_stage": {
 				Type:     schema.TypeString,
@@ -135,11 +137,11 @@ func resourceAutopilotAssistantCreate(ctx context.Context, d *schema.ResourceDat
 	client := meta.(*common.TwilioClient).Autopilot
 
 	createInput := &assistants.CreateAssistantInput{
-		FriendlyName:   utils.OptionalString(d, "friendly_name"),
-		UniqueName:     utils.OptionalString(d, "unique_name"),
+		FriendlyName:   utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		UniqueName:     utils.OptionalStringWithEmptyStringDefault(d, "unique_name"),
 		LogQueries:     utils.OptionalBool(d, "log_queries"),
-		CallbackURL:    utils.OptionalString(d, "callback_url"),
-		CallbackEvents: utils.OptionalSeperatedString(d, "callback_events", callbackEventsSeperator),
+		CallbackURL:    utils.OptionalStringWithEmptyStringDefault(d, "callback_url"),
+		CallbackEvents: utils.OptionalSeperatedStringWithEmptyStringDefault(d, "callback_events", callbackEventsSeperator),
 		Defaults:       utils.OptionalJSONString(d, "defaults"),
 		StyleSheet:     utils.OptionalJSONString(d, "stylesheet"),
 	}
@@ -175,7 +177,7 @@ func resourceAutopilotAssistantRead(ctx context.Context, d *schema.ResourceData,
 	d.Set("unique_name", getResponse.UniqueName)
 	d.Set("friendly_name", getResponse.FriendlyName)
 
-	if getResponse.CallbackEvents != nil {
+	if getResponse.CallbackEvents != nil && *getResponse.CallbackEvents != "" {
 		d.Set("callback_events", strings.Split(*getResponse.CallbackEvents, callbackEventsSeperator))
 	}
 
@@ -218,11 +220,11 @@ func resourceAutopilotAssistantUpdate(ctx context.Context, d *schema.ResourceDat
 	client := meta.(*common.TwilioClient).Autopilot
 
 	updateInput := &assistant.UpdateAssistantInput{
-		FriendlyName:     utils.OptionalString(d, "friendly_name"),
+		FriendlyName:     utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 		UniqueName:       utils.OptionalString(d, "unique_name"),
 		LogQueries:       utils.OptionalBool(d, "log_queries"),
-		CallbackURL:      utils.OptionalString(d, "callback_url"),
-		CallbackEvents:   utils.OptionalSeperatedString(d, "callback_events", callbackEventsSeperator),
+		CallbackURL:      utils.OptionalStringWithEmptyStringDefault(d, "callback_url"),
+		CallbackEvents:   utils.OptionalSeperatedStringWithEmptyStringDefault(d, "callback_events", callbackEventsSeperator),
 		DevelopmentStage: utils.OptionalString(d, "development_stage"),
 		Defaults:         utils.OptionalJSONString(d, "defaults"),
 		StyleSheet:       utils.OptionalJSONString(d, "stylesheet"),

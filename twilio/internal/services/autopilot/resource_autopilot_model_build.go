@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceAutopilotModelBuild() *schema.Resource {
@@ -58,9 +59,10 @@ func resourceAutopilotModelBuild() *schema.Resource {
 				Computed: true,
 			},
 			"assistant_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.AutopilotAssistantSidValidation(),
 			},
 			"unique_name_prefix": {
 				Type:     schema.TypeString,
@@ -71,9 +73,10 @@ func resourceAutopilotModelBuild() *schema.Resource {
 				Computed: true,
 			},
 			"status_callback": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"triggers": {
 				Type:     schema.TypeMap,
@@ -145,7 +148,7 @@ func resourceAutopilotModelBuildCreate(ctx context.Context, d *schema.ResourceDa
 
 	createInput := &model_builds.CreateModelBuildInput{
 		UniqueName:     uniqueName,
-		StatusCallback: utils.OptionalString(d, "status_callback"),
+		StatusCallback: utils.OptionalStringWithEmptyStringDefault(d, "status_callback"),
 	}
 
 	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuilds.CreateWithContext(ctx, createInput)
@@ -181,7 +184,6 @@ func resourceAutopilotModelBuildRead(ctx context.Context, d *schema.ResourceData
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("assistant_sid", getResponse.AssistantSid)
 	d.Set("unique_name", getResponse.UniqueName)
-	d.Set("status_callback", d.Get("status_callback").(string))
 	d.Set("build_duration", getResponse.BuildDuration)
 	d.Set("status", getResponse.Status)
 	d.Set("error_code", getResponse.ErrorCode)

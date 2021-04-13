@@ -11,6 +11,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1/assistant/field_type/field_values"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceAutopilotFieldValue() *schema.Resource {
@@ -53,24 +54,28 @@ func resourceAutopilotFieldValue() *schema.Resource {
 				Computed: true,
 			},
 			"assistant_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.AutopilotAssistantSidValidation(),
 			},
 			"field_type_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.AutopilotFieldTypeSidValidation(),
 			},
 			"language": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"value": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"synonym_of": {
 				Type:     schema.TypeString,
@@ -99,7 +104,7 @@ func resourceAutopilotFieldValueCreate(ctx context.Context, d *schema.ResourceDa
 	createInput := &field_values.CreateFieldValueInput{
 		Language:  d.Get("language").(string),
 		Value:     d.Get("value").(string),
-		SynonymOf: utils.OptionalString(d, "synonym_of"),
+		SynonymOf: utils.OptionalStringWithEmptyStringDefault(d, "synonym_of"),
 	}
 
 	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Get("field_type_sid").(string)).FieldValues.CreateWithContext(ctx, createInput)

@@ -28,8 +28,8 @@ resource "twilio_autopilot_field_type" "field_type" {
 The following arguments are supported:
 
 - `assistant_sid` - (Mandatory) The SID of the assistant to associate the field type with. Changing this forces a new resource to be created
-- `unique_name` - (Mandatory) The unique name of the field type. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The friendly name of the field type
+- `unique_name` - (Mandatory) The unique name of the field type. Changing this forces a new resource to be created. The length of the string must be between `1` and `64` characters (inclusive)
+- `friendly_name` - (Optional) The friendly name of the field type. The length of the string must be between `0` and `255` characters (inclusive)
 
 ## Attributes Reference
 

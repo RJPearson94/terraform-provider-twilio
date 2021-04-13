@@ -19,8 +19,7 @@ var webhookResourceName = "twilio_autopilot_webhook"
 func TestAccTwilioAutopilotWebhook_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.webhook", webhookResourceName)
 	uniqueName := acctest.RandString(10)
-	url := "http://localhost/webhook"
-	events := []string{"onDialogueStart", "onDialogueEnd"}
+	url := "http://localhost.com/webhook"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -28,19 +27,18 @@ func TestAccTwilioAutopilotWebhook_basic(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioAutopilotWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioAutopilotWebhook_basic(uniqueName, url, events),
+				Config: testAccTwilioAutopilotWebhook_basic(uniqueName, url),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioAutopilotWebhookExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
-					resource.TestCheckResourceAttr(stateResourceName, "events.#", "2"),
-					resource.TestCheckResourceAttr(stateResourceName, "events.0", "onDialogueStart"),
-					resource.TestCheckResourceAttr(stateResourceName, "events.1", "onDialogueEnd"),
 					resource.TestCheckResourceAttr(stateResourceName, "webhook_url", url),
+					resource.TestCheckResourceAttr(stateResourceName, "events.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "events.0", "onDialogueStart"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "webhook_method"),
+					resource.TestCheckResourceAttr(stateResourceName, "webhook_method", "POST"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -56,25 +54,162 @@ func TestAccTwilioAutopilotWebhook_basic(t *testing.T) {
 	})
 }
 
-func TestAccTwilioAutopilotWebhook_invalidWebhookURL(t *testing.T) {
-	uniqueName := acctest.RandString(10)
-	url := "webhookURL"
-	events := []string{"onDialogueStart"}
+func TestAccTwilioAutopilotWebhook_update(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.webhook", webhookResourceName)
+	uniqueName := acctest.RandString(1)
+	newUniqueName := acctest.RandString(64)
+	url := "http://localhost.com/webhook"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
+		CheckDestroy:      testAccCheckTwilioAutopilotWebhookDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config:      testAccTwilioAutopilotWebhook_basic(uniqueName, url, events),
-				ExpectError: regexp.MustCompile(`(?s)expected "webhook_url" to have a host, got webhookURL`),
+				Config: testAccTwilioAutopilotWebhook_basic(uniqueName, url),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotWebhookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
+					resource.TestCheckResourceAttr(stateResourceName, "webhook_url", url),
+					resource.TestCheckResourceAttr(stateResourceName, "events.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "events.0", "onDialogueStart"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
+					resource.TestCheckResourceAttr(stateResourceName, "webhook_method", "POST"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				Config: testAccTwilioAutopilotWebhook_basic(newUniqueName, url),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotWebhookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", newUniqueName),
+					resource.TestCheckResourceAttr(stateResourceName, "webhook_url", url),
+					resource.TestCheckResourceAttr(stateResourceName, "events.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "events.0", "onDialogueStart"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
+					resource.TestCheckResourceAttr(stateResourceName, "webhook_method", "POST"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
 			},
 		},
 	})
 }
 
-func TestAccTwilioAutopilotAssistant_invalidWebhookMethod(t *testing.T) {
+func TestAccTwilioAutopilotWebhook_invalidUniqueNameWith0Characters(t *testing.T) {
+	uniqueName := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotWebhook_withStubbedAssistantSid(uniqueName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of unique_name to be in the range \(1 - 64\), got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotWebhook_invalidUniqueNameWith65Characters(t *testing.T) {
+	uniqueName := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotWebhook_withStubbedAssistantSid(uniqueName),
+				ExpectError: regexp.MustCompile(`(?s)expected length of unique_name to be in the range \(1 - 64\), got aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotWebhook_events(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.webhook", webhookResourceName)
+	uniqueName := acctest.RandString(1)
+	url := "http://localhost.com/webhook"
+	events := []string{"onDialogueStart", "onDialogueEnd"}
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioAutopilotWebhookDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioAutopilotWebhook_events(uniqueName, url, events),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotWebhookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "events.#", "2"),
+					resource.TestCheckResourceAttr(stateResourceName, "events.0", "onDialogueStart"),
+					resource.TestCheckResourceAttr(stateResourceName, "events.1", "onDialogueEnd"),
+				),
+			},
+			{
+				Config: testAccTwilioAutopilotWebhook_basic(uniqueName, url),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotWebhookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "events.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "events.0", "onDialogueStart"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotWebhook_invalidEvent(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotWebhook_invalidEvent(),
+				ExpectError: regexp.MustCompile(`(?s)expected events.0 to be one of \[onDialogueStart onDialogueEnd onDialogueTaskStart onDialogueTaskEnd onDialogueTurn onCollectAttempt onActionsFetch\], got test`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotWebhook_webhookMethod(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.webhook", webhookResourceName)
+	uniqueName := acctest.RandString(1)
+	method := "GET"
+	url := "http://localhost.com/webhook"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioAutopilotWebhookDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioAutopilotWebhook_method(uniqueName, method),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotWebhookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "webhook_method", method),
+				),
+			},
+			{
+				Config: testAccTwilioAutopilotWebhook_basic(uniqueName, url),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotWebhookExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "webhook_method", "POST"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotWebhook_invalidWebhookMethod(t *testing.T) {
 	uniqueName := acctest.RandString(10)
 	method := "test"
 
@@ -91,55 +226,31 @@ func TestAccTwilioAutopilotAssistant_invalidWebhookMethod(t *testing.T) {
 	})
 }
 
-func TestAccTwilioAutopilotWebhook_update(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.webhook", webhookResourceName)
+func TestAccTwilioAutopilotWebhook_invalidWebhookURL(t *testing.T) {
 	uniqueName := acctest.RandString(10)
-	newUniqueName := acctest.RandString(10)
-	url := "http://localhost/webhook"
-	events := []string{"onDialogueStart"}
-	newEvents := []string{"onDialogueStart", "onDialogueEnd"}
+	url := "webhookURL"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioAutopilotWebhookDestroy,
+		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioAutopilotWebhook_basic(uniqueName, url, events),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioAutopilotWebhookExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "unique_name", uniqueName),
-					resource.TestCheckResourceAttr(stateResourceName, "events.#", "1"),
-					resource.TestCheckResourceAttr(stateResourceName, "events.0", "onDialogueStart"),
-					resource.TestCheckResourceAttr(stateResourceName, "webhook_url", url),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "webhook_method"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
-				),
+				Config:      testAccTwilioAutopilotWebhook_basic(uniqueName, url),
+				ExpectError: regexp.MustCompile(`(?s)expected "webhook_url" to have a host, got webhookURL`),
 			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotWebhook_invalidAssistantSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioAutopilotWebhook_basic(newUniqueName, url, newEvents),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioAutopilotWebhookExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "unique_name", newUniqueName),
-					resource.TestCheckResourceAttr(stateResourceName, "events.#", "2"),
-					resource.TestCheckResourceAttr(stateResourceName, "events.0", "onDialogueStart"),
-					resource.TestCheckResourceAttr(stateResourceName, "events.1", "onDialogueEnd"),
-					resource.TestCheckResourceAttr(stateResourceName, "webhook_url", url),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "webhook_method"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
-				),
+				Config:      testAccTwilioAutopilotWebhook_invalidAssistantSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of assistant_sid to match regular expression "\^UA\[0-9a-fA-F\]\{32\}\$", got assistant_sid`),
 			},
 		},
 	})
@@ -193,36 +304,92 @@ func testAccTwilioAutopilotWebhookImportStateIdFunc(name string) resource.Import
 	}
 }
 
-func testAccTwilioAutopilotWebhook_basic(uniqueName string, url string, events []string) string {
+func testAccTwilioAutopilotWebhook_basic(uniqueName string, url string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
 }
 
 resource "twilio_autopilot_webhook" "webhook" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
-  unique_name   = "%s"
-  webhook_url   = "%s"
-  events        = %s
+  unique_name   = "%[1]s"
+  webhook_url   = "%[2]s"
+  events = [
+    "onDialogueStart"
+  ]
 }
-`, uniqueName, uniqueName, url, "[\""+strings.Join(events, "\",\"")+"\"]")
+`, uniqueName, url)
+}
+
+func testAccTwilioAutopilotWebhook_events(uniqueName string, url string, events []string) string {
+	return fmt.Sprintf(`
+resource "twilio_autopilot_assistant" "assistant" {
+  unique_name = "%[1]s"
+}
+
+resource "twilio_autopilot_webhook" "webhook" {
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%[1]s"
+  webhook_url   = "%[2]s"
+  events        = %[3]s
+}
+`, uniqueName, url, `["`+strings.Join(events, `","`)+`"]`)
 }
 
 func testAccTwilioAutopilotWebhook_method(uniqueName string, method string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
 }
 
 resource "twilio_autopilot_webhook" "webhook" {
   assistant_sid  = twilio_autopilot_assistant.assistant.sid
-  unique_name    = "%s"
-  webhook_url    = "http://localhost/webhook"
-  webhook_method = "%s"
+  unique_name    = "%[1]s"
+  webhook_url    = "http://localhost.com/webhook"
+  webhook_method = "%[2]s"
   events = [
     "onDialogueStart",
     "onDialogueEnd"
   ]
 }
-`, uniqueName, uniqueName, method)
+`, uniqueName, method)
+}
+
+func testAccTwilioAutopilotWebhook_invalidAssistantSid() string {
+	return `
+resource "twilio_autopilot_webhook" "webhook" {
+  assistant_sid  = "assistant_sid"
+  unique_name    = "invalid_account_sid"
+  webhook_url    = "http://localhost.com/webhook"
+  events = [
+    "onDialogueStart"
+  ]
+}
+`
+}
+
+func testAccTwilioAutopilotWebhook_withStubbedAssistantSid(uniqueName string) string {
+	return fmt.Sprintf(`
+resource "twilio_autopilot_webhook" "webhook" {
+  assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  unique_name   = "%s"
+  webhook_url   = "http://localhost.com/webhook"
+  events = [
+    "onDialogueStart"
+  ]
+}
+`, uniqueName)
+}
+
+func testAccTwilioAutopilotWebhook_invalidEvent() string {
+	return `
+resource "twilio_autopilot_webhook" "webhook" {
+  assistant_sid  = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  unique_name    = "invalid_event"
+  webhook_url    = "http://localhost.com/webhook"
+  events = [
+    "test"
+  ]
+}
+`
 }

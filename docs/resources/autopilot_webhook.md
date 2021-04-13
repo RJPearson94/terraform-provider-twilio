@@ -31,10 +31,10 @@ resource "twilio_autopilot_webhook" "webhook" {
 The following arguments are supported:
 
 - `assistant_sid` - (Mandatory) The SID of the assistant to associate the webhook with. Changing this forces a new resource to be created
-- `unique_name` - (Mandatory) The unique name of the webhook
+- `unique_name` - (Mandatory) The unique name of the webhook. The length of the string must be between `1` and `64` characters (inclusive)
 - `webhook_url` - (Mandatory) The webhook URL
-- `events` - (Mandatory) A list of webhook events strings which trigger the webhook
-- `webhook_method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`
+- `events` - (Mandatory) A list of webhook events strings which trigger the webhook. Valid values are `onDialogueStart`, `onDialogueEnd`, `onDialogueTaskStart`, `onDialogueTaskEnd`, `onDialogueTurn`, `onCollectAttempt` or `onActionsFetch`
+- `webhook_method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`. The default value is `POST`
 
 ## Attributes Reference
 

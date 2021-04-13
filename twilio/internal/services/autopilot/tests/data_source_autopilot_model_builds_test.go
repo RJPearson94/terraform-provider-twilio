@@ -42,15 +42,28 @@ func TestAccDataSourceTwilioAutopilotModelBuilds_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioAutopilotModelBuilds_invalidAssistantSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAutopilotModelBuilds_invalidAssistantSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of assistant_sid to match regular expression "\^UA\[0-9a-fA-F\]\{32\}\$", got assistant_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioAutopilotModelBuilds_basic(uniqueName string, modelBuildUniqueNamePrefix string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
 }
 
 resource "twilio_autopilot_task" "task" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
-  unique_name   = "%s"
+  unique_name   = "%[1]s"
 }
 
 resource "twilio_autopilot_task_sample" "task_sample" {
@@ -62,7 +75,7 @@ resource "twilio_autopilot_task_sample" "task_sample" {
 
 resource "twilio_autopilot_model_build" "model_build" {
   assistant_sid      = twilio_autopilot_assistant.assistant.sid
-  unique_name_prefix = "%s"
+  unique_name_prefix = "%[2]s"
 
   triggers = {
     redeployment = sha1(join(",", tolist([
@@ -84,5 +97,13 @@ resource "twilio_autopilot_model_build" "model_build" {
 data "twilio_autopilot_model_builds" "model_builds" {
   assistant_sid = twilio_autopilot_model_build.model_build.assistant_sid
 }
-`, uniqueName, uniqueName, modelBuildUniqueNamePrefix)
+`, uniqueName, modelBuildUniqueNamePrefix)
+}
+
+func testAccDataSourceTwilioAutopilotModelBuilds_invalidAssistantSid() string {
+	return `
+data "twilio_autopilot_model_builds" "model_builds" {
+  assistant_sid = "assistant_sid"
+}
+`
 }

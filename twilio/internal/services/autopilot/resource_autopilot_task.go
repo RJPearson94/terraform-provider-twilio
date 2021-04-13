@@ -57,18 +57,20 @@ func resourceAutopilotTask() *schema.Resource {
 				Computed: true,
 			},
 			"assistant_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.AutopilotAssistantSidValidation(),
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringLenBetween(0, 255),
 			},
 			"unique_name": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringLenBetween(1, 64),
 			},
 			"actions_url": {
 				Type:          schema.TypeString,
@@ -106,7 +108,7 @@ func resourceAutopilotTaskCreate(ctx context.Context, d *schema.ResourceData, me
 
 	createInput := &tasks.CreateTaskInput{
 		UniqueName:   d.Get("unique_name").(string),
-		FriendlyName: utils.OptionalString(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 		ActionsURL:   utils.OptionalString(d, "actions_url"),
 		Actions:      utils.OptionalJSONString(d, "actions"),
 	}
@@ -165,7 +167,7 @@ func resourceAutopilotTaskUpdate(ctx context.Context, d *schema.ResourceData, me
 
 	updateInput := &task.UpdateTaskInput{
 		UniqueName:   utils.OptionalString(d, "unique_name"),
-		FriendlyName: utils.OptionalString(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 	}
 
 	if d.HasChange("actions") {

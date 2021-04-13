@@ -20,8 +20,9 @@ func dataSourceAutopilotModelBuilds() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"assistant_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.AutopilotAssistantSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,

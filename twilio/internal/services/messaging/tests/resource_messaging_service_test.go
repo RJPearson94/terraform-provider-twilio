@@ -601,7 +601,7 @@ resource "twilio_messaging_service" "service" {
 func testAccTwilioMessagingService_validityPeriod(friendlyName string, validityPeriod int) string {
 	return fmt.Sprintf(`
 resource "twilio_messaging_service" "service" {
-  friendly_name = "%s"
+  friendly_name   = "%s"
   validity_period = %d
 }
 `, friendlyName, validityPeriod)
@@ -619,7 +619,7 @@ resource "twilio_messaging_service" "service" {
 func testAccTwilioMessagingService_smartEncodingFalse(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_messaging_service" "service" {
-  friendly_name = "%s"
+  friendly_name  = "%s"
   smart_encoding = false
 }
 `, friendlyName)
@@ -637,7 +637,7 @@ resource "twilio_messaging_service" "service" {
 func testAccTwilioMessagingService_fallbackToLongCodeFalse(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_messaging_service" "service" {
-  friendly_name = "%s"
+  friendly_name         = "%s"
   fallback_to_long_code = false
 }
 `, friendlyName)
@@ -646,7 +646,7 @@ resource "twilio_messaging_service" "service" {
 func testAccTwilioMessagingService_areaCodeGeomatchFalse(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_messaging_service" "service" {
-  friendly_name = "%s"
+  friendly_name      = "%s"
   area_code_geomatch = false
 }
 `, friendlyName)

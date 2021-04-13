@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -18,7 +19,7 @@ func TestAccTwilioAutopilotFieldValue_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.field_value", fieldValueResourceName)
 	uniqueName := acctest.RandString(10)
 	language := "en-US"
-	value := "test"
+	value := "I"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -47,6 +48,87 @@ func TestAccTwilioAutopilotFieldValue_basic(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: testAccTwilioAutopilotFieldValueImportStateIdFunc(stateResourceName),
 				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotFieldValue_blankLanguage(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	language := ""
+	value := "Invalid Language"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotFieldValue_basic(uniqueName, language, value),
+				ExpectError: regexp.MustCompile(`(?s)expected \"language\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotFieldValue_blankValue(t *testing.T) {
+	uniqueName := acctest.RandString(10)
+	language := "en-US"
+	value := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotFieldValue_basic(uniqueName, language, value),
+				ExpectError: regexp.MustCompile(`(?s)expected \"value\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotFieldValue_synonym(t *testing.T) {
+	synonymStateResourceName := fmt.Sprintf("%s.field_value_synonym", fieldValueResourceName)
+	stateResourceName := fmt.Sprintf("%s.field_value", fieldValueResourceName)
+	uniqueName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioAutopilotFieldValueDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioAutopilotFieldValue_synonym(uniqueName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotFieldValueExists(stateResourceName),
+					resource.TestCheckResourceAttrPair(synonymStateResourceName, "synonym_of", stateResourceName, "value"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotFieldValue_invalidAssistantSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotFieldValue_invalidAssistantSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of assistant_sid to match regular expression "\^UA\[0-9a-fA-F\]\{32\}\$", got assistant_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotFieldValue_invalidFieldTypeSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotFieldValue_invalidFieldTypeSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of field_type_sid to match regular expression "\^UB\[0-9a-fA-F\]\{32\}\$", got field_type_sid`),
 			},
 		},
 	})
@@ -103,19 +185,69 @@ func testAccTwilioAutopilotFieldValueImportStateIdFunc(name string) resource.Imp
 func testAccTwilioAutopilotFieldValue_basic(uniqueName string, language string, value string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
 }
 
 resource "twilio_autopilot_field_type" "field_type" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
-  unique_name   = "%s"
+  unique_name   = "%[1]s"
 }
 
 resource "twilio_autopilot_field_value" "field_value" {
   assistant_sid  = twilio_autopilot_assistant.assistant.sid
   field_type_sid = twilio_autopilot_field_type.field_type.sid
-  language       = "%s"
-  value          = "%s"
+  language       = "%[2]s"
+  value          = "%[3]s"
 }
-`, uniqueName, uniqueName, language, value)
+`, uniqueName, language, value)
+}
+
+func testAccTwilioAutopilotFieldValue_synonym(uniqueName string) string {
+	return fmt.Sprintf(`
+resource "twilio_autopilot_assistant" "assistant" {
+  unique_name = "%[1]s"
+}
+
+resource "twilio_autopilot_field_type" "field_type" {
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%[1]s"
+}
+
+resource "twilio_autopilot_field_value" "field_value" {
+  assistant_sid  = twilio_autopilot_assistant.assistant.sid
+  field_type_sid = twilio_autopilot_field_type.field_type.sid
+  language       = "en-US"
+  value          = "hello"
+}
+
+resource "twilio_autopilot_field_value" "field_value_synonym" {
+  assistant_sid  = twilio_autopilot_assistant.assistant.sid
+  field_type_sid = twilio_autopilot_field_type.field_type.sid
+  language       = "en-US"
+  value          = "hi"
+  synonym_of     = twilio_autopilot_field_value.field_value.value
+}
+`, uniqueName)
+}
+
+func testAccTwilioAutopilotFieldValue_invalidAssistantSid() string {
+	return `
+resource "twilio_autopilot_field_value" "field_value" {
+  assistant_sid  = "assistant_sid"
+  field_type_sid = "UBaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  language       = "en-US"
+  value          = "test"
+}
+`
+}
+
+func testAccTwilioAutopilotFieldValue_invalidFieldTypeSid() string {
+	return `
+resource "twilio_autopilot_field_value" "field_value" {
+  assistant_sid  = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  field_type_sid = "field_type_sid"
+  language       = "en-US"
+  value          = "test"
+}
+`
 }

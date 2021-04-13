@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -41,22 +42,61 @@ func TestAccDataSourceTwilioAutopilotFieldValue_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioAutopilotFieldValue_invalidAssistantSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAutopilotFieldValue_invalidAssistantSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of assistant_sid to match regular expression "\^UA\[0-9a-fA-F\]\{32\}\$", got assistant_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioAutopilotFieldValue_invalidFieldTypeSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAutopilotFieldValue_invalidFieldTypeSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of field_type_sid to match regular expression "\^UB\[0-9a-fA-F\]\{32\}\$", got field_type_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioAutopilotFieldValue_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAutopilotFieldValue_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^UC\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioAutopilotFieldValue_basic(uniqueName string, language string, value string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
 }
 
 resource "twilio_autopilot_field_type" "field_type" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
-  unique_name   = "%s"
+  unique_name   = "%[1]s"
 }
 
 resource "twilio_autopilot_field_value" "field_value" {
   assistant_sid  = twilio_autopilot_assistant.assistant.sid
   field_type_sid = twilio_autopilot_field_type.field_type.sid
-  language       = "%s"
-  value          = "%s"
+  language       = "%[2]s"
+  value          = "%[3]s"
 }
 
 data "twilio_autopilot_field_value" "field_value" {
@@ -64,5 +104,35 @@ data "twilio_autopilot_field_value" "field_value" {
   field_type_sid = twilio_autopilot_field_value.field_value.field_type_sid
   sid            = twilio_autopilot_field_value.field_value.sid
 }
-`, uniqueName, uniqueName, language, value)
+`, uniqueName, language, value)
+}
+
+func testAccDataSourceTwilioAutopilotFieldValue_invalidAssistantSid() string {
+	return `
+data "twilio_autopilot_field_value" "field_value" {
+  assistant_sid  = "assistant_sid"
+  field_type_sid = "UBaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid            = "UCaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioAutopilotFieldValue_invalidFieldTypeSid() string {
+	return `
+data "twilio_autopilot_field_value" "field_value" {
+  assistant_sid  = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  field_type_sid = "field_type_sid"
+  sid            = "UCaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioAutopilotFieldValue_invalidSid() string {
+	return `
+data "twilio_autopilot_field_value" "field_value" {
+  assistant_sid  = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  field_type_sid = "UBaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid            = "sid"
+}
+`
 }

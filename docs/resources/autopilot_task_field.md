@@ -35,7 +35,7 @@ The following arguments are supported:
 
 - `assistant_sid` - (Mandatory) The SID of the assistant to associate the task field with. Changing this forces a new resource to be created
 - `task_sid` - (Mandatory) The SID of the task to associate the task field with. Changing this forces a new resource to be created
-- `unique_name` - (Mandatory) The unique name of the field. Changing this forces a new resource to be created
+- `unique_name` - (Mandatory) The unique name of the field. The length of the string must be between `1` and `64` characters (inclusive). Changing this forces a new resource to be created
 - `field_type` - (Mandatory) The type of field
 
 ## Attributes Reference

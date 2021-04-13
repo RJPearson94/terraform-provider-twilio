@@ -30,14 +30,14 @@ func TestAccTwilioAutopilotModelBuild_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioAutopilotModelBuildExists(stateResourceName),
 					resource.TestCheckResourceAttr(stateResourceName, "unique_name_prefix", modelBuildUniqueNamePrefix),
-					resource.TestCheckResourceAttr(stateResourceName, "status_callback", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestMatchResourceAttr(stateResourceName, "unique_name", regexp.MustCompile(fmt.Sprintf("^%s", modelBuildUniqueNamePrefix))),
 					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "triggers.%", "1"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "triggers.redeployment"), resource.TestCheckResourceAttr(stateResourceName, "polling.#", "1"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "triggers.redeployment"),
+					resource.TestCheckResourceAttr(stateResourceName, "polling.#", "1"),
 					resource.TestCheckResourceAttr(stateResourceName, "polling.0.enabled", "true"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "build_duration"),
@@ -58,61 +58,29 @@ func TestAccTwilioAutopilotModelBuild_basic(t *testing.T) {
 	})
 }
 
-func TestAccTwilioAutopilotModelBuild_update(t *testing.T) {
-	stateResourceName := fmt.Sprintf("%s.model_build", modelBuildResourceName)
-	uniqueName := acctest.RandString(10)
-	modelBuildUniqueNamePrefix := acctest.RandString(10)
-	newModelBuildUniqueNamePrefix := acctest.RandString(10)
+func TestAccTwilioAutopilotModelBuild_invalidAssistantSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotModelBuild_invalidAssistantSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of assistant_sid to match regular expression "\^UA\[0-9a-fA-F\]\{32\}\$", got assistant_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotModelBuild_invalidStatusCallback(t *testing.T) {
+	statusCallback := "statusCallback"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioAutopilotModelBuildDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioAutopilotModelBuild_basic(uniqueName, modelBuildUniqueNamePrefix),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioAutopilotModelBuildExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "unique_name_prefix", modelBuildUniqueNamePrefix),
-					resource.TestCheckResourceAttr(stateResourceName, "status_callback", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestMatchResourceAttr(stateResourceName, "unique_name", regexp.MustCompile(fmt.Sprintf("^%s", modelBuildUniqueNamePrefix))),
-					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "triggers.%", "1"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "triggers.redeployment"), resource.TestCheckResourceAttr(stateResourceName, "polling.#", "1"),
-					resource.TestCheckResourceAttr(stateResourceName, "polling.0.enabled", "true"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "build_duration"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "status"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "error_code"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
-				),
-			},
-			{
-				Config: testAccTwilioAutopilotModelBuild_basic(uniqueName, newModelBuildUniqueNamePrefix),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckTwilioAutopilotModelBuildExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "unique_name_prefix", newModelBuildUniqueNamePrefix),
-					resource.TestCheckResourceAttr(stateResourceName, "status_callback", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestMatchResourceAttr(stateResourceName, "unique_name", regexp.MustCompile(fmt.Sprintf("^%s", newModelBuildUniqueNamePrefix))),
-					resource.TestCheckResourceAttrSet(stateResourceName, "assistant_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "triggers.%", "1"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "triggers.redeployment"),
-					resource.TestCheckResourceAttr(stateResourceName, "polling.#", "1"),
-					resource.TestCheckResourceAttr(stateResourceName, "polling.0.enabled", "true"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "build_duration"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "status"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "error_code"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
-				),
+				Config:      testAccTwilioAutopilotModelBuild_statusCallbackWithStubbedAssistantSid(statusCallback),
+				ExpectError: regexp.MustCompile(`(?s)expected "status_callback" to have a host, got statusCallback`),
 			},
 		},
 	})
@@ -169,12 +137,12 @@ func testAccTwilioAutopilotModelBuildImportStateIdFunc(name string) resource.Imp
 func testAccTwilioAutopilotModelBuild_basic(uniqueName string, modelBuildUniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
 }
 
 resource "twilio_autopilot_task" "task" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
-  unique_name   = "%s"
+  unique_name   = "%[1]s"
 }
 
 resource "twilio_autopilot_task_sample" "task_sample" {
@@ -186,7 +154,7 @@ resource "twilio_autopilot_task_sample" "task_sample" {
 
 resource "twilio_autopilot_model_build" "model_build" {
   assistant_sid      = twilio_autopilot_assistant.assistant.sid
-  unique_name_prefix = "%s"
+  unique_name_prefix = "%[2]s"
 
   triggers = {
     redeployment = sha1(join(",", tolist([
@@ -204,5 +172,22 @@ resource "twilio_autopilot_model_build" "model_build" {
     enabled = true
   }
 }
-`, uniqueName, uniqueName, modelBuildUniqueName)
+`, uniqueName, modelBuildUniqueName)
+}
+
+func testAccTwilioAutopilotModelBuild_invalidAssistantSid() string {
+	return `
+resource "twilio_autopilot_model_build" "model_build" {
+  assistant_sid      = "assistant_sid"
+}
+`
+}
+
+func testAccTwilioAutopilotModelBuild_statusCallbackWithStubbedAssistantSid(statusCallbackURL string) string {
+	return fmt.Sprintf(`
+resource "twilio_autopilot_model_build" "model_build" {
+  assistant_sid   = "assistant_sid"
+  status_callback = "%s"
+}
+`, statusCallbackURL)
 }

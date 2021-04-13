@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -102,6 +103,102 @@ func TestAccTwilioAutopilotTaskSample_update(t *testing.T) {
 	})
 }
 
+func TestAccTwilioAutopilotTaskSample_sourceChannel(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.task_sample", taskSampleResourceName)
+	uniqueName := acctest.RandString(10)
+	language := "en-US"
+	taggedText := "test"
+	sourceChannel := "chat"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioAutopilotTaskSampleDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioAutopilotTaskSample_sourceChannel(uniqueName, language, taggedText, sourceChannel),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotTaskSampleExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "source_channel", sourceChannel),
+				),
+			},
+			// Test is currently disabled as the Task Sample API is currently returning voice when an empty string is supplied on update
+			// {
+			// 	Config: testAccTwilioAutopilotTaskSample_basic(uniqueName, language, taggedText),
+			// 	Check: resource.ComposeTestCheckFunc(
+			// 		testAccCheckTwilioAutopilotTaskSampleExists(stateResourceName),
+			// 		resource.TestCheckResourceAttr(stateResourceName, "source_channel", ""),
+			// 	),
+			// },
+		},
+	})
+}
+
+func TestAccTwilioAutopilotTaskSample_blankLanguage(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotTaskSample_blankLanguage(),
+				ExpectError: regexp.MustCompile(`(?s)expected \"language\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotTaskSample_blankTaggedText(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotTaskSample_blankTaggedText(),
+				ExpectError: regexp.MustCompile(`(?s)expected \"tagged_text\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotTaskSample_invalidSourceChannel(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotTaskSample_invalidSourceChannel(),
+				ExpectError: regexp.MustCompile(`(?s)expected source_channel to be one of \[voice sms chat alexa google-assistant slack\], got test`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotTaskSample_invalidAssistantSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotTaskSample_invalidAssistantSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of assistant_sid to match regular expression "\^UA\[0-9a-fA-F\]\{32\}\$", got assistant_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioAutopilotTaskSample_invalidTaskSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioAutopilotTaskSample_invalidTaskSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of task_sid to match regular expression "\^UD\[0-9a-fA-F\]\{32\}\$", got task_sid`),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioAutopilotTaskSampleDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Autopilot
 
@@ -153,19 +250,96 @@ func testAccTwilioAutopilotTaskSampleImportStateIdFunc(name string) resource.Imp
 func testAccTwilioAutopilotTaskSample_basic(uniqueName string, language string, taggedText string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
 }
 
 resource "twilio_autopilot_task" "task" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
-  unique_name   = "%s"
+  unique_name   = "%[1]s"
 }
 
 resource "twilio_autopilot_task_sample" "task_sample" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
   task_sid      = twilio_autopilot_task.task.sid
-  language      = "%s"
-  tagged_text   = "%s"
+  language      = "%[2]s"
+  tagged_text   = "%[3]s"
 }
-`, uniqueName, uniqueName, language, taggedText)
+`, uniqueName, language, taggedText)
+}
+
+func testAccTwilioAutopilotTaskSample_sourceChannel(uniqueName string, language string, taggedText string, sourceChannel string) string {
+	return fmt.Sprintf(`
+resource "twilio_autopilot_assistant" "assistant" {
+  unique_name = "%[1]s"
+}
+
+resource "twilio_autopilot_task" "task" {
+  assistant_sid = twilio_autopilot_assistant.assistant.sid
+  unique_name   = "%[1]s"
+}
+
+resource "twilio_autopilot_task_sample" "task_sample" {
+  assistant_sid  = twilio_autopilot_assistant.assistant.sid
+  task_sid       = twilio_autopilot_task.task.sid
+  language       = "%[2]s"
+  tagged_text    = "%[3]s"
+  source_channel = "%[4]s"
+}
+`, uniqueName, language, taggedText, sourceChannel)
+}
+
+func testAccTwilioAutopilotTaskSample_invalidAssistantSid() string {
+	return `
+resource "twilio_autopilot_task_sample" "task_sample" {
+  assistant_sid = "assistant_sid"
+  task_sid      = "UDaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  language      = "en-US"
+  tagged_text   = "hi"
+}
+`
+}
+
+func testAccTwilioAutopilotTaskSample_invalidTaskSid() string {
+	return `
+resource "twilio_autopilot_task_sample" "task_sample" {
+  assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  task_sid      = "task_sid"
+  language      = "en-US"
+  tagged_text   = "hi"
+}
+`
+}
+
+func testAccTwilioAutopilotTaskSample_blankLanguage() string {
+	return `
+resource "twilio_autopilot_task_sample" "task_sample" {
+  assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  task_sid      = "UDaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  language      = ""
+  tagged_text   = "hi"
+}
+`
+}
+
+func testAccTwilioAutopilotTaskSample_blankTaggedText() string {
+	return `
+resource "twilio_autopilot_task_sample" "task_sample" {
+  assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  task_sid      = "UDaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  language      = "en-US"
+  tagged_text   = ""
+}
+`
+}
+
+func testAccTwilioAutopilotTaskSample_invalidSourceChannel() string {
+	return `
+resource "twilio_autopilot_task_sample" "task_sample" {
+  assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  task_sid      = "UDaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  language      = "en-US"
+  tagged_text   = "hi"
+  source_channel = "test"
+}
+`
 }

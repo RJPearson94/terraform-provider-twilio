@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -39,6 +40,32 @@ func TestAccDataSourceTwilioAutopilotTask_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioAutopilotTask_invalidAssistantSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAutopilotTask_invalidAssistantSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of assistant_sid to match regular expression "\^UA\[0-9a-fA-F\]\{32\}\$", got assistant_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioAutopilotTask_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAutopilotTask_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^UD\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioAutopilotTask_basic(uniqueName string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
@@ -55,4 +82,22 @@ data "twilio_autopilot_task" "task" {
   sid           = twilio_autopilot_task.task.sid
 }
 `, uniqueName, uniqueName)
+}
+
+func testAccDataSourceTwilioAutopilotTask_invalidAssistantSid() string {
+	return `
+data "twilio_autopilot_task" "task" {
+  assistant_sid = "assistant_sid"
+  sid      = "UDaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioAutopilotTask_invalidSid() string {
+	return `
+data "twilio_autopilot_task" "task" {
+  assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid      = "sid"
+}
+`
 }

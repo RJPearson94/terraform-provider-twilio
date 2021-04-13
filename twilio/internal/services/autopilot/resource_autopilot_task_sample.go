@@ -12,6 +12,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1/assistant/task/samples"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceAutopilotTaskSample() *schema.Resource {
@@ -56,26 +57,38 @@ func resourceAutopilotTaskSample() *schema.Resource {
 				Computed: true,
 			},
 			"assistant_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.AutopilotAssistantSidValidation(),
 			},
 			"task_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.AutopilotTaskSidValidation(),
 			},
 			"language": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"tagged_text": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"source_channel": {
 				Type:     schema.TypeString,
 				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"voice",
+					"sms",
+					"chat",
+					"alexa",
+					"google-assistant",
+					"slack",
+				}, false),
 			},
 			"date_created": {
 				Type:     schema.TypeString,
@@ -99,7 +112,7 @@ func resourceAutopilotTaskSampleCreate(ctx context.Context, d *schema.ResourceDa
 	createInput := &samples.CreateSampleInput{
 		Language:      d.Get("language").(string),
 		TaggedText:    d.Get("tagged_text").(string),
-		SourceChannel: utils.OptionalString(d, "source_channel"),
+		SourceChannel: utils.OptionalStringWithEmptyStringDefault(d, "source_channel"),
 	}
 
 	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Samples.CreateWithContext(ctx, createInput)
@@ -146,7 +159,7 @@ func resourceAutopilotTaskSampleUpdate(ctx context.Context, d *schema.ResourceDa
 	updateInput := &sample.UpdateSampleInput{
 		Language:      utils.OptionalString(d, "language"),
 		TaggedText:    utils.OptionalString(d, "tagged_text"),
-		SourceChannel: utils.OptionalString(d, "source_channel"),
+		SourceChannel: utils.OptionalStringWithEmptyStringDefault(d, "source_channel"),
 	}
 
 	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Sample(d.Id()).UpdateWithContext(ctx, updateInput)

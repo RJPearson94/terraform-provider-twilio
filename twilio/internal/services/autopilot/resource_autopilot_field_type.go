@@ -12,6 +12,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1/assistant/field_types"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceAutopilotFieldType() *schema.Resource {
@@ -55,18 +56,21 @@ func resourceAutopilotFieldType() *schema.Resource {
 				Computed: true,
 			},
 			"assistant_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.AutopilotAssistantSidValidation(),
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringLenBetween(0, 255),
 			},
 			"unique_name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringLenBetween(1, 64),
 			},
 			"date_created": {
 				Type:     schema.TypeString,
@@ -89,7 +93,7 @@ func resourceAutopilotFieldTypeCreate(ctx context.Context, d *schema.ResourceDat
 
 	createInput := &field_types.CreateFieldTypeInput{
 		UniqueName:   d.Get("unique_name").(string),
-		FriendlyName: utils.OptionalString(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 	}
 
 	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).FieldTypes.CreateWithContext(ctx, createInput)
@@ -133,7 +137,7 @@ func resourceAutopilotFieldTypeUpdate(ctx context.Context, d *schema.ResourceDat
 
 	updateInput := &field_type.UpdateFieldTypeInput{
 		UniqueName:   utils.OptionalString(d, "unique_name"),
-		FriendlyName: utils.OptionalString(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 	}
 
 	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Id()).UpdateWithContext(ctx, updateInput)

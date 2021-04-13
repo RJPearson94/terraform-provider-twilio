@@ -25,6 +25,40 @@ func ApplicationSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^AP[0-9a-fA-F]{32}$"), "")
 }
 
+// Autopilot
+
+func AutopilotAssistantSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^UA[0-9a-fA-F]{32}$"), "")
+}
+
+func AutopilotFieldTypeSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^UB[0-9a-fA-F]{32}$"), "")
+}
+
+func AutopilotFieldValueSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^UC[0-9a-fA-F]{32}$"), "")
+}
+
+func AutopilotModelBuildSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^UG[0-9a-fA-F]{32}$"), "")
+}
+
+func AutopilotTaskFieldSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^UE[0-9a-fA-F]{32}$"), "")
+}
+
+func AutopilotTaskSampleSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^UF[0-9a-fA-F]{32}$"), "")
+}
+
+func AutopilotTaskSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^UD[0-9a-fA-F]{32}$"), "")
+}
+
+func AutopilotWebhookSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^UM[0-9a-fA-F]{32}$"), "")
+}
+
 // Bundle
 
 func BundleSidValidation() schema.SchemaValidateFunc {

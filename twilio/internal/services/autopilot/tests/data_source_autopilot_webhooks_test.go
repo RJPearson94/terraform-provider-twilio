@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -45,21 +46,42 @@ func TestAccDataSourceTwilioAutopilotWebhooks_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioAutopilotWebhooks_invalidAssistantSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioAutopilotWebhooks_invalidAssistantSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of assistant_sid to match regular expression "\^UA\[0-9a-fA-F\]\{32\}\$", got assistant_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioAutopilotWebhooks_basic(uniqueName string, url string, events []string) string {
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
 }
 
 resource "twilio_autopilot_webhook" "webhook" {
   assistant_sid = twilio_autopilot_assistant.assistant.sid
-  unique_name   = "%s"
-  webhook_url   = "%s"
-  events        = %s
+  unique_name   = "%[1]s"
+  webhook_url   = "%[2]s"
+  events        = %[3]s
 }
 
 data "twilio_autopilot_webhooks" "webhooks" {
   assistant_sid = twilio_autopilot_webhook.webhook.assistant_sid
 }
-`, uniqueName, uniqueName, url, "[\""+strings.Join(events, "\",\"")+"\"]")
+`, uniqueName, url, `["`+strings.Join(events, `","`)+`"]`)
+}
+
+func testAccDataSourceTwilioAutopilotWebhooks_invalidAssistantSid() string {
+	return `
+data "twilio_autopilot_webhooks" "webhooks" {
+  assistant_sid = "assistant_sid"
+}
+`
 }
