@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -46,21 +47,42 @@ func TestAccDataSourceTwilioChatRoles_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioChatRoles_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioChatRoles_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioChatRoles_basic(friendlyName string, roleType string, permissions []string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_chat_role" "role" {
   service_sid   = twilio_chat_service.service.sid
-  friendly_name = "%s"
-  type          = "%s"
-  permissions   = %s
+  friendly_name = "%[1]s"
+  type          = "%[2]s"
+  permissions   = %[3]s
 }
 
 data "twilio_chat_roles" "roles" {
   service_sid = twilio_chat_role.role.service_sid
 }
-`, friendlyName, friendlyName, roleType, `["`+strings.Join(permissions, `","`)+`"]`)
+`, friendlyName, roleType, `["`+strings.Join(permissions, `","`)+`"]`)
+}
+
+func testAccDataSourceTwilioChatRoles_invalidServiceSid() string {
+	return `
+data "twilio_chat_roles" "roles" {
+  service_sid = "service_sid"
+}
+`
 }

@@ -59,8 +59,9 @@ func resourceChatService() *schema.Resource {
 				Computed: true,
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringLenBetween(1, 256),
 			},
 			"default_channel_creator_role_sid": {
 				Type:     schema.TypeString,
@@ -82,14 +83,16 @@ func resourceChatService() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"channel_members": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Computed: true,
+							Type:         schema.TypeInt,
+							Optional:     true,
+							Default:      100,
+							ValidateFunc: validation.IntBetween(1, 1000),
 						},
 						"user_channels": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Computed: true,
+							Type:         schema.TypeInt,
+							Optional:     true,
+							Default:      250,
+							ValidateFunc: validation.IntBetween(1, 1000),
 						},
 					},
 				},
@@ -123,7 +126,7 @@ func resourceChatService() *schema.Resource {
 						"log_enabled": {
 							Type:     schema.TypeBool,
 							Optional: true,
-							Computed: true,
+							Default:  false,
 						},
 						"new_message": {
 							Type:     schema.TypeList,
@@ -134,7 +137,7 @@ func resourceChatService() *schema.Resource {
 									"enabled": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Computed: true,
+										Default:  false,
 									},
 									"template": {
 										Type:     schema.TypeString,
@@ -147,7 +150,7 @@ func resourceChatService() *schema.Resource {
 									"badge_count_enabled": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Computed: true,
+										Default:  false,
 									},
 								},
 							},
@@ -162,7 +165,7 @@ func resourceChatService() *schema.Resource {
 									"enabled": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Computed: true,
+										Default:  false,
 									},
 									"template": {
 										Type:     schema.TypeString,
@@ -185,7 +188,7 @@ func resourceChatService() *schema.Resource {
 									"enabled": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Computed: true,
+										Default:  false,
 									},
 									"template": {
 										Type:     schema.TypeString,
@@ -208,7 +211,7 @@ func resourceChatService() *schema.Resource {
 									"enabled": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Computed: true,
+										Default:  false,
 									},
 									"template": {
 										Type:     schema.TypeString,
@@ -227,7 +230,7 @@ func resourceChatService() *schema.Resource {
 			"post_webhook_retry_count": {
 				Type:     schema.TypeInt,
 				Optional: true,
-				Computed: true,
+				Default:  0,
 			},
 			"post_webhook_url": {
 				Type:         schema.TypeString,
@@ -237,7 +240,7 @@ func resourceChatService() *schema.Resource {
 			"pre_webhook_retry_count": {
 				Type:     schema.TypeInt,
 				Optional: true,
-				Computed: true,
+				Default:  0,
 			},
 			"pre_webhook_url": {
 				Type:         schema.TypeString,
@@ -254,7 +257,7 @@ func resourceChatService() *schema.Resource {
 			"webhook_method": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				Default:  "POST",
 				ValidateFunc: validation.StringInSlice([]string{
 					"POST",
 					"GET",
@@ -263,17 +266,17 @@ func resourceChatService() *schema.Resource {
 			"reachability_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  false,
 			},
 			"read_status_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  true,
 			},
 			"typing_indicator_timeout": {
 				Type:     schema.TypeInt,
 				Optional: true,
-				Computed: true,
+				Default:  5,
 			},
 			"date_created": {
 				Type:     schema.TypeString,
@@ -357,10 +360,10 @@ func resourceChatServiceUpdate(ctx context.Context, d *schema.ResourceData, meta
 		FriendlyName:           utils.OptionalString(d, "friendly_name"),
 		ReadStatusEnabled:      utils.OptionalBool(d, "read_status_enabled"),
 		TypingIndicatorTimeout: utils.OptionalInt(d, "typing_indicator_timeout"),
-		PostWebhookURL:         utils.OptionalString(d, "post_webhook_url"),
-		PostWebhookRetryCount:  utils.OptionalInt(d, "post_webhook_retry_count"),
-		PreWebhookURL:          utils.OptionalString(d, "pre_webhook_url"),
-		PreWebhookRetryCount:   utils.OptionalInt(d, "pre_webhook_retry_count"),
+		PostWebhookURL:         utils.OptionalStringWithEmptyStringDefault(d, "post_webhook_url"),
+		PostWebhookRetryCount:  utils.OptionalIntWith0Default(d, "post_webhook_retry_count"),
+		PreWebhookURL:          utils.OptionalStringWithEmptyStringDefault(d, "pre_webhook_url"),
+		PreWebhookRetryCount:   utils.OptionalIntWith0Default(d, "pre_webhook_retry_count"),
 		WebhookMethod:          utils.OptionalString(d, "webhook_method"),
 	}
 
@@ -372,8 +375,8 @@ func resourceChatServiceUpdate(ctx context.Context, d *schema.ResourceData, meta
 		if _, ok := d.GetOk("notifications.0.new_message"); ok {
 			notifications.NewMessage = &service.UpdateServiceNotificationsNewMessageInput{
 				Enabled:           utils.OptionalBool(d, "notifications.0.new_message.0.enabled"),
-				Template:          utils.OptionalString(d, "notifications.0.new_message.0.template"),
-				Sound:             utils.OptionalString(d, "notifications.0.new_message.0.sound"),
+				Template:          utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.new_message.0.template"),
+				Sound:             utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.new_message.0.sound"),
 				BadgeCountEnabled: utils.OptionalBool(d, "notifications.0.new_message.0.badge_count_enabled"),
 			}
 		}
@@ -381,24 +384,24 @@ func resourceChatServiceUpdate(ctx context.Context, d *schema.ResourceData, meta
 		if _, ok := d.GetOk("notifications.0.added_to_channel"); ok {
 			notifications.AddedToChannel = &service.UpdateServiceNotificationsActionInput{
 				Enabled:  utils.OptionalBool(d, "notifications.0.added_to_channel.0.enabled"),
-				Template: utils.OptionalString(d, "notifications.0.added_to_channel.0.template"),
-				Sound:    utils.OptionalString(d, "notifications.0.added_to_channel.0.sound"),
+				Template: utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.added_to_channel.0.template"),
+				Sound:    utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.added_to_channel.0.sound"),
 			}
 		}
 
 		if _, ok := d.GetOk("notifications.0.removed_from_channel"); ok {
 			notifications.RemovedFromChannel = &service.UpdateServiceNotificationsActionInput{
 				Enabled:  utils.OptionalBool(d, "notifications.0.removed_from_channel.0.enabled"),
-				Template: utils.OptionalString(d, "notifications.0.removed_from_channel.0.template"),
-				Sound:    utils.OptionalString(d, "notifications.0.removed_from_channel.0.sound"),
+				Template: utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.removed_from_channel.0.template"),
+				Sound:    utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.removed_from_channel.0.sound"),
 			}
 		}
 
 		if _, ok := d.GetOk("notifications.0.invited_to_channel"); ok {
 			notifications.InvitedToChannel = &service.UpdateServiceNotificationsActionInput{
 				Enabled:  utils.OptionalBool(d, "notifications.0.invited_to_channel.0.enabled"),
-				Template: utils.OptionalString(d, "notifications.0.invited_to_channel.0.template"),
-				Sound:    utils.OptionalString(d, "notifications.0.invited_to_channel.0.sound"),
+				Template: utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.invited_to_channel.0.template"),
+				Sound:    utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.invited_to_channel.0.sound"),
 			}
 		}
 

@@ -60,25 +60,28 @@ func resourceChatUser() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ChatServiceSidValidation(),
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringLenBetween(0, 256),
 			},
 			"attributes": {
 				Type:             schema.TypeString,
 				Optional:         true,
-				Computed:         true,
+				Default:          "{}",
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
 			"identity": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"is_notifiable": {
 				Type:     schema.TypeBool,
@@ -93,9 +96,10 @@ func resourceChatUser() *schema.Resource {
 				Computed: true,
 			},
 			"role_sid": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: utils.ChatRoleSidValidation(),
 			},
 			"date_created": {
 				Type:     schema.TypeString,
@@ -118,7 +122,7 @@ func resourceChatUserCreate(ctx context.Context, d *schema.ResourceData, meta in
 
 	createInput := &users.CreateUserInput{
 		Attributes:   utils.OptionalJSONString(d, "attributes"),
-		FriendlyName: utils.OptionalString(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 		Identity:     d.Get("identity").(string),
 		RoleSid:      utils.OptionalString(d, "role_sid"),
 	}
@@ -173,7 +177,7 @@ func resourceChatUserUpdate(ctx context.Context, d *schema.ResourceData, meta in
 
 	updateInput := &user.UpdateUserInput{
 		Attributes:   utils.OptionalJSONString(d, "attributes"),
-		FriendlyName: utils.OptionalString(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 		RoleSid:      utils.OptionalString(d, "role_sid"),
 	}
 

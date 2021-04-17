@@ -135,6 +135,19 @@ func TestAccTwilioChatRole_update(t *testing.T) {
 	})
 }
 
+func TestAccTwilioChatRole_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatRole_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioChatRoleDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Chat
 
@@ -189,14 +202,27 @@ func testAccTwilioChatRoleImportStateIdFunc(name string) resource.ImportStateIdF
 func testAccTwilioChatRole_basic(friendlyName string, roleType string, permissions []string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_chat_role" "role" {
   service_sid   = twilio_chat_service.service.sid
-  friendly_name = "%s"
-  type          = "%s"
-  permissions   = %s
+  friendly_name = "%[1]s"
+  type          = "%[2]s"
+  permissions   = %[3]s
 }
-`, friendlyName, friendlyName, roleType, `["`+strings.Join(permissions, `","`)+`"]`)
+`, friendlyName, roleType, `["`+strings.Join(permissions, `","`)+`"]`)
+}
+
+func testAccTwilioChatRole_invalidServiceSid() string {
+	return `
+resource "twilio_chat_role" "role" {
+  service_sid   = "service_sid"
+  friendly_name = "invalid_service_sid"
+  type          = "channel"
+  permissions   = [
+	"sendMessage"
+  ]
+}
+`
 }

@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -43,6 +44,32 @@ func TestAccDataSourceTwilioChatUser_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioChatUser_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioChatUser_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioChatUser_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioChatUser_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^US\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioChatUser_basic(friendlyName string, identity string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
@@ -59,4 +86,22 @@ data "twilio_chat_user" "user" {
   sid         = twilio_chat_user.user.sid
 }
 `, friendlyName, identity)
+}
+
+func testAccDataSourceTwilioChatUser_invalidServiceSid() string {
+	return `
+data "twilio_chat_user" "user" {
+  service_sid = "service_sid"
+  sid         = "USaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioChatUser_invalidSid() string {
+	return `
+data "twilio_chat_user" "user" {
+  service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid         = "sid"
+}
+`
 }

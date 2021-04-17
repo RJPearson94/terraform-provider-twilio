@@ -37,10 +37,10 @@ The following arguments are supported:
 
 - `service_sid` - (Mandatory) The service SID to associate the channel webhook with. Changing this forces a new resource to be created
 - `channel_sid` - (Mandatory) The channel SID to associate the channel webhook with. Changing this forces a new resource to be created
-- `method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`
+- `method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`. The default value is `POST`
 - `webhook_url` - (Mandatory) The webhook URL
 - `filters` - (Mandatory) The filter conditions that trigger the webhook
-- `retry_count` - (Optional) The number of attempts to retry a failed webhook call
+- `retry_count` - (Optional) The number of attempts to retry a failed webhook call. The value must be between `0` and `3` (inclusive). The default value is `0`
 
 ## Attributes Reference
 

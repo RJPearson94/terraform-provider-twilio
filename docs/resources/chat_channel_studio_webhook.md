@@ -37,7 +37,7 @@ The following arguments are supported:
 - `service_sid` - (Mandatory) The Service SID to associate the channel webhook with. Changing this forces a new resource to be created
 - `channel_sid` - (Mandatory) The Channel SID to associate the channel webhook with. Changing this forces a new resource to be created
 - `flow_sid` - (Mandatory) The SID for the Studio flow which will be called
-- `retry_count` - (Optional) The number of attempts to retry a failed webhook call
+- `retry_count` - (Optional) The number of attempts to retry a failed webhook call. The value must be between `0` and `3` (inclusive). The default value is `3`
 
 ## Attributes Reference
 

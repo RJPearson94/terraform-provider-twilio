@@ -38,8 +38,8 @@ func TestAccTwilioChatChannelWebhook_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "channel_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "method"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "retry_count"),
+					resource.TestCheckResourceAttr(stateResourceName, "method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "retry_count", "0"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -94,8 +94,8 @@ func TestAccTwilioChatChannelWebhook_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "channel_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "method"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "retry_count"),
+					resource.TestCheckResourceAttr(stateResourceName, "method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "retry_count", "0"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -113,12 +113,38 @@ func TestAccTwilioChatChannelWebhook_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "channel_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "method"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "retry_count"),
+					resource.TestCheckResourceAttr(stateResourceName, "method", "POST"),
+					resource.TestCheckResourceAttr(stateResourceName, "retry_count", "0"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelWebhook_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatChannelWebhook_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelWebhook_invalidChannelSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatChannelWebhook_invalidChannelSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of channel_sid to match regular expression "\^CH\[0-9a-fA-F\]\{32\}\$", got channel_sid`),
 			},
 		},
 	})
@@ -178,20 +204,42 @@ func testAccTwilioChatChannelWebhookImportStateIdFunc(name string) resource.Impo
 func testAccTwilioChatChannelWebhook_basic(friendlyName string, webhookUrl string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_chat_channel" "channel" {
   service_sid   = twilio_chat_service.service.sid
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
   type          = "private"
 }
 
 resource "twilio_chat_channel_webhook" "webhook" {
   service_sid = twilio_chat_service.service.sid
   channel_sid = twilio_chat_channel.channel.sid
-  webhook_url = "%s"
+  webhook_url = "%[2]s"
   filters     = ["onMessageSent"]
 }
-`, friendlyName, friendlyName, webhookUrl)
+`, friendlyName, webhookUrl)
+}
+
+func testAccTwilioChatChannelWebhook_invalidServiceSid() string {
+	return `
+resource "twilio_chat_channel_webhook" "webhook" {
+  service_sid = "service_sid"
+  channel_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  webhook_url = "https://localhost.com/webhook"
+  filters     = ["onMessageSent"]
+}
+`
+}
+
+func testAccTwilioChatChannelWebhook_invalidChannelSid() string {
+	return `
+resource "twilio_chat_channel_webhook" "webhook" {
+  service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  channel_sid = "channel_sid"
+  webhook_url = "https://localhost.com/webhook"
+  filters     = ["onMessageSent"]
+}
+`
 }

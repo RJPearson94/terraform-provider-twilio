@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -44,20 +45,41 @@ func TestAccDataSourceTwilioChatChannels_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioChatChannels_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioChatChannels_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioChatChannels_basic(friendlyName string, channelType string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_chat_channel" "channel" {
   service_sid   = twilio_chat_service.service.sid
-  friendly_name = "%s"
-  type          = "%s"
+  friendly_name = "%[1]s"
+  type          = "%[2]s"
 }
 
 data "twilio_chat_channels" "channels" {
   service_sid = twilio_chat_channel.channel.service_sid
 }
-`, friendlyName, friendlyName, channelType)
+`, friendlyName, channelType)
+}
+
+func testAccDataSourceTwilioChatChannels_invalidServiceSid() string {
+	return `
+data "twilio_chat_channels" "channels" {
+  service_sid = "service_sid"
+}
+`
 }

@@ -11,6 +11,8 @@ Manages a Programmable Chat user. See the [API docs](https://www.twilio.com/docs
 
 For more information on Programmable Chat, see the product [page](https://www.twilio.com/chat)
 
+!> If the `role_sid` is managed via Terraform and the `role_sid` is removed from the configuration file. The old value will be retained on the next apply.
+
 ## Example Usage
 
 ```hcl
@@ -30,8 +32,8 @@ The following arguments are supported:
 
 - `service_sid` - (Mandatory) The service SID to associate the user with. Changing this forces a new resource to be created
 - `identity` - (Mandatory) The identity of the user. Changing this forces a new resource to be created
-- `attributes` - (Optional) JSON string of user attributes
-- `friendly_name` - (Optional) The friendly name of the user
+- `attributes` - (Optional) JSON string of user attributes. The default value is `{}`
+- `friendly_name` - (Optional) The friendly name of the user. The length of the string must be between `0` and `256` characters (inclusive)
 - `role_sid` - (Optional) The SID of the role to associate with the user
 
 ## Attributes Reference

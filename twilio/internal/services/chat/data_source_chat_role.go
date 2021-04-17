@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -22,12 +23,14 @@ func dataSourceChatRole() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ChatRoleSidValidation(),
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.ChatServiceSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,

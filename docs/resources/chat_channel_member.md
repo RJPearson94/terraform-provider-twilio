@@ -11,6 +11,8 @@ Manages a Programmable Chat channel member. See the [API docs](https://www.twili
 
 For more information on Programmable Chat, see the product [page](https://www.twilio.com/chat)
 
+!> If the `role_sid` is managed via Terraform and the `role_sid` is removed from the configuration file. The old value will be retained on the next apply.
+
 ## Example Usage
 
 ```hcl
@@ -42,7 +44,7 @@ The following arguments are supported:
 - `service_sid` - (Mandatory) The service SID to associate the channel member with. Changing this forces a new resource to be created
 - `channel_sid` - (Mandatory) The channel SID to associate the channel member with. Changing this forces a new resource to be created
 - `identity` - (Mandatory) The identity of the chat user. Changing this forces a new resource to be created
-- `attributes` - (Optional) JSON string of member attributes
+- `attributes` - (Optional) JSON string of member attributes. The default value is `{}`
 - `role_sid` - (Optional) The role SID assignment to the member
 
 ## Attributes Reference

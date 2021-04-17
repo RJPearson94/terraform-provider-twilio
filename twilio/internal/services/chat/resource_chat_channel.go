@@ -59,9 +59,10 @@ func resourceChatChannel() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ChatServiceSidValidation(),
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,
@@ -74,17 +75,17 @@ func resourceChatChannel() *schema.Resource {
 			"attributes": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				Default:  "{}",
 			},
 			"type": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				ForceNew: true,
+				Default:  "public", // Replicating the API default to prevent breaking existing apps but I would usually set the default to private
 				ValidateFunc: validation.StringInSlice([]string{
 					"public",
 					"private",
 				}, false),
-				ForceNew: true,
 			},
 			"created_by": {
 				Type:     schema.TypeString,
@@ -118,8 +119,8 @@ func resourceChatChannelCreate(ctx context.Context, d *schema.ResourceData, meta
 	client := meta.(*common.TwilioClient).Chat
 
 	createInput := &channels.CreateChannelInput{
-		FriendlyName: utils.OptionalString(d, "friendly_name"),
-		UniqueName:   utils.OptionalString(d, "unique_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		UniqueName:   utils.OptionalStringWithEmptyStringDefault(d, "unique_name"),
 		Attributes:   utils.OptionalString(d, "attributes"),
 		Type:         utils.OptionalString(d, "type"),
 	}
@@ -173,8 +174,8 @@ func resourceChatChannelUpdate(ctx context.Context, d *schema.ResourceData, meta
 	client := meta.(*common.TwilioClient).Chat
 
 	updateInput := &channel.UpdateChannelInput{
-		FriendlyName: utils.OptionalString(d, "friendly_name"),
-		UniqueName:   utils.OptionalString(d, "unique_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		UniqueName:   utils.OptionalStringWithEmptyStringDefault(d, "unique_name"),
 		Attributes:   utils.OptionalString(d, "attributes"),
 	}
 

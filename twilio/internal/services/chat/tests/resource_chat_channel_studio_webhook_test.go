@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -35,7 +36,7 @@ func TestAccTwilioChatChannelStudioWebhook_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "channel_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "retry_count"),
+					resource.TestCheckResourceAttr(stateResourceName, "retry_count", "3"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -73,7 +74,7 @@ func TestAccTwilioChatChannelStudioWebhook_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "channel_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "retry_count"),
+					resource.TestCheckResourceAttr(stateResourceName, "retry_count", "3"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
@@ -90,11 +91,50 @@ func TestAccTwilioChatChannelStudioWebhook_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "channel_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "retry_count"),
+					resource.TestCheckResourceAttr(stateResourceName, "retry_count", "3"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelStudioWebhook_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatChannelStudioWebhook_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelStudioWebhook_invalidChannelSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatChannelStudioWebhook_invalidChannelSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of channel_sid to match regular expression "\^CH\[0-9a-fA-F\]\{32\}\$", got channel_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelStudioWebhook_invalidFlowSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatChannelStudioWebhook_invalidFlowSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of flow_sid to match regular expression "\^FW\[0-9a-fA-F\]\{32\}\$", got flow_sid`),
 			},
 		},
 	})
@@ -154,19 +194,49 @@ func testAccTwilioChatChannelStudioWebhookImportStateIdFunc(name string) resourc
 func testAccTwilioChatChannelStudioWebhook_basic(friendlyName string, flowSid string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_chat_channel" "channel" {
   service_sid   = twilio_chat_service.service.sid
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
   type          = "private"
 }
 
 resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
   service_sid = twilio_chat_service.service.sid
   channel_sid = twilio_chat_channel.channel.sid
-  flow_sid    = "%s"
+  flow_sid    = "%[2]s"
 }
-`, friendlyName, friendlyName, flowSid)
+`, friendlyName, flowSid)
+}
+
+func testAccTwilioChatChannelStudioWebhook_invalidServiceSid() string {
+	return `
+resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
+  service_sid = "service_sid"
+  channel_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  flow_sid = "FWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccTwilioChatChannelStudioWebhook_invalidChannelSid() string {
+	return `
+resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
+	service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	channel_sid = "channel_sid"
+	flow_sid = "FWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccTwilioChatChannelStudioWebhook_invalidFlowSid() string {
+	return `
+resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
+	service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	channel_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	flow_sid = "flow_sid"
+}
+`
 }

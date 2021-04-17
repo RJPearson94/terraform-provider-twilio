@@ -57,7 +57,7 @@ func resourceProxyService() *schema.Resource {
 			"chat_instance_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: utils.ChatInstanceSidValidation(),
+				ValidateFunc: utils.ChatServiceSidValidation(),
 			},
 			"unique_name": {
 				Type:         schema.TypeString,

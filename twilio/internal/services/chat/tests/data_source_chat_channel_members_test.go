@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -43,21 +44,47 @@ func TestAccDataSourceTwilioChatChannelMembers_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioChatChannelMembers_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioChatChannelMembers_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioChatChannelMembers_invalidChannelSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioChatChannelMembers_invalidChannelSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of channel_sid to match regular expression "\^CH\[0-9a-fA-F\]\{32\}\$", got channel_sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioChatChannelMembers_basic(friendlyName string, identity string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_chat_channel" "channel" {
   service_sid   = twilio_chat_service.service.sid
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
   type          = "private"
 }
 
 resource "twilio_chat_user" "user" {
   service_sid = twilio_chat_service.service.sid
-  identity    = "%s"
+  identity    = "%[2]s"
 }
 
 resource "twilio_chat_channel_member" "member" {
@@ -70,5 +97,23 @@ data "twilio_chat_channel_members" "members" {
   service_sid = twilio_chat_channel_member.member.service_sid
   channel_sid = twilio_chat_channel_member.member.channel_sid
 }
-`, friendlyName, friendlyName, identity)
+`, friendlyName, identity)
+}
+
+func testAccDataSourceTwilioChatChannelMembers_invalidServiceSid() string {
+	return `
+data "twilio_chat_channel_members" "members" {
+  service_sid = "service_sid"
+  channel_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+`
+}
+
+func testAccDataSourceTwilioChatChannelMembers_invalidChannelSid() string {
+	return `
+data "twilio_chat_channel_members" "members" {
+  service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  channel_sid = "channel_sid"
+}
+`
 }

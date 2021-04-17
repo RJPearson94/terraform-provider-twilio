@@ -71,10 +71,30 @@ func ByocSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^BY[0-9a-fA-F]{32}$"), "")
 }
 
-// Chat
+// Chat (near duplicate of conversations so all references can be removed when chat is removed from the provider)
 
-func ChatInstanceSidValidation() schema.SchemaValidateFunc {
+func ChatServiceSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^IS[0-9a-fA-F]{32}$"), "")
+}
+
+func ChatChannelMemberSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^MB[0-9a-fA-F]{32}$"), "")
+}
+
+func ChatChannelSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^CH[0-9a-fA-F]{32}$"), "")
+}
+
+func ChatChannelWebhookSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^WH[0-9a-fA-F]{32}$"), "")
+}
+
+func ChatRoleSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^RL[0-9a-fA-F]{32}$"), "")
+}
+
+func ChatUserSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^US[0-9a-fA-F]{32}$"), "")
 }
 
 // Conversations

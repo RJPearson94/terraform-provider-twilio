@@ -13,6 +13,7 @@ import (
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceChatChannelStudioWebhook() *schema.Resource {
@@ -59,27 +60,31 @@ func resourceChatChannelStudioWebhook() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ChatServiceSidValidation(),
 			},
 			"channel_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ChatChannelSidValidation(),
 			},
 			"type": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"flow_sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.StudioFlowSidValidation(),
 			},
 			"retry_count": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeInt,
+				Optional:     true,
+				Default:      3,
+				ValidateFunc: validation.IntBetween(0, 3),
 			},
 			"date_created": {
 				Type:     schema.TypeString,
@@ -104,7 +109,7 @@ func resourceChatChannelStudioWebhookCreate(ctx context.Context, d *schema.Resou
 		Type: "studio",
 		Configuration: &webhooks.CreateChannelWebhookConfigurationInput{
 			FlowSid:    utils.OptionalString(d, "flow_sid"),
-			RetryCount: utils.OptionalInt(d, "retry_count"),
+			RetryCount: utils.OptionalIntWith0Default(d, "retry_count"),
 		},
 	}
 
@@ -156,7 +161,7 @@ func resourceChatChannelStudioWebhookUpdate(ctx context.Context, d *schema.Resou
 	updateInput := &webhook.UpdateChannelWebhookInput{
 		Configuration: &webhook.UpdateChannelWebhookConfigurationInput{
 			FlowSid:    utils.OptionalString(d, "flow_sid"),
-			RetryCount: utils.OptionalInt(d, "retry_count"),
+			RetryCount: utils.OptionalIntWith0Default(d, "retry_count"),
 		},
 	}
 

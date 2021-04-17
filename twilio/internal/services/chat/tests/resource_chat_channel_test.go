@@ -35,8 +35,8 @@ func TestAccTwilioChatChannel_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "unique_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "type"),
+					resource.TestCheckResourceAttr(stateResourceName, "attributes", "{}"),
+					resource.TestCheckResourceAttr(stateResourceName, "type", channelType),
 					resource.TestCheckResourceAttrSet(stateResourceName, "created_by"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "members_count"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "messages_count"),
@@ -50,23 +50,6 @@ func TestAccTwilioChatChannel_basic(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: testAccTwilioChatChannelImportStateIdFunc(stateResourceName),
 				ImportStateVerify: true,
-			},
-		},
-	})
-}
-
-func TestAccTwilioChatChannel_invalidType(t *testing.T) {
-	friendlyName := acctest.RandString(10)
-	channelType := "test"
-
-	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:          func() { acceptance.PreCheck(t) },
-		ProviderFactories: acceptance.TestAccProviderFactories,
-		CheckDestroy:      testAccCheckTwilioChatChannelDestroy,
-		Steps: []resource.TestStep{
-			{
-				Config:      testAccTwilioChatChannel_basic(friendlyName, channelType),
-				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \[public private\], got test`),
 			},
 		},
 	})
@@ -93,8 +76,8 @@ func TestAccTwilioChatChannel_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "unique_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "type"),
+					resource.TestCheckResourceAttr(stateResourceName, "attributes", "{}"),
+					resource.TestCheckResourceAttr(stateResourceName, "type", channelType),
 					resource.TestCheckResourceAttrSet(stateResourceName, "created_by"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "members_count"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "messages_count"),
@@ -113,8 +96,8 @@ func TestAccTwilioChatChannel_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "unique_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "type"),
+					resource.TestCheckResourceAttr(stateResourceName, "attributes", "{}"),
+					resource.TestCheckResourceAttr(stateResourceName, "type", channelType),
 					resource.TestCheckResourceAttrSet(stateResourceName, "created_by"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "members_count"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "messages_count"),
@@ -122,6 +105,36 @@ func TestAccTwilioChatChannel_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannel_invalidType(t *testing.T) {
+	friendlyName := acctest.RandString(10)
+	channelType := "test"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioChatChannelDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatChannel_basic(friendlyName, channelType),
+				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \[public private\], got test`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannel_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatChannel_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
 			},
 		},
 	})
@@ -181,13 +194,23 @@ func testAccTwilioChatChannelImportStateIdFunc(name string) resource.ImportState
 func testAccTwilioChatChannel_basic(friendlyName string, channelType string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_chat_channel" "channel" {
   service_sid   = twilio_chat_service.service.sid
-  friendly_name = "%s"
-  type          = "%s"
+  friendly_name = "%[1]s"
+  type          = "%[2]s"
 }
-`, friendlyName, friendlyName, channelType)
+`, friendlyName, channelType)
+}
+
+func testAccTwilioChatChannel_invalidServiceSid() string {
+	return `
+resource "twilio_chat_channel" "channel" {
+  service_sid   = "service_sid"
+  friendly_name = "invalid_service_sid"
+  type          = "private"
+}
+`
 }

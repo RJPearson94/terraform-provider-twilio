@@ -59,14 +59,16 @@ func resourceChatRole() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ChatServiceSidValidation(),
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"type": {
 				Type:     schema.TypeString,

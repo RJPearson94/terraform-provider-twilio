@@ -60,14 +60,16 @@ func resourceChatChannelWebhook() *schema.Resource {
 				Computed: true,
 			},
 			"service_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ChatServiceSidValidation(),
 			},
 			"channel_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.ChatChannelSidValidation(),
 			},
 			"type": {
 				Type:     schema.TypeString,
@@ -76,11 +78,11 @@ func resourceChatChannelWebhook() *schema.Resource {
 			"method": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "POST",
 				ValidateFunc: validation.StringInSlice([]string{
 					"GET",
 					"POST",
 				}, false),
-				Computed: true,
 			},
 			"webhook_url": {
 				Type:         schema.TypeString,
@@ -95,9 +97,10 @@ func resourceChatChannelWebhook() *schema.Resource {
 				},
 			},
 			"retry_count": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Computed: true,
+				Type:         schema.TypeInt,
+				Optional:     true,
+				Default:      0,
+				ValidateFunc: validation.IntBetween(0, 3),
 			},
 			"date_created": {
 				Type:     schema.TypeString,
@@ -123,7 +126,7 @@ func resourceChatChannelWebhookCreate(ctx context.Context, d *schema.ResourceDat
 		Configuration: &webhooks.CreateChannelWebhookConfigurationInput{
 			URL:        utils.OptionalString(d, "webhook_url"),
 			Method:     utils.OptionalString(d, "method"),
-			RetryCount: utils.OptionalInt(d, "retry_count"),
+			RetryCount: utils.OptionalIntWith0Default(d, "retry_count"),
 			Filters:    utils.OptionalStringSlice(d, "filters"),
 		},
 	}
@@ -179,7 +182,7 @@ func resourceChatChannelWebhookUpdate(ctx context.Context, d *schema.ResourceDat
 		Configuration: &webhook.UpdateChannelWebhookConfigurationInput{
 			URL:        utils.OptionalString(d, "webhook_url"),
 			Method:     utils.OptionalString(d, "method"),
-			RetryCount: utils.OptionalInt(d, "retry_count"),
+			RetryCount: utils.OptionalIntWith0Default(d, "retry_count"),
 			Filters:    utils.OptionalStringSlice(d, "filters"),
 		},
 	}

@@ -23,26 +23,26 @@ resource "twilio_chat_service" "service" {
 
 The following arguments are supported:
 
-- `friendly_name` - (Mandatory) The friendly name of the service
+- `friendly_name` - (Mandatory) The friendly name of the service. The length of the string must be between `1` and `256` characters (inclusive)
 - `limits` - (Optional) A `limits` block as documented below.
 - `media` - (Optional) A `media` block as documented below.
 - `notifications` - (Optional) A `notifications` block as documented below.
-- `post_webhook_retry_count` - (Optional) The number of attempt to retry a failed webhook call
+- `post_webhook_retry_count` - (Optional) The number of attempt to retry a failed webhook call. The default value is `0`
 - `post_webhook_url` - (Optional) The webhook url
-- `pre_webhook_retry_count` - (Optional) The number of attempt to retry a failed webhook call
+- `pre_webhook_retry_count` - (Optional) The number of attempt to retry a failed webhook call. The default value is `0`
 - `pre_webhook_url` - (Optional) The webhook url
 - `webhook_filters` - (Optional) The events which trigger the webhook
-- `webhook_method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`
-- `reachability_enabled` - (Optional) Whether the reachability indicator (for Programmable Chat) is enabled
-- `read_status_enabled` - (Optional) Whether the message consumption horizon (for Programmable Chat) is enabled
-- `typing_indicator_timeout` - (Optional) How many seconds should the service wait after receiving a `started typing` event before assuming a user is no longer typing
+- `webhook_method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`. The default value is `POST`
+- `reachability_enabled` - (Optional) Whether the reachability indicator (for Programmable Chat) is enabled. The default value is `false`
+- `read_status_enabled` - (Optional) Whether the message consumption horizon (for Programmable Chat) is enabled. The default value is `true`
+- `typing_indicator_timeout` - (Optional) How many seconds should the service wait after receiving a `started typing` event before assuming a user is no longer typing. The default value is `5`
 
 ---
 
 A `limits` block supports the following:
 
-- `channel_members` - (Optional) The max number of members that can be added to a channel
-- `user_channels` - (Optional) The max number of users that can be a member of
+- `channel_members` - (Optional) The max number of members that can be added to a channel. The value must be between `1` and `1000` (inclusive). The default value is `100`
+- `user_channels` - (Optional) The max number of users that can be a member of. The value must be between `1` and `1000` (inclusive). The default value is `250`
 
 ---
 
@@ -54,7 +54,7 @@ A `media` block supports the following:
 
 A `notifications` block supports the following:
 
-- `log_enabled` - (Optional) Whether notification logs are enabled
+- `log_enabled` - (Optional) Whether notification logs are enabled. The default value is `false`
 - `new_message` - (Optional) A `new_message` block as documented below.
 - `added_to_channel` - (Optional) A `added_to_channel` block as documented below.
 - `invited_to_channel` - (Optional) A `added_to_channel` block as documented below.
@@ -64,16 +64,16 @@ A `notifications` block supports the following:
 
 A `new_message` block supports the following:
 
-- `enabled` - (Optional) Whether notifications for a new message are enabled
+- `enabled` - (Optional) Whether notifications for a new message are enabled. The default value is `false`
 - `template` - (Optional) The template message that is sent when a new message is received
 - `sound` - (Optional) The sound played when the notification is activated
-- `badge_count_enabled` - (Optional) Whether bade counts are enabled
+- `badge_count_enabled` - (Optional) Whether bade counts are enabled. The default value is `false`
 
 ---
 
 An `added_to_channel` block supports the following:
 
-- `enabled` - (Optional) Whether notifications for a user being added to a channel are enabled
+- `enabled` - (Optional) Whether notifications for a user being added to a channel are enabled. The default value is `false`
 - `template` - (Optional) The template message that is sent when the notification is activated
 - `sound` - (Optional) The sound played when the notification is activated
 
@@ -81,7 +81,7 @@ An `added_to_channel` block supports the following:
 
 An `invited_to_channel` block supports the following:
 
-- `enabled` - (Optional) Whether notifications for a user being invited to a channel are enabled
+- `enabled` - (Optional) Whether notifications for a user being invited to a channel are enabled. The default value is `false`
 - `template` - (Optional) The template message that is sent when the notification is activated
 - `sound` - (Optional) The sound played when the notification is activated
 
@@ -89,7 +89,7 @@ An `invited_to_channel` block supports the following:
 
 A `removed_from_channel` block supports the following:
 
-- `enabled` - (Optional) Whether notifications for a user being removed from a channel are enabled
+- `enabled` - (Optional) Whether notifications for a user being removed from a channel are enabled. The default value is `false`
 - `template` - (Optional) The template message that is sent when the notification is activated
 - `sound` - (Optional) The sound played when the notification is activated
 

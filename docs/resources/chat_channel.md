@@ -31,8 +31,8 @@ The following arguments are supported:
 - `service_sid` - (Mandatory) The Service SID to associate the channel with. Changing this forces a new resource to be created
 - `friendly_name` - (Optional) The friendly name of the channel
 - `unique_name` - (Optional) The unique name of the channel
-- `attributes` - (Optional) JSON string of channel attributes
-- `type` - (Optional) The type of channel. Valid values are `public` or `private`. Changing this forces a new resource to be created
+- `attributes` - (Optional) JSON string of channel attributes. The default value is `{}`
+- `type` - (Optional) The type of channel. Valid values are `public` or `private`. The default value is `public`. Changing this forces a new resource to be created
 
 ## Attributes Reference
 

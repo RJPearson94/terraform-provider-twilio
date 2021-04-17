@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -34,7 +35,7 @@ func TestAccTwilioChatUser_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
+					resource.TestCheckResourceAttr(stateResourceName, "attributes", "{}"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "is_notifiable"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "is_online"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "joined_channels_count"),
@@ -57,8 +58,8 @@ func TestAccTwilioChatUser_basic(t *testing.T) {
 func TestAccTwilioChatUser_friendlyName(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.user", userResourceName)
 	friendlyName := acctest.RandString(10)
-	userFriendlyName := acctest.RandString(10)
-	newUserFriendlyName := acctest.RandString(10)
+	userFriendlyName := ""
+	newUserFriendlyName := acctest.RandString(256)
 	identity := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -70,40 +71,21 @@ func TestAccTwilioChatUser_friendlyName(t *testing.T) {
 				Config: testAccTwilioChatUser_friendlyName(friendlyName, identity, userFriendlyName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioChatUserExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttr(stateResourceName, "identity", identity),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", userFriendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "attributes", "{\"test\":\"test\"}"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "is_notifiable"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "is_online"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "joined_channels_count"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "role_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
 			},
 			{
 				Config: testAccTwilioChatUser_friendlyName(friendlyName, identity, newUserFriendlyName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioChatUserExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttr(stateResourceName, "identity", identity),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", newUserFriendlyName),
-					resource.TestCheckResourceAttr(stateResourceName, "attributes", "{\"test\":\"test\"}"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "is_notifiable"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "is_online"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "joined_channels_count"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "role_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				Config: testAccTwilioChatUser_basic(friendlyName, identity),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioChatUserExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
 				),
 			},
 		},
@@ -112,6 +94,7 @@ func TestAccTwilioChatUser_friendlyName(t *testing.T) {
 
 func TestAccTwilioChatUser_role(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.user", userResourceName)
+	roleStateResourceName := "twilio_chat_role.role"
 	friendlyName := acctest.RandString(10)
 	identity := acctest.RandString(10)
 
@@ -124,21 +107,34 @@ func TestAccTwilioChatUser_role(t *testing.T) {
 				Config: testAccTwilioChatUser_role(friendlyName, identity),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioChatUserExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
-					resource.TestCheckResourceAttr(stateResourceName, "identity", identity),
-					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "service_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
-					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "is_notifiable"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "is_online"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "joined_channels_count"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "role_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "role_sid", roleStateResourceName, "sid"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatUser_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatUser_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatUser_invalidRoleSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatUser_invalidRoleSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of role_sid to match regular expression "\^RL\[0-9a-fA-F\]\{32\}\$", got role_sid`),
 			},
 		},
 	})
@@ -226,20 +222,39 @@ resource "twilio_chat_user" "user" {
 func testAccTwilioChatUser_role(friendlyName string, identity string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_chat_role" "role" {
   service_sid   = twilio_chat_service.service.sid
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
   type          = "deployment"
   permissions   = ["createChannel", "editOwnUserInfo", "joinChannel"]
 }
 
 resource "twilio_chat_user" "user" {
   service_sid = twilio_chat_service.service.sid
-  identity    = "%s"
+  identity    = "%[2]s"
   role_sid    = twilio_chat_role.role.sid
 }
-`, friendlyName, friendlyName, identity)
+`, friendlyName, identity)
+}
+
+func testAccTwilioChatUser_invalidServiceSid() string {
+	return `
+resource "twilio_chat_user" "user" {
+  service_sid = "service_sid"
+  identity    = "invalid_service_sid"
+}
+`
+}
+
+func testAccTwilioChatUser_invalidRoleSid() string {
+	return `
+resource "twilio_chat_user" "user" {
+  service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  identity    = "invalid_role_sid"
+  role_sid = "role_sid"
+}
+`
 }

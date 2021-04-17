@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -28,7 +29,7 @@ func TestAccTwilioChatChannelMember_basic(t *testing.T) {
 				Config: testAccTwilioChatChannelMember_basic(friendlyName, identity),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioChatChannelMemberExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
+					resource.TestCheckResourceAttr(stateResourceName, "attributes", "{}"),
 					resource.TestCheckResourceAttr(stateResourceName, "identity", identity),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
@@ -68,7 +69,7 @@ func TestAccTwilioChatChannelMember_update(t *testing.T) {
 				Config: testAccTwilioChatChannelMember_basic(friendlyName, identity),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioChatChannelMemberExists(stateResourceName),
-					resource.TestCheckResourceAttrSet(stateResourceName, "attributes"),
+					resource.TestCheckResourceAttr(stateResourceName, "attributes", "{}"),
 					resource.TestCheckResourceAttr(stateResourceName, "identity", identity),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
@@ -101,6 +102,45 @@ func TestAccTwilioChatChannelMember_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelMember_invalidServiceSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatChannelMember_invalidServiceSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of service_sid to match regular expression "\^IS\[0-9a-fA-F\]\{32\}\$", got service_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelMember_invalidChannelSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatChannelMember_invalidChannelSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of channel_sid to match regular expression "\^CH\[0-9a-fA-F\]\{32\}\$", got channel_sid`),
+			},
+		},
+	})
+}
+
+func TestAccTwilioChatChannelMember_invalidRoleSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioChatChannelMember_invalidRoleSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of role_sid to match regular expression "\^RL\[0-9a-fA-F\]\{32\}\$", got role_sid`),
 			},
 		},
 	})
@@ -160,18 +200,18 @@ func testAccTwilioChatChannelMemberImportStateIdFunc(name string) resource.Impor
 func testAccTwilioChatChannelMember_basic(friendlyName string, identity string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_chat_channel" "channel" {
   service_sid   = twilio_chat_service.service.sid
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
   type          = "private"
 }
 
 resource "twilio_chat_user" "user" {
   service_sid = twilio_chat_service.service.sid
-  identity    = "%s"
+  identity    = "%[2]s"
 }
 
 resource "twilio_chat_channel_member" "member" {
@@ -179,35 +219,64 @@ resource "twilio_chat_channel_member" "member" {
   channel_sid = twilio_chat_channel.channel.sid
   identity    = twilio_chat_user.user.identity
 }
-`, friendlyName, friendlyName, identity)
+`, friendlyName, identity)
 }
 
 func testAccTwilioChatChannelMember_attributes(friendlyName string, identity string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
 }
 
 resource "twilio_chat_channel" "channel" {
   service_sid   = twilio_chat_service.service.sid
-  friendly_name = "%s"
+  friendly_name = "%[1]s"
   type          = "private"
 }
 
 resource "twilio_chat_user" "user" {
   service_sid = twilio_chat_service.service.sid
-  identity    = "%s"
+  identity    = "%[2]s"
 }
 
 resource "twilio_chat_channel_member" "member" {
   service_sid = twilio_chat_service.service.sid
   channel_sid = twilio_chat_channel.channel.sid
   identity    = twilio_chat_user.user.identity
-  attributes  = <<EOF
-{
+  attributes  = jsonencode({
 	"test": "test"
+})
 }
-EOF
+`, friendlyName, identity)
 }
-`, friendlyName, friendlyName, identity)
+
+func testAccTwilioChatChannelMember_invalidServiceSid() string {
+	return `
+resource "twilio_chat_channel_member" "member" {
+  service_sid = "service_sid"
+  channel_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  identity    = "invalid_service_sid"
+}
+`
+}
+
+func testAccTwilioChatChannelMember_invalidChannelSid() string {
+	return `
+resource "twilio_chat_channel_member" "member" {
+  service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  channel_sid = "channel_sid"
+  identity    = "invalid_channel_sid"
+}
+`
+}
+
+func testAccTwilioChatChannelMember_invalidRoleSid() string {
+	return `
+resource "twilio_chat_channel_member" "member" {
+  service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  channel_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  identity    = "invalid_role_sid"
+  role_sid    = "role_sid"
+}
+`
 }
