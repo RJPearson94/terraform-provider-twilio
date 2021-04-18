@@ -243,9 +243,9 @@ resource "twilio_chat_channel_member" "member" {
   service_sid = twilio_chat_service.service.sid
   channel_sid = twilio_chat_channel.channel.sid
   identity    = twilio_chat_user.user.identity
-  attributes  = jsonencode({
-	"test": "test"
-})
+  attributes = jsonencode({
+    "test" : "test"
+  })
 }
 `, friendlyName, identity)
 }

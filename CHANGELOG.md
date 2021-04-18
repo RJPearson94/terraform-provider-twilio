@@ -2,7 +2,60 @@
 
 NOTES
 
-- The deprecated `sid` argument on the `twilio_sip_trunking_phone_number` resources has now been removed and the `phone_number_sid` argument has now become mandatory.
+This change is a major overhaul of the Terraform provider and contains several breaking changes.
+
+The provider schema now includes validation on several arguments (see documentation for any new limits/ constraints), the introduction of argument defaults. These default values were included to allow me to address an issue when the provider was no clearing down an argument value in Twilio when it was removed from the Terraform configuration. This is a change in the behaviour of the provider **breaking change**
+
+Due to the number of changes it is recommended you run a Terraform plan and make any necessary configuration changes to your Terraform configuration before applying the changes when upgrading the provider version. Once this has been completed all the new defaults should be applied and you can any Terraform configuration changes
+
+- The deprecated `sid` argument on the `twilio_sip_trunking_phone_number` resources has now been removed and the `phone_number_sid` argument has now become mandatory **breaking change**
+
+Defaults have been applied to the following resources:
+
+- twilio_account_address - emergency_enabled
+- twilio_account_sub_account - status
+- twilio_autopilot_assistant - log_queries
+- twilio_autopilot_task_sample - source_channel
+- twilio_autopilot_webhook - webhook_method
+- twilio_chat_channel - attributes, type
+- twilio_chat_channel_member - attributes
+- twilio_chat_channel_studio_webhook - retry_count
+- twilio_chat_channel_trigger_webhook - retry_count, method
+- twilio_chat_channel_webhook - retry_count, method
+- twilio_chat_service - post_webhook_retry_count, pre_webhook_retry_count, webhook_method, reachability_enabled, read_status_enabled, typing_indicator_timeout, limits.channel_members, limits.user_channels, notifications.log_enabled, new_message.enabled, new_message.badge_count_enabled, added_to_channel.enabled, invited_to_channel.enabled, removed_from_channel.enabled
+- twilio_chat_user - attributes
+- twilio_conversations_conversation - attributes, state
+- twilio_conversations_conversation_trigger_webhook - method
+- twilio_conversations_conversation_webhook - method
+- twilio_conversations_push_credential_apn - sandbox
+- twilio_conversations_service_configuration - reachability_enabled
+- twilio_conversations_service_notification - log_enabled, new_message.enabled, new_message.badge_count_enabled, added_to_conversation.enabled, removed_from_conversation.enabled
+- twilio_conversations_user - attributes
+- twilio_flex_flow - enabled, retry_count, janitor_enabled, long_lived
+- twilio_messaging_service - area_code_geomatch, fallback_method, fallback_to_long_code, inbound_method, mms_converter, smart_encoding, sticky_sender, validity_period
+- twilio_phone_number - status_callback_method, messaging.method, messaging.fallback_method, voice.method, voice.fallback_method, voice.caller_id_lookup, fax.method, fax.fallback_method
+- twilio_proxy_service - default_ttl, geo_match_level, number_selection_behavior
+- twilio_serverless_service - include_credentials, ui_editable
+- twilio_sip_ip_address - cidr_length_prefix
+- twilio_sip_domain - sip_registration, secure, emergency_calling_enabled, voice_method, voice_fallback_method, voice_status_callback_method
+- twilio_sip_trunking_trunk - cnam_lookup_enabled, recording.mode, recording.trim, secure and transfer_mode
+- twilio_taskrouter_workspace - template, prioritize_queue_order
+- twilio_taskrouter_workflow - task_reservation_timeout
+- twilio_taskrouter_worker - attributes
+- twilio_taskrouter_task queue - max_reserved_workers, task_order, target workers
+- twilio_taskrouter_task channel - channel_optimized_routing
+- twilio_video_composition_hook - status_callback_method, resolution, trim, format and enabled
+- twilio_voice_queue - max size
+
+For the new default values, please see the relevant documentation.
+
+FIXES
+
+- The TaskRouter workspace EventsFilter will now be null when an empty string is returned from the API on the `twilio_taskrouter_workspace` resource and data source. Thanks to @bobtfish for the fix
+- Remove `event_callback_url` attribute from`taskrouter_task_queue` resource and data source as the value is not returned from the API **breaking change**
+- Remove `chat_service_sid` attribute from`twilio_proxy_service` resource and data source as the value is not returned from the API **breaking change**
+- The Integration block on the `twilio_flex_flow` resource is now mandatory **breaking change**
+- A bug in the voice block in the `twilio_sip_domain` resource which caused the urls and methods to not be updated has been fixed. This bug was caused by the code referencing old argument names. The argument names have been updated and the appropriate test coverage has been added.
 
 FEATURES
 
