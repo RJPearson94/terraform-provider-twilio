@@ -30,6 +30,7 @@ func Provider() *schema.Provider {
 			"auth_token": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Sensitive:   true,
 				DefaultFunc: schema.EnvDefaultFunc("TWILIO_AUTH_TOKEN", nil),
 				Description: "The Auth Token which should be used.",
 			},
@@ -42,6 +43,7 @@ func Provider() *schema.Provider {
 			"api_secret": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Sensitive:   true,
 				DefaultFunc: schema.EnvDefaultFunc("TWILIO_API_SECRET", nil),
 				Description: "The API Key secret which should be used.",
 			},
