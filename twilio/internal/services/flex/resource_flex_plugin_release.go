@@ -51,9 +51,10 @@ func resourceFlexPluginRelease() *schema.Resource {
 				Computed: true,
 			},
 			"configuration_sid": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: utils.FlexPluginConfigurationSidValidation(),
 			},
 			"date_created": {
 				Type:     schema.TypeString,

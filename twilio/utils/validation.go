@@ -121,8 +121,24 @@ func ConversationUserSidValidation() schema.SchemaValidateFunc {
 
 // Flex
 
-func FlowSidValidation() schema.SchemaValidateFunc {
-	return validation.StringMatch(regexp.MustCompile("^FW[0-9a-fA-F]{32}$"), "")
+func FlexFlowSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^FO[0-9a-fA-F]{32}$"), "")
+}
+
+func FlexPluginSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^FP[0-9a-fA-F]{32}$"), "")
+}
+
+func FlexPluginReleaseSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^FK[0-9a-fA-F]{32}$"), "")
+}
+
+func FlexPluginConfigurationSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^FJ[0-9a-fA-F]{32}$"), "")
+}
+
+func FlexPluginVersionSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^FV[0-9a-fA-F]{32}$"), "")
 }
 
 // Identity
@@ -133,12 +149,12 @@ func IdentitySidValidation() schema.SchemaValidateFunc {
 
 // Messaging
 
-func MessagingServiceSidValidation() schema.SchemaValidateFunc {
-	return validation.StringMatch(regexp.MustCompile("^MG[0-9a-fA-F]{32}$"), "")
-}
-
 func MessagingAlphaSenderSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^AI[0-9a-fA-F]{32}$"), "")
+}
+
+func MessagingServiceSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^MG[0-9a-fA-F]{32}$"), "")
 }
 
 // Phone Number

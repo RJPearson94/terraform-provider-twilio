@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -68,6 +69,19 @@ func TestAccDataSourceTwilioFlexPluginConfiguration_withPlugins(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioFlexPluginConfiguration_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioFlexPluginConfiguration_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^FJ\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioFlexPluginConfiguration_basic(name string) string {
 	return fmt.Sprintf(`
 resource "twilio_flex_plugin_configuration" "plugin_configuration" {
@@ -83,13 +97,13 @@ data "twilio_flex_plugin_configuration" "plugin_configuration" {
 func testAccDataSourceTwilioFlexPluginConfiguration_withPlugins(name string) string {
 	return fmt.Sprintf(`
 resource "twilio_flex_plugin" "plugin" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
   version     = "1.0.0"
   plugin_url  = "https://example.com"
 }
 
 resource "twilio_flex_plugin_configuration" "plugin_configuration" {
-  name = "%s"
+  name = "%[1]s"
   plugins {
     plugin_version_sid = twilio_flex_plugin.plugin.latest_version_sid
   }
@@ -98,5 +112,13 @@ resource "twilio_flex_plugin_configuration" "plugin_configuration" {
 data "twilio_flex_plugin_configuration" "plugin_configuration" {
   sid = twilio_flex_plugin_configuration.plugin_configuration.sid
 }
-`, name, name)
+`, name)
+}
+
+func testAccDataSourceTwilioFlexPluginConfiguration_invalidSid() string {
+	return `
+data "twilio_flex_plugin_configuration" "plugin_configuration" {
+  sid = "sid"
+}
+`
 }

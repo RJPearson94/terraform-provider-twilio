@@ -17,8 +17,9 @@ func dataSourceFlexPluginConfiguration() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: utils.FlexPluginConfigurationSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,

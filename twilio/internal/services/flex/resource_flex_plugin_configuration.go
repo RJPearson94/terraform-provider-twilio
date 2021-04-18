@@ -13,6 +13,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/flex/v1/plugin_configurations"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceFlexPluginConfiguration() *schema.Resource {
@@ -56,9 +57,10 @@ func resourceFlexPluginConfiguration() *schema.Resource {
 				Computed: true,
 			},
 			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"description": {
 				Type:     schema.TypeString,
@@ -68,14 +70,14 @@ func resourceFlexPluginConfiguration() *schema.Resource {
 			"plugins": {
 				Type:     schema.TypeList,
 				Optional: true,
-				Computed: true,
 				ForceNew: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"plugin_version_sid": {
-							Type:     schema.TypeString,
-							Required: true,
-							ForceNew: true,
+							Type:         schema.TypeString,
+							Required:     true,
+							ForceNew:     true,
+							ValidateFunc: utils.FlexPluginVersionSidValidation(),
 						},
 						"plugin_sid": {
 							Type:     schema.TypeString,

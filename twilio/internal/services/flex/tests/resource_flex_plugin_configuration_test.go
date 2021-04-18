@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -46,8 +47,24 @@ func TestAccTwilioFlexPluginConfiguration_basic(t *testing.T) {
 	})
 }
 
+func TestAccTwilioFlexPluginConfiguration_blankName(t *testing.T) {
+	name := ""
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioFlexPluginConfiguration_basic(name),
+				ExpectError: regexp.MustCompile(`(?s)expected \"name\" to not be an empty string, got `),
+			},
+		},
+	})
+}
+
 func TestAccTwilioFlexPluginConfiguration_withPlugins(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.plugin_configuration", pluginConfigurationResourceName)
+	pluginStateResourceName := "twilio_flex_plugin.plugin"
 
 	name := acctest.RandString(10)
 
@@ -63,19 +80,32 @@ func TestAccTwilioFlexPluginConfiguration_withPlugins(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "name", name),
 					resource.TestCheckResourceAttr(stateResourceName, "description", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "plugins.#", "1"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "plugins.0.plugin_version_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "plugins.0.plugin_sid"),
-					resource.TestCheckResourceAttr(stateResourceName, "plugins.0.plugin_url", "https://example.com"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "plugins.0.plugin_version_sid", pluginStateResourceName, "latest_version_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "plugins.0.plugin_sid", pluginStateResourceName, "sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "plugins.0.plugin_url", pluginStateResourceName, "plugin_url"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "plugins.0.phase"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "plugins.0.private"),
-					resource.TestCheckResourceAttr(stateResourceName, "plugins.0.unique_name", name),
-					resource.TestCheckResourceAttr(stateResourceName, "plugins.0.version", "1.0.0"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "plugins.0.private", pluginStateResourceName, "private"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "plugins.0.unique_name", pluginStateResourceName, "unique_name"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "plugins.0.version", pluginStateResourceName, "version"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "plugins.0.date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "plugins.0.url"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioFlexPluginConfiguration_invalidPluginVersionSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioFlexPluginConfiguration_withInvalidPluginVersionSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of plugins.0.plugin_version_sid to match regular expression "\^FV\[0-9a-fA-F\]\{32\}\$", got plugin_version_sid`),
 			},
 		},
 	})
@@ -140,16 +170,27 @@ resource "twilio_flex_plugin_configuration" "plugin_configuration" {
 func testAccTwilioFlexPluginConfiguration_withPlugins(name string) string {
 	return fmt.Sprintf(`
 resource "twilio_flex_plugin" "plugin" {
-  unique_name = "%s"
+  unique_name = "%[1]s"
   version     = "1.0.0"
   plugin_url  = "https://example.com"
 }
 
 resource "twilio_flex_plugin_configuration" "plugin_configuration" {
-  name = "%s"
+  name = "%[1]s"
   plugins {
     plugin_version_sid = twilio_flex_plugin.plugin.latest_version_sid
   }
 }
-`, name, name)
+`, name)
+}
+
+func testAccTwilioFlexPluginConfiguration_withInvalidPluginVersionSid() string {
+	return `
+resource "twilio_flex_plugin_configuration" "plugin_configuration" {
+  name = "invalid_plugin_version_sid"
+  plugins {
+    plugin_version_sid = "plugin_version_sid"
+  }
+}
+`
 }

@@ -31,12 +31,12 @@ The following arguments are supported:
 - `channel_type` - (Mandatory) The type of channel which is integrated with the flow. Valid values are `web`, `sms`, `facebook`, `whatsapp`, `line` or `custom`
 - `chat_service_sid` - (Mandatory) The chat service SID to associate with the flow
 - `friendly_name` - (Mandatory) The friendly name of the flow
+- `integration` - (Mandatory) A `integration` block as documented below
 - `contact_identity` - (Optional) The contact identity for the channel
-- `enabled` - (Optional) Whether the flow is active
+- `enabled` - (Optional) Whether the flow is active. The default value is `false`
 - `integration_type` - (Optional) The type of integration with the flow. Valid values are `studio`, `external` or `task`
-- `janitor_enabled` - (Optional) Clean up chat channels and proxy sessions when the task is completed
-- `long_lived` - (Optional) Whether to reuse the same channel for any future interactions with the customer
-- `integration` - (Optional) A `integration` block as documented below
+- `janitor_enabled` - (Optional) Clean up chat channels and proxy sessions when the task is completed. The default value is `false`
+- `long_lived` - (Optional) Whether to reuse the same channel for any future interactions with the customer. The default value is `false`
 
 ---
 
@@ -46,7 +46,7 @@ An `integration` block supports the following:
 - `creation_on_message` - (Optional) Whether to create a task when the first message arrives
 - `flow_sid` - (Optional) The SID of the flow
 - `priority` - (Optional) The priority assigned to any new task that is received
-- `retry_count` - (Optional) The number of times a webhook request should be retried if the initial request fails
+- `retry_count` - (Optional) The number of times a webhook request should be retried if the initial request fails. The value must be between `0` and `3` (inclusive)
 - `timeout` - (Optional) The timeout set for any new task that is received
 - `url` - (Optional) The webhook URL
 - `workflow_sid` - (Optional) The SID of the workflow to send tasks to

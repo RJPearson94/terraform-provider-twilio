@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/acceptance"
@@ -33,6 +34,19 @@ func TestAccDataSourceTwilioFlexPluginRelease_basic(t *testing.T) {
 	})
 }
 
+func TestAccDataSourceTwilioFlexPluginRelease_invalidSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceTwilioFlexPluginRelease_invalidSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of sid to match regular expression "\^FK\[0-9a-fA-F\]\{32\}\$", got sid`),
+			},
+		},
+	})
+}
+
 func testAccDataSourceTwilioFlexPluginRelease_basic(name string) string {
 	return fmt.Sprintf(`
 resource "twilio_flex_plugin_configuration" "plugin_configuration" {
@@ -47,4 +61,12 @@ data "twilio_flex_plugin_release" "plugin_release" {
   sid = twilio_flex_plugin_release.plugin_release.sid
 }
 `, name)
+}
+
+func testAccDataSourceTwilioFlexPluginRelease_invalidSid() string {
+	return `
+data "twilio_flex_plugin_release" "plugin_release" {
+  sid = "sid"
+}
+`
 }

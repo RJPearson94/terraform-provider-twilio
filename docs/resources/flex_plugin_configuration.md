@@ -52,7 +52,7 @@ The following arguments are supported:
 
 A `plugin` block supports the following:
 
-- `plugin_version_sid` - (Optional) The SID of the plugin version to associate with the configuration. Changing this forces a new resource to be created
+- `plugin_version_sid` - (Mandatory) The SID of the plugin version to associate with the configuration. Changing this forces a new resource to be created
 
 ## Attributes Reference
 

@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -107,6 +108,23 @@ func TestAccTwilioFlexPlugin_update(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioFlexPlugin_blankUniqueName(t *testing.T) {
+	uniqueName := ""
+	version := "1.0.0"
+	pluginURL := "https://example.com"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioFlexPlugin_basic(uniqueName, version, pluginURL),
+				ExpectError: regexp.MustCompile(`(?s)expected \"unique_name\" to not be an empty string, got `),
 			},
 		},
 	})

@@ -74,7 +74,7 @@ func resourceConversationsConversationStudioWebhook() *schema.Resource {
 			"flow_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: utils.FlowSidValidation(),
+				ValidateFunc: utils.StudioFlowSidValidation(),
 			},
 			"replay_after": {
 				Type:     schema.TypeInt,

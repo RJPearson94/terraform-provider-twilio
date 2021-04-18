@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -16,6 +17,7 @@ var pluginReleaseResourceName = "twilio_flex_plugin_release"
 
 func TestAccTwilioFlexPluginRelease_basic(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.plugin_release", pluginReleaseResourceName)
+	pluginConfigurationStateResourceName := "twilio_flex_plugin_configuration.plugin_configuration"
 
 	name := acctest.RandString(10)
 
@@ -29,7 +31,7 @@ func TestAccTwilioFlexPluginRelease_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioFlexPluginReleaseExists(stateResourceName),
 					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
-					resource.TestCheckResourceAttrSet(stateResourceName, "configuration_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "configuration_sid", pluginConfigurationStateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
 				),
@@ -39,6 +41,19 @@ func TestAccTwilioFlexPluginRelease_basic(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: testAccTwilioFlexPluginReleaseImportStateIdFunc(stateResourceName),
 				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+func TestAccTwilioFlexPluginRelease_invalidConfigurationSid(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioFlexPluginRelease_invalidConfigurationSid(),
+				ExpectError: regexp.MustCompile(`(?s)expected value of configuration_sid to match regular expression "\^FJ\[0-9a-fA-F\]\{32\}\$", got configuration_sid`),
 			},
 		},
 	})
@@ -102,4 +117,12 @@ resource "twilio_flex_plugin_release" "plugin_release" {
   configuration_sid = twilio_flex_plugin_configuration.plugin_configuration.sid
 }
 `, name)
+}
+
+func testAccTwilioFlexPluginRelease_invalidConfigurationSid() string {
+	return `
+resource "twilio_flex_plugin_release" "plugin_release" {
+  configuration_sid = "configuration_sid"
+}
+`
 }

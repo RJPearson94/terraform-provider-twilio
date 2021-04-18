@@ -17,6 +17,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceFlexPlugin() *schema.Resource {
@@ -58,9 +59,10 @@ func resourceFlexPlugin() *schema.Resource {
 				Computed: true,
 			},
 			"unique_name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
 			},
 			"friendly_name": {
 				Type:     schema.TypeString,
@@ -84,13 +86,13 @@ func resourceFlexPlugin() *schema.Resource {
 				Required: true,
 			},
 			"plugin_url": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
 			},
 			"private": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
 			},
 			"version_archived": {
 				Type:     schema.TypeBool,
@@ -132,8 +134,8 @@ func resourceFlexPluginCreate(ctx context.Context, d *schema.ResourceData, meta 
 
 	createInput := &plugins.CreatePluginInput{
 		UniqueName:   d.Get("unique_name").(string),
-		Description:  utils.OptionalString(d, "description"),
-		FriendlyName: utils.OptionalString(d, "friendly_name"),
+		Description:  utils.OptionalStringWithEmptyStringDefault(d, "description"),
+		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 	}
 
 	createResult, err := client.Plugins.CreateWithContext(ctx, createInput)
@@ -208,8 +210,8 @@ func resourceFlexPluginUpdate(ctx context.Context, d *schema.ResourceData, meta 
 
 	if d.HasChanges("description", "friendly_name") {
 		updateInput := &plugin.UpdatePluginInput{
-			Description:  utils.OptionalString(d, "description"),
-			FriendlyName: utils.OptionalString(d, "friendly_name"),
+			Description:  utils.OptionalStringWithEmptyStringDefault(d, "description"),
+			FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
 		}
 
 		updateResp, err := client.Plugin(d.Id()).UpdateWithContext(ctx, updateInput)
@@ -238,7 +240,7 @@ func resourceFlexPluginDelete(ctx context.Context, d *schema.ResourceData, meta 
 
 func createPluginVersion(ctx context.Context, d *schema.ResourceData, client *flex.Flex) diag.Diagnostics {
 	createInput := &versions.CreateVersionInput{
-		Changelog: utils.OptionalString(d, "changelog"),
+		Changelog: utils.OptionalStringWithEmptyStringDefault(d, "changelog"),
 		PluginURL: d.Get("plugin_url").(string),
 		Private:   utils.OptionalBool(d, "private"),
 		Version:   d.Get("version").(string),
