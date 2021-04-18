@@ -1,8 +1,8 @@
-## v0.9.0 (unreleased)
+## v0.9.0 (2021-04-18)
 
 NOTES
 
-This change is a major overhaul of the Terraform provider and contains several breaking changes.
+**This change is a major overhaul of the Terraform provider and contains several breaking changes.**
 
 The provider schema now includes validation on several arguments (see documentation for any new limits/ constraints), the introduction of argument defaults. These default values were included to allow me to address an issue when the provider was not clearing down an argument value in Twilio when it was removed from the Terraform configuration. This is a change in the behaviour of the provider **breaking change**
 

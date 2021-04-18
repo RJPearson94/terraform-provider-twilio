@@ -4,8 +4,6 @@ This example provisions the following resources:
 
 - Composition Hook
 
-**NOTE:** v0.9.0 of the provider has not be released yet.
-
 ## Requirements
 
 | Name      | Version  |
