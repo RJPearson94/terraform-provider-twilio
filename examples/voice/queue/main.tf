@@ -1,4 +1,4 @@
 resource "twilio_voice_queue" "queue" {
-  account_sid   = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  account_sid   = var.account_sid
   friendly_name = "Test Queue"
 }
