@@ -4,7 +4,7 @@ NOTES
 
 This change is a major overhaul of the Terraform provider and contains several breaking changes.
 
-The provider schema now includes validation on several arguments (see documentation for any new limits/ constraints), the introduction of argument defaults. These default values were included to allow me to address an issue when the provider was no clearing down an argument value in Twilio when it was removed from the Terraform configuration. This is a change in the behaviour of the provider **breaking change**
+The provider schema now includes validation on several arguments (see documentation for any new limits/ constraints), the introduction of argument defaults. These default values were included to allow me to address an issue when the provider was not clearing down an argument value in Twilio when it was removed from the Terraform configuration. This is a change in the behaviour of the provider **breaking change**
 
 Due to the number of changes it is recommended you run a Terraform plan and make any necessary configuration changes to your Terraform configuration before applying the changes when upgrading the provider version. Once this has been completed all the new defaults should be applied and you can any Terraform configuration changes
 
@@ -56,6 +56,7 @@ FIXES
 - Remove `chat_service_sid` attribute from`twilio_proxy_service` resource and data source as the value is not returned from the API **breaking change**
 - The Integration block on the `twilio_flex_flow` resource is now mandatory **breaking change**
 - A bug in the voice block in the `twilio_sip_domain` resource which caused the urls and methods to not be updated has been fixed. This bug was caused by the code referencing old argument names. The argument names have been updated and the appropriate test coverage has been added.
+- The following attributes: `password` (`twilio_sip_credential`), `secret` (`twilio_conversations_push_credential_fcm`), `private_key` (`twilio_conversations_push_credential_apn`), `auth_token` (`provider`) and `api_secret` (`provider`) have now been marked sensitive
 
 FEATURES
 
