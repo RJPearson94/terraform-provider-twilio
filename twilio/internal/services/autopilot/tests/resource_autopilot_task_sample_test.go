@@ -122,14 +122,13 @@ func TestAccTwilioAutopilotTaskSample_sourceChannel(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "source_channel", sourceChannel),
 				),
 			},
-			// Test is currently disabled as the Task Sample API is currently returning voice when an empty string is supplied on update
-			// {
-			// 	Config: testAccTwilioAutopilotTaskSample_basic(uniqueName, language, taggedText),
-			// 	Check: resource.ComposeTestCheckFunc(
-			// 		testAccCheckTwilioAutopilotTaskSampleExists(stateResourceName),
-			// 		resource.TestCheckResourceAttr(stateResourceName, "source_channel", ""),
-			// 	),
-			// },
+			{
+				Config: testAccTwilioAutopilotTaskSample_basic(uniqueName, language, taggedText),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioAutopilotTaskSampleExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "source_channel", "voice"),
+				),
+			},
 		},
 	})
 }

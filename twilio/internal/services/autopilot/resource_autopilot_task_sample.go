@@ -81,6 +81,7 @@ func resourceAutopilotTaskSample() *schema.Resource {
 			"source_channel": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "voice",
 				ValidateFunc: validation.StringInSlice([]string{
 					"voice",
 					"sms",
@@ -112,7 +113,7 @@ func resourceAutopilotTaskSampleCreate(ctx context.Context, d *schema.ResourceDa
 	createInput := &samples.CreateSampleInput{
 		Language:      d.Get("language").(string),
 		TaggedText:    d.Get("tagged_text").(string),
-		SourceChannel: utils.OptionalStringWithEmptyStringOnChange(d, "source_channel"),
+		SourceChannel: utils.OptionalString(d, "source_channel"),
 	}
 
 	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Samples.CreateWithContext(ctx, createInput)
@@ -159,7 +160,7 @@ func resourceAutopilotTaskSampleUpdate(ctx context.Context, d *schema.ResourceDa
 	updateInput := &sample.UpdateSampleInput{
 		Language:      utils.OptionalString(d, "language"),
 		TaggedText:    utils.OptionalString(d, "tagged_text"),
-		SourceChannel: utils.OptionalStringWithEmptyStringOnChange(d, "source_channel"),
+		SourceChannel: utils.OptionalString(d, "source_channel"),
 	}
 
 	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).Task(d.Get("task_sid").(string)).Sample(d.Id()).UpdateWithContext(ctx, updateInput)

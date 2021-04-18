@@ -57,8 +57,8 @@ func TestAccTwilioAutopilotAssistant_basic(t *testing.T) {
 
 func TestAccTwilioAutopilotAssistant_update(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.assistant", assistantResourceName)
-	unqiueName := ""
-	newUnqiueName := acctest.RandString(64)
+	uniqueName := ""
+	newUniqueName := acctest.RandString(64)
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -66,7 +66,7 @@ func TestAccTwilioAutopilotAssistant_update(t *testing.T) {
 		CheckDestroy:      testAccCheckTwilioAutopilotAssistantDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTwilioAutopilotAssistant_uniqueName(unqiueName),
+				Config: testAccTwilioAutopilotAssistant_uniqueName(uniqueName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioAutopilotAssistantExists(stateResourceName),
 					resource.TestCheckResourceAttrSet(stateResourceName, "unique_name"), // Twilio will generate the unique name if you don't supply a unique name
@@ -88,10 +88,10 @@ func TestAccTwilioAutopilotAssistant_update(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccTwilioAutopilotAssistant_uniqueName(newUnqiueName),
+				Config: testAccTwilioAutopilotAssistant_uniqueName(newUniqueName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckTwilioAutopilotAssistantExists(stateResourceName),
-					resource.TestCheckResourceAttr(stateResourceName, "unique_name", newUnqiueName),
+					resource.TestCheckResourceAttr(stateResourceName, "unique_name", newUniqueName),
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
