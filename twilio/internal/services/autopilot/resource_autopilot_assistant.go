@@ -137,11 +137,11 @@ func resourceAutopilotAssistantCreate(ctx context.Context, d *schema.ResourceDat
 	client := meta.(*common.TwilioClient).Autopilot
 
 	createInput := &assistants.CreateAssistantInput{
-		FriendlyName:   utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
-		UniqueName:     utils.OptionalStringWithEmptyStringDefault(d, "unique_name"),
+		FriendlyName:   utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
+		UniqueName:     utils.OptionalStringWithEmptyStringOnChange(d, "unique_name"),
 		LogQueries:     utils.OptionalBool(d, "log_queries"),
-		CallbackURL:    utils.OptionalStringWithEmptyStringDefault(d, "callback_url"),
-		CallbackEvents: utils.OptionalSeperatedStringWithEmptyStringDefault(d, "callback_events", callbackEventsSeperator),
+		CallbackURL:    utils.OptionalStringWithEmptyStringOnChange(d, "callback_url"),
+		CallbackEvents: utils.OptionalSeperatedStringWithEmptyStringOnChange(d, "callback_events", callbackEventsSeperator),
 		Defaults:       utils.OptionalJSONString(d, "defaults"),
 		StyleSheet:     utils.OptionalJSONString(d, "stylesheet"),
 	}
@@ -220,11 +220,11 @@ func resourceAutopilotAssistantUpdate(ctx context.Context, d *schema.ResourceDat
 	client := meta.(*common.TwilioClient).Autopilot
 
 	updateInput := &assistant.UpdateAssistantInput{
-		FriendlyName:     utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		FriendlyName:     utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		UniqueName:       utils.OptionalString(d, "unique_name"),
 		LogQueries:       utils.OptionalBool(d, "log_queries"),
-		CallbackURL:      utils.OptionalStringWithEmptyStringDefault(d, "callback_url"),
-		CallbackEvents:   utils.OptionalSeperatedStringWithEmptyStringDefault(d, "callback_events", callbackEventsSeperator),
+		CallbackURL:      utils.OptionalStringWithEmptyStringOnChange(d, "callback_url"),
+		CallbackEvents:   utils.OptionalSeperatedStringWithEmptyStringOnChange(d, "callback_events", callbackEventsSeperator),
 		DevelopmentStage: utils.OptionalString(d, "development_stage"),
 		Defaults:         utils.OptionalJSONString(d, "defaults"),
 		StyleSheet:       utils.OptionalJSONString(d, "stylesheet"),

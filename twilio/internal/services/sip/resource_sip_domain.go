@@ -175,23 +175,23 @@ func resourceSIPDomainCreate(ctx context.Context, d *schema.ResourceData, meta i
 
 	createInput := &domains.CreateDomainInput{
 		DomainName:      d.Get("domain_name").(string),
-		ByocTrunkSid:    utils.OptionalStringWithEmptyStringDefault(d, "byoc_trunk_sid"),
-		FriendlyName:    utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		ByocTrunkSid:    utils.OptionalStringWithEmptyStringOnChange(d, "byoc_trunk_sid"),
+		FriendlyName:    utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		Secure:          utils.OptionalBool(d, "secure"),
 		SipRegistration: utils.OptionalBool(d, "sip_registration"),
 	}
 
 	if _, ok := d.GetOk("voice"); ok {
 		createInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
-		createInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.fallback_url")
+		createInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.fallback_url")
 		createInput.VoiceStatusCallbackMethod = utils.OptionalString(d, "voice.0.status_callback_method")
-		createInput.VoiceStatusCallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.status_callback_url")
+		createInput.VoiceStatusCallbackURL = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.status_callback_url")
 		createInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
-		createInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.url")
+		createInput.VoiceURL = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.url")
 	}
 
 	if _, ok := d.GetOk("emergency"); ok {
-		createInput.EmergencyCallerSid = utils.OptionalStringWithEmptyStringDefault(d, "emergency.0.caller_sid")
+		createInput.EmergencyCallerSid = utils.OptionalStringWithEmptyStringOnChange(d, "emergency.0.caller_sid")
 		createInput.EmergencyCallingEnabled = utils.OptionalBool(d, "emergency.0.calling_enabled")
 	}
 
@@ -240,23 +240,23 @@ func resourceSIPDomainUpdate(ctx context.Context, d *schema.ResourceData, meta i
 
 	updateInput := &domain.UpdateDomainInput{
 		DomainName:      utils.OptionalString(d, "domain_name"),
-		ByocTrunkSid:    utils.OptionalStringWithEmptyStringDefault(d, "byoc_trunk_sid"),
-		FriendlyName:    utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		ByocTrunkSid:    utils.OptionalStringWithEmptyStringOnChange(d, "byoc_trunk_sid"),
+		FriendlyName:    utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		Secure:          utils.OptionalBool(d, "secure"),
 		SipRegistration: utils.OptionalBool(d, "sip_registration"),
 	}
 
 	if _, ok := d.GetOk("voice"); ok {
 		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
-		updateInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.fallback_url")
+		updateInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.fallback_url")
 		updateInput.VoiceStatusCallbackMethod = utils.OptionalString(d, "voice.0.status_callback_method")
-		updateInput.VoiceStatusCallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.status_callback_url")
+		updateInput.VoiceStatusCallbackURL = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.status_callback_url")
 		updateInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
-		updateInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.url")
+		updateInput.VoiceURL = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.url")
 	}
 
 	if _, ok := d.GetOk("emergency"); ok {
-		updateInput.EmergencyCallerSid = utils.OptionalStringWithEmptyStringDefault(d, "emergency.0.caller_sid")
+		updateInput.EmergencyCallerSid = utils.OptionalStringWithEmptyStringOnChange(d, "emergency.0.caller_sid")
 		updateInput.EmergencyCallingEnabled = utils.OptionalBool(d, "emergency.0.calling_enabled")
 	}
 

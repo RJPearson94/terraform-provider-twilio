@@ -13,7 +13,7 @@ func OptionalString(d *schema.ResourceData, key string) *string {
 	return nil
 }
 
-func OptionalStringWithEmptyStringDefault(d *schema.ResourceData, key string) *string {
+func OptionalStringWithEmptyStringOnChange(d *schema.ResourceData, key string) *string {
 	if v, ok := d.GetOk(key); ok {
 		return sdkUtils.String(v.(string))
 	}
@@ -29,7 +29,7 @@ func OptionalJSONString(d *schema.ResourceData, key string) *string {
 	return nil
 }
 
-func OptionalJSONStringWithEmptyStringDefault(d *schema.ResourceData, key string) *string {
+func OptionalJSONStringWithEmptyStringOnChange(d *schema.ResourceData, key string) *string {
 	if v, ok := d.GetOk(key); ok {
 		// error not handled as it is assumed stringIsJSON validation is applied to the resource
 		normalizedJSON, _ := structure.NormalizeJsonString(v.(string))
@@ -45,7 +45,7 @@ func OptionalSeperatedString(d *schema.ResourceData, key string, separator strin
 	return nil
 }
 
-func OptionalSeperatedStringWithEmptyStringDefault(d *schema.ResourceData, key string, separator string) *string {
+func OptionalSeperatedStringWithEmptyStringOnChange(d *schema.ResourceData, key string, separator string) *string {
 	if v, ok := d.GetOk(key); ok {
 		return sdkUtils.String(ConvertSliceToSeperatedString(v.([]interface{}), separator))
 	}
@@ -67,7 +67,7 @@ func OptionalInt(d *schema.ResourceData, key string) *int {
 	return nil
 }
 
-func OptionalIntWith0Default(d *schema.ResourceData, key string) *int {
+func OptionalIntWith0OnChange(d *schema.ResourceData, key string) *int {
 	if v, ok := d.GetOk(key); ok {
 		return sdkUtils.Int(v.(int))
 	}

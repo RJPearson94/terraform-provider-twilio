@@ -128,12 +128,12 @@ func resourceAccountAddressCreate(ctx context.Context, d *schema.ResourceData, m
 		City:             d.Get("city").(string),
 		CustomerName:     d.Get("customer_name").(string),
 		EmergencyEnabled: utils.OptionalBool(d, "emergency_enabled"),
-		FriendlyName:     utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		FriendlyName:     utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		IsoCountry:       d.Get("iso_country").(string),
 		PostalCode:       d.Get("postal_code").(string),
 		Region:           d.Get("region").(string),
 		Street:           d.Get("street").(string),
-		StreetSecondary:  utils.OptionalStringWithEmptyStringDefault(d, "street_secondary"),
+		StreetSecondary:  utils.OptionalStringWithEmptyStringOnChange(d, "street_secondary"),
 	}
 
 	createResult, err := client.Account(d.Get("account_sid").(string)).Addresses.CreateWithContext(ctx, createInput)
@@ -187,11 +187,11 @@ func resourceAccountAddressUpdate(ctx context.Context, d *schema.ResourceData, m
 		City:             utils.OptionalString(d, "city"),
 		CustomerName:     utils.OptionalString(d, "customer_name"),
 		EmergencyEnabled: utils.OptionalBool(d, "emergency_enabled"),
-		FriendlyName:     utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		FriendlyName:     utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		PostalCode:       utils.OptionalString(d, "postal_code"),
 		Region:           utils.OptionalString(d, "region"),
 		Street:           utils.OptionalString(d, "street"),
-		StreetSecondary:  utils.OptionalStringWithEmptyStringDefault(d, "street_secondary"),
+		StreetSecondary:  utils.OptionalStringWithEmptyStringOnChange(d, "street_secondary"),
 	}
 
 	updateResp, err := client.Account(d.Get("account_sid").(string)).Address(d.Id()).UpdateWithContext(ctx, updateInput)

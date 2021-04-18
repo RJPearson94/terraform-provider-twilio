@@ -142,8 +142,8 @@ func resourceConversationsConversationCreate(ctx context.Context, d *schema.Reso
 
 	createInput := &conversations.CreateConversationInput{
 		Attributes:          utils.OptionalJSONString(d, "attributes"),
-		UniqueName:          utils.OptionalStringWithEmptyStringDefault(d, "unique_name"),
-		FriendlyName:        utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		UniqueName:          utils.OptionalStringWithEmptyStringOnChange(d, "unique_name"),
+		FriendlyName:        utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		MessagingServiceSid: utils.OptionalString(d, "messaging_service_sid"),
 		State:               utils.OptionalString(d, "state"),
 	}
@@ -201,8 +201,8 @@ func resourceConversationsConversationUpdate(ctx context.Context, d *schema.Reso
 
 	updateInput := &conversation.UpdateConversationInput{
 		Attributes:          utils.OptionalJSONString(d, "attributes"),
-		UniqueName:          utils.OptionalStringWithEmptyStringDefault(d, "unique_name"),
-		FriendlyName:        utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		UniqueName:          utils.OptionalStringWithEmptyStringOnChange(d, "unique_name"),
+		FriendlyName:        utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		MessagingServiceSid: utils.OptionalString(d, "messaging_service_sid"),
 		State:               utils.OptionalString(d, "state"),
 	}

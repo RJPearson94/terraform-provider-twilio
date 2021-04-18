@@ -157,9 +157,9 @@ func resourceSIPTrunkingOriginationURLUpdate(ctx context.Context, d *schema.Reso
 	updateInput := &origination_url.UpdateOriginationURLInput{
 		Enabled:      utils.OptionalBool(d, "enabled"),
 		FriendlyName: utils.OptionalString(d, "friendly_name"),
-		Priority:     utils.OptionalIntWith0Default(d, "priority"),
+		Priority:     utils.OptionalIntWith0OnChange(d, "priority"),
 		SipURL:       utils.OptionalString(d, "sip_url"),
-		Weight:       utils.OptionalIntWith0Default(d, "weight"),
+		Weight:       utils.OptionalIntWith0OnChange(d, "weight"),
 	}
 
 	updateResult, err := client.Trunk(d.Get("trunk_sid").(string)).OriginationURL(d.Id()).UpdateWithContext(ctx, updateInput)

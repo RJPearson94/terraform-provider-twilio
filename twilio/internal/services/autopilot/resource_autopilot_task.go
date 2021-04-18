@@ -108,7 +108,7 @@ func resourceAutopilotTaskCreate(ctx context.Context, d *schema.ResourceData, me
 
 	createInput := &tasks.CreateTaskInput{
 		UniqueName:   d.Get("unique_name").(string),
-		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		ActionsURL:   utils.OptionalString(d, "actions_url"),
 		Actions:      utils.OptionalJSONString(d, "actions"),
 	}
@@ -167,7 +167,7 @@ func resourceAutopilotTaskUpdate(ctx context.Context, d *schema.ResourceData, me
 
 	updateInput := &task.UpdateTaskInput{
 		UniqueName:   utils.OptionalString(d, "unique_name"),
-		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 	}
 
 	if d.HasChange("actions") {

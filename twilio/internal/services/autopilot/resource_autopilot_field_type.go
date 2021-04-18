@@ -93,7 +93,7 @@ func resourceAutopilotFieldTypeCreate(ctx context.Context, d *schema.ResourceDat
 
 	createInput := &field_types.CreateFieldTypeInput{
 		UniqueName:   d.Get("unique_name").(string),
-		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 	}
 
 	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).FieldTypes.CreateWithContext(ctx, createInput)
@@ -137,7 +137,7 @@ func resourceAutopilotFieldTypeUpdate(ctx context.Context, d *schema.ResourceDat
 
 	updateInput := &field_type.UpdateFieldTypeInput{
 		UniqueName:   utils.OptionalString(d, "unique_name"),
-		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 	}
 
 	updateResp, err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Id()).UpdateWithContext(ctx, updateInput)

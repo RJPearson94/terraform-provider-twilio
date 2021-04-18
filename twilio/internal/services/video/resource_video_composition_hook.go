@@ -147,10 +147,10 @@ func resourceVideoCompositionHookCreate(ctx context.Context, d *schema.ResourceD
 		Enabled:              utils.OptionalBool(d, "enabled"),
 		Format:               utils.OptionalString(d, "format"),
 		Resolution:           utils.OptionalString(d, "resolution"),
-		StatusCallback:       utils.OptionalStringWithEmptyStringDefault(d, "status_callback_url"),
+		StatusCallback:       utils.OptionalStringWithEmptyStringOnChange(d, "status_callback_url"),
 		StatusCallbackMethod: utils.OptionalString(d, "status_callback_method"),
 		Trim:                 utils.OptionalBool(d, "trim"),
-		VideoLayout:          utils.OptionalStringWithEmptyStringDefault(d, "video_layout"),
+		VideoLayout:          utils.OptionalStringWithEmptyStringOnChange(d, "video_layout"),
 	}
 
 	createResult, err := client.CompositionHooks.CreateWithContext(ctx, createInput)
@@ -211,10 +211,10 @@ func resourceVideoCompositionHookUpdate(ctx context.Context, d *schema.ResourceD
 		Enabled:              utils.OptionalBool(d, "enabled"),
 		Format:               utils.OptionalString(d, "format"),
 		Resolution:           utils.OptionalString(d, "resolution"),
-		StatusCallback:       utils.OptionalStringWithEmptyStringDefault(d, "status_callback_url"),
+		StatusCallback:       utils.OptionalStringWithEmptyStringOnChange(d, "status_callback_url"),
 		StatusCallbackMethod: utils.OptionalString(d, "status_callback_method"),
 		Trim:                 utils.OptionalBool(d, "trim"),
-		VideoLayout:          utils.OptionalStringWithEmptyStringDefault(d, "video_layout"),
+		VideoLayout:          utils.OptionalStringWithEmptyStringOnChange(d, "video_layout"),
 	}
 
 	updateResp, err := client.CompositionHook(d.Id()).UpdateWithContext(ctx, updateInput)

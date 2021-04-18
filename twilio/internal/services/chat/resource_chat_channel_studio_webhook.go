@@ -109,7 +109,7 @@ func resourceChatChannelStudioWebhookCreate(ctx context.Context, d *schema.Resou
 		Type: "studio",
 		Configuration: &webhooks.CreateChannelWebhookConfigurationInput{
 			FlowSid:    utils.OptionalString(d, "flow_sid"),
-			RetryCount: utils.OptionalIntWith0Default(d, "retry_count"),
+			RetryCount: utils.OptionalIntWith0OnChange(d, "retry_count"),
 		},
 	}
 
@@ -161,7 +161,7 @@ func resourceChatChannelStudioWebhookUpdate(ctx context.Context, d *schema.Resou
 	updateInput := &webhook.UpdateChannelWebhookInput{
 		Configuration: &webhook.UpdateChannelWebhookConfigurationInput{
 			FlowSid:    utils.OptionalString(d, "flow_sid"),
-			RetryCount: utils.OptionalIntWith0Default(d, "retry_count"),
+			RetryCount: utils.OptionalIntWith0OnChange(d, "retry_count"),
 		},
 	}
 

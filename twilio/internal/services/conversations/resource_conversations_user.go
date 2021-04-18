@@ -114,7 +114,7 @@ func resourceConversationsUserCreate(ctx context.Context, d *schema.ResourceData
 
 	createInput := &users.CreateUserInput{
 		Attributes:   utils.OptionalJSONString(d, "attributes"),
-		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		Identity:     d.Get("identity").(string),
 		RoleSid:      utils.OptionalString(d, "role_sid"),
 	}
@@ -165,7 +165,7 @@ func resourceConversationsUserUpdate(ctx context.Context, d *schema.ResourceData
 
 	updateInput := &user.UpdateUserInput{
 		Attributes:   utils.OptionalJSONString(d, "attributes"),
-		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		RoleSid:      utils.OptionalString(d, "role_sid"),
 	}
 

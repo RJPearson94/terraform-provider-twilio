@@ -318,44 +318,44 @@ func resourcePhoneNumberCreate(ctx context.Context, d *schema.ResourceData, meta
 	client := meta.(*common.TwilioClient).API
 
 	createInput := &incoming_phone_numbers.CreateIncomingPhoneNumberInput{
-		AddressSid:           utils.OptionalStringWithEmptyStringDefault(d, "address_sid"),
-		AreaCode:             utils.OptionalStringWithEmptyStringDefault(d, "area_code"),
-		BundleSid:            utils.OptionalStringWithEmptyStringDefault(d, "bundle_sid"),
-		EmergencyAddressSid:  utils.OptionalStringWithEmptyStringDefault(d, "emergency_address_sid"),
+		AddressSid:           utils.OptionalStringWithEmptyStringOnChange(d, "address_sid"),
+		AreaCode:             utils.OptionalStringWithEmptyStringOnChange(d, "area_code"),
+		BundleSid:            utils.OptionalStringWithEmptyStringOnChange(d, "bundle_sid"),
+		EmergencyAddressSid:  utils.OptionalStringWithEmptyStringOnChange(d, "emergency_address_sid"),
 		EmergencyStatus:      utils.OptionalString(d, "emergency_status"),
 		FriendlyName:         utils.OptionalString(d, "friendly_name"),
-		IdentitySid:          utils.OptionalStringWithEmptyStringDefault(d, "identity_sid"),
+		IdentitySid:          utils.OptionalStringWithEmptyStringOnChange(d, "identity_sid"),
 		PhoneNumber:          utils.OptionalString(d, "phone_number"),
-		StatusCallback:       utils.OptionalStringWithEmptyStringDefault(d, "status_callback_url"),
+		StatusCallback:       utils.OptionalStringWithEmptyStringOnChange(d, "status_callback_url"),
 		StatusCallbackMethod: utils.OptionalString(d, "status_callback_method"),
-		TrunkSid:             utils.OptionalStringWithEmptyStringDefault(d, "trunk_sid"),
+		TrunkSid:             utils.OptionalStringWithEmptyStringOnChange(d, "trunk_sid"),
 	}
 
 	if _, ok := d.GetOk("messaging"); ok {
-		createInput.SmsApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.application_sid")
+		createInput.SmsApplicationSid = utils.OptionalStringWithEmptyStringOnChange(d, "messaging.0.application_sid")
 		createInput.SmsFallbackMethod = utils.OptionalString(d, "messaging.0.fallback_method")
-		createInput.SmsFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.fallback_url")
+		createInput.SmsFallbackURL = utils.OptionalStringWithEmptyStringOnChange(d, "messaging.0.fallback_url")
 		createInput.SmsMethod = utils.OptionalString(d, "messaging.0.method")
-		createInput.SmsURL = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.url")
+		createInput.SmsURL = utils.OptionalStringWithEmptyStringOnChange(d, "messaging.0.url")
 	}
 
 	if _, ok := d.GetOk("voice"); ok {
 		createInput.VoiceReceiveMode = sdkUtils.String("voice")
-		createInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.application_sid")
+		createInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.application_sid")
 		createInput.VoiceCallerIDLookup = utils.OptionalBool(d, "voice.0.caller_id_lookup")
 		createInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
-		createInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.fallback_url")
+		createInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.fallback_url")
 		createInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
-		createInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.url")
+		createInput.VoiceURL = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.url")
 	}
 
 	if _, ok := d.GetOk("fax"); ok {
 		createInput.VoiceReceiveMode = sdkUtils.String("fax")
-		createInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.application_sid")
+		createInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringOnChange(d, "fax.0.application_sid")
 		createInput.VoiceFallbackMethod = utils.OptionalString(d, "fax.0.fallback_method")
-		createInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.fallback_url")
+		createInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringOnChange(d, "fax.0.fallback_url")
 		createInput.VoiceMethod = utils.OptionalString(d, "fax.0.method")
-		createInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.url")
+		createInput.VoiceURL = utils.OptionalStringWithEmptyStringOnChange(d, "fax.0.url")
 	}
 
 	createResult, err := client.Account(d.Get("account_sid").(string)).IncomingPhoneNumbers.CreateWithContext(ctx, createInput)
@@ -419,42 +419,42 @@ func resourcePhoneNumberUpdate(ctx context.Context, d *schema.ResourceData, meta
 	client := meta.(*common.TwilioClient).API
 
 	updateInput := &incoming_phone_number.UpdateIncomingPhoneNumberInput{
-		AddressSid:           utils.OptionalStringWithEmptyStringDefault(d, "address_sid"),
-		BundleSid:            utils.OptionalStringWithEmptyStringDefault(d, "bundle_sid"),
-		EmergencyAddressSid:  utils.OptionalStringWithEmptyStringDefault(d, "emergency_address_sid"),
+		AddressSid:           utils.OptionalStringWithEmptyStringOnChange(d, "address_sid"),
+		BundleSid:            utils.OptionalStringWithEmptyStringOnChange(d, "bundle_sid"),
+		EmergencyAddressSid:  utils.OptionalStringWithEmptyStringOnChange(d, "emergency_address_sid"),
 		EmergencyStatus:      utils.OptionalString(d, "emergency_status"),
 		FriendlyName:         utils.OptionalString(d, "friendly_name"),
-		IdentitySid:          utils.OptionalStringWithEmptyStringDefault(d, "identity_sid"),
-		StatusCallback:       utils.OptionalStringWithEmptyStringDefault(d, "status_callback_url"),
+		IdentitySid:          utils.OptionalStringWithEmptyStringOnChange(d, "identity_sid"),
+		StatusCallback:       utils.OptionalStringWithEmptyStringOnChange(d, "status_callback_url"),
 		StatusCallbackMethod: utils.OptionalString(d, "status_callback_method"),
-		TrunkSid:             utils.OptionalStringWithEmptyStringDefault(d, "trunk_sid"),
+		TrunkSid:             utils.OptionalStringWithEmptyStringOnChange(d, "trunk_sid"),
 	}
 
 	if _, ok := d.GetOk("messaging"); ok {
-		updateInput.SmsApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.application_sid")
+		updateInput.SmsApplicationSid = utils.OptionalStringWithEmptyStringOnChange(d, "messaging.0.application_sid")
 		updateInput.SmsFallbackMethod = utils.OptionalString(d, "messaging.0.fallback_method")
-		updateInput.SmsFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.fallback_url")
+		updateInput.SmsFallbackURL = utils.OptionalStringWithEmptyStringOnChange(d, "messaging.0.fallback_url")
 		updateInput.SmsMethod = utils.OptionalString(d, "messaging.0.method")
-		updateInput.SmsURL = utils.OptionalStringWithEmptyStringDefault(d, "messaging.0.url")
+		updateInput.SmsURL = utils.OptionalStringWithEmptyStringOnChange(d, "messaging.0.url")
 	}
 
 	if _, ok := d.GetOk("voice"); ok {
 		updateInput.VoiceReceiveMode = sdkUtils.String("voice")
-		updateInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.application_sid")
+		updateInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.application_sid")
 		updateInput.VoiceCallerIDLookup = utils.OptionalBool(d, "voice.0.caller_id_lookup")
 		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "voice.0.fallback_method")
-		updateInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.fallback_url")
+		updateInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.fallback_url")
 		updateInput.VoiceMethod = utils.OptionalString(d, "voice.0.method")
-		updateInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "voice.0.url")
+		updateInput.VoiceURL = utils.OptionalStringWithEmptyStringOnChange(d, "voice.0.url")
 	}
 
 	if _, ok := d.GetOk("fax"); ok {
 		updateInput.VoiceReceiveMode = sdkUtils.String("fax")
-		updateInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.application_sid")
+		updateInput.VoiceApplicationSid = utils.OptionalStringWithEmptyStringOnChange(d, "fax.0.application_sid")
 		updateInput.VoiceFallbackMethod = utils.OptionalString(d, "fax.0.fallback_method")
-		updateInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.fallback_url")
+		updateInput.VoiceFallbackURL = utils.OptionalStringWithEmptyStringOnChange(d, "fax.0.fallback_url")
 		updateInput.VoiceMethod = utils.OptionalString(d, "fax.0.method")
-		updateInput.VoiceURL = utils.OptionalStringWithEmptyStringDefault(d, "fax.0.url")
+		updateInput.VoiceURL = utils.OptionalStringWithEmptyStringOnChange(d, "fax.0.url")
 	}
 
 	updateResp, err := client.Account(d.Get("account_sid").(string)).IncomingPhoneNumber(d.Id()).UpdateWithContext(ctx, updateInput)

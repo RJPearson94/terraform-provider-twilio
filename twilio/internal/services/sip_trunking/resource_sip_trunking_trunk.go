@@ -161,10 +161,10 @@ func resourceSIPTrunkingTrunkCreate(ctx context.Context, d *schema.ResourceData,
 
 	createInput := &trunks.CreateTrunkInput{
 		CnamLookupEnabled:      utils.OptionalBool(d, "cnam_lookup_enabled"),
-		DisasterRecoveryMethod: utils.OptionalStringWithEmptyStringDefault(d, "disaster_recovery_method"),
-		DisasterRecoveryURL:    utils.OptionalStringWithEmptyStringDefault(d, "disaster_recovery_url"),
-		DomainName:             utils.OptionalStringWithEmptyStringDefault(d, "domain_name"),
-		FriendlyName:           utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		DisasterRecoveryMethod: utils.OptionalStringWithEmptyStringOnChange(d, "disaster_recovery_method"),
+		DisasterRecoveryURL:    utils.OptionalStringWithEmptyStringOnChange(d, "disaster_recovery_url"),
+		DomainName:             utils.OptionalStringWithEmptyStringOnChange(d, "domain_name"),
+		FriendlyName:           utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		Secure:                 utils.OptionalBool(d, "secure"),
 		TransferMode:           utils.OptionalString(d, "transfer_mode"),
 	}
@@ -223,10 +223,10 @@ func resourceSIPTrunkingTrunkUpdate(ctx context.Context, d *schema.ResourceData,
 
 	updateInput := &trunk.UpdateTrunkInput{
 		CnamLookupEnabled:      utils.OptionalBool(d, "cnam_lookup_enabled"),
-		DisasterRecoveryMethod: utils.OptionalStringWithEmptyStringDefault(d, "disaster_recovery_method"),
-		DisasterRecoveryURL:    utils.OptionalStringWithEmptyStringDefault(d, "disaster_recovery_url"),
-		DomainName:             utils.OptionalStringWithEmptyStringDefault(d, "domain_name"),
-		FriendlyName:           utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		DisasterRecoveryMethod: utils.OptionalStringWithEmptyStringOnChange(d, "disaster_recovery_method"),
+		DisasterRecoveryURL:    utils.OptionalStringWithEmptyStringOnChange(d, "disaster_recovery_url"),
+		DomainName:             utils.OptionalStringWithEmptyStringOnChange(d, "domain_name"),
+		FriendlyName:           utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		Secure:                 utils.OptionalBool(d, "secure"),
 		TransferMode:           utils.OptionalString(d, "transfer_mode"),
 	}

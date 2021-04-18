@@ -117,8 +117,8 @@ func resourceTaskRouterWorkflowCreate(ctx context.Context, d *schema.ResourceDat
 	createInput := &workflows.CreateWorkflowInput{
 		FriendlyName:                  d.Get("friendly_name").(string),
 		Configuration:                 configurationJSONString,
-		AssignmentCallbackURL:         utils.OptionalStringWithEmptyStringDefault(d, "assignment_callback_url"),
-		FallbackAssignmentCallbackURL: utils.OptionalStringWithEmptyStringDefault(d, "fallback_assignment_callback_url"),
+		AssignmentCallbackURL:         utils.OptionalStringWithEmptyStringOnChange(d, "assignment_callback_url"),
+		FallbackAssignmentCallbackURL: utils.OptionalStringWithEmptyStringOnChange(d, "fallback_assignment_callback_url"),
 		TaskReservationTimeout:        utils.OptionalInt(d, "task_reservation_timeout"),
 	}
 
@@ -169,8 +169,8 @@ func resourceTaskRouterWorkflowUpdate(ctx context.Context, d *schema.ResourceDat
 	updateInput := &workflow.UpdateWorkflowInput{
 		FriendlyName:                  utils.OptionalString(d, "friendly_name"),
 		Configuration:                 utils.OptionalJSONString(d, "configuration"),
-		AssignmentCallbackURL:         utils.OptionalStringWithEmptyStringDefault(d, "assignment_callback_url"),
-		FallbackAssignmentCallbackURL: utils.OptionalStringWithEmptyStringDefault(d, "fallback_assignment_callback_url"),
+		AssignmentCallbackURL:         utils.OptionalStringWithEmptyStringOnChange(d, "assignment_callback_url"),
+		FallbackAssignmentCallbackURL: utils.OptionalStringWithEmptyStringOnChange(d, "fallback_assignment_callback_url"),
 		TaskReservationTimeout:        utils.OptionalInt(d, "task_reservation_timeout"),
 	}
 

@@ -124,13 +124,13 @@ func resourceProxyServiceCreate(ctx context.Context, d *schema.ResourceData, met
 
 	createInput := &services.CreateServiceInput{
 		UniqueName:              d.Get("unique_name").(string),
-		DefaultTtl:              utils.OptionalIntWith0Default(d, "default_ttl"),
-		CallbackURL:             utils.OptionalStringWithEmptyStringDefault(d, "callback_url"),
+		DefaultTtl:              utils.OptionalIntWith0OnChange(d, "default_ttl"),
+		CallbackURL:             utils.OptionalStringWithEmptyStringOnChange(d, "callback_url"),
 		GeoMatchLevel:           utils.OptionalString(d, "geo_match_level"),
 		NumberSelectionBehavior: utils.OptionalString(d, "number_selection_behavior"),
-		InterceptCallbackURL:    utils.OptionalStringWithEmptyStringDefault(d, "intercept_callback_url"),
-		OutOfSessionCallbackURL: utils.OptionalStringWithEmptyStringDefault(d, "out_of_session_callback_url"),
-		ChatInstanceSid:         utils.OptionalStringWithEmptyStringDefault(d, "chat_instance_sid"),
+		InterceptCallbackURL:    utils.OptionalStringWithEmptyStringOnChange(d, "intercept_callback_url"),
+		OutOfSessionCallbackURL: utils.OptionalStringWithEmptyStringOnChange(d, "out_of_session_callback_url"),
+		ChatInstanceSid:         utils.OptionalStringWithEmptyStringOnChange(d, "chat_instance_sid"),
 	}
 
 	createResult, err := client.Services.CreateWithContext(ctx, createInput)
@@ -180,13 +180,13 @@ func resourceProxyServiceUpdate(ctx context.Context, d *schema.ResourceData, met
 
 	updateInput := &service.UpdateServiceInput{
 		UniqueName:              utils.OptionalString(d, "unique_name"),
-		DefaultTtl:              utils.OptionalIntWith0Default(d, "default_ttl"),
-		CallbackURL:             utils.OptionalStringWithEmptyStringDefault(d, "callback_url"),
+		DefaultTtl:              utils.OptionalIntWith0OnChange(d, "default_ttl"),
+		CallbackURL:             utils.OptionalStringWithEmptyStringOnChange(d, "callback_url"),
 		GeoMatchLevel:           utils.OptionalString(d, "geo_match_level"),
 		NumberSelectionBehavior: utils.OptionalString(d, "number_selection_behavior"),
-		InterceptCallbackURL:    utils.OptionalStringWithEmptyStringDefault(d, "intercept_callback_url"),
-		OutOfSessionCallbackURL: utils.OptionalStringWithEmptyStringDefault(d, "out_of_session_callback_url"),
-		ChatInstanceSid:         utils.OptionalStringWithEmptyStringDefault(d, "chat_instance_sid"),
+		InterceptCallbackURL:    utils.OptionalStringWithEmptyStringOnChange(d, "intercept_callback_url"),
+		OutOfSessionCallbackURL: utils.OptionalStringWithEmptyStringOnChange(d, "out_of_session_callback_url"),
+		ChatInstanceSid:         utils.OptionalStringWithEmptyStringOnChange(d, "chat_instance_sid"),
 	}
 
 	updateResp, err := client.Service(d.Id()).UpdateWithContext(ctx, updateInput)

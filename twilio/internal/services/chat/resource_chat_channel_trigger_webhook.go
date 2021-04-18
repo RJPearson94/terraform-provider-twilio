@@ -126,7 +126,7 @@ func resourceChatChannelTriggerWebhookCreate(ctx context.Context, d *schema.Reso
 		Configuration: &webhooks.CreateChannelWebhookConfigurationInput{
 			URL:        utils.OptionalString(d, "webhook_url"),
 			Method:     utils.OptionalString(d, "method"),
-			RetryCount: utils.OptionalIntWith0Default(d, "retry_count"),
+			RetryCount: utils.OptionalIntWith0OnChange(d, "retry_count"),
 			Triggers:   utils.OptionalStringSlice(d, "triggers"),
 		},
 	}
@@ -182,7 +182,7 @@ func resourceChatChannelTriggerWebhookUpdate(ctx context.Context, d *schema.Reso
 		Configuration: &webhook.UpdateChannelWebhookConfigurationInput{
 			URL:        utils.OptionalString(d, "webhook_url"),
 			Method:     utils.OptionalString(d, "method"),
-			RetryCount: utils.OptionalIntWith0Default(d, "retry_count"),
+			RetryCount: utils.OptionalIntWith0OnChange(d, "retry_count"),
 			Triggers:   utils.OptionalStringSlice(d, "triggers"),
 		},
 	}

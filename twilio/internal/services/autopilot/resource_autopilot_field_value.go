@@ -104,7 +104,7 @@ func resourceAutopilotFieldValueCreate(ctx context.Context, d *schema.ResourceDa
 	createInput := &field_values.CreateFieldValueInput{
 		Language:  d.Get("language").(string),
 		Value:     d.Get("value").(string),
-		SynonymOf: utils.OptionalStringWithEmptyStringDefault(d, "synonym_of"),
+		SynonymOf: utils.OptionalStringWithEmptyStringOnChange(d, "synonym_of"),
 	}
 
 	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).FieldType(d.Get("field_type_sid").(string)).FieldValues.CreateWithContext(ctx, createInput)

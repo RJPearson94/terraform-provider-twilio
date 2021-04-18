@@ -148,7 +148,7 @@ func resourceAutopilotModelBuildCreate(ctx context.Context, d *schema.ResourceDa
 
 	createInput := &model_builds.CreateModelBuildInput{
 		UniqueName:     uniqueName,
-		StatusCallback: utils.OptionalStringWithEmptyStringDefault(d, "status_callback"),
+		StatusCallback: utils.OptionalStringWithEmptyStringOnChange(d, "status_callback"),
 	}
 
 	createResult, err := client.Assistant(d.Get("assistant_sid").(string)).ModelBuilds.CreateWithContext(ctx, createInput)

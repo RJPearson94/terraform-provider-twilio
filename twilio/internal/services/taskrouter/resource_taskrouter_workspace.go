@@ -159,8 +159,8 @@ func resourceTaskRouterWorkspaceCreate(ctx context.Context, d *schema.ResourceDa
 
 	createInput := &workspaces.CreateWorkspaceInput{
 		FriendlyName:         d.Get("friendly_name").(string),
-		EventCallbackURL:     utils.OptionalStringWithEmptyStringDefault(d, "event_callback_url"),
-		EventsFilter:         utils.OptionalSeperatedStringWithEmptyStringDefault(d, "event_filters", workspaceEventsSeperator),
+		EventCallbackURL:     utils.OptionalStringWithEmptyStringOnChange(d, "event_callback_url"),
+		EventsFilter:         utils.OptionalSeperatedStringWithEmptyStringOnChange(d, "event_filters", workspaceEventsSeperator),
 		MultiTaskEnabled:     utils.OptionalBool(d, "multi_task_enabled"),
 		Template:             utils.OptionalString(d, "template"),
 		PrioritizeQueueOrder: utils.OptionalString(d, "prioritize_queue_order"),
@@ -218,8 +218,8 @@ func resourceTaskRouterWorkspaceUpdate(ctx context.Context, d *schema.ResourceDa
 
 	updateInput := &workspace.UpdateWorkspaceInput{
 		FriendlyName:         utils.OptionalString(d, "friendly_name"),
-		EventCallbackURL:     utils.OptionalStringWithEmptyStringDefault(d, "event_callback_url"),
-		EventsFilter:         utils.OptionalSeperatedStringWithEmptyStringDefault(d, "event_filters", workspaceEventsSeperator),
+		EventCallbackURL:     utils.OptionalStringWithEmptyStringOnChange(d, "event_callback_url"),
+		EventsFilter:         utils.OptionalSeperatedStringWithEmptyStringOnChange(d, "event_filters", workspaceEventsSeperator),
 		MultiTaskEnabled:     utils.OptionalBool(d, "multi_task_enabled"),
 		Template:             utils.OptionalString(d, "template"),
 		PrioritizeQueueOrder: utils.OptionalString(d, "prioritize_queue_order"),

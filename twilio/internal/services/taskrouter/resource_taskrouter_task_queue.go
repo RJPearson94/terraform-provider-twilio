@@ -125,11 +125,11 @@ func resourceTaskRouterTaskQueueCreate(ctx context.Context, d *schema.ResourceDa
 
 	createInput := &task_queues.CreateTaskQueueInput{
 		FriendlyName:           d.Get("friendly_name").(string),
-		AssignmentActivitySid:  utils.OptionalStringWithEmptyStringDefault(d, "assignment_activity_sid"),
+		AssignmentActivitySid:  utils.OptionalStringWithEmptyStringOnChange(d, "assignment_activity_sid"),
 		MaxReservedWorkers:     utils.OptionalInt(d, "max_reserved_workers"),
 		TargetWorkers:          utils.OptionalString(d, "target_workers"),
 		TaskOrder:              utils.OptionalString(d, "task_order"),
-		ReservationActivitySid: utils.OptionalStringWithEmptyStringDefault(d, "reservation_activity_sid"),
+		ReservationActivitySid: utils.OptionalStringWithEmptyStringOnChange(d, "reservation_activity_sid"),
 	}
 
 	createResult, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueues.CreateWithContext(ctx, createInput)
@@ -180,11 +180,11 @@ func resourceTaskRouterTaskQueueUpdate(ctx context.Context, d *schema.ResourceDa
 
 	updateInput := &task_queue.UpdateTaskQueueInput{
 		FriendlyName:           utils.OptionalString(d, "friendly_name"),
-		AssignmentActivitySid:  utils.OptionalStringWithEmptyStringDefault(d, "assignment_activity_sid"),
+		AssignmentActivitySid:  utils.OptionalStringWithEmptyStringOnChange(d, "assignment_activity_sid"),
 		MaxReservedWorkers:     utils.OptionalInt(d, "max_reserved_workers"),
 		TargetWorkers:          utils.OptionalString(d, "target_workers"),
 		TaskOrder:              utils.OptionalString(d, "task_order"),
-		ReservationActivitySid: utils.OptionalStringWithEmptyStringDefault(d, "reservation_activity_sid"),
+		ReservationActivitySid: utils.OptionalStringWithEmptyStringOnChange(d, "reservation_activity_sid"),
 	}
 
 	updateResp, err := client.Workspace(d.Get("workspace_sid").(string)).TaskQueue(d.Id()).UpdateWithContext(ctx, updateInput)

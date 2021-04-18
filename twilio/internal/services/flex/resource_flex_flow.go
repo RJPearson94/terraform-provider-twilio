@@ -179,7 +179,7 @@ func resourceFlexFlowCreate(ctx context.Context, d *schema.ResourceData, meta in
 	createInput := &flex_flows.CreateFlexFlowInput{
 		ChannelType:     d.Get("channel_type").(string),
 		ChatServiceSid:  d.Get("chat_service_sid").(string),
-		ContactIdentity: utils.OptionalStringWithEmptyStringDefault(d, "contact_identity"),
+		ContactIdentity: utils.OptionalStringWithEmptyStringOnChange(d, "contact_identity"),
 		Enabled:         utils.OptionalBool(d, "enabled"),
 		FriendlyName:    d.Get("friendly_name").(string),
 		IntegrationType: utils.OptionalString(d, "integration_type"),
@@ -189,15 +189,15 @@ func resourceFlexFlowCreate(ctx context.Context, d *schema.ResourceData, meta in
 
 	if _, ok := d.GetOk("integration"); ok {
 		createInput.Integration = &flex_flows.CreateFlexFlowIntegrationInput{
-			Channel:           utils.OptionalStringWithEmptyStringDefault(d, "integration.0.channel"),
+			Channel:           utils.OptionalStringWithEmptyStringOnChange(d, "integration.0.channel"),
 			CreationOnMessage: utils.OptionalBool(d, "integration.0.creation_on_message"),
-			FlowSid:           utils.OptionalStringWithEmptyStringDefault(d, "integration.0.flow_sid"),
-			Priority:          utils.OptionalIntWith0Default(d, "integration.0.priority"),
-			RetryCount:        utils.OptionalIntWith0Default(d, "integration.0.retry_count"),
-			Timeout:           utils.OptionalIntWith0Default(d, "integration.0.timeout"),
-			URL:               utils.OptionalStringWithEmptyStringDefault(d, "integration.0.url"),
-			WorkflowSid:       utils.OptionalStringWithEmptyStringDefault(d, "integration.0.workflow_sid"),
-			WorkspaceSid:      utils.OptionalStringWithEmptyStringDefault(d, "integration.0.workspace_sid"),
+			FlowSid:           utils.OptionalStringWithEmptyStringOnChange(d, "integration.0.flow_sid"),
+			Priority:          utils.OptionalIntWith0OnChange(d, "integration.0.priority"),
+			RetryCount:        utils.OptionalIntWith0OnChange(d, "integration.0.retry_count"),
+			Timeout:           utils.OptionalIntWith0OnChange(d, "integration.0.timeout"),
+			URL:               utils.OptionalStringWithEmptyStringOnChange(d, "integration.0.url"),
+			WorkflowSid:       utils.OptionalStringWithEmptyStringOnChange(d, "integration.0.workflow_sid"),
+			WorkspaceSid:      utils.OptionalStringWithEmptyStringOnChange(d, "integration.0.workspace_sid"),
 		}
 	}
 
@@ -250,7 +250,7 @@ func resourceFlexFlowUpdate(ctx context.Context, d *schema.ResourceData, meta in
 	updateInput := &flex_flow.UpdateFlexFlowInput{
 		ChannelType:     utils.OptionalString(d, "channel_type"),
 		ChatServiceSid:  utils.OptionalString(d, "chat_service_sid"),
-		ContactIdentity: utils.OptionalStringWithEmptyStringDefault(d, "contact_identity"),
+		ContactIdentity: utils.OptionalStringWithEmptyStringOnChange(d, "contact_identity"),
 		Enabled:         utils.OptionalBool(d, "enabled"),
 		FriendlyName:    utils.OptionalString(d, "friendly_name"),
 		IntegrationType: utils.OptionalString(d, "integration_type"),
@@ -260,15 +260,15 @@ func resourceFlexFlowUpdate(ctx context.Context, d *schema.ResourceData, meta in
 
 	if _, ok := d.GetOk("integration"); ok {
 		updateInput.Integration = &flex_flow.UpdateFlexFlowIntegrationInput{
-			Channel:           utils.OptionalStringWithEmptyStringDefault(d, "integration.0.channel"),
+			Channel:           utils.OptionalStringWithEmptyStringOnChange(d, "integration.0.channel"),
 			CreationOnMessage: utils.OptionalBool(d, "integration.0.creation_on_message"),
-			FlowSid:           utils.OptionalStringWithEmptyStringDefault(d, "integration.0.flow_sid"),
-			Priority:          utils.OptionalIntWith0Default(d, "integration.0.priority"),
-			RetryCount:        utils.OptionalIntWith0Default(d, "integration.0.retry_count"),
-			Timeout:           utils.OptionalIntWith0Default(d, "integration.0.timeout"),
-			URL:               utils.OptionalStringWithEmptyStringDefault(d, "integration.0.url"),
-			WorkflowSid:       utils.OptionalStringWithEmptyStringDefault(d, "integration.0.workflow_sid"),
-			WorkspaceSid:      utils.OptionalStringWithEmptyStringDefault(d, "integration.0.workspace_sid"),
+			FlowSid:           utils.OptionalStringWithEmptyStringOnChange(d, "integration.0.flow_sid"),
+			Priority:          utils.OptionalIntWith0OnChange(d, "integration.0.priority"),
+			RetryCount:        utils.OptionalIntWith0OnChange(d, "integration.0.retry_count"),
+			Timeout:           utils.OptionalIntWith0OnChange(d, "integration.0.timeout"),
+			URL:               utils.OptionalStringWithEmptyStringOnChange(d, "integration.0.url"),
+			WorkflowSid:       utils.OptionalStringWithEmptyStringOnChange(d, "integration.0.workflow_sid"),
+			WorkspaceSid:      utils.OptionalStringWithEmptyStringOnChange(d, "integration.0.workspace_sid"),
 		}
 	}
 

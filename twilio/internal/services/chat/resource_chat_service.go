@@ -360,10 +360,10 @@ func resourceChatServiceUpdate(ctx context.Context, d *schema.ResourceData, meta
 		FriendlyName:           utils.OptionalString(d, "friendly_name"),
 		ReadStatusEnabled:      utils.OptionalBool(d, "read_status_enabled"),
 		TypingIndicatorTimeout: utils.OptionalInt(d, "typing_indicator_timeout"),
-		PostWebhookURL:         utils.OptionalStringWithEmptyStringDefault(d, "post_webhook_url"),
-		PostWebhookRetryCount:  utils.OptionalIntWith0Default(d, "post_webhook_retry_count"),
-		PreWebhookURL:          utils.OptionalStringWithEmptyStringDefault(d, "pre_webhook_url"),
-		PreWebhookRetryCount:   utils.OptionalIntWith0Default(d, "pre_webhook_retry_count"),
+		PostWebhookURL:         utils.OptionalStringWithEmptyStringOnChange(d, "post_webhook_url"),
+		PostWebhookRetryCount:  utils.OptionalIntWith0OnChange(d, "post_webhook_retry_count"),
+		PreWebhookURL:          utils.OptionalStringWithEmptyStringOnChange(d, "pre_webhook_url"),
+		PreWebhookRetryCount:   utils.OptionalIntWith0OnChange(d, "pre_webhook_retry_count"),
 		WebhookMethod:          utils.OptionalString(d, "webhook_method"),
 	}
 
@@ -375,8 +375,8 @@ func resourceChatServiceUpdate(ctx context.Context, d *schema.ResourceData, meta
 		if _, ok := d.GetOk("notifications.0.new_message"); ok {
 			notifications.NewMessage = &service.UpdateServiceNotificationsNewMessageInput{
 				Enabled:           utils.OptionalBool(d, "notifications.0.new_message.0.enabled"),
-				Template:          utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.new_message.0.template"),
-				Sound:             utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.new_message.0.sound"),
+				Template:          utils.OptionalStringWithEmptyStringOnChange(d, "notifications.0.new_message.0.template"),
+				Sound:             utils.OptionalStringWithEmptyStringOnChange(d, "notifications.0.new_message.0.sound"),
 				BadgeCountEnabled: utils.OptionalBool(d, "notifications.0.new_message.0.badge_count_enabled"),
 			}
 		}
@@ -384,24 +384,24 @@ func resourceChatServiceUpdate(ctx context.Context, d *schema.ResourceData, meta
 		if _, ok := d.GetOk("notifications.0.added_to_channel"); ok {
 			notifications.AddedToChannel = &service.UpdateServiceNotificationsActionInput{
 				Enabled:  utils.OptionalBool(d, "notifications.0.added_to_channel.0.enabled"),
-				Template: utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.added_to_channel.0.template"),
-				Sound:    utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.added_to_channel.0.sound"),
+				Template: utils.OptionalStringWithEmptyStringOnChange(d, "notifications.0.added_to_channel.0.template"),
+				Sound:    utils.OptionalStringWithEmptyStringOnChange(d, "notifications.0.added_to_channel.0.sound"),
 			}
 		}
 
 		if _, ok := d.GetOk("notifications.0.removed_from_channel"); ok {
 			notifications.RemovedFromChannel = &service.UpdateServiceNotificationsActionInput{
 				Enabled:  utils.OptionalBool(d, "notifications.0.removed_from_channel.0.enabled"),
-				Template: utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.removed_from_channel.0.template"),
-				Sound:    utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.removed_from_channel.0.sound"),
+				Template: utils.OptionalStringWithEmptyStringOnChange(d, "notifications.0.removed_from_channel.0.template"),
+				Sound:    utils.OptionalStringWithEmptyStringOnChange(d, "notifications.0.removed_from_channel.0.sound"),
 			}
 		}
 
 		if _, ok := d.GetOk("notifications.0.invited_to_channel"); ok {
 			notifications.InvitedToChannel = &service.UpdateServiceNotificationsActionInput{
 				Enabled:  utils.OptionalBool(d, "notifications.0.invited_to_channel.0.enabled"),
-				Template: utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.invited_to_channel.0.template"),
-				Sound:    utils.OptionalStringWithEmptyStringDefault(d, "notifications.0.invited_to_channel.0.sound"),
+				Template: utils.OptionalStringWithEmptyStringOnChange(d, "notifications.0.invited_to_channel.0.template"),
+				Sound:    utils.OptionalStringWithEmptyStringOnChange(d, "notifications.0.invited_to_channel.0.sound"),
 			}
 		}
 

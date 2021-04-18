@@ -13,8 +13,8 @@ func FlattenTimers(d *schema.ResourceData, timers conversation.FetchConversation
 	timerMap := make(map[string]interface{})
 
 	if _, ok := d.GetOk("timers"); ok {
-		timerMap["closed"] = utils.OptionalStringWithEmptyStringDefault(d, "timers.0.closed")
-		timerMap["inactive"] = utils.OptionalStringWithEmptyStringDefault(d, "timers.0.inactive")
+		timerMap["closed"] = utils.OptionalStringWithEmptyStringOnChange(d, "timers.0.closed")
+		timerMap["inactive"] = utils.OptionalStringWithEmptyStringOnChange(d, "timers.0.inactive")
 	}
 
 	if timers.DateClosed != nil {

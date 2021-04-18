@@ -134,8 +134,8 @@ func resourceFlexPluginCreate(ctx context.Context, d *schema.ResourceData, meta 
 
 	createInput := &plugins.CreatePluginInput{
 		UniqueName:   d.Get("unique_name").(string),
-		Description:  utils.OptionalStringWithEmptyStringDefault(d, "description"),
-		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		Description:  utils.OptionalStringWithEmptyStringOnChange(d, "description"),
+		FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 	}
 
 	createResult, err := client.Plugins.CreateWithContext(ctx, createInput)
@@ -210,8 +210,8 @@ func resourceFlexPluginUpdate(ctx context.Context, d *schema.ResourceData, meta 
 
 	if d.HasChanges("description", "friendly_name") {
 		updateInput := &plugin.UpdatePluginInput{
-			Description:  utils.OptionalStringWithEmptyStringDefault(d, "description"),
-			FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+			Description:  utils.OptionalStringWithEmptyStringOnChange(d, "description"),
+			FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 		}
 
 		updateResp, err := client.Plugin(d.Id()).UpdateWithContext(ctx, updateInput)
@@ -240,7 +240,7 @@ func resourceFlexPluginDelete(ctx context.Context, d *schema.ResourceData, meta 
 
 func createPluginVersion(ctx context.Context, d *schema.ResourceData, client *flex.Flex) diag.Diagnostics {
 	createInput := &versions.CreateVersionInput{
-		Changelog: utils.OptionalStringWithEmptyStringDefault(d, "changelog"),
+		Changelog: utils.OptionalStringWithEmptyStringOnChange(d, "changelog"),
 		PluginURL: d.Get("plugin_url").(string),
 		Private:   utils.OptionalBool(d, "private"),
 		Version:   d.Get("version").(string),

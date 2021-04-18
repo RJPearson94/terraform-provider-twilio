@@ -119,8 +119,8 @@ func resourceChatChannelCreate(ctx context.Context, d *schema.ResourceData, meta
 	client := meta.(*common.TwilioClient).Chat
 
 	createInput := &channels.CreateChannelInput{
-		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
-		UniqueName:   utils.OptionalStringWithEmptyStringDefault(d, "unique_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
+		UniqueName:   utils.OptionalStringWithEmptyStringOnChange(d, "unique_name"),
 		Attributes:   utils.OptionalString(d, "attributes"),
 		Type:         utils.OptionalString(d, "type"),
 	}
@@ -174,8 +174,8 @@ func resourceChatChannelUpdate(ctx context.Context, d *schema.ResourceData, meta
 	client := meta.(*common.TwilioClient).Chat
 
 	updateInput := &channel.UpdateChannelInput{
-		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
-		UniqueName:   utils.OptionalStringWithEmptyStringDefault(d, "unique_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
+		UniqueName:   utils.OptionalStringWithEmptyStringOnChange(d, "unique_name"),
 		Attributes:   utils.OptionalString(d, "attributes"),
 	}
 

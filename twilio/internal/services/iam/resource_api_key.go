@@ -64,7 +64,7 @@ func resourceApiKeyCreate(ctx context.Context, d *schema.ResourceData, meta inte
 	client := meta.(*common.TwilioClient).API
 
 	createInput := &keys.CreateKeyInput{
-		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 	}
 
 	createResult, err := client.Account(d.Get("account_sid").(string)).Keys.CreateWithContext(ctx, createInput)
@@ -105,7 +105,7 @@ func resourceApiKeyUpdate(ctx context.Context, d *schema.ResourceData, meta inte
 	client := meta.(*common.TwilioClient).API
 
 	updateInput := &key.UpdateKeyInput{
-		FriendlyName: utils.OptionalStringWithEmptyStringDefault(d, "friendly_name"),
+		FriendlyName: utils.OptionalStringWithEmptyStringOnChange(d, "friendly_name"),
 	}
 
 	updateResp, err := client.Account(d.Get("account_sid").(string)).Key(d.Id()).UpdateWithContext(ctx, updateInput)

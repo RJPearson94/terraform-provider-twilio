@@ -163,8 +163,8 @@ func resourceConversationsServiceNotificationUpdate(ctx context.Context, d *sche
 	if _, ok := d.GetOk("new_message"); ok {
 		updateInput.NewMessage = &notification.UpdateNotificationNewMessageInput{
 			Enabled:           utils.OptionalBool(d, "new_message.0.enabled"),
-			Template:          utils.OptionalStringWithEmptyStringDefault(d, "new_message.0.template"),
-			Sound:             utils.OptionalStringWithEmptyStringDefault(d, "new_message.0.sound"),
+			Template:          utils.OptionalStringWithEmptyStringOnChange(d, "new_message.0.template"),
+			Sound:             utils.OptionalStringWithEmptyStringOnChange(d, "new_message.0.sound"),
 			BadgeCountEnabled: utils.OptionalBool(d, "new_message.0.badge_count_enabled"),
 		}
 	}
@@ -172,16 +172,16 @@ func resourceConversationsServiceNotificationUpdate(ctx context.Context, d *sche
 	if _, ok := d.GetOk("added_to_conversation"); ok {
 		updateInput.AddedToConversation = &notification.UpdateNotificationConversationActionInput{
 			Enabled:  utils.OptionalBool(d, "added_to_conversation.0.enabled"),
-			Template: utils.OptionalStringWithEmptyStringDefault(d, "added_to_conversation.0.template"),
-			Sound:    utils.OptionalStringWithEmptyStringDefault(d, "added_to_conversation.0.sound"),
+			Template: utils.OptionalStringWithEmptyStringOnChange(d, "added_to_conversation.0.template"),
+			Sound:    utils.OptionalStringWithEmptyStringOnChange(d, "added_to_conversation.0.sound"),
 		}
 	}
 
 	if _, ok := d.GetOk("removed_from_conversation"); ok {
 		updateInput.RemovedFromConversation = &notification.UpdateNotificationConversationActionInput{
 			Enabled:  utils.OptionalBool(d, "removed_from_conversation.0.enabled"),
-			Template: utils.OptionalStringWithEmptyStringDefault(d, "removed_from_conversation.0.template"),
-			Sound:    utils.OptionalStringWithEmptyStringDefault(d, "removed_from_conversation.0.sound"),
+			Template: utils.OptionalStringWithEmptyStringOnChange(d, "removed_from_conversation.0.template"),
+			Sound:    utils.OptionalStringWithEmptyStringOnChange(d, "removed_from_conversation.0.sound"),
 		}
 	}
 
