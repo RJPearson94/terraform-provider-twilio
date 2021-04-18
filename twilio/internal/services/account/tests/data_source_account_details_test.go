@@ -12,9 +12,37 @@ import (
 
 var accountDetailsDataSourceName = "twilio_account_details"
 
+func TestAccDataSourceTwilioAccountDetails_basic(t *testing.T) {
+	stateDataSourceName := fmt.Sprintf("data.%s.details", accountDetailsDataSourceName)
+	testData := acceptance.TestAccData
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceTwilioAccountDetails_providerAccountSid(),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(stateDataSourceName, "sid", testData.AccountSid),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "owner_account_sid"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "friendly_name"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "auth_token"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "status"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "type"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_updated"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccDataSourceTwilioAccountDetails_complete(t *testing.T) {
 	stateDataSourceName := fmt.Sprintf("data.%s.details", accountDetailsDataSourceName)
+	subAccountStateResourceName := "twilio_account_sub_account.sub_account"
+
 	friendlyName := acctest.RandString(10)
+	testData := acceptance.TestAccData
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -23,9 +51,9 @@ func TestAccDataSourceTwilioAccountDetails_complete(t *testing.T) {
 			{
 				Config: testAccDataSourceTwilioAccountDetails_complete(friendlyName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestMatchResourceAttr(stateDataSourceName, "sid", regexp.MustCompile(`^AC(.+)$`)),
-					resource.TestCheckResourceAttrSet(stateDataSourceName, "owner_account_sid"),
-					resource.TestCheckResourceAttrSet(stateDataSourceName, "friendly_name"),
+					resource.TestCheckResourceAttrPair(stateDataSourceName, "sid", subAccountStateResourceName, "sid"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "owner_account_sid", testData.AccountSid),
+					resource.TestCheckResourceAttr(stateDataSourceName, "friendly_name", friendlyName),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "auth_token"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "status"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "type"),
@@ -61,6 +89,12 @@ data "twilio_account_details" "details" {
   sid = twilio_account_sub_account.sub_account.sid
 }
 `, friendlyName)
+}
+
+func testAccDataSourceTwilioAccountDetails_providerAccountSid() string {
+	return `
+data "twilio_account_details" "details" {}
+`
 }
 
 func testAccDataSourceTwilioAccountDetails_invalidSid() string {

@@ -1,3 +1,9 @@
+## v0.10.0 (unreleased)
+
+FEATURES
+
+- Make the `sid` argument optional on the `twilio_account_details` data source to allow the account SID configured on the provider to be used. This means the data source can be used instead of having to supply the account SID twice, once in the provider configuration and for any resources/ data sources which have the account sid as an argument
+
 ## v0.9.0 (2021-04-18)
 
 NOTES

@@ -9,6 +9,18 @@ Use this data source to access information about an existing account. See the [A
 
 ## Example Usage
 
+## Use the provider Account SID
+
+```hcl
+data "twilio_account_details" "account" {}
+
+output "account_sid" {
+  value = data.twilio_account_details.account.account_sid
+}
+```
+
+## Specify Account SID
+
 ```hcl
 data "twilio_account_details" "account" {
   sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -23,7 +35,9 @@ output "friendly_name" {
 
 The following arguments are supported:
 
-- `sid` - (Mandatory) The sid of the account
+- `sid` - (Optional) The SID of the account
+
+~> If an account SID is not supplied the account SID configured on the provider is used instead
 
 ## Attributes Reference
 

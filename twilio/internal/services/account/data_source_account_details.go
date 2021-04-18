@@ -21,7 +21,8 @@ func dataSourceAccountDetails() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:         schema.TypeString,
-				Required:     true,
+				Optional:     true,
+				Computed:     true,
 				ValidateFunc: utils.AccountSidValidation(),
 			},
 			"owner_account_sid": {
@@ -58,9 +59,16 @@ func dataSourceAccountDetails() *schema.Resource {
 }
 
 func dataSourceAccountDetailsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*common.TwilioClient).API
+	twilioClient := meta.(*common.TwilioClient)
+	client := twilioClient.API
 
-	sid := d.Get("sid").(string)
+	var sid string
+	if v, ok := d.GetOk("sid"); ok {
+		sid = v.(string)
+	} else {
+		sid = twilioClient.AccountSid
+	}
+
 	getResponse, err := client.Account(sid).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
