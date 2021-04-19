@@ -14,6 +14,8 @@ import (
 
 func dataSourcePhoneNumberAvailableTollFreeNumbers() *schema.Resource {
 	return &schema.Resource{
+		DeprecationMessage: "As data sources are read at the plan phase and retrive a new list of available phone numbers, this data source cannot be used to purchase a phone number. Please use the `search_criteria` block on the `twilio_phone_number` resource instead. The data source will be removed in a future release",
+
 		ReadContext: dataSourcePhoneNumberAvailableTollFreeNumbersRead,
 
 		Timeouts: &schema.ResourceTimeout{

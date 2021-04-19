@@ -35,6 +35,11 @@ func TestAccTwilioPhoneNumber_complete(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "friendly_name"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "phone_number"),
+					resource.TestCheckResourceAttr(stateResourceName, "search_criteria.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "search_criteria.0.type", "mobile"),
+					resource.TestCheckResourceAttr(stateResourceName, "search_criteria.0.iso_country", "GB"),
+					resource.TestCheckResourceAttr(stateResourceName, "search_criteria.0.exclude_address_requirements.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "search_criteria.0.exclude_address_requirements.0.all", "true"),
 					resource.TestCheckResourceAttr(stateResourceName, "address_sid", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "address_requirements"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "beta"),
@@ -67,10 +72,11 @@ func TestAccTwilioPhoneNumber_complete(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      stateResourceName,
-				ImportState:       true,
-				ImportStateIdFunc: testAccTwilioPhoneNumberImportStateIdFunc(stateResourceName),
-				ImportStateVerify: true,
+				ResourceName:            stateResourceName,
+				ImportState:             true,
+				ImportStateIdFunc:       testAccTwilioPhoneNumberImportStateIdFunc(stateResourceName),
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"search_criteria.#", "search_criteria.0"},
 			},
 			{
 				Config: testAccTwilioPhoneNumber_complete(testData, newUrl),
@@ -81,6 +87,11 @@ func TestAccTwilioPhoneNumber_complete(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "friendly_name"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "phone_number"),
+					resource.TestCheckResourceAttr(stateResourceName, "search_criteria.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "search_criteria.0.type", "mobile"),
+					resource.TestCheckResourceAttr(stateResourceName, "search_criteria.0.iso_country", "GB"),
+					resource.TestCheckResourceAttr(stateResourceName, "search_criteria.0.exclude_address_requirements.#", "1"),
+					resource.TestCheckResourceAttr(stateResourceName, "search_criteria.0.exclude_address_requirements.0.all", "true"),
 					resource.TestCheckResourceAttr(stateResourceName, "address_sid", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "address_requirements"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "beta"),
@@ -167,12 +178,20 @@ func testAccTwilioPhoneNumberImportStateIdFunc(name string) resource.ImportState
 func testAccTwilioPhoneNumber_complete(testData *acceptance.TestData, url string) string {
 	return fmt.Sprintf(`
 resource "twilio_phone_number" "phone_number" {
-  account_sid  = "%s"
-  phone_number = "%s"
+  account_sid = "%s"
+
+  search_criteria {
+    type        = "mobile"
+    iso_country = "GB"
+
+    exclude_address_requirements {
+      all = true
+    }
+  }
 
   voice {
     url = "%s"
   }
 }
-`, testData.AccountSid, testData.PurchasablePhoneNumber, url)
+`, testData.AccountSid, url)
 }

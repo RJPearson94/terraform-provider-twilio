@@ -5,6 +5,8 @@ subcategory: "Phone Numbers"
 
 # twilio_phone_number_available_local_numbers Data Source
 
+!> This resource is deprecated and will be removed in a future release of the provider. As the data source is refreshed on every plan, this data source cannot be used to purchase a phone number. Please use the `search_criteria` block on the `twilio_phone_number` resource instead
+
 Use this data source to search for available local phone numbers. See the [API docs](https://www.twilio.com/docs/phone-numbers/api/availablephonenumber-local-resource) for more information
 
 ## Example Usage

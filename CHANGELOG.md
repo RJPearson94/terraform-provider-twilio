@@ -3,6 +3,11 @@
 FEATURES
 
 - Make the `sid` argument optional on the `twilio_account_details` data source to allow the account SID configured on the provider to be used. This means the data source can be used instead of having to supply the account SID twice, once in the provider configuration and for any resources/ data sources that have the account sid as an argument
+- Add the ability to search for a `local`, `mobile` or `toll_free` phone number on the `twilio_phone_number` resource. This allows you to search for and purchase a phone number in a single resource. This gets around the issue with data sources return a new available phone numbers list on plan which caused a new phone number to be purchased when being supplied as the input to the `twilio_phone_number` resource
+
+NOTES
+
+- The following data sources `twilio_phone_number_available_local_numbers`, `twilio_phone_number_available_mobile_numbers` and `twilio_phone_number_available_toll_free_numbers` have been deprecated. The `search_criteria` block on the `twilio_phone_number` resource should be used instead
 
 ## v0.9.0 (2021-04-18)
 

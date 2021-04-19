@@ -9,6 +9,9 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/phone_number/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
+	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/available_phone_number/local"
+	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/available_phone_number/mobile"
+	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/available_phone_number/toll_free"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/incoming_phone_number"
 	"github.com/RJPearson94/twilio-sdk-go/service/api/v2010/account/incoming_phone_numbers"
 	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
@@ -69,14 +72,161 @@ func resourcePhoneNumber() *schema.Resource {
 				Optional:     true,
 				Computed:     true,
 				ForceNew:     true,
-				ExactlyOneOf: []string{"phone_number", "area_code"},
+				ExactlyOneOf: []string{"phone_number", "area_code", "search_criteria"},
 				ValidateFunc: utils.PhoneNumberValidation(),
 			},
 			"area_code": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ForceNew:     true,
-				ExactlyOneOf: []string{"phone_number", "area_code"},
+				ExactlyOneOf: []string{"phone_number", "area_code", "search_criteria"},
+			},
+			"search_criteria": {
+				Type:         schema.TypeList,
+				Optional:     true,
+				ForceNew:     true,
+				MaxItems:     1,
+				ExactlyOneOf: []string{"phone_number", "area_code", "search_criteria"},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"type": {
+							Type:     schema.TypeString,
+							Required: true,
+							ForceNew: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"local",
+								"mobile",
+								"toll_free",
+							}, false),
+						},
+						"iso_country": {
+							Type:         schema.TypeString,
+							Required:     true,
+							ForceNew:     true,
+							ValidateFunc: validation.StringIsNotEmpty,
+						},
+						"area_code": {
+							Type:     schema.TypeInt,
+							Optional: true,
+							ForceNew: true,
+						},
+						"allow_beta_numbers": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							ForceNew: true,
+						},
+						"contains_number_pattern": {
+							Type:     schema.TypeString,
+							Optional: true,
+							ForceNew: true,
+						},
+						"exclude_address_requirements": {
+							Type:     schema.TypeList,
+							Optional: true,
+							ForceNew: true,
+							MaxItems: 1,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"all": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										ForceNew: true,
+									},
+									"local": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										ForceNew: true,
+									},
+									"foreign": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										ForceNew: true,
+									},
+								},
+							},
+						},
+						"location": {
+							Type:     schema.TypeList,
+							Optional: true,
+							ForceNew: true,
+							MaxItems: 1,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"in_postal_code": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ForceNew: true,
+									},
+									"in_region": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ForceNew: true,
+									},
+									"in_lata": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ForceNew: true,
+									},
+									"in_locality": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ForceNew: true,
+									},
+									"in_rate_center": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ForceNew: true,
+									},
+									"near_number": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ForceNew: true,
+									},
+									"near_lat_long": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ForceNew: true,
+									},
+									"distance": {
+										Type:     schema.TypeInt,
+										Optional: true,
+										ForceNew: true,
+									},
+								},
+							},
+						},
+						"capabilities": {
+							Type:     schema.TypeList,
+							Optional: true,
+							ForceNew: true,
+							MaxItems: 1,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"fax_enabled": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										ForceNew: true,
+									},
+									"sms_enabled": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										ForceNew: true,
+									},
+									"mms_enabled": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										ForceNew: true,
+									},
+									"voice_enabled": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										ForceNew: true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 			"address_sid": {
 				Type:         schema.TypeString,
@@ -319,16 +469,30 @@ func resourcePhoneNumberCreate(ctx context.Context, d *schema.ResourceData, meta
 
 	createInput := &incoming_phone_numbers.CreateIncomingPhoneNumberInput{
 		AddressSid:           utils.OptionalStringWithEmptyStringOnChange(d, "address_sid"),
-		AreaCode:             utils.OptionalStringWithEmptyStringOnChange(d, "area_code"),
 		BundleSid:            utils.OptionalStringWithEmptyStringOnChange(d, "bundle_sid"),
 		EmergencyAddressSid:  utils.OptionalStringWithEmptyStringOnChange(d, "emergency_address_sid"),
 		EmergencyStatus:      utils.OptionalString(d, "emergency_status"),
 		FriendlyName:         utils.OptionalString(d, "friendly_name"),
 		IdentitySid:          utils.OptionalStringWithEmptyStringOnChange(d, "identity_sid"),
-		PhoneNumber:          utils.OptionalString(d, "phone_number"),
 		StatusCallback:       utils.OptionalStringWithEmptyStringOnChange(d, "status_callback_url"),
 		StatusCallbackMethod: utils.OptionalString(d, "status_callback_method"),
 		TrunkSid:             utils.OptionalStringWithEmptyStringOnChange(d, "trunk_sid"),
+	}
+
+	if _, ok := d.GetOk("area_code"); ok {
+		createInput.AreaCode = utils.OptionalString(d, "area_code")
+	}
+
+	if _, ok := d.GetOk("phone_number"); ok {
+		createInput.PhoneNumber = utils.OptionalString(d, "phone_number")
+	}
+
+	if _, ok := d.GetOk("search_criteria"); ok {
+		phoneNumber, err := searchForPhoneNumber(ctx, d, meta)
+		if err != nil {
+			return err
+		}
+		createInput.PhoneNumber = phoneNumber
 	}
 
 	if _, ok := d.GetOk("messaging"); ok {
@@ -475,4 +639,204 @@ func resourcePhoneNumberDelete(ctx context.Context, d *schema.ResourceData, meta
 
 	d.SetId("")
 	return nil
+}
+
+func searchForPhoneNumber(ctx context.Context, d *schema.ResourceData, meta interface{}) (*string, diag.Diagnostics) {
+	typeOfPhoneNumber := d.Get("search_criteria.0.type")
+
+	if typeOfPhoneNumber == "local" {
+		return searchForLocalNumber(ctx, d, meta)
+	}
+	if typeOfPhoneNumber == "mobile" {
+		return searchForMobileNumber(ctx, d, meta)
+	}
+	return searchForTollFreeNumber(ctx, d, meta)
+}
+
+func searchForLocalNumber(ctx context.Context, d *schema.ResourceData, meta interface{}) (*string, diag.Diagnostics) {
+	client := meta.(*common.TwilioClient).API
+
+	pageOptions := populateAvailablePhoneNumberPageOptions(d)
+	options := &local.AvailablePhoneNumbersPageOptions{
+		AreaCode:                      pageOptions.AreaCode,
+		Beta:                          pageOptions.Beta,
+		Contains:                      pageOptions.Contains,
+		PageSize:                      pageOptions.PageSize,
+		ExcludeAllAddressRequired:     pageOptions.ExcludeAllAddressRequired,
+		ExcludeLocalAddressRequired:   pageOptions.ExcludeLocalAddressRequired,
+		ExcludeForeignAddressRequired: pageOptions.ExcludeForeignAddressRequired,
+		FaxEnabled:                    pageOptions.FaxEnabled,
+		SmsEnabled:                    pageOptions.SmsEnabled,
+		MmsEnabled:                    pageOptions.MmsEnabled,
+		VoiceEnabled:                  pageOptions.VoiceEnabled,
+		NearNumber:                    pageOptions.NearNumber,
+		NearLatLong:                   pageOptions.NearLatLong,
+		Distance:                      pageOptions.Distance,
+		InPostalCode:                  pageOptions.InPostalCode,
+		InRegion:                      pageOptions.InRegion,
+		InRateCenter:                  pageOptions.InRateCenter,
+		InLata:                        pageOptions.InLata,
+		InLocality:                    pageOptions.InLocality,
+	}
+
+	accountSid := d.Get("account_sid").(string)
+	countryCode := d.Get("search_criteria.0.iso_country").(string)
+	pageResponse, err := client.Account(accountSid).AvailablePhoneNumber(countryCode).Local.PageWithContext(ctx, options)
+	if err != nil {
+		if utils.IsNotFoundError(err) {
+			return nil, diag.Errorf("No local phone numbers were found for country (%s) in account (%s)", countryCode, accountSid)
+		}
+		// If the account sid is incorrect a 401 is returned, a this is a generic error this will not be handled here and an error will be returned
+		return nil, diag.Errorf("Failed to list available local phone numbers: %s", err.Error())
+	}
+
+	availableNumbers := pageResponse.AvailablePhoneNumbers
+	if len(availableNumbers) == 0 {
+		return nil, diag.Errorf("No local phone numbers have been found")
+	}
+	return sdkUtils.String(availableNumbers[0].PhoneNumber), nil
+}
+
+func searchForMobileNumber(ctx context.Context, d *schema.ResourceData, meta interface{}) (*string, diag.Diagnostics) {
+	client := meta.(*common.TwilioClient).API
+
+	pageOptions := populateAvailablePhoneNumberPageOptions(d)
+	options := &mobile.AvailablePhoneNumbersPageOptions{
+		AreaCode:                      pageOptions.AreaCode,
+		Beta:                          pageOptions.Beta,
+		Contains:                      pageOptions.Contains,
+		PageSize:                      pageOptions.PageSize,
+		ExcludeAllAddressRequired:     pageOptions.ExcludeAllAddressRequired,
+		ExcludeLocalAddressRequired:   pageOptions.ExcludeLocalAddressRequired,
+		ExcludeForeignAddressRequired: pageOptions.ExcludeForeignAddressRequired,
+		FaxEnabled:                    pageOptions.FaxEnabled,
+		SmsEnabled:                    pageOptions.SmsEnabled,
+		MmsEnabled:                    pageOptions.MmsEnabled,
+		VoiceEnabled:                  pageOptions.VoiceEnabled,
+		NearNumber:                    pageOptions.NearNumber,
+		NearLatLong:                   pageOptions.NearLatLong,
+		Distance:                      pageOptions.Distance,
+		InPostalCode:                  pageOptions.InPostalCode,
+		InRegion:                      pageOptions.InRegion,
+		InRateCenter:                  pageOptions.InRateCenter,
+		InLata:                        pageOptions.InLata,
+		InLocality:                    pageOptions.InLocality,
+	}
+
+	accountSid := d.Get("account_sid").(string)
+	countryCode := d.Get("search_criteria.0.iso_country").(string)
+	pageResponse, err := client.Account(accountSid).AvailablePhoneNumber(countryCode).Mobile.PageWithContext(ctx, options)
+	if err != nil {
+		if utils.IsNotFoundError(err) {
+			return nil, diag.Errorf("No mobile phone numbers were found for country (%s) in account (%s)", countryCode, accountSid)
+		}
+		// If the account sid is incorrect a 401 is returned, a this is a generic error this will not be handled here and an error will be returned
+		return nil, diag.Errorf("Failed to list available mobile phone numbers: %s", err.Error())
+	}
+
+	availableNumbers := pageResponse.AvailablePhoneNumbers
+	if len(availableNumbers) == 0 {
+		return nil, diag.Errorf("No mobile phone numbers have been found")
+	}
+	return sdkUtils.String(availableNumbers[0].PhoneNumber), nil
+}
+
+func searchForTollFreeNumber(ctx context.Context, d *schema.ResourceData, meta interface{}) (*string, diag.Diagnostics) {
+	client := meta.(*common.TwilioClient).API
+
+	pageOptions := populateAvailablePhoneNumberPageOptions(d)
+	options := &toll_free.AvailablePhoneNumbersPageOptions{
+		AreaCode:                      pageOptions.AreaCode,
+		Beta:                          pageOptions.Beta,
+		Contains:                      pageOptions.Contains,
+		PageSize:                      pageOptions.PageSize,
+		ExcludeAllAddressRequired:     pageOptions.ExcludeAllAddressRequired,
+		ExcludeLocalAddressRequired:   pageOptions.ExcludeLocalAddressRequired,
+		ExcludeForeignAddressRequired: pageOptions.ExcludeForeignAddressRequired,
+		FaxEnabled:                    pageOptions.FaxEnabled,
+		SmsEnabled:                    pageOptions.SmsEnabled,
+		MmsEnabled:                    pageOptions.MmsEnabled,
+		VoiceEnabled:                  pageOptions.VoiceEnabled,
+		NearNumber:                    pageOptions.NearNumber,
+		NearLatLong:                   pageOptions.NearLatLong,
+		Distance:                      pageOptions.Distance,
+		InPostalCode:                  pageOptions.InPostalCode,
+		InRegion:                      pageOptions.InRegion,
+		InRateCenter:                  pageOptions.InRateCenter,
+		InLata:                        pageOptions.InLata,
+		InLocality:                    pageOptions.InLocality,
+	}
+
+	accountSid := d.Get("account_sid").(string)
+	countryCode := d.Get("search_criteria.0.iso_country").(string)
+	pageResponse, err := client.Account(accountSid).AvailablePhoneNumber(countryCode).TollFree.PageWithContext(ctx, options)
+	if err != nil {
+		if utils.IsNotFoundError(err) {
+			return nil, diag.Errorf("No toll free phone numbers were found for country (%s) in account (%s)", countryCode, accountSid)
+		}
+		// If the account sid is incorrect a 401 is returned, a this is a generic error this will not be handled here and an error will be returned
+		return nil, diag.Errorf("Failed to list available toll free phone numbers: %s", err.Error())
+	}
+
+	availableNumbers := pageResponse.AvailablePhoneNumbers
+	if len(availableNumbers) == 0 {
+		return nil, diag.Errorf("No toll free phone numbers have been found")
+	}
+	return sdkUtils.String(availableNumbers[0].PhoneNumber), nil
+}
+
+type AvailablePhoneNumbersPageOptions struct {
+	PageSize                      *int
+	AreaCode                      *int
+	Contains                      *string
+	SmsEnabled                    *bool
+	MmsEnabled                    *bool
+	VoiceEnabled                  *bool
+	ExcludeAllAddressRequired     *bool
+	ExcludeLocalAddressRequired   *bool
+	ExcludeForeignAddressRequired *bool
+	Beta                          *bool
+	NearNumber                    *string
+	NearLatLong                   *string
+	Distance                      *int
+	InPostalCode                  *string
+	InRegion                      *string
+	InRateCenter                  *string
+	InLata                        *string
+	InLocality                    *string
+	FaxEnabled                    *bool
+}
+
+func populateAvailablePhoneNumberPageOptions(d *schema.ResourceData) *AvailablePhoneNumbersPageOptions {
+	options := &AvailablePhoneNumbersPageOptions{
+		AreaCode: utils.OptionalInt(d, "search_criteria.0.area_code"),
+		Beta:     utils.OptionalBool(d, "search_criteria.0.allow_beta_numbers"),
+		Contains: utils.OptionalString(d, "search_criteria.0.contains_number_pattern"),
+		PageSize: sdkUtils.Int(1), // We only need 1 phone number to purchase
+	}
+
+	if _, ok := d.GetOk("search_criteria.0.exclude_address_requirements"); ok {
+		options.ExcludeAllAddressRequired = utils.OptionalBool(d, "search_criteria.0.exclude_address_requirements.0.all")
+		options.ExcludeLocalAddressRequired = utils.OptionalBool(d, "search_criteria.0.exclude_address_requirements.0.local")
+		options.ExcludeForeignAddressRequired = utils.OptionalBool(d, "search_criteria.0.exclude_address_requirements.0.foreign")
+	}
+
+	if _, ok := d.GetOk("search_criteria.0.capabilities"); ok {
+		options.FaxEnabled = utils.OptionalBool(d, "search_criteria.0.capabilities.0.fax_enabled")
+		options.SmsEnabled = utils.OptionalBool(d, "search_criteria.0.capabilities.0.sms_enabled")
+		options.MmsEnabled = utils.OptionalBool(d, "search_criteria.0.capabilities.0.mms_enabled")
+		options.VoiceEnabled = utils.OptionalBool(d, "search_criteria.0.capabilities.0.voice_enabled")
+	}
+
+	if _, ok := d.GetOk("search_criteria.0.location"); ok {
+		options.NearNumber = utils.OptionalString(d, "search_criteria.0.location.0.near_number")
+		options.NearLatLong = utils.OptionalString(d, "search_criteria.0.location.0.near_lat_long")
+		options.Distance = utils.OptionalInt(d, "search_criteria.0.location.0.distance")
+		options.InPostalCode = utils.OptionalString(d, "search_criteria.0.location.0.in_postal_code")
+		options.InRegion = utils.OptionalString(d, "search_criteria.0.location.0.in_region")
+		options.InRateCenter = utils.OptionalString(d, "search_criteria.0.location.0.in_rate_center")
+		options.InLata = utils.OptionalString(d, "search_criteria.0.location.0.in_lata")
+		options.InLocality = utils.OptionalString(d, "search_criteria.0.location.0.in_locality")
+	}
+	return options
 }
