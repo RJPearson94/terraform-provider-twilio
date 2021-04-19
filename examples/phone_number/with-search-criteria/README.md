@@ -4,6 +4,8 @@ This example provisions the following resources:
 
 - Phone number
 
+**NOTE:** v0.10.0 of the provider has not be released yet.
+
 ## Requirements
 
 | Name      | Version  |
