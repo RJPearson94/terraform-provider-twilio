@@ -1,13 +1,18 @@
 ## v0.10.0 (unreleased)
 
-FEATURES
+### FEATURES
 
 - Make the `sid` argument optional on the `twilio_account_details` data source to allow the account SID configured on the provider to be used. This means the data source can be used instead of having to supply the account SID twice, once in the provider configuration and for any resources/ data sources that have the account sid as an argument
-- Add the ability to search for a `local`, `mobile` or `toll_free` phone number on the `twilio_phone_number` resource. This allows you to search for and purchase a phone number in a single resource. This gets around the issue with data sources return a new available phone numbers list on plan which caused a new phone number to be purchased when being supplied as the input to the `twilio_phone_number` resource
+- Add the ability to search for a `local`, `mobile` or `toll_free` phone number on the `twilio_phone_number` resource. This allows you to search for and purchase a phone number in a single resource. This gets around the issue with data sources returns a new available phone numbers list on each plan which caused a new phone number to be purchased when being supplied as the input to the `twilio_phone_number` resource
 
-NOTES
+### FIXES
+
+- Previously when creating a serverless build with multiple functions or asset versions that were created simultaneously, the Twilio API could return these in any order. As the order may not match the order the asset or function versions were supplied, Terraform will detect this as a drift and the build is re-created on the next deployment. A diff suppression has been added to the `sid` argument in the `asset_version` and `function_version` block to check if the SID was present in the list, just in a different position
+
+### NOTES
 
 - The following data sources `twilio_phone_number_available_local_numbers`, `twilio_phone_number_available_mobile_numbers` and `twilio_phone_number_available_toll_free_numbers` have been deprecated. The `search_criteria` block on the `twilio_phone_number` resource should be used instead
+- The `function_version` and `asset_version` lists on the `twilio_serverless_build` resource, `twilio_serverless_build` data source and `twilio_serverless_builds` data source are now sorted by SID. This is to ensure the outputs are consistent despite the API returning the values in a random order
 
 ## v0.9.0 (2021-04-18)
 

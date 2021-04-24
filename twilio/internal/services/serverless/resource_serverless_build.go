@@ -70,9 +70,21 @@ func resourceServerlessBuild() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"sid": {
-							Type:         schema.TypeString,
-							Required:     true,
-							ForceNew:     true,
+							Type:     schema.TypeString,
+							Required: true,
+							ForceNew: true,
+							DiffSuppressFunc: func(k string, _ string, new string, d *schema.ResourceData) bool {
+								old, _ := d.GetChange("asset_version")
+
+								// Suppress the diff if the resource existed in any position of the old asset versions array.
+								// This is to mitigate a problem when the Twilio API returns the content in a random order when multiple versions have been created at the same time
+								for _, assetVersion := range old.([]interface{}) {
+									if assetVersion.(map[string]interface{})["sid"].(string) == new {
+										return true
+									}
+								}
+								return false
+							},
 							ValidateFunc: utils.ServerlessAssetVersionSidValidation(),
 						},
 						"account_sid": {
@@ -109,9 +121,21 @@ func resourceServerlessBuild() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"sid": {
-							Type:         schema.TypeString,
-							Required:     true,
-							ForceNew:     true,
+							Type:     schema.TypeString,
+							Required: true,
+							ForceNew: true,
+							DiffSuppressFunc: func(k string, _ string, new string, d *schema.ResourceData) bool {
+								old, _ := d.GetChange("function_version")
+
+								// Suppress the diff if the resource existed in any position of the old function versions array.
+								// This is to mitigate a problem when the Twilio API returns the content in a random order when multiple versions have been created at the same time
+								for _, functionVersion := range old.([]interface{}) {
+									if functionVersion.(map[string]interface{})["sid"].(string) == new {
+										return true
+									}
+								}
+								return false
+							},
 							ValidateFunc: utils.ServerlessFunctionVersionSidValidation(),
 						},
 						"account_sid": {

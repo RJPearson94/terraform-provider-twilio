@@ -57,6 +57,92 @@ func TestAccTwilioServerlessBuild_basic(t *testing.T) {
 	})
 }
 
+func TestAccTwilioServerlessBuild_functions(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.build", buildResourceName)
+	uniqueName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioServerlessBuildDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessBuild_multipleFunctions(uniqueName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessBuildExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "function_version.#", "4"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "function_version.0.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "function_version.1.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "function_version.2.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "function_version.3.sid"),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessBuild_oneFunction(uniqueName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessBuildExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "function_version.#", "1"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "function_version.0.sid"),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessBuild_multipleFunctions(uniqueName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessBuildExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "function_version.#", "4"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "function_version.0.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "function_version.1.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "function_version.2.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "function_version.3.sid"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioServerlessBuild_assets(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.build", buildResourceName)
+	uniqueName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioServerlessBuildDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioServerlessBuild_multipleAssets(uniqueName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessBuildExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "asset_version.#", "4"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "asset_version.0.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "asset_version.1.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "asset_version.2.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "asset_version.3.sid"),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessBuild_oneAsset(uniqueName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessBuildExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "asset_version.#", "1"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "asset_version.0.sid"),
+				),
+			},
+			{
+				Config: testAccTwilioServerlessBuild_multipleAssets(uniqueName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioServerlessBuildExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "asset_version.#", "4"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "asset_version.0.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "asset_version.1.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "asset_version.2.sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "asset_version.3.sid"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccTwilioServerlessBuild_dependenciesAndRuntime(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.build", buildResourceName)
 	uniqueName := acctest.RandString(10)
@@ -223,6 +309,220 @@ resource "twilio_serverless_build" "build" {
   }
   asset_version {
     sid = twilio_serverless_asset.asset.latest_version_sid
+  }
+  polling {
+    enabled = true
+  }
+}
+`, uniqueName)
+}
+
+func testAccTwilioServerlessBuild_oneFunction(uniqueName string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "service-%s"
+  friendly_name = "test"
+}
+
+resource "twilio_serverless_function" "function" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = <<EOF
+exports.handler = function (context, event, callback) {
+	callback(null, "Hello World");
+};
+EOF
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "private"
+}
+
+resource "twilio_serverless_build" "build" {
+  service_sid = twilio_serverless_service.service.sid
+  function_version {
+    sid = twilio_serverless_function.function.latest_version_sid
+  }
+  polling {
+    enabled = true
+  }
+}
+`, uniqueName)
+}
+
+func testAccTwilioServerlessBuild_multipleFunctions(uniqueName string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "service-%s"
+  friendly_name = "test"
+}
+
+resource "twilio_serverless_function" "function" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = <<EOF
+exports.handler = function (context, event, callback) {
+	callback(null, "Hello World");
+};
+EOF
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld.js"
+  path              = "/test-function"
+  visibility        = "private"
+}
+
+resource "twilio_serverless_function" "function2" {
+	service_sid       = twilio_serverless_service.service.sid
+	friendly_name     = "test"
+	content           = <<EOF
+  exports.handler = function (context, event, callback) {
+	  callback(null, "Hello World 2");
+  };
+  EOF
+	content_type      = "application/javascript"
+	content_file_name = "helloWorld2.js"
+	path              = "/test-function2"
+	visibility        = "private"
+  }
+
+  resource "twilio_serverless_function" "function3" {
+	service_sid       = twilio_serverless_service.service.sid
+	friendly_name     = "test"
+	content           = <<EOF
+  exports.handler = function (context, event, callback) {
+	  callback(null, "Hello World 3");
+  };
+  EOF
+	content_type      = "application/javascript"
+	content_file_name = "helloWorld3.js"
+	path              = "/test-function3"
+	visibility        = "private"
+  }
+
+  resource "twilio_serverless_function" "function4" {
+	service_sid       = twilio_serverless_service.service.sid
+	friendly_name     = "test"
+	content           = <<EOF
+  exports.handler = function (context, event, callback) {
+	  callback(null, "Hello World 3");
+  };
+  EOF
+	content_type      = "application/javascript"
+	content_file_name = "helloWorld4.js"
+	path              = "/test-function4"
+	visibility        = "private"
+  }
+
+resource "twilio_serverless_build" "build" {
+  service_sid = twilio_serverless_service.service.sid
+  function_version {
+    sid = twilio_serverless_function.function.latest_version_sid
+  }
+  function_version {
+    sid = twilio_serverless_function.function2.latest_version_sid
+  }
+  function_version {
+    sid = twilio_serverless_function.function3.latest_version_sid
+  }
+  function_version {
+    sid = twilio_serverless_function.function4.latest_version_sid
+  }
+  polling {
+    enabled = true
+  }
+}
+`, uniqueName)
+}
+
+func testAccTwilioServerlessBuild_oneAsset(uniqueName string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "service-%s"
+  friendly_name = "test"
+}
+
+resource "twilio_serverless_asset" "asset" {
+	service_sid       = twilio_serverless_service.service.sid
+	friendly_name     = "test"
+	content           = "{}"
+	content_type      = "application/json"
+	content_file_name = "test.json"
+	path              = "/test-asset"
+	visibility        = "private"
+  }
+
+resource "twilio_serverless_build" "build" {
+  service_sid = twilio_serverless_service.service.sid
+  asset_version {
+    sid = twilio_serverless_asset.asset.latest_version_sid
+  }
+  polling {
+    enabled = true
+  }
+}
+`, uniqueName)
+}
+
+func testAccTwilioServerlessBuild_multipleAssets(uniqueName string) string {
+	return fmt.Sprintf(`
+resource "twilio_serverless_service" "service" {
+  unique_name   = "service-%s"
+  friendly_name = "test"
+}
+
+resource "twilio_serverless_asset" "asset" {
+	service_sid       = twilio_serverless_service.service.sid
+	friendly_name     = "test"
+	content           = "{}"
+	content_type      = "application/json"
+	content_file_name = "test.json"
+	path              = "/test-asset"
+	visibility        = "private"
+  }
+
+  resource "twilio_serverless_asset" "asset2" {
+	service_sid       = twilio_serverless_service.service.sid
+	friendly_name     = "test2"
+	content           = "{}"
+	content_type      = "application/json"
+	content_file_name = "test.json"
+	path              = "/test-asset2"
+	visibility        = "private"
+  }
+
+  resource "twilio_serverless_asset" "asset3" {
+	service_sid       = twilio_serverless_service.service.sid
+	friendly_name     = "test3"
+	content           = "{}"
+	content_type      = "application/json"
+	content_file_name = "test.json"
+	path              = "/test-asset3"
+	visibility        = "private"
+  }
+
+  resource "twilio_serverless_asset" "asset4" {
+	service_sid       = twilio_serverless_service.service.sid
+	friendly_name     = "test4"
+	content           = "{}"
+	content_type      = "application/json"
+	content_file_name = "test.json"
+	path              = "/test-asset4"
+	visibility        = "private"
+  }
+
+resource "twilio_serverless_build" "build" {
+  service_sid = twilio_serverless_service.service.sid
+  asset_version {
+    sid = twilio_serverless_asset.asset.latest_version_sid
+  }
+  asset_version {
+    sid = twilio_serverless_asset.asset2.latest_version_sid
+  }
+  asset_version {
+    sid = twilio_serverless_asset.asset3.latest_version_sid
+  }
+  asset_version {
+    sid = twilio_serverless_asset.asset4.latest_version_sid
   }
   polling {
     enabled = true

@@ -2,6 +2,7 @@ package serverless
 
 import (
 	"context"
+	"sort"
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
@@ -197,9 +198,16 @@ func flattenAssetVersions(input *[]builds.PageAssetVersion) *[]interface{} {
 		return nil
 	}
 
+	assetVersions := *input
+
+	// Sort array in SID order due to values being returned in a random order if 2 or more resources are created at the same time
+	sort.Slice(assetVersions[:], func(i, j int) bool {
+		return assetVersions[i].Sid < assetVersions[j].Sid
+	})
+
 	results := make([]interface{}, 0)
 
-	for _, prop := range *input {
+	for _, prop := range assetVersions {
 		result := make(map[string]interface{})
 		result["sid"] = prop.Sid
 		result["account_sid"] = prop.AccountSid
@@ -220,9 +228,16 @@ func flattenPageFunctionVersions(input *[]builds.PageFunctionVersion) *[]interfa
 		return nil
 	}
 
+	functionVersions := *input
+
+	// Sort array in SID order due to values being returned in a random order if 2 or more resources are created at the same time
+	sort.Slice(functionVersions[:], func(i, j int) bool {
+		return functionVersions[i].Sid < functionVersions[j].Sid
+	})
+
 	results := make([]interface{}, 0)
 
-	for _, prop := range *input {
+	for _, prop := range functionVersions {
 		result := make(map[string]interface{})
 		result["sid"] = prop.Sid
 		result["account_sid"] = prop.AccountSid
