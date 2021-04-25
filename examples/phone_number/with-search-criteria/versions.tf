@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     twilio = {
-      source  = "RJPearson94.com/twilio/twilio"
+      source  = "RJPearson94/twilio"
       version = ">= 0.10.0"
     }
   }
