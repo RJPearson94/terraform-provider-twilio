@@ -43,7 +43,6 @@ tools:
 	@echo "==> installing required tooling..."
 	GO111MODULE=off go get -u github.com/client9/misspell/cmd/misspell
 	GO111MODULE=off go get -u github.com/bflad/tfproviderlint/cmd/tfproviderlint
-	GO111MODULE=off go get -u github.com/bflad/tfproviderdocs
 	GO111MODULE=off go get -u github.com/katbyte/terrafmt
 	GO111MODULE=off go get -u github.com/boyter/scc
 	GO111MODULE=off go get -u golang.org/x/tools/cmd/goimports
