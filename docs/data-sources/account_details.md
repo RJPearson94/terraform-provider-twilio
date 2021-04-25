@@ -37,7 +37,7 @@ The following arguments are supported:
 
 - `sid` - (Optional) The SID of the account
 
-~> If an account SID is not supplied the account SID configured on the provider is used instead
+~> If an account SID is not supplied then the account SID configured on the provider is used instead
 
 ## Attributes Reference
 

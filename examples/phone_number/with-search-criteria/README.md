@@ -4,20 +4,18 @@ This example provisions the following resources:
 
 - Phone number
 
-**NOTE:** v0.10.0 of the provider has not be released yet.
-
 ## Requirements
 
-| Name      | Version  |
-| --------- | -------- |
-| terraform | >= 0.13  |
-| twilio    | >= 0.1.0 |
+| Name      | Version   |
+| --------- | --------- |
+| terraform | >= 0.13   |
+| twilio    | >= 0.10.0 |
 
 ## Providers
 
-| Name   | Version  |
-| ------ | -------- |
-| twilio | >= 0.1.0 |
+| Name   | Version   |
+| ------ | --------- |
+| twilio | >= 0.10.0 |
 
 ## Modules
 
