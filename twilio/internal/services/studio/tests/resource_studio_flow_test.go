@@ -167,6 +167,36 @@ func TestAccTwilioStudioFlow_withWidgets(t *testing.T) {
 	})
 }
 
+func TestAccTwilioStudioFlow_commitMessage(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.flow", resourceName)
+
+	friendlyName := acctest.RandString(10)
+	status := "published"
+	commitMessage := "Test commit message"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioStudioFlowDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioStudioFlow_withCommitMessage(friendlyName, status, commitMessage),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioStudioFlowExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "commit_message", commitMessage),
+				),
+			},
+			{
+				Config: testAccTwilioStudioFlow_basic(friendlyName, status),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioStudioFlowExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "commit_message", ""),
+				),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioStudioFlowDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Studio
 
@@ -242,6 +272,36 @@ resource "twilio_studio_flow" "flow" {
   })
 }
 `, friendlyName, status)
+}
+
+func testAccTwilioStudioFlow_withCommitMessage(friendlyName string, status string, commitMessage string) string {
+	return fmt.Sprintf(`
+resource "twilio_studio_flow" "flow" {
+  friendly_name = "%s"
+  status        = "%s"
+  commit_message = "%s"
+  definition = jsonencode({
+    "description" : "A New Flow",
+    "flags" : {
+      "allow_concurrent_calls" : true
+    },
+    "initial_state" : "Trigger",
+    "states" : [
+      {
+        "name" : "Trigger",
+        "properties" : {
+          "offset" : {
+            "x" : 0,
+            "y" : 0
+          }
+        },
+        "transitions" : [],
+        "type" : "trigger"
+      }
+    ]
+  })
+}
+`, friendlyName, status, commitMessage)
 }
 
 func testAccTwilioStudioFlow_withWidgets() string {

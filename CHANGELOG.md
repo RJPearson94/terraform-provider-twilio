@@ -1,5 +1,9 @@
 ## v0.11.0 (unreleased)
 
+FIXES
+
+- Previously when removing a commit message from a `twilio_studio_flow` resource an error was thrown because an empty string was being passed up to the Twilio API for the commit message. This was incorrect, the commit message parameter should not have been sent to the API as a new version is created without the commit message, hence removing it from the resource
+
 FEATURES
 
 - **New Data Source:** `twilio_studio_flow_definition` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_definition.md)
