@@ -3,6 +3,7 @@
 FIXES
 
 - Previously when removing a commit message from a `twilio_studio_flow` resource an error was thrown because an empty string was being passed up to the Twilio API for the commit message. This was incorrect, the commit message parameter should not have been sent to the API as a new version is created without the commit message, hence removing it from the resource
+- Previously the provider acceptable a `reachability_enabled` boolean on the `twilio_chat_service` resource however this value was not passed to the Twilio API and always caused a drift. This has been corrected
 
 FEATURES
 

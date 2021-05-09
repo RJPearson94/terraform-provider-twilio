@@ -289,6 +289,33 @@ func TestAccTwilioChatService_notificationsUpdate(t *testing.T) {
 	})
 }
 
+func TestAccTwilioChatService_reachabilityEnabled(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioChatServiceDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioChatService_reachabilityEnabledTrue(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioChatServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "reachability_enabled", "true"),
+				),
+			},
+			{
+				Config: testAccTwilioChatService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioChatServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "reachability_enabled", "false"),
+				),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioChatServiceDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Chat
 
@@ -381,4 +408,13 @@ resource "twilio_chat_service" "service" {
   pre_webhook_url         = "%s"
 }
 `, friendlyName, url)
+}
+
+func testAccTwilioChatService_reachabilityEnabledTrue(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_chat_service" "service" {
+  friendly_name = "%s"
+  reachability_enabled = true
+}
+`, friendlyName)
 }

@@ -359,6 +359,7 @@ func resourceChatServiceUpdate(ctx context.Context, d *schema.ResourceData, meta
 	updateInput := &service.UpdateServiceInput{
 		FriendlyName:           utils.OptionalString(d, "friendly_name"),
 		ReadStatusEnabled:      utils.OptionalBool(d, "read_status_enabled"),
+		ReachabilityEnabled:    utils.OptionalBool(d, "reachability_enabled"),
 		TypingIndicatorTimeout: utils.OptionalInt(d, "typing_indicator_timeout"),
 		PostWebhookURL:         utils.OptionalStringWithEmptyStringOnChange(d, "post_webhook_url"),
 		PostWebhookRetryCount:  utils.OptionalIntWith0OnChange(d, "post_webhook_retry_count"),
