@@ -197,6 +197,19 @@ func TestAccTwilioStudioFlow_commitMessage(t *testing.T) {
 	})
 }
 
+func TestAccTwilioStudioFlow_withInvalidFlow(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTwilioStudioFlow_invalidFlow(),
+				ExpectError: regexp.MustCompile("(?s)Failed to validate studio flow: Flow definition validation failed, check `details` for more information. Details are .*"),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioStudioFlowDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Studio
 
@@ -333,6 +346,19 @@ resource "twilio_studio_flow" "flow" {
 	status        = "published"
 	definition    = data.twilio_studio_flow_definition.definition.json
 	validate      = true
+}
+`
+}
+
+func testAccTwilioStudioFlow_invalidFlow() string {
+	return `
+resource "twilio_studio_flow" "flow" {
+  friendly_name = "invalid flow"
+  status        = "draft"
+  validate      = true
+  definition = jsonencode({
+    "description" : "Invalid flow"
+  })
 }
 `
 }

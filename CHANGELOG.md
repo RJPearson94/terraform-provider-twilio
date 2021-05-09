@@ -29,6 +29,8 @@ FEATURES
 - **New Data Source:** `twilio_studio_flow_widget_state` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_state.md)
 - **New Data Source:** `twilio_studio_flow_widget_trigger` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_trigger.md)
 
+- Show the validation errors which are returned in the API response when you create, update or validate a studio flow. This improved error logging on `twilio_studio_flow` resource can aid with debugging issues with your Studio Flow definition
+
 ## v0.10.0 (2021-04-25)
 
 ### FEATURES

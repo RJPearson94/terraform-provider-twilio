@@ -11,6 +11,7 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flow"
 	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flow_validation"
 	"github.com/RJPearson94/twilio-sdk-go/service/studio/v2/flows"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
@@ -129,7 +130,7 @@ func resourceStudioFlowCreate(ctx context.Context, d *schema.ResourceData, meta 
 
 	createResult, err := client.Flows.CreateWithContext(ctx, createInput)
 	if err != nil {
-		return diag.Errorf("Failed to create studio flow: %s", err.Error())
+		return handleError("Failed to create studio flow", err)
 	}
 
 	d.SetId(createResult.Sid)
@@ -189,7 +190,7 @@ func resourceStudioFlowUpdate(ctx context.Context, d *schema.ResourceData, meta 
 
 	updateResp, err := client.Flow(d.Id()).UpdateWithContext(ctx, updateInput)
 	if err != nil {
-		return diag.Errorf("Failed to Update Studio Flow: %s", err.Error())
+		return handleError("Failed to update studio flow", err)
 	}
 
 	d.SetId(updateResp.Sid)
@@ -220,11 +221,19 @@ func validateRequest(ctx context.Context, d *schema.ResourceData, meta interface
 
 		resp, err := client.FlowValidation.ValidateWithContext(ctx, validateInput)
 		if err != nil {
-			return diag.Errorf("Failed to validate studio flow: %s", err.Error())
+			return handleError("Failed to validate studio flow", err)
 		}
 		if !resp.Valid {
 			return diag.Errorf("The template is invalid")
 		}
 	}
 	return nil
+}
+
+func handleError(errorPrefix string, err error) diag.Diagnostics {
+	if twilioErr, ok := err.(*sdkUtils.TwilioError); ok && twilioErr.Details != nil {
+		errDetails, _ := structure.FlattenJsonToString(*twilioErr.Details)
+		return diag.Errorf("%s: %s. Details are %s", errorPrefix, err.Error(), errDetails)
+	}
+	return diag.Errorf("%s: %s", errorPrefix, err.Error())
 }
