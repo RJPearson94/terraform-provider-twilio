@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"fmt"
 	"regexp"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -253,6 +255,10 @@ func StudioFlowSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^FW[0-9a-fA-F]{32}$"), "")
 }
 
+func StudioFlowWidgetLiquidTemplateValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile(`^\{[\{%].+[\}%]\}$`), "")
+}
+
 // TaskRouter
 
 func TaskRouterWorkspaceSidValidation() schema.SchemaValidateFunc {
@@ -289,4 +295,21 @@ func VideoCompositionHookSidValidation() schema.SchemaValidateFunc {
 
 func VoiceQueueSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^QU[0-9a-fA-F]{32}$"), "")
+}
+
+// General
+
+func StringDigitsBetween(min int, max int) schema.SchemaValidateFunc {
+	return func(i interface{}, k string) (warnings []string, errors []error) {
+		if v, err := strconv.Atoi(i.(string)); err == nil {
+			if v < min || v > max {
+				errors = append(errors, fmt.Errorf("expected %s to be in the range (%d - %d), got %d", k, min, max, v))
+				return warnings, errors
+			}
+			return warnings, errors
+		}
+
+		errors = append(errors, fmt.Errorf("expected %s value (%v) to be a number", k, i))
+		return warnings, errors
+	}
 }

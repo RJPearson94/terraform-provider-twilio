@@ -372,46 +372,46 @@ EOF
 }
 
 resource "twilio_serverless_function" "function2" {
-	service_sid       = twilio_serverless_service.service.sid
-	friendly_name     = "test"
-	content           = <<EOF
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = <<EOF
   exports.handler = function (context, event, callback) {
 	  callback(null, "Hello World 2");
   };
   EOF
-	content_type      = "application/javascript"
-	content_file_name = "helloWorld2.js"
-	path              = "/test-function2"
-	visibility        = "private"
-  }
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld2.js"
+  path              = "/test-function2"
+  visibility        = "private"
+}
 
-  resource "twilio_serverless_function" "function3" {
-	service_sid       = twilio_serverless_service.service.sid
-	friendly_name     = "test"
-	content           = <<EOF
+resource "twilio_serverless_function" "function3" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = <<EOF
   exports.handler = function (context, event, callback) {
 	  callback(null, "Hello World 3");
   };
   EOF
-	content_type      = "application/javascript"
-	content_file_name = "helloWorld3.js"
-	path              = "/test-function3"
-	visibility        = "private"
-  }
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld3.js"
+  path              = "/test-function3"
+  visibility        = "private"
+}
 
-  resource "twilio_serverless_function" "function4" {
-	service_sid       = twilio_serverless_service.service.sid
-	friendly_name     = "test"
-	content           = <<EOF
+resource "twilio_serverless_function" "function4" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = <<EOF
   exports.handler = function (context, event, callback) {
 	  callback(null, "Hello World 3");
   };
   EOF
-	content_type      = "application/javascript"
-	content_file_name = "helloWorld4.js"
-	path              = "/test-function4"
-	visibility        = "private"
-  }
+  content_type      = "application/javascript"
+  content_file_name = "helloWorld4.js"
+  path              = "/test-function4"
+  visibility        = "private"
+}
 
 resource "twilio_serverless_build" "build" {
   service_sid = twilio_serverless_service.service.sid
@@ -442,14 +442,14 @@ resource "twilio_serverless_service" "service" {
 }
 
 resource "twilio_serverless_asset" "asset" {
-	service_sid       = twilio_serverless_service.service.sid
-	friendly_name     = "test"
-	content           = "{}"
-	content_type      = "application/json"
-	content_file_name = "test.json"
-	path              = "/test-asset"
-	visibility        = "private"
-  }
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset"
+  visibility        = "private"
+}
 
 resource "twilio_serverless_build" "build" {
   service_sid = twilio_serverless_service.service.sid
@@ -471,44 +471,44 @@ resource "twilio_serverless_service" "service" {
 }
 
 resource "twilio_serverless_asset" "asset" {
-	service_sid       = twilio_serverless_service.service.sid
-	friendly_name     = "test"
-	content           = "{}"
-	content_type      = "application/json"
-	content_file_name = "test.json"
-	path              = "/test-asset"
-	visibility        = "private"
-  }
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test"
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset"
+  visibility        = "private"
+}
 
-  resource "twilio_serverless_asset" "asset2" {
-	service_sid       = twilio_serverless_service.service.sid
-	friendly_name     = "test2"
-	content           = "{}"
-	content_type      = "application/json"
-	content_file_name = "test.json"
-	path              = "/test-asset2"
-	visibility        = "private"
-  }
+resource "twilio_serverless_asset" "asset2" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test2"
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset2"
+  visibility        = "private"
+}
 
-  resource "twilio_serverless_asset" "asset3" {
-	service_sid       = twilio_serverless_service.service.sid
-	friendly_name     = "test3"
-	content           = "{}"
-	content_type      = "application/json"
-	content_file_name = "test.json"
-	path              = "/test-asset3"
-	visibility        = "private"
-  }
+resource "twilio_serverless_asset" "asset3" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test3"
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset3"
+  visibility        = "private"
+}
 
-  resource "twilio_serverless_asset" "asset4" {
-	service_sid       = twilio_serverless_service.service.sid
-	friendly_name     = "test4"
-	content           = "{}"
-	content_type      = "application/json"
-	content_file_name = "test.json"
-	path              = "/test-asset4"
-	visibility        = "private"
-  }
+resource "twilio_serverless_asset" "asset4" {
+  service_sid       = twilio_serverless_service.service.sid
+  friendly_name     = "test4"
+  content           = "{}"
+  content_type      = "application/json"
+  content_file_name = "test.json"
+  path              = "/test-asset4"
+  visibility        = "private"
+}
 
 resource "twilio_serverless_build" "build" {
   service_sid = twilio_serverless_service.service.sid

@@ -43,7 +43,7 @@ func TestAccDataSourceTwilioStudioFlow_complete(t *testing.T) {
 	})
 }
 
-func TestAccDataSourceTwilioAccountQueue_invalidSid(t *testing.T) {
+func TestAccDataSourceTwilioStudioFlow_invalidSid(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,

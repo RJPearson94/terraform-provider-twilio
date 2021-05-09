@@ -1,3 +1,30 @@
+## v0.11.0 (unreleased)
+
+FEATURES
+
+- **New Data Source:** `twilio_studio_flow_definition` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_definition.md)
+- **New Data Source:** `twilio_studio_flow_widget_add_twiml_redirect` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_add_twiml_redirect.md)
+- **New Data Source:** `twilio_studio_flow_widget_capture_payments` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_capture_payments.md)
+- **New Data Source:** `twilio_studio_flow_widget_connect_call_to` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_connect_call_to.md)
+- **New Data Source:** `twilio_studio_flow_widget_connect_virtual_agent` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_connect_virtual_agent.md)
+- **New Data Source:** `twilio_studio_flow_widget_enqueue_call` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_enqueue_call.md)
+- **New Data Source:** `twilio_studio_flow_widget_fork_stream` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_fork_stream.md)
+- **New Data Source:** `twilio_studio_flow_widget_gather_input_on_call` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_gather_input_on_call.md)
+- **New Data Source:** `twilio_studio_flow_widget_make_http_request` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_make_http_request.md)
+- **New Data Source:** `twilio_studio_flow_widget_make_outgoing_call` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_make_outgoing_call.md)
+- **New Data Source:** `twilio_studio_flow_widget_record_call` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_record_call.md)
+- **New Data Source:** `twilio_studio_flow_widget_record_voicemail` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_record_voicemail.md)
+- **New Data Source:** `twilio_studio_flow_widget_run_function` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_run_function.md)
+- **New Data Source:** `twilio_studio_flow_widget_say_play` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_say_play.md)
+- **New Data Source:** `twilio_studio_flow_widget_send_and_wait_for_reply` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_send_and_wait_for_reply.md)
+- **New Data Source:** `twilio_studio_flow_widget_send_message` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_send_message.md)
+- **New Data Source:** `twilio_studio_flow_widget_send_to_autopilot` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_send_to_autopilot.md)
+- **New Data Source:** `twilio_studio_flow_widget_send_to_flex` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_send_to_flex.md)
+- **New Data Source:** `twilio_studio_flow_widget_set_variables` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_set_variables.md)
+- **New Data Source:** `twilio_studio_flow_widget_split_based_on` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_split_based_on.md)
+- **New Data Source:** `twilio_studio_flow_widget_state` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_state.md)
+- **New Data Source:** `twilio_studio_flow_widget_trigger` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/studio_flow_widget_trigger.md)
+
 ## v0.10.0 (2021-04-25)
 
 ### FEATURES

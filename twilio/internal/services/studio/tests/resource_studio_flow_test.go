@@ -145,6 +145,28 @@ func TestAccTwilioStudioFlow_blankFriendlyName(t *testing.T) {
 	})
 }
 
+func TestAccTwilioStudioFlow_withWidgets(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.flow", resourceName)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioStudioFlowDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioStudioFlow_withWidgets(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioStudioFlowExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", "With widgets"),
+					resource.TestCheckResourceAttr(stateResourceName, "status", "published"),
+					resource.TestCheckResourceAttr(stateResourceName, "validate", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "definition", `{"description":"Flow with trigger widget","flags":{"allow_concurrent_calls":true},"initial_state":"Trigger","states":[{"name":"Trigger","properties":{"offset":{"x":200,"y":0}},"transitions":[{"event":"incomingCall"},{"event":"incomingMessage"},{"event":"incomingRequest"}],"type":"trigger"}]}`),
+				),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioStudioFlowDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Studio
 
@@ -220,4 +242,37 @@ resource "twilio_studio_flow" "flow" {
   })
 }
 `, friendlyName, status)
+}
+
+func testAccTwilioStudioFlow_withWidgets() string {
+	return `
+data "twilio_studio_flow_widget_trigger" "trigger" {
+	name = "Trigger"
+	
+	offset {
+		x = 200
+		y = 0
+	}
+}
+	
+data "twilio_studio_flow_definition" "definition" {
+	description   = "Flow with trigger widget"
+	initial_state = data.twilio_studio_flow_widget_trigger.trigger.name
+	
+	flags {
+		allow_concurrent_calls = true
+	}
+	
+	states {
+		json = data.twilio_studio_flow_widget_trigger.trigger.json
+	}
+}
+	
+resource "twilio_studio_flow" "flow" {
+	friendly_name = "With widgets"
+	status        = "published"
+	definition    = data.twilio_studio_flow_definition.definition.json
+	validate      = true
+}
+`
 }
