@@ -16,6 +16,7 @@ import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/sip_trunking"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/studio"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/taskrouter"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/twiml"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/video"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/voice"
 )
@@ -36,6 +37,7 @@ func SupportedServices() []common.ServiceRegistration {
 		sip.Registration{},
 		sip_trunking.Registration{},
 		taskrouter.Registration{},
+		twiml.Registration{},
 		video.Registration{},
 		voice.Registration{},
 	}

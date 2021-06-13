@@ -1,3 +1,14 @@
+## v0.12.0 (unreleased)
+
+FIXES
+
+- The `account_sid` attribute for `twilio_voice_queue` will force a new resource when the value is changed. This implementation now matches the documented behaviour
+
+FEATURES
+
+- **New Data Source:** `twilio_twiml_app` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/twiml_app.md)
+- - **New Resource:** `twilio_twiml_app` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/twiml_app.md)
+
 ## v0.11.0 (2021-05-09)
 
 FIXES
