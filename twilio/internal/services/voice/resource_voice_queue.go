@@ -54,6 +54,7 @@ func resourceVoiceQueue() *schema.Resource {
 			"account_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
+				ForceNew:     true,
 				ValidateFunc: utils.AccountSidValidation(),
 			},
 			"friendly_name": {
