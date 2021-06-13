@@ -11,9 +11,21 @@ Manages a TwiML application. See the [API docs](https://www.twilio.com/docs/usag
 
 ## Example Usage
 
+### With Account SID
+
 ```hcl
 resource "twilio_twiml_app" "app" {
   account_sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+```
+
+### With `twilio_account_details` data source
+
+```hcl
+data "twilio_account_details" "account_details" {}
+
+resource "twilio_twiml_app" "app" {
+  account_sid = data.twilio_account_details.account_details.sid
 }
 ```
 
