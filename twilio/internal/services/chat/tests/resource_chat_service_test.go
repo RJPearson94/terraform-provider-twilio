@@ -413,7 +413,7 @@ resource "twilio_chat_service" "service" {
 func testAccTwilioChatService_reachabilityEnabledTrue(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_chat_service" "service" {
-  friendly_name = "%s"
+  friendly_name        = "%s"
   reachability_enabled = true
 }
 `, friendlyName)

@@ -290,8 +290,8 @@ resource "twilio_studio_flow" "flow" {
 func testAccTwilioStudioFlow_withCommitMessage(friendlyName string, status string, commitMessage string) string {
 	return fmt.Sprintf(`
 resource "twilio_studio_flow" "flow" {
-  friendly_name = "%s"
-  status        = "%s"
+  friendly_name  = "%s"
+  status         = "%s"
   commit_message = "%s"
   definition = jsonencode({
     "description" : "A New Flow",
