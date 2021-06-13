@@ -11,15 +11,26 @@ This example uses the following Flow Widgets
 
 ## Requirements
 
-| Name      | Version |
-| --------- | ------- |
-| terraform | >= 0.12 |
+| Name      | Version  |
+| --------- | -------- |
+| terraform | >= 0.13  |
+| twilio    | >= 0.2.0 |
 
 ## Providers
 
-| Name   | Version |
-| ------ | ------- |
-| twilio | n/a     |
+| Name   | Version  |
+| ------ | -------- |
+| twilio | >= 0.2.0 |
+
+## Modules
+
+No Modules.
+
+## Resources
+
+| Name                                                                                                              |
+| ----------------------------------------------------------------------------------------------------------------- |
+| [twilio_studio_flow](https://registry.terraform.io/providers/RJPearson94/twilio/0.2.0/docs/resources/studio_flow) |
 
 ## Inputs
 

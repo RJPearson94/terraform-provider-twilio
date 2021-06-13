@@ -9,7 +9,7 @@ variable "channel_sid" {
 }
 
 variable "autopilot_assistant_sid" {
-  description = "autopilot assistant sid"
+  description = "Autopilot Assistant sid"
   type        = string
   default     = null
 }
