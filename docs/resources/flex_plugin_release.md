@@ -9,11 +9,9 @@ Manages a Flex plugin release resource. See the [API docs](https://www.twilio.co
 
 For more information on Twilio Flex, see the product [page](https://www.twilio.com/flex)
 
-!> This API used to manage this resource is currently in beta and is subject to change
+!> If this resource is deleted and the release is the latest Twilio Flex Plugin release. A new configuration without any plugins will be created. This configuration will then be deployed as a new release to supersede the existing release
 
-!> The plugin release API does not support deleting or archiving of release resources therefore the provider will not remove or modify any resources when running a destroy, only the state for the resource will be removed.
-
-!> If you need to remove a current release from Flex you will need to create a new release resource with the desired configuration
+~> To allow terraform to correctly manage the lifecycle of the release, it is recommended that use the lifecycle meta-argument `create_before_destroy` with this resource. The docs can be found [here](https://www.terraform.io/docs/configuration/resources.html#create_before_destroy)
 
 ## Example Usage
 
@@ -29,10 +27,18 @@ resource "twilio_flex_plugin_configuration" "plugin_configuration" {
   plugins {
     plugin_version_sid = twilio_flex_plugin.plugin.latest_version_sid
   }
+
+  lifecycle {
+		create_before_destroy = true
+	}
 }
 
 resource "twilio_flex_plugin_release" "plugin_release" {
   configuration_sid = twilio_flex_plugin_configuration.plugin_configuration.sid
+
+  lifecycle {
+		create_before_destroy = true
+	}
 }
 ```
 

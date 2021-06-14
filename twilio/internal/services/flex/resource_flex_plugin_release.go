@@ -9,7 +9,9 @@ import (
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
+	"github.com/RJPearson94/twilio-sdk-go/service/flex/v1/plugin_configurations"
 	"github.com/RJPearson94/twilio-sdk-go/service/flex/v1/plugin_releases"
+	sdkUtils "github.com/RJPearson94/twilio-sdk-go/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -69,13 +71,7 @@ func resourceFlexPluginRelease() *schema.Resource {
 }
 
 func resourceFlexPluginReleaseCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*common.TwilioClient).Flex
-
-	createInput := &plugin_releases.CreateReleaseInput{
-		ConfigurationId: d.Get("configuration_sid").(string),
-	}
-
-	createResult, err := client.PluginReleases.CreateWithContext(ctx, createInput)
+	createResult, err := createRelease(ctx, d, meta, d.Get("configuration_sid").(string))
 	if err != nil {
 		return diag.Errorf("Failed to create flex plugin release: %s", err.Error())
 	}
@@ -106,8 +102,53 @@ func resourceFlexPluginReleaseRead(ctx context.Context, d *schema.ResourceData, 
 }
 
 func resourceFlexPluginReleaseDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("[INFO] Flex plugin release cannot be deleted, so removing from the Terraform state")
+	client := meta.(*common.TwilioClient).Flex
+
+	releasesPaginator := client.PluginReleases.NewReleasesPaginatorWithOptions(&plugin_releases.ReleasesPageOptions{
+		PageSize: sdkUtils.Int(5),
+	})
+
+	// The twilio api return the latest version as the first element in the array.
+	// So there is no need to loop to retrieve all records
+	releasesPaginator.Next()
+
+	if releasesPaginator.Error() != nil {
+		return diag.Errorf("Failed to read flex plugin releases: %s", releasesPaginator.Error().Error())
+	}
+
+	isCurrentRelease := d.Id() == releasesPaginator.Releases[0].Sid
+	if isCurrentRelease {
+		log.Printf("[INFO] Flex plugin release is current so a new default configuration will be created with a new release")
+
+		defaultConfigResp, err := createDefaultConfiguration(ctx, d, meta)
+		if err != nil {
+			return diag.Errorf("Failed to create default configuration during release deletion: %s", err.Error())
+		}
+
+		if _, err := createRelease(ctx, d, meta, defaultConfigResp.Sid); err != nil {
+			return diag.Errorf("Failed to create new flex plugin release deletion: %s", err.Error())
+		}
+	}
 
 	d.SetId("")
 	return nil
+}
+
+func createDefaultConfiguration(ctx context.Context, d *schema.ResourceData, meta interface{}) (*plugin_configurations.CreateConfigurationResponse, error) {
+	client := meta.(*common.TwilioClient).Flex
+
+	createInput := &plugin_configurations.CreateConfigurationInput{
+		Name: fmt.Sprintf("Default Configuration to supersede release %s", d.Id()),
+	}
+	return client.PluginConfigurations.CreateWithContext(ctx, createInput)
+}
+
+func createRelease(ctx context.Context, d *schema.ResourceData, meta interface{}, configurationSid string) (*plugin_releases.CreateReleaseResponse, error) {
+	client := meta.(*common.TwilioClient).Flex
+
+	createInput := &plugin_releases.CreateReleaseInput{
+		ConfigurationId: configurationSid,
+	}
+
+	return client.PluginReleases.CreateWithContext(ctx, createInput)
 }

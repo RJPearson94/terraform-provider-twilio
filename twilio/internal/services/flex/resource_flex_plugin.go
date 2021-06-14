@@ -232,8 +232,11 @@ func resourceFlexPluginUpdate(ctx context.Context, d *schema.ResourceData, meta 
 }
 
 func resourceFlexPluginDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("[INFO] Flex plugin cannot be deleted, so removing from the Terraform state")
+	client := meta.(*common.TwilioClient).Flex
 
+	if _, err := client.Plugin(d.Id()).ArchiveWithContext(ctx); err != nil {
+		return diag.Errorf("Failed to archive flex plugin: %s", err.Error())
+	}
 	d.SetId("")
 	return nil
 }
@@ -251,5 +254,4 @@ func createPluginVersion(ctx context.Context, d *schema.ResourceData, client *fl
 	}
 
 	return nil
-
 }

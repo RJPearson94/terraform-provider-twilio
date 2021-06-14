@@ -9,9 +9,7 @@ Manages a Flex plugin configuration resource. See the [API docs](https://www.twi
 
 For more information on Twilio Flex, see the product [page](https://www.twilio.com/flex)
 
-!> This API used to manage this resource is currently in beta and is subject to change
-
-!> The plugin configuration API does not support deleting or archiving of configuration resources therefore the provider will not remove or modify any resources when running a destroy, only the state for the resource will be removed.
+~> To allow terraform to correctly manage the lifecycle of the configuration, it is recommended that use the lifecycle meta-argument `create_before_destroy` with this resource. The docs can be found [here](https://www.terraform.io/docs/configuration/resources.html#create_before_destroy)
 
 ## Example Usage
 
@@ -37,6 +35,10 @@ resource "twilio_flex_plugin_configuration" "plugin_configuration" {
   plugins {
     plugin_version_sid = twilio_flex_plugin.plugin.latest_version_sid
   }
+
+  lifecycle {
+		create_before_destroy = true
+	}
 }
 ```
 

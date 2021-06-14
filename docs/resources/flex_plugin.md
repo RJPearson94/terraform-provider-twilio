@@ -9,10 +9,6 @@ Manages a versioned Flex plugin. See the [API docs](https://www.twilio.com/docs/
 
 For more information on Twilio Flex, see the product [page](https://www.twilio.com/flex)
 
-!> This API used to manage this resource is currently in beta and is subject to change
-
-!> The plugin API does not support deleting or archiving of plugin resources therefore the provider will not remove or modify any resources when running a destroy, only the state for the resource will be removed.
-
 ## Example Usage
 
 ```hcl

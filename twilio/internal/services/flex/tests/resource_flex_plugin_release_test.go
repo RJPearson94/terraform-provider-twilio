@@ -46,6 +46,43 @@ func TestAccTwilioFlexPluginRelease_basic(t *testing.T) {
 	})
 }
 
+func TestAccTwilioFlexPluginRelease_createBeforeDestroy(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.plugin_release", pluginReleaseResourceName)
+	pluginConfigurationStateResourceName := "twilio_flex_plugin_configuration.plugin_configuration"
+
+	name := acctest.RandString(10)
+	url := "https://example.com"
+	newUrl := "https://example.com"
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioFlexPluginReleaseDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioFlexPluginRelease_createBeforeDestroy(name, url),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioFlexPluginReleaseExists(stateResourceName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "configuration_sid", pluginConfigurationStateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+			{
+				Config: testAccTwilioFlexPluginRelease_createBeforeDestroy(name, newUrl),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioFlexPluginReleaseExists(stateResourceName),
+					resource.TestCheckResourceAttrSet(stateResourceName, "account_sid"),
+					resource.TestCheckResourceAttrPair(stateResourceName, "configuration_sid", pluginConfigurationStateResourceName, "sid"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateResourceName, "url"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccTwilioFlexPluginRelease_invalidConfigurationSid(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -117,6 +154,35 @@ resource "twilio_flex_plugin_release" "plugin_release" {
   configuration_sid = twilio_flex_plugin_configuration.plugin_configuration.sid
 }
 `, name)
+}
+
+func testAccTwilioFlexPluginRelease_createBeforeDestroy(name string, url string) string {
+	return fmt.Sprintf(`
+resource "twilio_flex_plugin" "plugin" {
+	unique_name = "%[1]s"
+	version     = "1.0.0"
+	plugin_url  = "%[2]s"
+}
+
+resource "twilio_flex_plugin_configuration" "plugin_configuration" {
+	name = "%[1]s"
+	plugins {
+		plugin_version_sid = twilio_flex_plugin.plugin.latest_version_sid
+	}
+
+	lifecycle {
+		create_before_destroy = true
+	} 
+}
+
+resource "twilio_flex_plugin_release" "plugin_release" {
+  configuration_sid = twilio_flex_plugin_configuration.plugin_configuration.sid
+
+	lifecycle {
+		create_before_destroy = true
+	}
+}
+`, name, url)
 }
 
 func testAccTwilioFlexPluginRelease_invalidConfigurationSid() string {

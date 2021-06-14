@@ -3,7 +3,6 @@ package flex
 import (
 	"context"
 	"fmt"
-	"log"
 	"regexp"
 	"time"
 
@@ -189,8 +188,11 @@ func resourceFlexPluginConfigurationRead(ctx context.Context, d *schema.Resource
 }
 
 func resourceFlexPluginConfigurationDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("[INFO] Flex plugin configuration cannot be deleted, so removing from the Terraform state")
+	client := meta.(*common.TwilioClient).Flex
 
+	if _, err := client.PluginConfiguration(d.Id()).ArchiveWithContext(ctx); err != nil {
+		return diag.Errorf("Failed to archive flex plugin configuration: %s", err.Error())
+	}
 	d.SetId("")
 	return nil
 }
