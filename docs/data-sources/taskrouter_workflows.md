@@ -26,6 +26,7 @@ output "workflows" {
 The following arguments are supported:
 
 - `workspace_sid` - (Mandatory) The SID of the workspace the workflows are associated with
+- `friendly_name` - (Optional) Search for all workflows which have the friendly name specified
 
 ## Attributes Reference
 

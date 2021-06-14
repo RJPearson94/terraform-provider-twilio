@@ -26,6 +26,27 @@ func TestAccDataSourceTwilioTaskRouterWorkflows_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "workspace_sid"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "workflows.#", "2"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioTaskRouterWorkflows_withFriendlyName(t *testing.T) {
+	stateDataSourceName := fmt.Sprintf("data.%s.workflows", workflowsDataSourceName)
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceTwilioTaskRouterWorkflows_withFriendlyName(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "id"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "workspace_sid"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "workflows.#", "1"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "workflows.0.sid"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "workflows.0.friendly_name", friendlyName),
@@ -82,8 +103,67 @@ resource "twilio_taskrouter_workflow" "workflow" {
   })
 }
 
+resource "twilio_taskrouter_workflow" "workflow_2" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s-2"
+  configuration = jsonencode({
+    "task_routing" : {
+      "filters" : [],
+      "default_filter" : {
+        "queue" : twilio_taskrouter_task_queue.task_queue.sid
+      }
+    }
+  })
+}
+
 data "twilio_taskrouter_workflows" "workflows" {
   workspace_sid = twilio_taskrouter_workflow.workflow.workspace_sid
+}
+`, friendlyName)
+}
+
+func testAccDataSourceTwilioTaskRouterWorkflows_withFriendlyName(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_taskrouter_workspace" "workspace" {
+  friendly_name          = "%[1]s"
+  multi_task_enabled     = true
+  prioritize_queue_order = "FIFO"
+}
+
+resource "twilio_taskrouter_task_queue" "task_queue" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s"
+}
+
+resource "twilio_taskrouter_workflow" "workflow" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s"
+  configuration = jsonencode({
+    "task_routing" : {
+      "filters" : [],
+      "default_filter" : {
+        "queue" : twilio_taskrouter_task_queue.task_queue.sid
+      }
+    }
+  })
+}
+
+resource "twilio_taskrouter_workflow" "workflow_2" {
+  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  friendly_name = "%[1]s-2"
+  configuration = jsonencode({
+    "task_routing" : {
+      "filters" : [],
+      "default_filter" : {
+        "queue" : twilio_taskrouter_task_queue.task_queue.sid
+      }
+    }
+  })
+}
+
+data "twilio_taskrouter_workflows" "workflows" {
+  workspace_sid = twilio_taskrouter_workflow.workflow.workspace_sid
+	friendly_name = "%[1]s"
 }
 `, friendlyName)
 }

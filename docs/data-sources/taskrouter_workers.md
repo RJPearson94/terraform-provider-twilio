@@ -26,6 +26,13 @@ output "workers" {
 The following arguments are supported:
 
 - `workspace_sid` - (Mandatory) The SID of the workspace the workers are associated with
+- `activity_name` - (Optional) Search for all workers that have the activity specified
+- `activity_sid` - (Optional) Search for all workers that have the activity specified
+- `available` - (Optional) Search for all workers that have the specified available state
+- `friendly_name` - (Optional) Search for all workers that have the friendly name specified
+- `target_workers_expression` - (Optional) Search for all workers that match the expression specified
+- `task_queue_name` - (Optional) Search for all workers that are eligible to read from the task queue specified
+- `task_queue_sid` - (Optional) Search for all workers that are eligible to read from the task queue specified
 
 ## Attributes Reference
 

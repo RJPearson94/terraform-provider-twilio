@@ -89,7 +89,8 @@ func dataSourceTaskRouterTaskQueues() *schema.Resource {
 }
 
 func dataSourceTaskRouterTaskQueuesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*common.TwilioClient).TaskRouter
+	twilioClient := meta.(*common.TwilioClient)
+	client := twilioClient.TaskRouter
 
 	workspaceSid := d.Get("workspace_sid").(string)
 	paginator := client.Workspace(workspaceSid).TaskQueues.NewTaskQueuesPaginator()
@@ -106,12 +107,11 @@ func dataSourceTaskRouterTaskQueuesRead(ctx context.Context, d *schema.ResourceD
 
 	d.SetId(workspaceSid)
 	d.Set("workspace_sid", workspaceSid)
+	d.Set("account_sid", twilioClient.AccountSid)
 
 	taskQueues := make([]interface{}, 0)
 
 	for _, taskQueue := range paginator.TaskQueues {
-		d.Set("account_sid", taskQueue.AccountSid)
-
 		taskQueuesMap := make(map[string]interface{})
 
 		taskQueuesMap["sid"] = taskQueue.Sid

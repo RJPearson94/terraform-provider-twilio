@@ -26,6 +26,8 @@ output "activities" {
 The following arguments are supported:
 
 - `workspace_sid` - (Mandatory) The SID of the workspace activities are associated with
+- `friendly_name` - (Optional) Search for all activities which have the friendly name specified
+- `available` - (Optional) Search for all activities which have the specified available state
 
 ## Attributes Reference
 

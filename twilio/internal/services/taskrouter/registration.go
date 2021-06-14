@@ -23,6 +23,7 @@ func (r Registration) SupportedDataSources() map[string]*schema.Resource {
 		"twilio_taskrouter_workflow":      dataSourceTaskRouterWorkflow(),
 		"twilio_taskrouter_workflows":     dataSourceTaskRouterWorkflows(),
 		"twilio_taskrouter_workspace":     dataSourceTaskRouterWorkspace(),
+		"twilio_taskrouter_workspaces":    dataSourceTaskRouterWorkspaces(),
 	}
 }
 

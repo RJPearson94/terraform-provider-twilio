@@ -6,6 +6,7 @@ import (
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
+	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/workflows"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -23,6 +24,10 @@ func dataSourceTaskRouterWorkflows() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: utils.TaskRouterWorkspaceSidValidation(),
+			},
+			"friendly_name": {
+				Type:     schema.TypeString,
+				Optional: true,
 			},
 			"account_sid": {
 				Type:     schema.TypeString,
@@ -81,10 +86,15 @@ func dataSourceTaskRouterWorkflows() *schema.Resource {
 }
 
 func dataSourceTaskRouterWorkflowsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*common.TwilioClient).TaskRouter
+	twilioClient := meta.(*common.TwilioClient)
+	client := twilioClient.TaskRouter
+
+	options := &workflows.WorkflowsPageOptions{
+		FriendlyName: utils.OptionalString(d, "friendly_name"),
+	}
 
 	workspaceSid := d.Get("workspace_sid").(string)
-	paginator := client.Workspace(workspaceSid).Workflows.NewWorkflowsPaginator()
+	paginator := client.Workspace(workspaceSid).Workflows.NewWorkflowsPaginatorWithOptions(options)
 	for paginator.NextWithContext(ctx) {
 	}
 
@@ -98,12 +108,11 @@ func dataSourceTaskRouterWorkflowsRead(ctx context.Context, d *schema.ResourceDa
 
 	d.SetId(workspaceSid)
 	d.Set("workspace_sid", workspaceSid)
+	d.Set("account_sid", twilioClient.AccountSid)
 
 	workflows := make([]interface{}, 0)
 
 	for _, workflow := range paginator.Workflows {
-		d.Set("account_sid", workflow.AccountSid)
-
 		workflowsMap := make(map[string]interface{})
 
 		workflowsMap["sid"] = workflow.Sid

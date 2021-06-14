@@ -6,6 +6,7 @@ import (
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
+	"github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1/workspace/workers"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -23,6 +24,36 @@ func dataSourceTaskRouterWorkers() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: utils.TaskRouterWorkspaceSidValidation(),
+			},
+			"activity_name": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"activity_sid": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: utils.TaskRouterActivitySidValidation(),
+			},
+			"available": {
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+			"friendly_name": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"target_workers_expression": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"task_queue_name": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"task_queue_sid": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: utils.TaskRouterTaskQueueSidValidation(),
 			},
 			"account_sid": {
 				Type:     schema.TypeString,
@@ -81,10 +112,21 @@ func dataSourceTaskRouterWorkers() *schema.Resource {
 }
 
 func dataSourceTaskRouterWorkersRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*common.TwilioClient).TaskRouter
+	twilioClient := meta.(*common.TwilioClient)
+	client := twilioClient.TaskRouter
+
+	options := &workers.WorkersPageOptions{
+		ActivityName:            utils.OptionalString(d, "activity_name"),
+		ActivitySid:             utils.OptionalString(d, "activity_sid"),
+		Available:               utils.OptionalBool(d, "available"),
+		FriendlyName:            utils.OptionalString(d, "friendly_name"),
+		TargetWorkersExpression: utils.OptionalString(d, "target_workers_expression"),
+		TaskQueueName:           utils.OptionalString(d, "task_queue_name"),
+		TaskQueueSid:            utils.OptionalString(d, "task_queue_sid"),
+	}
 
 	workspaceSid := d.Get("workspace_sid").(string)
-	paginator := client.Workspace(workspaceSid).Workers.NewWorkersPaginator()
+	paginator := client.Workspace(workspaceSid).Workers.NewWorkersPaginatorWithOptions(options)
 	for paginator.NextWithContext(ctx) {
 	}
 
@@ -98,12 +140,11 @@ func dataSourceTaskRouterWorkersRead(ctx context.Context, d *schema.ResourceData
 
 	d.SetId(workspaceSid)
 	d.Set("workspace_sid", workspaceSid)
+	d.Set("account_sid", twilioClient.AccountSid)
 
 	workers := make([]interface{}, 0)
 
 	for _, worker := range paginator.Workers {
-		d.Set("account_sid", worker.AccountSid)
-
 		workersMap := make(map[string]interface{})
 
 		workersMap["sid"] = worker.Sid
