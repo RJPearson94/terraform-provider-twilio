@@ -32,7 +32,7 @@ func TestAccDataSourceTwilioAutopilotTaskSample_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "assistant_sid"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "task_sid"),
-					resource.TestCheckResourceAttr(stateDataSourceName, "source_channel", ""),
+					resource.TestCheckResourceAttr(stateDataSourceName, "source_channel", "voice"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_created"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_updated"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "url"),

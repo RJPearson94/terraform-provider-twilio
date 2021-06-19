@@ -6,6 +6,7 @@ import (
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
+	"github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1/assistant/task/samples"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -28,6 +29,10 @@ func dataSourceAutopilotTaskSamples() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: utils.AutopilotTaskSidValidation(),
+			},
+			"language": {
+				Type:     schema.TypeString,
+				Optional: true,
 			},
 			"account_sid": {
 				Type:     schema.TypeString,
@@ -76,9 +81,13 @@ func dataSourceAutopilotTaskSamples() *schema.Resource {
 func dataSourceAutopilotTaskSamplesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
 
+	options := &samples.SamplesPageOptions{
+		Language: utils.OptionalString(d, "language"),
+	}
+
 	assistantSid := d.Get("assistant_sid").(string)
 	taskSid := d.Get("task_sid").(string)
-	paginator := client.Assistant(assistantSid).Task(taskSid).Samples.NewSamplesPaginator()
+	paginator := client.Assistant(assistantSid).Task(taskSid).Samples.NewSamplesPaginatorWithOptions(options)
 	for paginator.NextWithContext(ctx) {
 	}
 

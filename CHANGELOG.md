@@ -14,6 +14,7 @@ FEATURES
 - **Updated Data Source:** `twilio_taskrouter_workflows` now supports limiting search results by filtering by `friendly_name`
 - **Updated Data Source:** `twilio_taskrouter_workers` now supports limiting search results by filtering by one or more of the following arguments: `activity_name`, `activity_sid`, `available`, `friendly_name`, `target_workers_expression`, `task_queue_name` and `task_queue_sid`
 - **Updated Data Source:** `twilio_taskrouter_activities` now supports limiting search results by filtering by one or more of the following arguments: `available` and `friendly_name`
+- **Updated Data Source:** `twilio_autopilot_task_samples` now supports limiting search results by filtering by `language`
 
 ## v0.12.0 (2021-06-13)
 
