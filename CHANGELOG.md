@@ -3,6 +3,9 @@
 FIXES
 
 - Update `twilio_voice_queues` to set the max size instead of the friendly name for the `max_size` attribute
+- Update `twilio_flex_plugin` to archive plugin on deletion **breaking change**
+- Update `twilio_flex_plugin_configuration` to archive configuration on deletion **breaking change**
+- Update `twilio_flex_plugin_release` to create a new empty configuration and release if the release is active when the resource is deleted **breaking change**
 
 FEATURES
 
