@@ -44,7 +44,7 @@ The following arguments are supported:
 The following attributes are exported:
 
 - `id` - The ID of the resource (Same as the `account_sid`)
-- `account_sid` - The account SID associated with the workspaces
+- `account_sid` - The account SID associated with the workspaces (Same as the `id`)
 - `workspaces` - A list of `workspace` blocks as documented below
 
 ---

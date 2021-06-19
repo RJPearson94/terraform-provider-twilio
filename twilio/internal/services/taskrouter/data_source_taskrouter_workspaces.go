@@ -17,7 +17,7 @@ func dataSourceTaskRouterWorkspaces() *schema.Resource {
 		ReadContext: dataSourceTaskRouterWorkspacesRead,
 
 		Timeouts: &schema.ResourceTimeout{
-			Read: schema.DefaultTimeout(5 * time.Minute),
+			Read: schema.DefaultTimeout(10 * time.Minute),
 		},
 
 		Schema: map[string]*schema.Schema{
