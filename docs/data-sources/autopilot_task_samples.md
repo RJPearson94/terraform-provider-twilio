@@ -28,6 +28,7 @@ The following arguments are supported:
 
 - `assistant_sid` - (Mandatory) The SID of the assistant the samples are associated with
 - `task_sid` - (Mandatory) The SID of the task the samples are associated with
+- `language` - (Optional) Search for all samples which have the language specified
 
 ## Attributes Reference
 
