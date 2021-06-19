@@ -1,5 +1,9 @@
 ## v0.13.0 (unreleased)
 
+FIXES
+
+- Update `twilio_voice_queues` to set the max size instead of the friendly name for the `max_size` attribute
+
 FEATURES
 
 - **New Data Source:** `twilio_taskrouter_workspaces` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/taskrouter_workspaces.md)

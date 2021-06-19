@@ -88,7 +88,7 @@ func dataSourceVoiceQueuesRead(ctx context.Context, d *schema.ResourceData, meta
 
 		queueMap["sid"] = queue.Sid
 		queueMap["friendly_name"] = queue.FriendlyName
-		queueMap["max_size"] = queue.FriendlyName
+		queueMap["max_size"] = queue.MaxSize
 		queueMap["average_wait_time"] = queue.AverageWaitTime
 		queueMap["current_size"] = queue.CurrentSize
 		queueMap["date_created"] = queue.DateCreated.Format(time.RFC3339)
