@@ -44,7 +44,7 @@ The following arguments are supported:
 - `path` - (Mandatory) The request URI path. The length of the string must be between `1` and `255` characters (inclusive)
 - `visibility` - (Mandatory) The visibility of the asset. Valid values are `public` or `protected` or `private`
 
-~> Either source or content need to be specified
+~> Either `source` or `content` need to be specified
 
 ## Attributes Reference
 
