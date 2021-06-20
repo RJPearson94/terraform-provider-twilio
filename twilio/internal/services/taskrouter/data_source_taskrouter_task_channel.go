@@ -21,8 +21,16 @@ func dataSourceTaskRouterTaskChannel() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:         schema.TypeString,
-				Required:     true,
+				Optional:     true,
+				Computed:     true,
 				ValidateFunc: utils.TaskRouterTaskChannelSidValidation(),
+				ExactlyOneOf: []string{"sid", "unique_name"},
+			},
+			"unique_name": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ExactlyOneOf: []string{"sid", "unique_name"},
 			},
 			"workspace_sid": {
 				Type:         schema.TypeString,
@@ -34,10 +42,6 @@ func dataSourceTaskRouterTaskChannel() *schema.Resource {
 				Computed: true,
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"unique_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -64,12 +68,19 @@ func dataSourceTaskRouterTaskChannel() *schema.Resource {
 func dataSourceTaskRouterTaskChannelRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).TaskRouter
 
+	var identifier string
+
+	if v, ok := d.GetOk("sid"); ok {
+		identifier = v.(string)
+	} else {
+		identifier = d.Get("unique_name").(string)
+	}
+
 	workspaceSid := d.Get("workspace_sid").(string)
-	sid := d.Get("sid").(string)
-	getResponse, err := client.Workspace(workspaceSid).TaskChannel(sid).FetchWithContext(ctx)
+	getResponse, err := client.Workspace(workspaceSid).TaskChannel(identifier).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return diag.Errorf("Task channel with sid (%s) was not found for taskrouter workspace with sid (%s)", sid, workspaceSid)
+			return diag.Errorf("Task channel with sid/ unique name (%s) was not found for taskrouter workspace with sid (%s)", identifier, workspaceSid)
 		}
 		return diag.Errorf("Failed to read task channel: %s", err.Error())
 	}

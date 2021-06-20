@@ -11,10 +11,25 @@ For more information on TaskRouter, see the product [page](https://www.twilio.co
 
 ## Example Usage
 
+### SID
+
 ```hcl
 data "twilio_taskrouter_task_channel" "task_channel" {
   workspace_sid = "WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   sid           = "TCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+
+output "task_channel" {
+  value = data.twilio_taskrouter_task_channel.task_channel
+}
+```
+
+### Unique Name
+
+```hcl
+data "twilio_taskrouter_task_channel" "task_channel" {
+  workspace_sid = "WSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  unique_name   = "UniqueName"
 }
 
 output "task_channel" {
@@ -27,7 +42,10 @@ output "task_channel" {
 The following arguments are supported:
 
 - `workspace_sid` - (Mandatory) The SID of the workspace the task channel is associated with
-- `sid` - (Mandatory) The SID of the task channel
+- `sid` - (Optional) The SID of the task channel
+- `unique_name` - (Optional) The unique name of the task channel
+
+~> Either `sid` or `unique_name` must be specified
 
 ## Attributes Reference
 
