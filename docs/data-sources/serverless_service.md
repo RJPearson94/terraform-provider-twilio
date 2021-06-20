@@ -13,9 +13,19 @@ For more information on Serverless (also known as Runtime), see the product [pag
 
 ## Example Usage
 
+### SID
+
 ```hcl
 data "twilio_serverless_build" "build" {
   sid = "ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+```
+
+### Unique Name
+
+```hcl
+data "twilio_serverless_build" "build" {
+  unique_name = "UniqueName"
 }
 ```
 
@@ -23,7 +33,10 @@ data "twilio_serverless_build" "build" {
 
 The following arguments are supported:
 
-- `sid` - (Mandatory) The SID of the service
+- `sid` - (Optional) The SID of the service
+- `unique_name` - (Optional) The unique name of the service
+
+~> Either `sid` or `unique_name` must be specified
 
 ## Attributes Reference
 
