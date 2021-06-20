@@ -74,9 +74,9 @@ resource "twilio_taskrouter_workspace" "workspace" {
 }
 
 data "twilio_taskrouter_workspaces" "workspaces" {
-	depends_on = [
-		twilio_taskrouter_workspace.workspace
-	]
+  depends_on = [
+    twilio_taskrouter_workspace.workspace
+  ]
 }
 `, friendlyName, queueOrder)
 }
@@ -92,9 +92,9 @@ resource "twilio_taskrouter_workspace" "workspace" {
 data "twilio_taskrouter_workspaces" "workspaces" {
   friendly_name = "%[1]s"
 
-	depends_on = [
-		twilio_taskrouter_workspace.workspace
-	]
+  depends_on = [
+    twilio_taskrouter_workspace.workspace
+  ]
 }
 `, friendlyName, queueOrder)
 }

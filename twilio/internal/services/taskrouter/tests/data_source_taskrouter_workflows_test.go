@@ -163,7 +163,7 @@ resource "twilio_taskrouter_workflow" "workflow_2" {
 
 data "twilio_taskrouter_workflows" "workflows" {
   workspace_sid = twilio_taskrouter_workflow.workflow.workspace_sid
-	friendly_name = "%[1]s"
+  friendly_name = "%[1]s"
 }
 `, friendlyName)
 }

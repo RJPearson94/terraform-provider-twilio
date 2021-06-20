@@ -320,10 +320,10 @@ resource "twilio_taskrouter_worker" "worker_2" {
 data "twilio_taskrouter_workers" "workers" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
 
-	depends_on = [
-		twilio_taskrouter_worker.worker,
-		twilio_taskrouter_worker.worker_2,
-	]
+  depends_on = [
+    twilio_taskrouter_worker.worker,
+    twilio_taskrouter_worker.worker_2,
+  ]
 }
 `, friendlyName)
 }
@@ -343,7 +343,7 @@ resource "twilio_taskrouter_activity" "activity" {
 
 resource "twilio_taskrouter_worker" "worker" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	activity_sid = twilio_taskrouter_activity.activity.sid
+  activity_sid  = twilio_taskrouter_activity.activity.sid
   friendly_name = "%[1]s"
 }
 
@@ -354,12 +354,12 @@ resource "twilio_taskrouter_worker" "worker_2" {
 
 data "twilio_taskrouter_workers" "workers" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	activity_name = twilio_taskrouter_activity.activity.friendly_name
+  activity_name = twilio_taskrouter_activity.activity.friendly_name
 
-	depends_on = [
-		twilio_taskrouter_worker.worker,
-		twilio_taskrouter_worker.worker_2,
-	]
+  depends_on = [
+    twilio_taskrouter_worker.worker,
+    twilio_taskrouter_worker.worker_2,
+  ]
 }
 `, friendlyName)
 }
@@ -379,7 +379,7 @@ resource "twilio_taskrouter_activity" "activity" {
 
 resource "twilio_taskrouter_worker" "worker" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	activity_sid = twilio_taskrouter_activity.activity.sid
+  activity_sid  = twilio_taskrouter_activity.activity.sid
   friendly_name = "%[1]s"
 }
 
@@ -390,12 +390,12 @@ resource "twilio_taskrouter_worker" "worker_2" {
 
 data "twilio_taskrouter_workers" "workers" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	activity_sid = twilio_taskrouter_activity.activity.sid
+  activity_sid  = twilio_taskrouter_activity.activity.sid
 
-	depends_on = [
-		twilio_taskrouter_worker.worker,
-		twilio_taskrouter_worker.worker_2,
-	]
+  depends_on = [
+    twilio_taskrouter_worker.worker,
+    twilio_taskrouter_worker.worker_2,
+  ]
 }
 `, friendlyName)
 }
@@ -411,18 +411,18 @@ resource "twilio_taskrouter_workspace" "workspace" {
 resource "twilio_taskrouter_activity" "activity" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
   friendly_name = "%[1]s"
-	available = true
+  available     = true
 }
 
 resource "twilio_taskrouter_activity" "activity_offline" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
   friendly_name = "%[1]s-2"
-	available = false
+  available     = false
 }
 
 resource "twilio_taskrouter_worker" "worker" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	activity_sid = %[2]v ? twilio_taskrouter_activity.activity.sid : twilio_taskrouter_activity.activity_offline.sid
+  activity_sid  = %[2]v ? twilio_taskrouter_activity.activity.sid : twilio_taskrouter_activity.activity_offline.sid
   friendly_name = "%[1]s"
 }
 
@@ -433,12 +433,12 @@ resource "twilio_taskrouter_worker" "worker_2" {
 
 data "twilio_taskrouter_workers" "workers" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	available = twilio_taskrouter_activity.activity.available
+  available     = twilio_taskrouter_activity.activity.available
 
-	depends_on = [
-		twilio_taskrouter_worker.worker,
-		twilio_taskrouter_worker.worker_2,
-	]
+  depends_on = [
+    twilio_taskrouter_worker.worker,
+    twilio_taskrouter_worker.worker_2,
+  ]
 }
 `, friendlyName, available)
 }
@@ -463,12 +463,12 @@ resource "twilio_taskrouter_worker" "worker_2" {
 
 data "twilio_taskrouter_workers" "workers" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	friendly_name = "%[1]s"
+  friendly_name = "%[1]s"
 
-	depends_on = [
-		twilio_taskrouter_worker.worker,
-		twilio_taskrouter_worker.worker_2,
-	]
+  depends_on = [
+    twilio_taskrouter_worker.worker,
+    twilio_taskrouter_worker.worker_2,
+  ]
 }
 `, friendlyName)
 }
@@ -482,17 +482,17 @@ resource "twilio_taskrouter_workspace" "workspace" {
 }
 
 resource "twilio_taskrouter_task_queue" "task_queue" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%[1]s"
-	target_workers = "skills HAS 'tester'"
+  workspace_sid  = twilio_taskrouter_workspace.workspace.sid
+  friendly_name  = "%[1]s"
+  target_workers = "skills HAS 'tester'"
 }
 
 resource "twilio_taskrouter_worker" "worker" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
   friendly_name = "%[1]s"
-	attributes = jsonencode({
-		"skills":["tester"]
-	})
+  attributes = jsonencode({
+    "skills" : ["tester"]
+  })
 }
 
 resource "twilio_taskrouter_worker" "worker_2" {
@@ -501,13 +501,13 @@ resource "twilio_taskrouter_worker" "worker_2" {
 }
 
 data "twilio_taskrouter_workers" "workers" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	task_queue_name = twilio_taskrouter_task_queue.task_queue.friendly_name
+  workspace_sid   = twilio_taskrouter_workspace.workspace.sid
+  task_queue_name = twilio_taskrouter_task_queue.task_queue.friendly_name
 
-	depends_on = [
-		twilio_taskrouter_worker.worker,
-		twilio_taskrouter_worker.worker_2,
-	]
+  depends_on = [
+    twilio_taskrouter_worker.worker,
+    twilio_taskrouter_worker.worker_2,
+  ]
 }
 `, friendlyName)
 }
@@ -521,17 +521,17 @@ resource "twilio_taskrouter_workspace" "workspace" {
 }
 
 resource "twilio_taskrouter_task_queue" "task_queue" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%[1]s"
-	target_workers = "skills HAS 'tester'"
+  workspace_sid  = twilio_taskrouter_workspace.workspace.sid
+  friendly_name  = "%[1]s"
+  target_workers = "skills HAS 'tester'"
 }
 
 resource "twilio_taskrouter_worker" "worker" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
   friendly_name = "%[1]s"
-	attributes = jsonencode({
-		"skills":["tester"]
-	})
+  attributes = jsonencode({
+    "skills" : ["tester"]
+  })
 }
 
 resource "twilio_taskrouter_worker" "worker_2" {
@@ -540,13 +540,13 @@ resource "twilio_taskrouter_worker" "worker_2" {
 }
 
 data "twilio_taskrouter_workers" "workers" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	task_queue_sid = twilio_taskrouter_task_queue.task_queue.sid
+  workspace_sid  = twilio_taskrouter_workspace.workspace.sid
+  task_queue_sid = twilio_taskrouter_task_queue.task_queue.sid
 
-	depends_on = [
-		twilio_taskrouter_worker.worker,
-		twilio_taskrouter_worker.worker_2,
-	]
+  depends_on = [
+    twilio_taskrouter_worker.worker,
+    twilio_taskrouter_worker.worker_2,
+  ]
 }
 `, friendlyName)
 }
@@ -560,17 +560,17 @@ resource "twilio_taskrouter_workspace" "workspace" {
 }
 
 resource "twilio_taskrouter_task_queue" "task_queue" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%[1]s"
-	target_workers = "skills HAS 'tester'"
+  workspace_sid  = twilio_taskrouter_workspace.workspace.sid
+  friendly_name  = "%[1]s"
+  target_workers = "skills HAS 'tester'"
 }
 
 resource "twilio_taskrouter_worker" "worker" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
   friendly_name = "%[1]s"
-	attributes = jsonencode({
-		"skills":["tester"]
-	})
+  attributes = jsonencode({
+    "skills" : ["tester"]
+  })
 }
 
 resource "twilio_taskrouter_worker" "worker_2" {
@@ -579,13 +579,13 @@ resource "twilio_taskrouter_worker" "worker_2" {
 }
 
 data "twilio_taskrouter_workers" "workers" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	target_workers_expression = twilio_taskrouter_task_queue.task_queue.target_workers
+  workspace_sid             = twilio_taskrouter_workspace.workspace.sid
+  target_workers_expression = twilio_taskrouter_task_queue.task_queue.target_workers
 
-	depends_on = [
-		twilio_taskrouter_worker.worker,
-		twilio_taskrouter_worker.worker_2,
-	]
+  depends_on = [
+    twilio_taskrouter_worker.worker,
+    twilio_taskrouter_worker.worker_2,
+  ]
 }
 `, friendlyName)
 }

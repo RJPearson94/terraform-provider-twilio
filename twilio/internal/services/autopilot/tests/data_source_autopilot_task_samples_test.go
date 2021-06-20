@@ -146,12 +146,12 @@ resource "twilio_autopilot_task_sample" "task_sample_2" {
 data "twilio_autopilot_task_samples" "task_samples" {
   assistant_sid = twilio_autopilot_task.task.assistant_sid
   task_sid      = twilio_autopilot_task.task.sid
-	language      = "%[2]s"
+  language      = "%[2]s"
 
-	depends_on = [
-		twilio_autopilot_task_sample.task_sample,
-		twilio_autopilot_task_sample.task_sample_2,
-	]
+  depends_on = [
+    twilio_autopilot_task_sample.task_sample,
+    twilio_autopilot_task_sample.task_sample_2,
+  ]
 }
 `, uniqueName, language, taggedText)
 }

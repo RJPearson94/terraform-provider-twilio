@@ -37,8 +37,8 @@ resource "twilio_flex_plugin_configuration" "plugin_configuration" {
   }
 
   lifecycle {
-		create_before_destroy = true
-	}
+    create_before_destroy = true
+  }
 }
 ```
 

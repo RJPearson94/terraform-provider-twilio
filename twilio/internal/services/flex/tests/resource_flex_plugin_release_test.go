@@ -159,28 +159,28 @@ resource "twilio_flex_plugin_release" "plugin_release" {
 func testAccTwilioFlexPluginRelease_createBeforeDestroy(name string, url string) string {
 	return fmt.Sprintf(`
 resource "twilio_flex_plugin" "plugin" {
-	unique_name = "%[1]s"
-	version     = "1.0.0"
-	plugin_url  = "%[2]s"
+  unique_name = "%[1]s"
+  version     = "1.0.0"
+  plugin_url  = "%[2]s"
 }
 
 resource "twilio_flex_plugin_configuration" "plugin_configuration" {
-	name = "%[1]s"
-	plugins {
-		plugin_version_sid = twilio_flex_plugin.plugin.latest_version_sid
-	}
+  name = "%[1]s"
+  plugins {
+    plugin_version_sid = twilio_flex_plugin.plugin.latest_version_sid
+  }
 
-	lifecycle {
-		create_before_destroy = true
-	} 
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "twilio_flex_plugin_release" "plugin_release" {
   configuration_sid = twilio_flex_plugin_configuration.plugin_configuration.sid
 
-	lifecycle {
-		create_before_destroy = true
-	}
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 `, name, url)
 }

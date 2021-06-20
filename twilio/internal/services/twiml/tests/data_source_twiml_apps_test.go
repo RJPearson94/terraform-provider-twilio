@@ -99,12 +99,12 @@ data "twilio_twiml_apps" "apps" {
 func testAccDataSourceTwilioTwimlApps_friendlyName(testData *acceptance.TestData, friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_twiml_app" "app" {
-  account_sid = "%[1]s"
-	friendly_name = "%[2]s"
+  account_sid   = "%[1]s"
+  friendly_name = "%[2]s"
 }
 
 data "twilio_twiml_apps" "apps" {
-  account_sid = twilio_twiml_app.app.account_sid
+  account_sid   = twilio_twiml_app.app.account_sid
   friendly_name = "%[2]s"
 }
 `, testData.AccountSid, friendlyName)

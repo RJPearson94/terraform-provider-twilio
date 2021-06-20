@@ -125,10 +125,10 @@ resource "twilio_taskrouter_activity" "activity_2" {
 data "twilio_taskrouter_activities" "activities" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
 
-	depends_on = [
-		twilio_taskrouter_activity.activity,
-		twilio_taskrouter_activity.activity_2
-	]
+  depends_on = [
+    twilio_taskrouter_activity.activity,
+    twilio_taskrouter_activity.activity_2
+  ]
 }
 `, friendlyName)
 }
@@ -155,12 +155,12 @@ resource "twilio_taskrouter_activity" "activity_2" {
 
 data "twilio_taskrouter_activities" "activities" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	friendly_name = "%[1]s"
+  friendly_name = "%[1]s"
 
-	depends_on = [
-		twilio_taskrouter_activity.activity,
-		twilio_taskrouter_activity.activity_2
-	]
+  depends_on = [
+    twilio_taskrouter_activity.activity,
+    twilio_taskrouter_activity.activity_2
+  ]
 }
 `, friendlyName)
 }
@@ -187,12 +187,12 @@ resource "twilio_taskrouter_activity" "activity_2" {
 
 data "twilio_taskrouter_activities" "activities" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	available     = false
+  available     = false
 
-	depends_on = [
-		twilio_taskrouter_activity.activity,
-		twilio_taskrouter_activity.activity_2
-	]
+  depends_on = [
+    twilio_taskrouter_activity.activity,
+    twilio_taskrouter_activity.activity_2
+  ]
 }
 `, friendlyName)
 }

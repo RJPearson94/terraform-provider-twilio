@@ -107,7 +107,7 @@ func testAccDataSourceTwilioAutopilotAssistant_uniqueName(friendlyName string) s
 	return fmt.Sprintf(`
 resource "twilio_autopilot_assistant" "assistant" {
   friendly_name = "%[1]s"
-  unique_name = "%[1]s"
+  unique_name   = "%[1]s"
 }
 
 data "twilio_autopilot_assistant" "assistant" {

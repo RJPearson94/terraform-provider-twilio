@@ -227,9 +227,9 @@ func testAccTwilioFlexPluginConfiguration_createBeforeRelease(name string) strin
 resource "twilio_flex_plugin_configuration" "plugin_configuration" {
   name = "%[1]s"
 
-	lifecycle {
-		create_before_destroy = true
-	}
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 `, name)
 }
@@ -248,9 +248,9 @@ resource "twilio_flex_plugin_configuration" "plugin_configuration" {
     plugin_version_sid = twilio_flex_plugin.plugin.latest_version_sid
   }
 
-	lifecycle {
-		create_before_destroy = true
-	}
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 `, name)
 }
