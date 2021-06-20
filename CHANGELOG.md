@@ -15,6 +15,15 @@ FEATURES
 - **Updated Data Source:** `twilio_taskrouter_workers` now supports limiting search results by filtering by one or more of the following arguments: `activity_name`, `activity_sid`, `available`, `friendly_name`, `target_workers_expression`, `task_queue_name` and `task_queue_sid`
 - **Updated Data Source:** `twilio_taskrouter_activities` now supports limiting search results by filtering by one or more of the following arguments: `available` and `friendly_name`
 - **Updated Data Source:** `twilio_autopilot_task_samples` now supports limiting search results by filtering by `language`
+- **Updated Data Source:** `twilio_autopilot_assistant` now supports searching for the resource by `unique_name`
+- **Updated Data Source:** `twilio_autopilot_field_type` now supports searching for the resource by `unique_name`
+- **Updated Data Source:** `twilio_autopilot_model_build` now supports searching for the resource by `unique_name`
+- **Updated Data Source:** `twilio_autopilot_task` now supports searching for the resource by `unique_name`
+- **Updated Data Source:** `twilio_autopilot_task_field` now supports searching for the resource by `unique_name`
+- **Updated Data Source:** `twilio_autopilot_webhook` now supports searching for the resource by `unique_name`
+- **Updated Data Source:** `twilio_flex_plugin` now supports searching for the resource by `unique_name`
+- **Updated Data Source:** `twilio_serverless_service` now supports searching for the resource by `unique_name`
+- **Updated Data Source:** `twilio_taskrouter_task_channel` now supports searching for the resource by `unique_name`
 
 ## v0.12.0 (2021-06-13)
 
