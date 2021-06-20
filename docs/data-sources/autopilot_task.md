@@ -11,10 +11,25 @@ For more information on Autopilot, see the product [page](https://www.twilio.com
 
 ## Example Usage
 
+### SID
+
 ```hcl
 data "twilio_autopilot_task" "task" {
   assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   sid           = "UDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+
+output "task" {
+  value = data.twilio_autopilot_task.task
+}
+```
+
+### Unique Name
+
+```hcl
+data "twilio_autopilot_task" "task" {
+  assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  unique_name   = "UniqueName"
 }
 
 output "task" {
@@ -27,7 +42,10 @@ output "task" {
 The following arguments are supported:
 
 - `assistant_sid` - (Mandatory) The SID of the assistant the task is associated with
-- `sid` - (Mandatory) The SID of the task
+- `sid` - (Optional) The SID of the task
+- `unique_name` - (Optional) The unique name of the task
+
+~> Either `sid` or `unique_name` must be specified
 
 ## Attributes Reference
 

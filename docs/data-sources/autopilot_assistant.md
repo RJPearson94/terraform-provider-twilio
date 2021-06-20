@@ -11,9 +11,23 @@ For more information on Autopilot, see the product [page](https://www.twilio.com
 
 ## Example Usage
 
+### SID
+
 ```hcl
 data "twilio_autopilot_assistant" "assistant" {
   sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+
+output "assistant" {
+  value = data.twilio_autopilot_assistant.assistant
+}
+```
+
+### Unique Name
+
+```hcl
+data "twilio_autopilot_assistant" "assistant" {
+  unique_name = "UniqueName"
 }
 
 output "assistant" {
@@ -25,7 +39,10 @@ output "assistant" {
 
 The following arguments are supported:
 
-- `sid` - (Mandatory) The SID of the assistant
+- `sid` - (Optional) The SID of the assistant
+- `unique_name` - (Optional) The unique name of the assistant
+
+~> Either `sid` or `unique_name` must be specified
 
 ## Attributes Reference
 

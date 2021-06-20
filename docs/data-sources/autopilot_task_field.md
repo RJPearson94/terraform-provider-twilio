@@ -11,11 +11,27 @@ For more information on Autopilot, see the product [page](https://www.twilio.com
 
 ## Example Usage
 
+### SID
+
 ```hcl
 data "twilio_autopilot_task_field" "task_field" {
   assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   task_sid      = "UDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   sid           = "UEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+
+output "task_field" {
+  value = data.twilio_autopilot_task_field.task_field
+}
+```
+
+### Unique Name
+
+```hcl
+data "twilio_autopilot_task_field" "task_field" {
+  assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  task_sid      = "UDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  unique_name   = "UniqueName"
 }
 
 output "task_field" {
@@ -29,7 +45,10 @@ The following arguments are supported:
 
 - `assistant_sid` - (Mandatory) The SID of the assistant the field is associated with
 - `task_sid` - (Mandatory) The SID of the task the field is associated with
-- `sid` - (Mandatory) The SID of the field
+- `sid` - (Optional) The SID of the field
+- `unique_name` - (Optional) The unique name of the field
+
+~> Either `sid` or `unique_name` must be specified
 
 ## Attributes Reference
 

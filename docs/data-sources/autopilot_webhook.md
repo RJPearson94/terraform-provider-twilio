@@ -11,10 +11,25 @@ For more information on Autopilot, see the product [page](https://www.twilio.com
 
 ## Example Usage
 
+### SID
+
 ```hcl
 data "twilio_autopilot_webhook" "webhook" {
   assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   sid           = "UMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+
+output "webhook" {
+  value = data.twilio_autopilot_webhook.webhook
+}
+```
+
+### Unique Name
+
+```hcl
+data "twilio_autopilot_webhook" "webhook" {
+  assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  unique_name   = "UniqueName"
 }
 
 output "webhook" {
@@ -27,7 +42,10 @@ output "webhook" {
 The following arguments are supported:
 
 - `assistant_sid` - (Mandatory) The SID of the assistant the webhook is associated with
-- `sid` - (Mandatory) The SID of the webhook
+- `sid` - (Optional) The SID of the webhook
+- `unique_name` - (Optional) The unique name of the webhook
+
+~> Either `sid` or `unique_name` must be specified
 
 ## Attributes Reference
 

@@ -11,10 +11,25 @@ For more information on Autopilot, see the product [page](https://www.twilio.com
 
 ## Example Usage
 
+### SID
+
 ```hcl
 data "twilio_autopilot_model_build" "model_build" {
   assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   sid           = "UGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+
+output "model_build" {
+  value = data.twilio_autopilot_model_build.model_build
+}
+```
+
+### Unique Name
+
+```hcl
+data "twilio_autopilot_model_build" "model_build" {
+  assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  unique_name   = "UniqueName"
 }
 
 output "model_build" {
@@ -27,7 +42,10 @@ output "model_build" {
 The following arguments are supported:
 
 - `assistant_sid` - (Mandatory) The SID of the assistant the model build is associated with
-- `sid` - (Mandatory) The SID of the model build
+- `sid` - (Optional) The SID of the model build
+- `unique_name` - (Optional) The unique name of the model build
+
+~> Either `sid` or `unique_name` must be specified
 
 ## Attributes Reference
 

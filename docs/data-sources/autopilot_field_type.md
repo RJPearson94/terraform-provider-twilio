@@ -11,10 +11,25 @@ For more information on Autopilot, see the product [page](https://www.twilio.com
 
 ## Example Usage
 
+### SID
+
 ```hcl
 data "twilio_autopilot_field_type" "field_type" {
   assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
   sid           = "UBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+
+output "field_type" {
+  value = data.twilio_autopilot_field_type.field_type
+}
+```
+
+### Unique Name
+
+```hcl
+data "twilio_autopilot_field_type" "field_type" {
+  assistant_sid = "UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  unique_name   = "UniqueName"
 }
 
 output "field_type" {
@@ -27,7 +42,10 @@ output "field_type" {
 The following arguments are supported:
 
 - `assistant_sid` - (Mandatory) The SID of the assistant the field type is associated with
-- `sid` - (Mandatory) The SID of the field type
+- `sid` - (Optional) The SID of the field type
+- `unique_name` - (Optional) The unique name of the field type
+
+~> Either `sid` or `unique_name` must be specified
 
 ## Attributes Reference
 

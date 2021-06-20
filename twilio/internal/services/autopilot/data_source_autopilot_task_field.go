@@ -21,8 +21,16 @@ func dataSourceAutopilotTaskField() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:         schema.TypeString,
-				Required:     true,
+				Optional:     true,
+				Computed:     true,
 				ValidateFunc: utils.AutopilotTaskFieldSidValidation(),
+				ExactlyOneOf: []string{"sid", "unique_name"},
+			},
+			"unique_name": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ExactlyOneOf: []string{"sid", "unique_name"},
 			},
 			"assistant_sid": {
 				Type:         schema.TypeString,
@@ -35,10 +43,6 @@ func dataSourceAutopilotTaskField() *schema.Resource {
 				ValidateFunc: utils.AutopilotTaskSidValidation(),
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"unique_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -65,13 +69,20 @@ func dataSourceAutopilotTaskField() *schema.Resource {
 func dataSourceAutopilotTaskFieldRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
 
+	var identifier string
+
+	if v, ok := d.GetOk("sid"); ok {
+		identifier = v.(string)
+	} else {
+		identifier = d.Get("unique_name").(string)
+	}
+
 	assistantSid := d.Get("assistant_sid").(string)
 	taskSid := d.Get("task_sid").(string)
-	sid := d.Get("sid").(string)
-	getResponse, err := client.Assistant(assistantSid).Task(taskSid).Field(sid).FetchWithContext(ctx)
+	getResponse, err := client.Assistant(assistantSid).Task(taskSid).Field(identifier).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return diag.Errorf("Task field with sid (%s) was not found for assistant with sid (%s) and task with sid (%s)", sid, assistantSid, taskSid)
+			return diag.Errorf("Task field with sid/ unique name (%s) was not found for assistant with sid (%s) and task with sid (%s)", identifier, assistantSid, taskSid)
 		}
 		return diag.Errorf("Failed to read autopilot task field: %s", err.Error())
 	}

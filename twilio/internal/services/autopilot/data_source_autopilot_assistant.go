@@ -23,8 +23,16 @@ func dataSourceAutopilotAssistant() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:         schema.TypeString,
-				Required:     true,
+				Optional:     true,
+				Computed:     true,
 				ValidateFunc: utils.AutopilotAssistantSidValidation(),
+				ExactlyOneOf: []string{"sid", "unique_name"},
+			},
+			"unique_name": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ExactlyOneOf: []string{"sid", "unique_name"},
 			},
 			"account_sid": {
 				Type:     schema.TypeString,
@@ -35,10 +43,6 @@ func dataSourceAutopilotAssistant() *schema.Resource {
 				Computed: true,
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"unique_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -92,11 +96,18 @@ func dataSourceAutopilotAssistant() *schema.Resource {
 func dataSourceAutopilotAssistantRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Autopilot
 
-	sid := d.Get("sid").(string)
-	getResponse, err := client.Assistant(sid).FetchWithContext(ctx)
+	var identifier string
+
+	if v, ok := d.GetOk("sid"); ok {
+		identifier = v.(string)
+	} else {
+		identifier = d.Get("unique_name").(string)
+	}
+
+	getResponse, err := client.Assistant(identifier).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return diag.Errorf("Assistant with sid (%s) was not found", sid)
+			return diag.Errorf("Assistant with sid/ unique name (%s) was not found", identifier)
 		}
 		return diag.Errorf("Failed to read autopilot assistant: %s", err.Error())
 	}
