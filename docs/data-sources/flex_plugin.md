@@ -11,9 +11,23 @@ For more information on Twilio Flex, see the product [page](https://www.twilio.c
 
 ## Example Usage
 
+### SID
+
 ```hcl
 data "twilio_flex_plugin" "plugin" {
   sid = "FPXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+
+output "plugin" {
+  value = data.twilio_flex_plugin.plugin
+}
+```
+
+### Unique Name
+
+```hcl
+data "twilio_flex_plugin" "plugin" {
+  unique_name = "UniqueName"
 }
 
 output "plugin" {
@@ -25,7 +39,10 @@ output "plugin" {
 
 The following arguments are supported:
 
-- `sid` - The SID of the plugin
+- `sid` - (Optional) The SID of the plugin
+- `unique_name` - (Optional) The unique name of the plugin
+
+~> Either `sid` or `unique_name` must be specified
 
 ## Attributes Reference
 

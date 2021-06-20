@@ -12,7 +12,7 @@ import (
 
 var pluginDataSourceName = "twilio_flex_plugin"
 
-func TestAccDataSourceTwilioFlexPlugin_basic(t *testing.T) {
+func TestAccDataSourceTwilioFlexPlugin_sid(t *testing.T) {
 	stateDataSourceName := fmt.Sprintf("data.%s.plugin", pluginDataSourceName)
 
 	uniqueName := acctest.RandString(10)
@@ -24,7 +24,41 @@ func TestAccDataSourceTwilioFlexPlugin_basic(t *testing.T) {
 		ProviderFactories: acceptance.TestAccProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceTwilioFlexPlugin_basic(uniqueName, version, pluginURL),
+				Config: testAccDataSourceTwilioFlexPlugin_sid(uniqueName, version, pluginURL),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(stateDataSourceName, "unique_name", uniqueName),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "friendly_name"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "description", ""),
+					resource.TestCheckResourceAttr(stateDataSourceName, "archived", "false"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "changelog", ""),
+					resource.TestCheckResourceAttr(stateDataSourceName, "version", version),
+					resource.TestCheckResourceAttr(stateDataSourceName, "plugin_url", pluginURL),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "private"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "version_archived", "false"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "account_sid"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "latest_version_sid"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_created"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_updated"),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "url"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceTwilioFlexPlugin_uniqueName(t *testing.T) {
+	stateDataSourceName := fmt.Sprintf("data.%s.plugin", pluginDataSourceName)
+
+	uniqueName := acctest.RandString(10)
+	version := "1.0.0"
+	pluginURL := "https://example2.com"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceTwilioFlexPlugin_uniqueName(uniqueName, version, pluginURL),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(stateDataSourceName, "unique_name", uniqueName),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "friendly_name"),
@@ -59,7 +93,7 @@ func TestAccDataSourceTwilioFlexPlugin_invalidSid(t *testing.T) {
 	})
 }
 
-func testAccDataSourceTwilioFlexPlugin_basic(uniqueName string, version string, pluginURL string) string {
+func testAccDataSourceTwilioFlexPlugin_sid(uniqueName string, version string, pluginURL string) string {
 	return fmt.Sprintf(`
 resource "twilio_flex_plugin" "plugin" {
   unique_name = "%s"
@@ -69,6 +103,20 @@ resource "twilio_flex_plugin" "plugin" {
 
 data "twilio_flex_plugin" "plugin" {
   sid = twilio_flex_plugin.plugin.sid
+}
+`, uniqueName, version, pluginURL)
+}
+
+func testAccDataSourceTwilioFlexPlugin_uniqueName(uniqueName string, version string, pluginURL string) string {
+	return fmt.Sprintf(`
+resource "twilio_flex_plugin" "plugin" {
+  unique_name = "%s"
+  version     = "%s"
+  plugin_url  = "%s"
+}
+
+data "twilio_flex_plugin" "plugin" {
+  unique_name = twilio_flex_plugin.plugin.unique_name
 }
 `, uniqueName, version, pluginURL)
 }

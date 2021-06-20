@@ -24,14 +24,18 @@ func dataSourceFlexPlugin() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"sid": {
 				Type:         schema.TypeString,
-				Required:     true,
+				Optional:     true,
+				Computed:     true,
 				ValidateFunc: utils.FlexPluginSidValidation(),
-			},
-			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				ExactlyOneOf: []string{"sid", "unique_name"},
 			},
 			"unique_name": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ExactlyOneOf: []string{"sid", "unique_name"},
+			},
+			"account_sid": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -90,16 +94,23 @@ func dataSourceFlexPlugin() *schema.Resource {
 func dataSourceFlexPluginRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*common.TwilioClient).Flex
 
-	sid := d.Get("sid").(string)
-	getResponse, err := client.Plugin(sid).FetchWithContext(ctx)
+	var identifier string
+
+	if v, ok := d.GetOk("sid"); ok {
+		identifier = v.(string)
+	} else {
+		identifier = d.Get("unique_name").(string)
+	}
+
+	getResponse, err := client.Plugin(identifier).FetchWithContext(ctx)
 	if err != nil {
 		if utils.IsNotFoundError(err) {
-			return diag.Errorf("Flex plugin with sid (%s) was not found", sid)
+			return diag.Errorf("Flex plugin with sid/ unique name (%s) was not found", identifier)
 		}
 		return diag.Errorf("Failed to read flex plugin: %s", err.Error())
 	}
 
-	versionsPaginator := client.Plugin(sid).Versions.NewVersionsPaginatorWithOptions(&versions.VersionsPageOptions{
+	versionsPaginator := client.Plugin(getResponse.Sid).Versions.NewVersionsPaginatorWithOptions(&versions.VersionsPageOptions{
 		PageSize: sdkUtils.Int(5),
 	})
 	// The twilio api return the latest version as the first element in the array.
