@@ -1,8 +1,8 @@
 data "twilio_studio_flow_widget_send_to_flex" "send_to_flex" {
   name = "SendMessageToAgent"
 
-  workflow = var.workflow_sid
-  channel  = var.channel_sid
+  workflow_sid = var.workflow_sid
+  channel_sid  = var.channel_sid
   attributes = jsonencode({
     "name" : "{{trigger.message.ChannelAttributes.from}}",
     "channelType" : "{{trigger.message.ChannelAttributes.channel_type}}",
