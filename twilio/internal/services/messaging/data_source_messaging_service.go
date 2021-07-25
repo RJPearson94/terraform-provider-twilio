@@ -72,6 +72,10 @@ func dataSourceMessagingService() *schema.Resource {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
+			"use_inbound_webhook_on_number": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
 			"validity_period": {
 				Type:     schema.TypeInt,
 				Computed: true,
@@ -118,6 +122,7 @@ func dataSourceMessagingServiceRead(ctx context.Context, d *schema.ResourceData,
 	d.Set("smart_encoding", getResponse.SmartEncoding)
 	d.Set("status_callback_url", getResponse.StatusCallback)
 	d.Set("sticky_sender", getResponse.StickySender)
+	d.Set("use_inbound_webhook_on_number", getResponse.UseInboundWebhookOnNumber)
 	d.Set("validity_period", getResponse.ValidityPeriod)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 

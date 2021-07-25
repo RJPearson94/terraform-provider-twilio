@@ -41,6 +41,7 @@ func TestAccTwilioMessagingService_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "smart_encoding", "true"),
 					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "sticky_sender", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "use_inbound_webhook_on_number", "false"),
 					resource.TestCheckResourceAttr(stateResourceName, "validity_period", "14400"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -86,6 +87,7 @@ func TestAccTwilioMessagingService_update(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "smart_encoding", "true"),
 					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "sticky_sender", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "use_inbound_webhook_on_number", "false"),
 					resource.TestCheckResourceAttr(stateResourceName, "validity_period", "14400"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -110,6 +112,7 @@ func TestAccTwilioMessagingService_update(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "smart_encoding", "true"),
 					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
 					resource.TestCheckResourceAttr(stateResourceName, "sticky_sender", "true"),
+					resource.TestCheckResourceAttr(stateResourceName, "use_inbound_webhook_on_number", "false"),
 					resource.TestCheckResourceAttr(stateResourceName, "validity_period", "14400"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -513,6 +516,33 @@ func TestAccTwilioMessagingService_areaCodeGeomatch(t *testing.T) {
 	})
 }
 
+func TestAccTwilioMessagingService_useInboundWebhookOnNumber(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+
+	friendlyName := acctest.RandString(10)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioMessagingService_useInboundWebhookOnNumberTrue(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "use_inbound_webhook_on_number", "true"),
+				),
+			},
+			{
+				Config: testAccTwilioMessagingService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioMessagingServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "use_inbound_webhook_on_number", "false"),
+				),
+			},
+		},
+	})
+}
+
 func testAccCheckTwilioMessagingServiceDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).Messaging
 
@@ -648,6 +678,15 @@ func testAccTwilioMessagingService_areaCodeGeomatchFalse(friendlyName string) st
 resource "twilio_messaging_service" "service" {
   friendly_name      = "%s"
   area_code_geomatch = false
+}
+`, friendlyName)
+}
+
+func testAccTwilioMessagingService_useInboundWebhookOnNumberTrue(friendlyName string) string {
+	return fmt.Sprintf(`
+resource "twilio_messaging_service" "service" {
+  friendly_name      = "%s"
+  use_inbound_webhook_on_number = true
 }
 `, friendlyName)
 }

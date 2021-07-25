@@ -117,6 +117,11 @@ func resourceMessagingService() *schema.Resource {
 				Optional: true,
 				Default:  true,
 			},
+			"use_inbound_webhook_on_number": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
 			"validity_period": {
 				Type:         schema.TypeInt,
 				Optional:     true,
@@ -143,18 +148,19 @@ func resourceMessagingServiceCreate(ctx context.Context, d *schema.ResourceData,
 	client := meta.(*common.TwilioClient).Messaging
 
 	createInput := &services.CreateServiceInput{
-		FriendlyName:       d.Get("friendly_name").(string),
-		AreaCodeGeomatch:   utils.OptionalBool(d, "area_code_geomatch"),
-		FallbackMethod:     utils.OptionalString(d, "fallback_method"),
-		FallbackToLongCode: utils.OptionalBool(d, "fallback_to_long_code"),
-		FallbackURL:        utils.OptionalStringWithEmptyStringOnChange(d, "fallback_url"),
-		InboundMethod:      utils.OptionalString(d, "inbound_method"),
-		InboundRequestURL:  utils.OptionalStringWithEmptyStringOnChange(d, "inbound_request_url"),
-		MmsConverter:       utils.OptionalBool(d, "mms_converter"),
-		SmartEncoding:      utils.OptionalBool(d, "smart_encoding"),
-		StatusCallback:     utils.OptionalStringWithEmptyStringOnChange(d, "status_callback_url"),
-		StickySender:       utils.OptionalBool(d, "sticky_sender"),
-		ValidityPeriod:     utils.OptionalInt(d, "validity_period"),
+		FriendlyName:              d.Get("friendly_name").(string),
+		AreaCodeGeomatch:          utils.OptionalBool(d, "area_code_geomatch"),
+		FallbackMethod:            utils.OptionalString(d, "fallback_method"),
+		FallbackToLongCode:        utils.OptionalBool(d, "fallback_to_long_code"),
+		FallbackURL:               utils.OptionalStringWithEmptyStringOnChange(d, "fallback_url"),
+		InboundMethod:             utils.OptionalString(d, "inbound_method"),
+		InboundRequestURL:         utils.OptionalStringWithEmptyStringOnChange(d, "inbound_request_url"),
+		MmsConverter:              utils.OptionalBool(d, "mms_converter"),
+		SmartEncoding:             utils.OptionalBool(d, "smart_encoding"),
+		StatusCallback:            utils.OptionalStringWithEmptyStringOnChange(d, "status_callback_url"),
+		StickySender:              utils.OptionalBool(d, "sticky_sender"),
+		UseInboundWebhookOnNumber: utils.OptionalBool(d, "use_inbound_webhook_on_number"),
+		ValidityPeriod:            utils.OptionalInt(d, "validity_period"),
 	}
 
 	createResult, err := client.Services.CreateWithContext(ctx, createInput)
@@ -191,6 +197,7 @@ func resourceMessagingServiceRead(ctx context.Context, d *schema.ResourceData, m
 	d.Set("smart_encoding", getResponse.SmartEncoding)
 	d.Set("status_callback_url", getResponse.StatusCallback)
 	d.Set("sticky_sender", getResponse.StickySender)
+	d.Set("use_inbound_webhook_on_number", getResponse.UseInboundWebhookOnNumber)
 	d.Set("validity_period", getResponse.ValidityPeriod)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
@@ -207,18 +214,19 @@ func resourceMessagingServiceUpdate(ctx context.Context, d *schema.ResourceData,
 	client := meta.(*common.TwilioClient).Messaging
 
 	updateInput := &service.UpdateServiceInput{
-		FriendlyName:       utils.OptionalString(d, "friendly_name"),
-		AreaCodeGeomatch:   utils.OptionalBool(d, "area_code_geomatch"),
-		FallbackMethod:     utils.OptionalString(d, "fallback_method"),
-		FallbackToLongCode: utils.OptionalBool(d, "fallback_to_long_code"),
-		FallbackURL:        utils.OptionalStringWithEmptyStringOnChange(d, "fallback_url"),
-		InboundMethod:      utils.OptionalString(d, "inbound_method"),
-		InboundRequestURL:  utils.OptionalStringWithEmptyStringOnChange(d, "inbound_request_url"),
-		MmsConverter:       utils.OptionalBool(d, "mms_converter"),
-		SmartEncoding:      utils.OptionalBool(d, "smart_encoding"),
-		StatusCallback:     utils.OptionalStringWithEmptyStringOnChange(d, "status_callback_url"),
-		StickySender:       utils.OptionalBool(d, "sticky_sender"),
-		ValidityPeriod:     utils.OptionalInt(d, "validity_period"),
+		FriendlyName:              utils.OptionalString(d, "friendly_name"),
+		AreaCodeGeomatch:          utils.OptionalBool(d, "area_code_geomatch"),
+		FallbackMethod:            utils.OptionalString(d, "fallback_method"),
+		FallbackToLongCode:        utils.OptionalBool(d, "fallback_to_long_code"),
+		FallbackURL:               utils.OptionalStringWithEmptyStringOnChange(d, "fallback_url"),
+		InboundMethod:             utils.OptionalString(d, "inbound_method"),
+		InboundRequestURL:         utils.OptionalStringWithEmptyStringOnChange(d, "inbound_request_url"),
+		MmsConverter:              utils.OptionalBool(d, "mms_converter"),
+		SmartEncoding:             utils.OptionalBool(d, "smart_encoding"),
+		StatusCallback:            utils.OptionalStringWithEmptyStringOnChange(d, "status_callback_url"),
+		StickySender:              utils.OptionalBool(d, "sticky_sender"),
+		UseInboundWebhookOnNumber: utils.OptionalBool(d, "use_inbound_webhook_on_number"),
+		ValidityPeriod:            utils.OptionalInt(d, "validity_period"),
 	}
 
 	updateResp, err := client.Service(d.Id()).UpdateWithContext(ctx, updateInput)

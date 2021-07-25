@@ -47,6 +47,7 @@ The following attributes are exported:
 - `smart_encoding` - Whether to enable detection and replacement of Unicode characters that are easy to miss
 - `status_callback_url` - The URL which will be called when a message delivery status is changed
 - `sticky_sender` - Whether to ensure the end-user receives messages from the same phone number
+- `use_inbound_webhook_on_number` - Whether to use the webhook that is configured on the phone number
 - `validity_period` - How long (in seconds) messages sent from the messaging service are valid for
 - `date_created` - The date in RFC3339 format that the service was created
 - `date_updated` - The date in RFC3339 format that the service was updated

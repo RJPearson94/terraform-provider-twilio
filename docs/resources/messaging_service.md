@@ -37,6 +37,7 @@ The following arguments are supported:
 - `smart_encoding` - (Optional) Whether to enable detection and replacement of Unicode characters that are easy to miss. The default value is `true`
 - `status_callback_url` - (Optional) The URL which will be called when a message delivery status is changed
 - `sticky_sender` - (Optional) Whether to ensure the end-user receives messages from the same phone number. The default value is `true`
+- `use_inbound_webhook_on_number` - (Optional) Whether to use the webhook that is configured on the phone number. The default value is `false`
 - `validity_period` - (Optional) How long (in seconds) messages sent from the messaging service are valid for. The value must be between `1` and `14400` (inclusive). The default value is `14400`
 
 ## Attributes Reference
@@ -58,6 +59,7 @@ The following attributes are exported:
 - `status_callback_url` - The URL which will be called when a message delivery status is changed
 - `sticky_sender` - Whether to ensure the end-user receives messages from the same phone number
 - `validity_period` - How long (in seconds) messages sent from the messaging service are valid for
+- `use_inbound_webhook_on_number` - Whether to use the webhook that is configured on the phone number
 - `date_created` - The date in RFC3339 format that the service was created
 - `date_updated` - The date in RFC3339 format that the service was updated
 - `url` - The URL of the service

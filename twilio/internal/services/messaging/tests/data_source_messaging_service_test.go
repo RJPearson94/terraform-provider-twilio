@@ -36,6 +36,7 @@ func TestAccDataSourceTwilioMessagingService_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(stateDataSourceName, "smart_encoding", "true"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "status_callback_url", ""),
 					resource.TestCheckResourceAttr(stateDataSourceName, "sticky_sender", "true"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "use_inbound_webhook_on_number", "false"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "validity_period", "14400"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "sid"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_created"),
