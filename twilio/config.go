@@ -3,6 +3,7 @@ package twilio
 import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/twilio-sdk-go/client"
+	accounts "github.com/RJPearson94/twilio-sdk-go/service/accounts/v1"
 	api "github.com/RJPearson94/twilio-sdk-go/service/api/v2010"
 	autopilot "github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1"
 	chat "github.com/RJPearson94/twilio-sdk-go/service/chat/v2"
@@ -42,6 +43,7 @@ func (config *Config) Client() (interface{}, diag.Diagnostics) {
 		AccountSid:       config.AccountSid,
 		TerraformVersion: config.terraformVersion,
 
+		Accounts:      accounts.New(sess, sdkConfig),
 		API:           api.New(sess, sdkConfig),
 		Autopilot:     autopilot.New(sess, sdkConfig),
 		Chat:          chat.New(sess, sdkConfig),

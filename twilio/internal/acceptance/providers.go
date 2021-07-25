@@ -22,6 +22,9 @@ type TestData struct {
 	PurchasablePhoneNumber string // TODO: Temp hack this needs to be looked up
 	PhoneNumberSid         string
 	FlexChannelServiceSid  string
+	PublicKey              string
+	AWSAccessKeyID         string
+	AWSSecretAccessKey     string
 	CustomerName           string
 	Address                AddressDetails
 }
@@ -48,6 +51,9 @@ func InitialiseProviders() {
 			PurchasablePhoneNumber: os.Getenv("TWILIO_PURCHASABLE_PHONE_NUMBER"), // TODO: Temp hack this needs to be looked up
 			PhoneNumberSid:         os.Getenv("TWILIO_PHONE_NUMBER_SID"),
 			FlexChannelServiceSid:  os.Getenv("TWILIO_FLEX_CHANNEL_SERVICE_SID"),
+			PublicKey:              os.Getenv("TWILIO_PUBLIC_KEY"),
+			AWSAccessKeyID:         os.Getenv("TWILIO_AWS_ACCESS_KEY_ID"),     // I am using TWILIO_AWS_ACCESS_KEY_ID to ensure only the correct AWS credentials are sent to Twilio
+			AWSSecretAccessKey:     os.Getenv("TWILIO_AWS_SECRET_ACCESS_KEY"), // I am using TWILIO_AWS_SECRET_ACCESS_KEY to ensure only the correct AWS credentials are sent to Twilio
 			CustomerName:           os.Getenv("TWILIO_CUSTOMER_NAME"),
 			Address: AddressDetails{
 				Street:          os.Getenv("TWILIO_ADDRESS_STREET"),

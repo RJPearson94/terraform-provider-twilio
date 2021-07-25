@@ -1,3 +1,10 @@
+## v0.14.0 (unreleased)
+
+FEATURES
+
+- **New Resource:** `twilio_credentials_aws` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/credentials_aws.md)
+- **New Resource:** `twilio_credentials_public_key` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/credentials_public_key.md)
+
 ## v0.13.0 (2021-06-20)
 
 FIXES

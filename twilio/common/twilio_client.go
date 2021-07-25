@@ -1,6 +1,7 @@
 package common
 
 import (
+	accounts "github.com/RJPearson94/twilio-sdk-go/service/accounts/v1"
 	api "github.com/RJPearson94/twilio-sdk-go/service/api/v2010"
 	autopilot "github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1"
 	chat "github.com/RJPearson94/twilio-sdk-go/service/chat/v2"
@@ -19,6 +20,7 @@ type TwilioClient struct {
 	AccountSid       string
 	TerraformVersion string
 
+	Accounts      *accounts.Accounts
 	API           *api.V2010
 	Autopilot     *autopilot.Autopilot
 	Chat          *chat.Chat
