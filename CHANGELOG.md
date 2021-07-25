@@ -1,4 +1,4 @@
-## v0.14.0 (unreleased)
+## v0.14.0 (2021-07-25)
 
 FEATURES
 
