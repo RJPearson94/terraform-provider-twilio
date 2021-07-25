@@ -4,6 +4,10 @@ FEATURES
 
 - **New Resource:** `twilio_credentials_aws` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/credentials_aws.md)
 - **New Resource:** `twilio_credentials_public_key` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/credentials_public_key.md)
+- **New Resource:** `twilio_video_composition_settings` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/video_composition_settings.md)
+- **New Resource:** `twilio_video_recording_settings` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/video_recording_settings.md)
+- **New Data Source:** `twilio_video_composition_settings` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/video_composition_settings.md)
+- **New Data Source:** `twilio_video_recording_settings` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/video_recording_settings.md)
 - **Updated Resource:** `twilio_messaging_service` Add `use_inbound_webhook_on_number` argument
 - **Updated Data Source:** `twilio_messaging_service` Add `use_inbound_webhook_on_number` attribute
 

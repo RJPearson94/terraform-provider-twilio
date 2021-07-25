@@ -121,6 +121,12 @@ func ConversationUserSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^US[0-9a-fA-F]{32}$"), "")
 }
 
+// Credentials
+
+func CredentialSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^CR[0-9a-fA-F]{32}$"), "")
+}
+
 // Flex
 
 func FlexFlowSidValidation() schema.SchemaValidateFunc {
