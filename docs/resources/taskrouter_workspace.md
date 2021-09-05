@@ -26,7 +26,7 @@ The following arguments are supported:
 - `event_callback_url` - (Optional) The event callback URL
 - `event_filters` - (Optional) list of event callback filters. Valid values are `task.created`,`task.completed`,`task.canceled`,`task.deleted`,`task.updated`,`task.wrapup`,`task-queue.entered`,`task-queue.moved`,`task-queue.timeout`,`reservation.created`,`reservation.accepted`,`reservation.rejected`,`reservation.timeout`,`reservation.canceled`,`reservation.rescinded`,`reservation.completed`,`workflow.entered`,`workflow.timeout`,`workflow.target-matched`,`worker.activity.update`,`worker.attributes.update`,`worker.capacity.update` or `worker.channel.availability.update`
 - `multi_task_enabled` - (Optional) Whether or not multitasking is enabled
-- `template` - (Optional) TaskRouter template to use. Valid values are `NONE` or `FIFO`. The default value is `NONE`
+- `template` - (Optional) TaskRouter template to use. Valid values are `NONE` or `FIFO`. The default value is `NONE`. Changing this forces a new resource to be created
 - `prioritize_queue_order` - (Optional) Determine how TaskRouter prioritizes incoming tasks. Valid values are `LIFO` or `FIFO`. The default value is `FIFO`
 
 ## Attributes Reference

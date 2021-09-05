@@ -1,3 +1,9 @@
+## v0.15.0 (unreleased)
+
+FIXES
+
+- Update `twilio_taskrouter_workspace` to force a new resource to be created when the template attribute is changed. This can only be set a point of creation
+
 ## v0.14.0 (2021-07-25)
 
 FEATURES

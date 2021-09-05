@@ -107,6 +107,7 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 			"template": {
 				Type:     schema.TypeString,
 				Optional: true,
+				ForceNew: true,
 				Default:  "NONE",
 				ValidateFunc: validation.StringInSlice([]string{
 					"NONE",
@@ -221,7 +222,6 @@ func resourceTaskRouterWorkspaceUpdate(ctx context.Context, d *schema.ResourceDa
 		EventCallbackURL:     utils.OptionalStringWithEmptyStringOnChange(d, "event_callback_url"),
 		EventsFilter:         utils.OptionalSeperatedStringWithEmptyStringOnChange(d, "event_filters", workspaceEventsSeperator),
 		MultiTaskEnabled:     utils.OptionalBool(d, "multi_task_enabled"),
-		Template:             utils.OptionalString(d, "template"),
 		PrioritizeQueueOrder: utils.OptionalString(d, "prioritize_queue_order"),
 	}
 
