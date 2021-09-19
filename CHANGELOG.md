@@ -1,5 +1,9 @@
 ## v0.15.0 (unreleased)
 
+FEATURES
+
+- **New Resource:** `twilio_taskrouter_workspace_configuration` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/taskrouter_workspace_configuration.md)
+
 FIXES
 
 - Update `twilio_taskrouter_workspace` to force a new resource to be created when the template attribute is changed. This can only be set a point of creation

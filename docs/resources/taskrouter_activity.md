@@ -9,6 +9,8 @@ Manages a TaskRouter activity. See the [API docs](https://www.twilio.com/docs/ta
 
 For more information on TaskRouter, see the product [page](https://www.twilio.com/taskrouter)
 
+!> Twilio will throw an error if you try to delete an activity if it's attached as either the default or timeout activity SID of a workspace (this can be managed via the `twilio_taskrouter_workspace_configuration` resource). If you use this resource, you will need to either remove the resource from the Terraform state or update the configuration to reference an activity that is not known by Terraform i.e. one of the activities created when the workspace was created, then the activity resource can be deleted.
+
 ## Example Usage
 
 ```hcl

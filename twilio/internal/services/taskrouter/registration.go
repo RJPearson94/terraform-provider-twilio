@@ -30,11 +30,12 @@ func (r Registration) SupportedDataSources() map[string]*schema.Resource {
 // SupportedResources returns the supported Resources supported by this Service
 func (r Registration) SupportedResources() map[string]*schema.Resource {
 	return map[string]*schema.Resource{
-		"twilio_taskrouter_activity":     resourceTaskRouterActivity(),
-		"twilio_taskrouter_task_channel": resourceTaskRouterTaskChannel(),
-		"twilio_taskrouter_task_queue":   resourceTaskRouterTaskQueue(),
-		"twilio_taskrouter_worker":       resourceTaskRouterWorker(),
-		"twilio_taskrouter_workflow":     resourceTaskRouterWorkflow(),
-		"twilio_taskrouter_workspace":    resourceTaskRouterWorkspace(),
+		"twilio_taskrouter_activity":                resourceTaskRouterActivity(),
+		"twilio_taskrouter_task_channel":            resourceTaskRouterTaskChannel(),
+		"twilio_taskrouter_task_queue":              resourceTaskRouterTaskQueue(),
+		"twilio_taskrouter_worker":                  resourceTaskRouterWorker(),
+		"twilio_taskrouter_workflow":                resourceTaskRouterWorkflow(),
+		"twilio_taskrouter_workspace":               resourceTaskRouterWorkspace(),
+		"twilio_taskrouter_workspace_configuration": resourceTaskRouterWorkspaceConfiguration(),
 	}
 }

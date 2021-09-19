@@ -41,10 +41,10 @@ The following attributes are exported:
 - `event_filters` - The event callback filter
 - `multi_task_enabled` - Whether or not multitasking is enabled
 - `prioritize_queue_order` - Determine how TaskRouter prioritizes incoming
-- `default_activity_name` - Name of default activity
-- `default_activity_sid` - SID of default activity
-- `timeout_activity_name` - Name of timeout activity
-- `timeout_activity_sid` - SID of timeout activity
+- `default_activity_name` - Name of the default activity
+- `default_activity_sid` - SID of the default activity
+- `timeout_activity_name` - Name of the timeout activity
+- `timeout_activity_sid` - SID of the timeout activity
 - `date_created` - The date in RFC3339 format that the workspace was created
 - `date_updated` - The date in RFC3339 format that the workspace was updated
 - `url` - The URL of the workspace
