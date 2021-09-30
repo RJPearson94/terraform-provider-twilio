@@ -47,6 +47,18 @@ func Provider() *schema.Provider {
 				DefaultFunc: schema.EnvDefaultFunc("TWILIO_API_SECRET", nil),
 				Description: "The API Key secret which should be used.",
 			},
+			"retry_attempts": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("TWILIO_RETRY_ATTEMPTS", 3),
+				Description: "The maximum number of retry attempts",
+			},
+			"backoff_interval_in_ms": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("TWILIO_BACKOFF_INTERVAL_IN_MS", 5000),
+				Description: "The time in ms to wait between each retry attempt",
+			},
 		},
 
 		DataSourcesMap: dataSources,
@@ -79,6 +91,8 @@ func providerConfigure(p *schema.Provider) schema.ConfigureContextFunc {
 			AuthToken:        d.Get("auth_token").(string),
 			APIKey:           d.Get("api_key").(string),
 			APISecret:        d.Get("api_secret").(string),
+			RetryAttempts:    d.Get("retry_attempts").(int),
+			BackoffInterval:  d.Get("backoff_interval_in_ms").(int),
 			terraformVersion: terraformVersion,
 		}
 

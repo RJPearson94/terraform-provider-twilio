@@ -48,7 +48,7 @@ The Twilio provider offers a various way of providing credentials for authentica
 
 #### API Key & Secret
 
-Static credentials can be provided by adding an `account_sid`, `api_key` & `api_secret` in-line in the Twilio provider block:
+Static credentials can be provided by setting the `account_sid`, `api_key` & `api_secret` attributes in the Twilio provider block:
 
 Usage:
 
@@ -62,7 +62,7 @@ provider "twilio" {
 
 #### Account SID & Auth Token
 
-Static credentials can be provided by adding an `account_sid` and `auth_token` in-line in the Twilio provider block:
+Static credentials can be provided by setting the `account_sid` and `auth_token` attributes in the Twilio provider block:
 
 Usage:
 
@@ -120,6 +120,49 @@ or
 TWILIO_ACCOUNT_SID="ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" TWILIO_AUTH_TOKEN="my-auth-token" terraform plan
 ```
 
+## Rate Limiting & Retry configuration
+
+To protect its services, Twilio implements Rate Limiting on it's APIs. When provisioning/ configuring a large number of resources the provider may experience rate limiting from the various API's and the provider may error with the following error message `Error: Failed to create workflow: Rate limit exceeded for target Workflow-Create`.
+
+To limit the number of errors, the provider supports retries with exponential backoff, by default the provider will retry `3` times with a backoff interval of `5` seconds (`5000` ms). Under certain scenarios this limit may not be suitable, so the configuration can be overridden on the provider by specifying the attributes on the provider or via environment variables
+
+To configure a retry limit of `5` attempts and a backoff interval of `10` seconds (`10000` ms) you can use one of the following options:
+
+### Provider attributes
+
+```hcl
+provider "twilio" {}
+```
+
+Usage:
+
+```hcl
+provider "twilio" {
+  retry_attempts         = 5
+  backoff_interval_in_ms = 10000
+}
+```
+
+### Environment variables
+
+```hcl
+provider "twilio" {}
+```
+
+Usage:
+
+```sh
+export TWILIO_RETRY_ATTEMPTS=5
+export TWILIO_BACKOFF_INTERVAL_IN_MS=10000
+terraform plan
+```
+
+or
+
+```sh
+TWILIO_RETRY_ATTEMPTS=5 TWILIO_BACKOFF_INTERVAL_IN_MS=10000 terraform plan
+```
+
 ## Argument Reference
 
 In addition to [generic provider arguments](https://www.terraform.io/docs/configuration/providers.html) the following arguments are supported:
@@ -128,5 +171,7 @@ In addition to [generic provider arguments](https://www.terraform.io/docs/config
 - `api_key` - (Optional) An API key SID associate with the account. This value can be retrieved from the `TWILIO_API_KEY` environment variable
 - `api_secret` - (Optional) An secret value for the API Key. This value can be retrieved from the `TWILIO_API_SECRET` environment variable
 - `auth_token` - (Optional) The Auth token for the account. This value can be retrieved from the `TWILIO_AUTH_TOKEN` environment variable
+- `retry_attempts` - (Optional) The maximum number of retry attempts. This value can be retrieved from the `TWILIO_RETRY_ATTEMPTS` environment variable. The default value is `3`
+- `backoff_interval_in_ms` - (Optional) The time in ms to wait between each retry attempt. This value can be retrieved from the `TWILIO_BACKOFF_INTERVAL_IN_MS` environment variable. The default value is `5000`
 
 **NOTE:** A valid API Key and Secret or Auth Token must be supplied

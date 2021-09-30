@@ -1,3 +1,9 @@
+## v0.16.0 (unreleased)
+
+FEATURES
+
+- Update the provider to support configuring retries and backoff intervals to mitigate issues caused by rate limiting from the Twilio APIs
+
 ## v0.15.0 (2021-09-19)
 
 FEATURES
