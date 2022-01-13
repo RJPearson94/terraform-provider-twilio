@@ -1,3 +1,10 @@
+## v0.17.0 (unreleased)
+
+FEATURES
+
+- **Updated Resource:** Update `twilio_serverless_build` to add `node14` as an allowed value for the runtime argument
+- **Updated Resource:** Update `twilio_serverless_build` to remove `node10` as an allowed value for the runtime argument **breaking change**
+
 ## v0.16.0 (2021-09-30)
 
 FEATURES
