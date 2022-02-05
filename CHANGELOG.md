@@ -2,6 +2,9 @@
 
 FEATURES
 
+- **New Resource:** `twilio_sip_domain_registration_credential_list_mapping` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sip_domain_registration_credential_list_mapping.md)
+- **New Data Source:** `twilio_sip_domain_registration_credential_list_mapping` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_domain_registration_credential_list_mapping.md)
+- **New Data Source:** `twilio_sip_domain_registration_credential_list_mappings` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sip_domain_registration_credential_list_mappings.md)
 - **Updated Resource:** Update `twilio_serverless_build` to add `node14` as an allowed value for the runtime argument
 - **Updated Resource:** Update `twilio_serverless_build` to remove `node10` as an allowed value for the runtime argument **breaking change**
 
