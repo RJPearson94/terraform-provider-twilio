@@ -1,6 +1,6 @@
 module github.com/RJPearson94/terraform-provider-twilio
 
-go 1.16
+go 1.17
 
 require (
 	github.com/RJPearson94/twilio-sdk-go v0.19.0
