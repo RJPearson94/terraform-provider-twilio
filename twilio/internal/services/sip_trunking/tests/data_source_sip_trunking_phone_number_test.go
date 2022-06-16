@@ -34,7 +34,7 @@ func TestAccDataSourceTwilioSIPTrunkingPhoneNumber_complete(t *testing.T) {
 					resource.TestCheckResourceAttr(stateDataSourceName, "messaging.#", "1"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "trunk_sid"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "voice.#", "1"),
-					resource.TestCheckNoResourceAttr(stateDataSourceName, "fax"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "fax.#", "0"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "status_callback_url", ""),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "status_callback_method"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "date_created"),

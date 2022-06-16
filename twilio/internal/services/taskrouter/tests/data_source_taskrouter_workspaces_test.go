@@ -47,7 +47,7 @@ func TestAccDataSourceTwilioTaskRouterWorkspaces_withFriendlyName(t *testing.T) 
 					resource.TestCheckResourceAttr(stateDataSourceName, "workspaces.#", "1"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "workspaces.0.friendly_name", friendlyName),
 					resource.TestCheckResourceAttr(stateDataSourceName, "workspaces.0.event_callback_url", ""),
-					resource.TestCheckNoResourceAttr(stateDataSourceName, "workspaces.0.event_filters"),
+					resource.TestCheckResourceAttr(stateDataSourceName, "workspaces.0.event_filters.#", "0"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "workspaces.0.multi_task_enabled", "true"),
 					resource.TestCheckNoResourceAttr(stateDataSourceName, "workspaces.0.template"),
 					resource.TestCheckResourceAttr(stateDataSourceName, "workspaces.0.prioritize_queue_order", queueOrder),

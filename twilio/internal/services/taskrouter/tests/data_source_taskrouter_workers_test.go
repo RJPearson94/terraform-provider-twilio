@@ -495,18 +495,12 @@ resource "twilio_taskrouter_worker" "worker" {
   })
 }
 
-resource "twilio_taskrouter_worker" "worker_2" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  friendly_name = "%[1]s-2"
-}
-
 data "twilio_taskrouter_workers" "workers" {
   workspace_sid   = twilio_taskrouter_workspace.workspace.sid
   task_queue_name = twilio_taskrouter_task_queue.task_queue.friendly_name
 
   depends_on = [
     twilio_taskrouter_worker.worker,
-    twilio_taskrouter_worker.worker_2,
   ]
 }
 `, friendlyName)

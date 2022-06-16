@@ -39,7 +39,7 @@ func TestAccTwilioSIPTrunkingPhoneNumber_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "messaging.#", "1"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "trunk_sid"),
 					resource.TestCheckResourceAttr(stateResourceName, "voice.#", "1"),
-					resource.TestCheckNoResourceAttr(stateResourceName, "fax"),
+					resource.TestCheckResourceAttr(stateResourceName, "fax.#", "0"),
 					resource.TestCheckResourceAttr(stateResourceName, "status_callback_url", ""),
 					resource.TestCheckResourceAttrSet(stateResourceName, "status_callback_method"),
 					resource.TestCheckResourceAttrSet(stateResourceName, "date_created"),
@@ -61,7 +61,7 @@ func testAccCheckTwilioSIPTrunkingPhoneNumberDestroy(s *terraform.State) error {
 	client := acceptance.TestAccProvider.Meta().(*common.TwilioClient).SIPTrunking
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != trunkResourceName {
+		if rs.Type != phoneNumberResourceName {
 			continue
 		}
 

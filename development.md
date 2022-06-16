@@ -7,7 +7,7 @@ These instruction are here to help aid you in setting up your development enviro
 ## Prerequisites
 
 - [Terraform](https://www.terraform.io/downloads.html) 0.12+
-- [Go](https://golang.org/doc/install) 1.16 (to build the provider plugin)
+- [Go](https://golang.org/doc/install) 1.17 (to build the provider plugin)
 
 **Note:** This project uses [Go Modules](https://blog.golang.org/using-go-modules)
 
