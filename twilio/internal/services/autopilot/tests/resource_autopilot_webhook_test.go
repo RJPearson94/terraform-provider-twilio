@@ -358,9 +358,9 @@ resource "twilio_autopilot_webhook" "webhook" {
 func testAccTwilioAutopilotWebhook_invalidAssistantSid() string {
 	return `
 resource "twilio_autopilot_webhook" "webhook" {
-  assistant_sid  = "assistant_sid"
-  unique_name    = "invalid_account_sid"
-  webhook_url    = "http://localhost.com/webhook"
+  assistant_sid = "assistant_sid"
+  unique_name   = "invalid_account_sid"
+  webhook_url   = "http://localhost.com/webhook"
   events = [
     "onDialogueStart"
   ]
@@ -384,9 +384,9 @@ resource "twilio_autopilot_webhook" "webhook" {
 func testAccTwilioAutopilotWebhook_invalidEvent() string {
 	return `
 resource "twilio_autopilot_webhook" "webhook" {
-  assistant_sid  = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  unique_name    = "invalid_event"
-  webhook_url    = "http://localhost.com/webhook"
+  assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  unique_name   = "invalid_event"
+  webhook_url   = "http://localhost.com/webhook"
   events = [
     "test"
   ]

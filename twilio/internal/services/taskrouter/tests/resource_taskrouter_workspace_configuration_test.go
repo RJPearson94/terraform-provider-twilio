@@ -235,8 +235,8 @@ resource "twilio_taskrouter_activity" "activity" {
 }
 
 resource "twilio_taskrouter_workspace_configuration" "workspace_configuration" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	default_activity_sid = twilio_taskrouter_activity.activity.sid
+  workspace_sid        = twilio_taskrouter_workspace.workspace.sid
+  default_activity_sid = twilio_taskrouter_activity.activity.sid
 }
 `, friendlyName)
 }
@@ -261,8 +261,8 @@ resource "twilio_taskrouter_activity" "activity" {
 }
 
 resource "twilio_taskrouter_workspace_configuration" "workspace_configuration" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	default_activity_sid = data.twilio_taskrouter_activities.activities.activities[0].sid
+  workspace_sid        = twilio_taskrouter_workspace.workspace.sid
+  default_activity_sid = data.twilio_taskrouter_activities.activities.activities[0].sid
 }
 `, friendlyName)
 }
@@ -282,8 +282,8 @@ resource "twilio_taskrouter_activity" "activity" {
 }
 
 resource "twilio_taskrouter_workspace_configuration" "workspace_configuration" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	timeout_activity_sid = twilio_taskrouter_activity.activity.sid
+  workspace_sid        = twilio_taskrouter_workspace.workspace.sid
+  timeout_activity_sid = twilio_taskrouter_activity.activity.sid
 }
 `, friendlyName)
 }
@@ -308,8 +308,8 @@ data "twilio_taskrouter_activities" "activities" {
 }
 
 resource "twilio_taskrouter_workspace_configuration" "workspace_configuration" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
-	timeout_activity_sid = data.twilio_taskrouter_activities.activities.activities[0].sid
+  workspace_sid        = twilio_taskrouter_workspace.workspace.sid
+  timeout_activity_sid = data.twilio_taskrouter_activities.activities.activities[0].sid
 }
 `, friendlyName)
 }
@@ -325,8 +325,8 @@ resource "twilio_taskrouter_workspace_configuration" "workspace_configuration" {
 func testAccTwilioTaskRouterWorkspaceConfiguration_invalidDefaultActivitySid() string {
 	return `
 resource "twilio_taskrouter_workspace_configuration" "workspace_configuration" {
-  workspace_sid = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	default_activity_sid = "default_activity_sid"
+  workspace_sid        = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  default_activity_sid = "default_activity_sid"
 }
 `
 }
@@ -334,8 +334,8 @@ resource "twilio_taskrouter_workspace_configuration" "workspace_configuration" {
 func testAccTwilioTaskRouterWorkspaceConfiguration_invalidTimeoutActivitySid() string {
 	return `
 resource "twilio_taskrouter_workspace_configuration" "workspace_configuration" {
-  workspace_sid = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	timeout_activity_sid = "timeout_activity_sid"
+  workspace_sid        = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  timeout_activity_sid = "timeout_activity_sid"
 }
 `
 }

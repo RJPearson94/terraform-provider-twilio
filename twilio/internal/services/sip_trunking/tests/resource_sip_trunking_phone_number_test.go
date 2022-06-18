@@ -145,8 +145,8 @@ resource "twilio_sip_trunking_phone_number" "phone_number" {
 func testAccTwilioSIPTrunkingPhoneNumber_invalidTrunkSid() string {
 	return `
 resource "twilio_sip_trunking_phone_number" "phone_number" {
-  trunk_sid = "trunk_sid"
-  phone_number_sid       = "PNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  trunk_sid        = "trunk_sid"
+  phone_number_sid = "PNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `
 }
@@ -154,8 +154,8 @@ resource "twilio_sip_trunking_phone_number" "phone_number" {
 func testAccTwilioSIPTrunkingPhoneNumber_invalidPhoneNumberSid() string {
 	return `
 resource "twilio_sip_trunking_phone_number" "phone_number" {
-  trunk_sid = "TKaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  phone_number_sid       = "phone_number_sid"
+  trunk_sid        = "TKaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  phone_number_sid = "phone_number_sid"
 }
 `
 }

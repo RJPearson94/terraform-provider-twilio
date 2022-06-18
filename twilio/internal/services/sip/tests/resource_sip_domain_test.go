@@ -653,7 +653,7 @@ resource "twilio_sip_domain" "domain" {
   domain_name = "invalid-caller-sid.sip.twilio.com"
   emergency {
     calling_enabled = false
-	caller_sid = "caller_sid"
+    caller_sid      = "caller_sid"
   }
 }
 `
@@ -662,8 +662,8 @@ resource "twilio_sip_domain" "domain" {
 func testAccTwilioSIPDomain_invalidByocTrunkSid() string {
 	return `
 resource "twilio_sip_domain" "domain" {
-  account_sid = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  domain_name = "invalid-byoc-trunk-sid.sip.twilio.com"
+  account_sid    = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  domain_name    = "invalid-byoc-trunk-sid.sip.twilio.com"
   byoc_trunk_sid = "byoc_trunk_sid"
 }
 `
@@ -692,8 +692,8 @@ resource "twilio_sip_domain" "domain" {
 func testAccTwilioSIPDomain_invalidAccountSid() string {
 	return `
 resource "twilio_sip_domain" "domain" {
-  account_sid = "account_sid"
-  domain_name = "invalid-account-sid.sip.twilio.com"
+  account_sid    = "account_sid"
+  domain_name    = "invalid-account-sid.sip.twilio.com"
   byoc_trunk_sid = "BYaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `

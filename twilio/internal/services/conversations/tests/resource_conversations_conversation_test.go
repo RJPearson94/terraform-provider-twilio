@@ -484,7 +484,7 @@ func testAccTwilioConversationsConversation_invalidAttributesString() string {
 	return `
 resource "twilio_conversations_conversation" "conversation" {
   service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  attributes = "attributes"
+  attributes  = "attributes"
 }
 `
 }
@@ -568,7 +568,7 @@ resource "twilio_conversations_conversation" "conversation" {
 func testAccTwilioConversationsConversation_invalidMessagingServiceSid() string {
 	return `
 resource "twilio_conversations_conversation" "conversation" {
-  service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  service_sid           = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   messaging_service_sid = "messaging_service_sid"
 }
 `

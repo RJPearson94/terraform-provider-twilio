@@ -64,7 +64,7 @@ func testAccDataSourceTwilioSIPTrunkingTrunk_complete(testData *acceptance.TestD
 resource "twilio_sip_trunking_trunk" "trunk" {}
 
 data "twilio_sip_trunking_trunk" "trunk" {
-	sid = twilio_sip_trunking_trunk.trunk.sid
+  sid = twilio_sip_trunking_trunk.trunk.sid
 }
 `
 }
@@ -72,7 +72,7 @@ data "twilio_sip_trunking_trunk" "trunk" {
 func testAccDataSourceTwilioSIPTrunkingTrunk_invalidSid() string {
 	return `
 data "twilio_sip_trunking_trunk" "trunk" {
-  sid       = "sid"
+  sid = "sid"
 }
 `
 }

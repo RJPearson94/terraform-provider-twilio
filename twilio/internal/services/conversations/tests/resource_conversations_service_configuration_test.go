@@ -178,7 +178,7 @@ resource "twilio_conversations_service_configuration" "service_configuration" {
 func testAccTwilioConversationsServiceConfiguration_invalidDefaultChatServiceRoleSid() string {
 	return `
 resource "twilio_conversations_service_configuration" "service_configuration" {
-  service_sid = "service_sid"
+  service_sid                   = "service_sid"
   default_chat_service_role_sid = "default_chat_service_role_sid"
 }
 `
@@ -187,7 +187,7 @@ resource "twilio_conversations_service_configuration" "service_configuration" {
 func testAccTwilioConversationsServiceConfiguration_invalidDefaultConversationCreatorRole() string {
 	return `
 resource "twilio_conversations_service_configuration" "service_configuration" {
-  service_sid = "service_sid"
+  service_sid                           = "service_sid"
   default_conversation_creator_role_sid = "default_conversation_creator_role_sid"
 }
 `
@@ -196,7 +196,7 @@ resource "twilio_conversations_service_configuration" "service_configuration" {
 func testAccTwilioConversationsServiceConfiguration_invalidDefaultConversationRoleSid() string {
 	return `
 resource "twilio_conversations_service_configuration" "service_configuration" {
-  service_sid = "service_sid"
+  service_sid                   = "service_sid"
   default_conversation_role_sid = "default_conversation_role_sid"
 }
 `

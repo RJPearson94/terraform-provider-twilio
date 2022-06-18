@@ -152,9 +152,9 @@ resource "twilio_credentials_aws" "aws" {
 func testAccTwilioAWS_invalidAccountSid() string {
 	return `
 resource "twilio_credentials_aws" "aws" {
-  aws_access_key_id = "aws_access_key_id"
+  aws_access_key_id     = "aws_access_key_id"
   aws_secret_access_key = "aws_secret_access_key"
-	account_sid = "account_sid"
+  account_sid           = "account_sid"
 }
 `
 }

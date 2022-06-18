@@ -685,7 +685,7 @@ resource "twilio_messaging_service" "service" {
 func testAccTwilioMessagingService_useInboundWebhookOnNumberTrue(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_messaging_service" "service" {
-  friendly_name      = "%s"
+  friendly_name                 = "%s"
   use_inbound_webhook_on_number = true
 }
 `, friendlyName)

@@ -467,6 +467,6 @@ resource "twilio_autopilot_assistant" "assistant" {
 func testAccTwilioAutopilotAssistant_logQueriesFalse() string {
 	return `
 resource "twilio_autopilot_assistant" "assistant" {
-	log_queries = false
+  log_queries = false
 }`
 }

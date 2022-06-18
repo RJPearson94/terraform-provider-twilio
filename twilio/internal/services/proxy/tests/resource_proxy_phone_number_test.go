@@ -277,9 +277,9 @@ resource "twilio_proxy_phone_number" "phone_number" {
 func testAccTwilioProxyPhoneNumber_invalidPhoneNumber() string {
 	return `
 resource "twilio_proxy_phone_number" "phone_number" {
-  service_sid = "KSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  phone_number         = "phone_number"
-  is_reserved = false
+  service_sid  = "KSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  phone_number = "phone_number"
+  is_reserved  = false
 }
 `
 }

@@ -134,7 +134,7 @@ func testAccDataSourceTwilioAutopilotTask_invalidAssistantSid() string {
 	return `
 data "twilio_autopilot_task" "task" {
   assistant_sid = "assistant_sid"
-  sid      = "UDaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid           = "UDaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `
 }
@@ -143,7 +143,7 @@ func testAccDataSourceTwilioAutopilotTask_invalidSid() string {
 	return `
 data "twilio_autopilot_task" "task" {
   assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  sid      = "sid"
+  sid           = "sid"
 }
 `
 }

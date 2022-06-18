@@ -141,7 +141,7 @@ func testAccCheckTwilioVideoCompositionSettingsExists(name string) resource.Test
 func testAccTwilioVideoCompositionSettings_basic(friendlyName string) string {
 	return fmt.Sprintf(`
 resource "twilio_video_composition_settings" "composition_settings" {
-	friendly_name = "%s"
+  friendly_name = "%s"
 }
 `, friendlyName)
 }
@@ -149,8 +149,8 @@ resource "twilio_video_composition_settings" "composition_settings" {
 func testAccTwilioVideoCompositionSettings_invalidEncryptionKeySid() string {
 	return `
 resource "twilio_video_composition_settings" "composition_settings" {
-	friendly_name = "Invalid Encryption Key SID"
-	encryption_key_sid = "encryption_key_sid"
+  friendly_name      = "Invalid Encryption Key SID"
+  encryption_key_sid = "encryption_key_sid"
 }
 `
 }
@@ -158,8 +158,8 @@ resource "twilio_video_composition_settings" "composition_settings" {
 func testAccTwilioVideoCompositionSettings_invalidAWSCredentialSid() string {
 	return `
 resource "twilio_video_composition_settings" "composition_settings" {
-	friendly_name = "Invalid AWS Credential SID"
-	aws_credentials_sid = "aws_credentials_sid"
+  friendly_name       = "Invalid AWS Credential SID"
+  aws_credentials_sid = "aws_credentials_sid"
 }
 `
 }
@@ -167,8 +167,8 @@ resource "twilio_video_composition_settings" "composition_settings" {
 func testAccTwilioVideoCompositionSettings_invalidAWSS3URL() string {
 	return `
 resource "twilio_video_composition_settings" "composition_settings" {
-	friendly_name = "Invalid AWS S3 URL"
-	aws_s3_url = "aws_s3_url"
+  friendly_name = "Invalid AWS S3 URL"
+  aws_s3_url    = "aws_s3_url"
 }
 `
 }

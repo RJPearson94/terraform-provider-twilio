@@ -43,8 +43,8 @@ resource "twilio_video_composition_settings" "composition_settings" {
 
 data "twilio_video_composition_settings" "composition_settings" {
   depends_on = [
-		twilio_video_composition_settings.composition_settings
-	]
+    twilio_video_composition_settings.composition_settings
+  ]
 }
 `, friendlyName)
 }

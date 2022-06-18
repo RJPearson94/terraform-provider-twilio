@@ -77,8 +77,8 @@ data "twilio_taskrouter_task_channels" "task_channels" {
 
 func testAccDataSourceTwilioTaskRouterTaskChannels_invalidWorkspaceSid() string {
 	return `
-	data "twilio_taskrouter_task_channels" "task_channels" {
-		workspace_sid = "workspace_sid"
-	}
+data "twilio_taskrouter_task_channels" "task_channels" {
+  workspace_sid = "workspace_sid"
+}
 `
 }

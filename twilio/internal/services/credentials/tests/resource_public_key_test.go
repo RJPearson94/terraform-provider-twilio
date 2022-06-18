@@ -149,8 +149,8 @@ resource "twilio_credentials_public_key" "public_key" {
 func testAccTwilioPublicKey_invalidAccountSid() string {
 	return `
 resource "twilio_credentials_public_key" "public_key" {
-  public_key = "invalid_account_sid"
-	account_sid = "account_sid"
+  public_key  = "invalid_account_sid"
+  account_sid = "account_sid"
 }
 `
 }

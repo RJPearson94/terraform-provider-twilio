@@ -92,7 +92,7 @@ func testAccDataSourceTwilioTwimlApp_invalidAccountSid() string {
 	return `
 data "twilio_twiml_app" "app" {
   account_sid = "account_sid"
-  sid 				= "APaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid         = "APaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `
 }
@@ -101,7 +101,7 @@ func testAccDataSourceTwilioTwimlApp_invalidSid() string {
 	return `
 data "twilio_twiml_app" "app" {
   account_sid = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  sid 			  = "sid"
+  sid         = "sid"
 }
 `
 }

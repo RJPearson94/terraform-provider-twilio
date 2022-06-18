@@ -541,7 +541,7 @@ resource "twilio_sip_trunking_trunk" "trunk" {
 func testAccTwilioSIPTrunkingTrunk_cnamLookupEnabledTrue() string {
 	return `
 resource "twilio_sip_trunking_trunk" "trunk" {
-	cnam_lookup_enabled = true
+  cnam_lookup_enabled = true
 }
 `
 }

@@ -178,7 +178,7 @@ resource "twilio_autopilot_model_build" "model_build" {
 func testAccTwilioAutopilotModelBuild_invalidAssistantSid() string {
 	return `
 resource "twilio_autopilot_model_build" "model_build" {
-  assistant_sid      = "assistant_sid"
+  assistant_sid = "assistant_sid"
 }
 `
 }

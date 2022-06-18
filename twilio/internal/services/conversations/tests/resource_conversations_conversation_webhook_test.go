@@ -260,7 +260,7 @@ resource "twilio_conversations_conversation_webhook" "webhook" {
   conversation_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   method           = "POST"
   webhook_url      = "https://localhost.com/webhook"
-  filters         = ["onMessageAdded"]
+  filters          = ["onMessageAdded"]
 }
 `
 }
@@ -272,7 +272,7 @@ resource "twilio_conversations_conversation_webhook" "webhook" {
   conversation_sid = "conversation_sid"
   method           = "POST"
   webhook_url      = "https://localhost.com/webhook"
-  filters         = ["onMessageAdded"]
+  filters          = ["onMessageAdded"]
 }
 `
 }

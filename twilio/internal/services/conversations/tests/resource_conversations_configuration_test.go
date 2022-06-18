@@ -142,7 +142,7 @@ resource "twilio_conversations_configuration" "configuration" {
 func testAccTwilioConversationsConfiguration_invalidDefaultMessagingServiceSid() string {
 	return `
 resource "twilio_conversations_configuration" "configuration" {
-	default_messaging_service_sid = "default_messaging_service_sid"
+  default_messaging_service_sid = "default_messaging_service_sid"
 }
 `
 }

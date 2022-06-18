@@ -383,13 +383,13 @@ resource "twilio_account_address" "address" {
 func testAccTwilioAccountAddress_blankCustomerName() string {
 	return `
 resource "twilio_account_address" "address" {
-  account_sid      = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  customer_name    = ""
-  street           = "street"
-  city             = "city"
-  region           = "region"
-  postal_code      = "postal_code"
-  iso_country      = "iso_country"
+  account_sid   = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  customer_name = ""
+  street        = "street"
+  city          = "city"
+  region        = "region"
+  postal_code   = "postal_code"
+  iso_country   = "iso_country"
 }
 `
 }
@@ -397,13 +397,13 @@ resource "twilio_account_address" "address" {
 func testAccTwilioAccountAddress_blankStreet() string {
 	return `
 resource "twilio_account_address" "address" {
-  account_sid      = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  customer_name    = "customer_name"
-  street           = ""
-  city             = "city"
-  region           = "region"
-  postal_code      = "postal_code"
-  iso_country      = "iso_country"
+  account_sid   = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  customer_name = "customer_name"
+  street        = ""
+  city          = "city"
+  region        = "region"
+  postal_code   = "postal_code"
+  iso_country   = "iso_country"
 }
 `
 }
@@ -411,13 +411,13 @@ resource "twilio_account_address" "address" {
 func testAccTwilioAccountAddress_blankCity() string {
 	return `
 resource "twilio_account_address" "address" {
-  account_sid      = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  customer_name    = "customer_name"
-  street           = "street"
-  city             = ""
-  region           = "region"
-  postal_code      = "postal_code"
-  iso_country      = "iso_country"
+  account_sid   = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  customer_name = "customer_name"
+  street        = "street"
+  city          = ""
+  region        = "region"
+  postal_code   = "postal_code"
+  iso_country   = "iso_country"
 }
 `
 }
@@ -425,13 +425,13 @@ resource "twilio_account_address" "address" {
 func testAccTwilioAccountAddress_blankRegion() string {
 	return `
 resource "twilio_account_address" "address" {
-  account_sid      = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  customer_name    = "customer_name"
-  street           = "street"
-  city             = "city"
-  region           = ""
-  postal_code      = "postal_code"
-  iso_country      = "iso_country"
+  account_sid   = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  customer_name = "customer_name"
+  street        = "street"
+  city          = "city"
+  region        = ""
+  postal_code   = "postal_code"
+  iso_country   = "iso_country"
 }
 `
 }
@@ -439,13 +439,13 @@ resource "twilio_account_address" "address" {
 func testAccTwilioAccountAddress_blankPostalCode() string {
 	return `
 resource "twilio_account_address" "address" {
-  account_sid      = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  customer_name    = "customer_name"
-  street           = "street"
-  city             = "city"
-  region           = "region"
-  postal_code      = ""
-  iso_country      = "iso_country"
+  account_sid   = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  customer_name = "customer_name"
+  street        = "street"
+  city          = "city"
+  region        = "region"
+  postal_code   = ""
+  iso_country   = "iso_country"
 }
 `
 }
@@ -453,13 +453,13 @@ resource "twilio_account_address" "address" {
 func testAccTwilioAccountAddress_blankIsoCountry() string {
 	return `
 resource "twilio_account_address" "address" {
-  account_sid      = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  customer_name    = "customer_name"
-  street           = "street"
-  city             = "city"
-  region           = "region"
-  postal_code      = "postal_code"
-  iso_country      = ""
+  account_sid   = "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  customer_name = "customer_name"
+  street        = "street"
+  city          = "city"
+  region        = "region"
+  postal_code   = "postal_code"
+  iso_country   = ""
 }
 `
 }

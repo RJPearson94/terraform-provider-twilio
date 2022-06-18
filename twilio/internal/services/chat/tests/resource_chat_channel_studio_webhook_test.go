@@ -216,7 +216,7 @@ func testAccTwilioChatChannelStudioWebhook_invalidServiceSid() string {
 resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
   service_sid = "service_sid"
   channel_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  flow_sid = "FWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  flow_sid    = "FWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `
 }
@@ -224,9 +224,9 @@ resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
 func testAccTwilioChatChannelStudioWebhook_invalidChannelSid() string {
 	return `
 resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
-	service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	channel_sid = "channel_sid"
-	flow_sid = "FWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  channel_sid = "channel_sid"
+  flow_sid    = "FWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `
 }
@@ -234,9 +234,9 @@ resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
 func testAccTwilioChatChannelStudioWebhook_invalidFlowSid() string {
 	return `
 resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
-	service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	channel_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	flow_sid = "flow_sid"
+  service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  channel_sid = "CHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  flow_sid    = "flow_sid"
 }
 `
 }

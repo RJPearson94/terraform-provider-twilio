@@ -43,8 +43,8 @@ resource "twilio_video_recording_settings" "recording_settings" {
 
 data "twilio_video_recording_settings" "recording_settings" {
   depends_on = [
-		twilio_video_recording_settings.recording_settings
-	]
+    twilio_video_recording_settings.recording_settings
+  ]
 }
 `, friendlyName)
 }

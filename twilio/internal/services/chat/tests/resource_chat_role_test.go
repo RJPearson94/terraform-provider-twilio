@@ -220,8 +220,8 @@ resource "twilio_chat_role" "role" {
   service_sid   = "service_sid"
   friendly_name = "invalid_service_sid"
   type          = "channel"
-  permissions   = [
-	"sendMessage"
+  permissions = [
+    "sendMessage"
   ]
 }
 `

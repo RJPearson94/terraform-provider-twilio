@@ -139,8 +139,8 @@ data "twilio_taskrouter_task_channel" "task_channel" {
 func testAccDataSourceTwilioTaskRouterTaskChannel_invalidWorkspaceSid() string {
 	return `
 data "twilio_taskrouter_task_channel" "task_channel" {
-	workspace_sid = "workspace_sid"
-	sid = "TCaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  workspace_sid = "workspace_sid"
+  sid           = "TCaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `
 }
@@ -148,8 +148,8 @@ data "twilio_taskrouter_task_channel" "task_channel" {
 func testAccDataSourceTwilioTaskRouterTaskChannel_invalidSid() string {
 	return `
 data "twilio_taskrouter_task_channel" "task_channel" {
-	workspace_sid = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	sid = "sid"
+  workspace_sid = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid           = "sid"
 }
 `
 }

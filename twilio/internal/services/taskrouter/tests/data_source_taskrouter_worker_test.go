@@ -92,7 +92,7 @@ func testAccDataSourceTwilioTaskRouterWorker_invalidWorkspaceSid() string {
 	return `
 data "twilio_taskrouter_worker" "worker" {
   workspace_sid = "workspace_sid"
-  sid = "Wkaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  sid           = "Wkaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `
 }
@@ -101,7 +101,7 @@ func testAccDataSourceTwilioTaskRouterWorker_invalidSid() string {
 	return `
 data "twilio_taskrouter_worker" "worker" {
   workspace_sid = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  sid = "sid"
+  sid           = "sid"
 }
 `
 }

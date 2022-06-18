@@ -334,10 +334,10 @@ resource "twilio_autopilot_task_sample" "task_sample" {
 func testAccTwilioAutopilotTaskSample_invalidSourceChannel() string {
 	return `
 resource "twilio_autopilot_task_sample" "task_sample" {
-  assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  task_sid      = "UDaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  language      = "en-US"
-  tagged_text   = "hi"
+  assistant_sid  = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  task_sid       = "UDaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  language       = "en-US"
+  tagged_text    = "hi"
   source_channel = "test"
 }
 `

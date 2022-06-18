@@ -254,7 +254,7 @@ func testAccTwilioChatUser_invalidRoleSid() string {
 resource "twilio_chat_user" "user" {
   service_sid = "ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   identity    = "invalid_role_sid"
-  role_sid = "role_sid"
+  role_sid    = "role_sid"
 }
 `
 }

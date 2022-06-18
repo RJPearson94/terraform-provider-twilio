@@ -422,7 +422,7 @@ resource "twilio_taskrouter_activity" "activity_offline" {
 
 resource "twilio_taskrouter_worker" "worker" {
   workspace_sid = twilio_taskrouter_workspace.workspace.sid
-  activity_sid  = %[2]v ? twilio_taskrouter_activity.activity.sid : twilio_taskrouter_activity.activity_offline.sid
+  activity_sid  = %[2]t ? twilio_taskrouter_activity.activity.sid : twilio_taskrouter_activity.activity_offline.sid
   friendly_name = "%[1]s"
 }
 
@@ -596,7 +596,7 @@ func testAccDataSourceTwilioTaskRouterWorkers_invalidActivitySid() string {
 	return `
 data "twilio_taskrouter_workers" "workers" {
   workspace_sid = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	activity_sid = "activity_sid"
+  activity_sid  = "activity_sid"
 }
 `
 }
@@ -604,8 +604,8 @@ data "twilio_taskrouter_workers" "workers" {
 func testAccDataSourceTwilioTaskRouterWorkers_invalidTaskQueueSid() string {
 	return `
 data "twilio_taskrouter_workers" "workers" {
-  workspace_sid = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	task_queue_sid = "task_queue_sid"
+  workspace_sid  = "WSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  task_queue_sid = "task_queue_sid"
 }
 `
 }
