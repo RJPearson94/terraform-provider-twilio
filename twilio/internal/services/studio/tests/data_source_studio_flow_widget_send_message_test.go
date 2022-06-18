@@ -47,8 +47,8 @@ func TestAccDataSourceTwilioStudioFlowWidgetSendMessage_complete(t *testing.T) {
 func testAccDataSourceTwilioStudioFlowWidgetSendMessage_basic() string {
 	return `
 data "twilio_studio_flow_widget_send_message" "send_message" {
-	name = "SendMessage"
-	body = "Hello World"
+  name = "SendMessage"
+  body = "Hello World"
 }
 `
 }
@@ -56,29 +56,29 @@ data "twilio_studio_flow_widget_send_message" "send_message" {
 func testAccDataSourceTwilioStudioFlowWidgetSendMessage_complete() string {
 	return `
 data "twilio_studio_flow_widget_send_message" "send_message" {
-	name = "SendMessage"
+  name = "SendMessage"
 
-	transitions {
-		failed = "SendMessage"
-		sent = "SendMessage"
-	}
+  transitions {
+    failed = "SendMessage"
+    sent   = "SendMessage"
+  }
 
-	attributes = jsonencode({
-		"name":"{{trigger.message.ChannelAttributes.from}}",
-		"channelType":"{{trigger.message.ChannelAttributes.channel_type}}",
-		"channelSid":"{{trigger.message.ChannelSid}}"
-	})
-	body = "Hello World"
-    channel_sid = "{{trigger.message.ChannelSid}}"
-	from = "{{flow.channel.address}}"
-    media_url = "https://test.com"
-	service_sid = "{{trigger.message.InstanceSid}}"
-	to = "{{contact.channel.address}}"
+  attributes = jsonencode({
+    "name" : "{{trigger.message.ChannelAttributes.from}}",
+    "channelType" : "{{trigger.message.ChannelAttributes.channel_type}}",
+    "channelSid" : "{{trigger.message.ChannelSid}}"
+  })
+  body        = "Hello World"
+  channel_sid = "{{trigger.message.ChannelSid}}"
+  from        = "{{flow.channel.address}}"
+  media_url   = "https://test.com"
+  service_sid = "{{trigger.message.InstanceSid}}"
+  to          = "{{contact.channel.address}}"
 
-	offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

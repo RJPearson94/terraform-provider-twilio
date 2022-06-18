@@ -98,16 +98,16 @@ func TestAccDataSourceTwilioStudioFlowWidgetState_withMultipleTransitions(t *tes
 func testAccDataSourceTwilioStudioFlowWidgetState_basic() string {
 	return `
 data "twilio_studio_flow_widget_state" "state" {
-	name = "State"
-	type = "say-play"
+  name = "State"
+  type = "say-play"
 
-	transitions {
-		event = "audioComplete"
-	}
+  transitions {
+    event = "audioComplete"
+  }
 
-	properties = { 
-		"digits": "123" 
-	}
+  properties = {
+    "digits" : "123"
+  }
 }
 `
 }
@@ -115,17 +115,17 @@ data "twilio_studio_flow_widget_state" "state" {
 func testAccDataSourceTwilioStudioFlowWidgetState_withNext() string {
 	return `
 data "twilio_studio_flow_widget_state" "state" {
-	name = "State"
-	type = "say-play"
+  name = "State"
+  type = "say-play"
 
-	transitions {
-		event = "audioComplete"
-		next = "State"
-	}
+  transitions {
+    event = "audioComplete"
+    next  = "State"
+  }
 
-	properties = { 
-		"digits": "123" 
-	}
+  properties = {
+    "digits" : "123"
+  }
 }
 `
 }
@@ -133,25 +133,25 @@ data "twilio_studio_flow_widget_state" "state" {
 func testAccDataSourceTwilioStudioFlowWidgetState_withNextAndCondition() string {
 	return `
 data "twilio_studio_flow_widget_state" "state" {
-	name = "State"
-	type = "test-type"
+  name = "State"
+  type = "test-type"
 
-	transitions {
-		event = "test"
-		next = "testTransition"
-		conditions {
-			arguments = ["{{contact.channel.address}}"]
-			friendly_name = "If value equal_to test"
-			type = "equal_to"
-			value = "test"
-		}
-	}
+  transitions {
+    event = "test"
+    next  = "testTransition"
+    conditions {
+      arguments     = ["{{contact.channel.address}}"]
+      friendly_name = "If value equal_to test"
+      type          = "equal_to"
+      value         = "test"
+    }
+  }
 
-	properties = { 
-		"input": "{{contact.channel.address}}",
-		"workflow": "WWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-		"channel": "TCaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	}
+  properties = {
+    "input" : "{{contact.channel.address}}",
+    "workflow" : "WWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "channel" : "TCaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
 }
 `
 }
@@ -159,30 +159,30 @@ data "twilio_studio_flow_widget_state" "state" {
 func testAccDataSourceTwilioStudioFlowWidgetState_withMultipleConditions() string {
 	return `
 data "twilio_studio_flow_widget_state" "state" {
-	name = "State"
-	type = "test-type"
+  name = "State"
+  type = "test-type"
 
-	transitions {
-		event = "test"
-		conditions {
-			arguments = ["{{contact.channel.address}}"]
-			friendly_name = "If value equal_to test"
-			type = "equal_to"
-			value = "test"
-		}
-		conditions {
-			arguments = ["{{contact.channel.address}}"]
-			friendly_name = "If value equal_to test 2"
-			type = "equal_to"
-			value = "test 2"
-		}
-	}
+  transitions {
+    event = "test"
+    conditions {
+      arguments     = ["{{contact.channel.address}}"]
+      friendly_name = "If value equal_to test"
+      type          = "equal_to"
+      value         = "test"
+    }
+    conditions {
+      arguments     = ["{{contact.channel.address}}"]
+      friendly_name = "If value equal_to test 2"
+      type          = "equal_to"
+      value         = "test 2"
+    }
+  }
 
-	properties = { 
-		"input": "{{contact.channel.address}}",
-		"workflow": "WWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-		"channel": "TCaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	}
+  properties = {
+    "input" : "{{contact.channel.address}}",
+    "workflow" : "WWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "channel" : "TCaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
 }
 `
 }
@@ -190,27 +190,27 @@ data "twilio_studio_flow_widget_state" "state" {
 func testAccDataSourceTwilioStudioFlowWidgetState_multipleTransitions() string {
 	return `
 data "twilio_studio_flow_widget_state" "state" {
-	name = "State"
-	type = "test-type"
+  name = "State"
+  type = "test-type"
 
-	transitions {
-		event = "test"
-		next = "testTransition"
-		conditions {
-			arguments = ["{{contact.channel.address}}"]
-			friendly_name = "If value equal_to test"
-			type = "equal_to"
-			value = "test"
-		}
-	}
+  transitions {
+    event = "test"
+    next  = "testTransition"
+    conditions {
+      arguments     = ["{{contact.channel.address}}"]
+      friendly_name = "If value equal_to test"
+      type          = "equal_to"
+      value         = "test"
+    }
+  }
 
-	transitions {
-		event = "noMatch"
-	}
+  transitions {
+    event = "noMatch"
+  }
 
-	properties = { 
-		"input": "{{contact.channel.address}}",
-	}
+  properties = {
+    "input" : "{{contact.channel.address}}",
+  }
 }
 `
 }

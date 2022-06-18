@@ -137,9 +137,9 @@ func TestAccDataSourceTwilioStudioFlowWidgetConnectCallTo_complete(t *testing.T)
 func testAccDataSourceTwilioStudioFlowWidgetConnectCallTo_client() string {
 	return `
 data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
-	name = "ConnectCallTo"
-	noun = "client"
-    to = "test"
+  name = "ConnectCallTo"
+  noun = "client"
+  to   = "test"
 }
 `
 }
@@ -147,9 +147,9 @@ data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
 func testAccDataSourceTwilioStudioFlowWidgetConnectCallTo_conference() string {
 	return `
 data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
-	name = "ConnectCallTo"
-	noun = "conference"
-    to = "CFaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  name = "ConnectCallTo"
+  noun = "conference"
+  to   = "CFaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `
 }
@@ -157,9 +157,9 @@ data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
 func testAccDataSourceTwilioStudioFlowWidgetConnectCallTo_number() string {
 	return `
 data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
-	name = "ConnectCallTo"
-	noun = "number"
-    to = "+441234567890"
+  name = "ConnectCallTo"
+  noun = "number"
+  to   = "+441234567890"
 }
 `
 }
@@ -167,9 +167,9 @@ data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
 func testAccDataSourceTwilioStudioFlowWidgetConnectCallTo_numberMulti() string {
 	return `
 data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
-	name = "ConnectCallTo"
-	noun = "number-multi"
-    to = "+441234567890,+441234567891"
+  name = "ConnectCallTo"
+  noun = "number-multi"
+  to   = "+441234567890,+441234567891"
 }
 `
 }
@@ -177,9 +177,9 @@ data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
 func testAccDataSourceTwilioStudioFlowWidgetConnectCallTo_sim() string {
 	return `
 data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
-	name = "ConnectCallTo"
-	noun = "sim"
-    to = "DEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  name = "ConnectCallTo"
+  noun = "sim"
+  to   = "DEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `
 }
@@ -187,9 +187,9 @@ data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
 func testAccDataSourceTwilioStudioFlowWidgetConnectCallTo_sip() string {
 	return `
 data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
-	name = "ConnectCallTo"
-	noun = "sip"
-    sip_endpoint = "sip:test@test.com"
+  name         = "ConnectCallTo"
+  noun         = "sip"
+  sip_endpoint = "sip:test@test.com"
 }
 `
 }
@@ -197,25 +197,25 @@ data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
 func testAccDataSourceTwilioStudioFlowWidgetConnectCallTo_complete() string {
 	return `
 data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
-	name = "ConnectCallTo"
+  name = "ConnectCallTo"
 
-	transitions {
-		call_completed = "ConnectCallTo"
-		hangup = "ConnectCallTo"
-	}
+  transitions {
+    call_completed = "ConnectCallTo"
+    hangup         = "ConnectCallTo"
+  }
 
-	caller_id = "{{contact.channel.address}}"
-    record = true
-    noun = "sip"
-    timeout = 30
-    sip_username = "test"
-    sip_password = "test2"
-    sip_endpoint = "sip:test@test.com"
+  caller_id    = "{{contact.channel.address}}"
+  record       = true
+  noun         = "sip"
+  timeout      = 30
+  sip_username = "test"
+  sip_password = "test2"
+  sip_endpoint = "sip:test@test.com"
 
-    offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

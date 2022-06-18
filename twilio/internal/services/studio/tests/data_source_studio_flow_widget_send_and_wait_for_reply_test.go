@@ -47,13 +47,13 @@ func TestAccDataSourceTwilioStudioFlowWidgetSendAndWaitForReply_complete(t *test
 func testAccDataSourceTwilioStudioFlowWidgetSendAndWaitForReply_basic() string {
 	return `
 data "twilio_studio_flow_widget_send_and_wait_for_reply" "send_and_wait_for_reply" {
-	name = "SendAndWaitForReply"
+  name = "SendAndWaitForReply"
 
-	transitions {
-		incoming_message = "SendAndWaitForReply"
-	}
+  transitions {
+    incoming_message = "SendAndWaitForReply"
+  }
 
-	body = "Hello World"
+  body = "Hello World"
 }
 `
 }
@@ -61,30 +61,30 @@ data "twilio_studio_flow_widget_send_and_wait_for_reply" "send_and_wait_for_repl
 func testAccDataSourceTwilioStudioFlowWidgetSendAndWaitForReply_complete() string {
 	return `
 data "twilio_studio_flow_widget_send_and_wait_for_reply" "send_and_wait_for_reply" {
-	name = "SendAndWaitForReply"
+  name = "SendAndWaitForReply"
 
-	transitions {
-		delivery_failure = "SendAndWaitForReply"
-		incoming_message = "SendAndWaitForReply"
-		timeout = "SendAndWaitForReply"
-	}
+  transitions {
+    delivery_failure = "SendAndWaitForReply"
+    incoming_message = "SendAndWaitForReply"
+    timeout          = "SendAndWaitForReply"
+  }
 
-	attributes = jsonencode({
-		"channelSid":"{{trigger.message.ChannelSid}}",
-		"channelType":"{{trigger.message.ChannelAttributes.channel_type}}",
-		"name":"{{trigger.message.ChannelAttributes.from}}"
-	})
-	body = "Hello World"
-    channel_sid = "{{trigger.message.ChannelSid}}"
-	from = "{{flow.channel.address}}"
-    media_url = "https://test.com"
-	service_sid = "{{trigger.message.InstanceSid}}"
-	timeout = "300"
+  attributes = jsonencode({
+    "channelSid" : "{{trigger.message.ChannelSid}}",
+    "channelType" : "{{trigger.message.ChannelAttributes.channel_type}}",
+    "name" : "{{trigger.message.ChannelAttributes.from}}"
+  })
+  body        = "Hello World"
+  channel_sid = "{{trigger.message.ChannelSid}}"
+  from        = "{{flow.channel.address}}"
+  media_url   = "https://test.com"
+  service_sid = "{{trigger.message.InstanceSid}}"
+  timeout     = "300"
 
-	offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

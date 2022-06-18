@@ -47,8 +47,8 @@ func TestAccDataSourceTwilioStudioFlowWidgetAddTwiMLRedirect_complete(t *testing
 func testAccDataSourceTwilioStudioFlowWidgetAddTwiMLRedirect_basic() string {
 	return `
 data "twilio_studio_flow_widget_add_twiml_redirect" "add_twiml_redirect" {
-	name = "AddTwiMLRedirect"
-	url = "https://test.com/twiml"
+  name = "AddTwiMLRedirect"
+  url  = "https://test.com/twiml"
 }
 `
 }
@@ -56,22 +56,22 @@ data "twilio_studio_flow_widget_add_twiml_redirect" "add_twiml_redirect" {
 func testAccDataSourceTwilioStudioFlowWidgetAddTwiMLRedirect_complete() string {
 	return `
 data "twilio_studio_flow_widget_add_twiml_redirect" "add_twiml_redirect" {
-	name = "AddTwiMLRedirect"
+  name = "AddTwiMLRedirect"
 
-	transitions {
-		fail = "AddTwiMLRedirect"
-		return = "AddTwiMLRedirect"
-		timeout = "AddTwiMLRedirect"
-	}
+  transitions {
+    fail    = "AddTwiMLRedirect"
+    return  = "AddTwiMLRedirect"
+    timeout = "AddTwiMLRedirect"
+  }
 
-	method = "POST"
-	timeout = "100"
-	url = "https://test.com/twiml"
+  method  = "POST"
+  timeout = "100"
+  url     = "https://test.com/twiml"
 
-    offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

@@ -47,8 +47,8 @@ func TestAccDataSourceTwilioStudioFlowWidgetConnectVirtualAgent_complete(t *test
 func testAccDataSourceTwilioStudioFlowWidgetConnectVirtualAgent_basic() string {
 	return `
 data "twilio_studio_flow_widget_connect_virtual_agent" "connect_virtual_agent" {
-	name = "ConnectVirtualAgent"
-	connector = "test-connector"
+  name      = "ConnectVirtualAgent"
+  connector = "test-connector"
 }
 `
 }
@@ -56,22 +56,22 @@ data "twilio_studio_flow_widget_connect_virtual_agent" "connect_virtual_agent" {
 func testAccDataSourceTwilioStudioFlowWidgetConnectVirtualAgent_complete() string {
 	return `
 data "twilio_studio_flow_widget_connect_virtual_agent" "connect_virtual_agent" {
-	name = "ConnectVirtualAgent"
+  name = "ConnectVirtualAgent"
 
-	transitions {
-		hangup = "ConnectVirtualAgent"
-		return = "ConnectVirtualAgent"
-	}
+  transitions {
+    hangup = "ConnectVirtualAgent"
+    return = "ConnectVirtualAgent"
+  }
 
-	connector = "test-connector"
-    sentiment_analysis = "true"
-    language = "en-US"
-    status_callback_url = "https://test.com"
+  connector           = "test-connector"
+  sentiment_analysis  = "true"
+  language            = "en-US"
+  status_callback_url = "https://test.com"
 
-    offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

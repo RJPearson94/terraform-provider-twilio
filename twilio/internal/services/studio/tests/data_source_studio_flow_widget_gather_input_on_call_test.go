@@ -65,9 +65,9 @@ func TestAccDataSourceTwilioStudioFlowWidgetGatherInputOnCall_complete(t *testin
 func testAccDataSourceTwilioStudioFlowWidgetGatherInputOnCall_play() string {
 	return `
 data "twilio_studio_flow_widget_gather_input_on_call" "gather_input_on_call" {
-	name = "GatherInputOnCall"
+  name = "GatherInputOnCall"
 
-	play = "http://localhost.com"
+  play = "http://localhost.com"
 }
 `
 }
@@ -75,9 +75,9 @@ data "twilio_studio_flow_widget_gather_input_on_call" "gather_input_on_call" {
 func testAccDataSourceTwilioStudioFlowWidgetGatherInputOnCall_say() string {
 	return `
 data "twilio_studio_flow_widget_gather_input_on_call" "gather_input_on_call" {
-	name = "GatherInputOnCall"
+  name = "GatherInputOnCall"
 
-	say = "Hello World"
+  say = "Hello World"
 }
 `
 }
@@ -85,35 +85,35 @@ data "twilio_studio_flow_widget_gather_input_on_call" "gather_input_on_call" {
 func testAccDataSourceTwilioStudioFlowWidgetGatherInputOnCall_complete() string {
 	return `
 data "twilio_studio_flow_widget_gather_input_on_call" "gather_input_on_call" {
-	name = "GatherInputOnCall"
+  name = "GatherInputOnCall"
 
-	transitions {
-		keypress = "GatherInputOnCall"
-		speech = "GatherInputOnCall"
-		timeout = "GatherInputOnCall"
-	}
+  transitions {
+    keypress = "GatherInputOnCall"
+    speech   = "GatherInputOnCall"
+    timeout  = "GatherInputOnCall"
+  }
 
-    finish_on_key = "1"
-    gather_language = "en-US"
-    hints = [
-		"test",
-		"test2"
-	]
-	language = "en-US"
-    loop = 1
-    number_of_digits = 3
-    profanity_filter = "true"
-	say = "Hello World"
-    speech_model = "phone_call"
-    speech_timeout = "auto"
-    stop_gather = true
-    timeout = 5
-	voice = "alice"
+  finish_on_key   = "1"
+  gather_language = "en-US"
+  hints = [
+    "test",
+    "test2"
+  ]
+  language         = "en-US"
+  loop             = 1
+  number_of_digits = 3
+  profanity_filter = "true"
+  say              = "Hello World"
+  speech_model     = "phone_call"
+  speech_timeout   = "auto"
+  stop_gather      = true
+  timeout          = 5
+  voice            = "alice"
 
-    offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

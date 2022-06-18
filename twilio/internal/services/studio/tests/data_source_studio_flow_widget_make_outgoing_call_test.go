@@ -47,7 +47,7 @@ func TestAccDataSourceTwilioStudioFlowWidgetMakeOutgoingCall_complete(t *testing
 func testAccDataSourceTwilioStudioFlowWidgetMakeOutgoingCall_basic() string {
 	return `
 data "twilio_studio_flow_widget_make_outgoing_call" "make_outgoing_call" {
-	name = "MakeOutgoingCall"
+  name = "MakeOutgoingCall"
 }
 `
 }
@@ -55,34 +55,34 @@ data "twilio_studio_flow_widget_make_outgoing_call" "make_outgoing_call" {
 func testAccDataSourceTwilioStudioFlowWidgetMakeOutgoingCall_complete() string {
 	return `
 data "twilio_studio_flow_widget_make_outgoing_call" "make_outgoing_call" {
-	name = "MakeOutgoingCall"
+  name = "MakeOutgoingCall"
 
-	transitions {
-		answered = "MakeOutgoingCall"
-		busy = "MakeOutgoingCall"
-		failed = "MakeOutgoingCall"
-		no_answer = "MakeOutgoingCall"
-	}
+  transitions {
+    answered  = "MakeOutgoingCall"
+    busy      = "MakeOutgoingCall"
+    failed    = "MakeOutgoingCall"
+    no_answer = "MakeOutgoingCall"
+  }
 
-	detect_answering_machine = true
-	from = "{{flow.channel.address}}"
-    to = "{{contact.channel.address}}"
-    machine_detection = "Enable"
-	machine_detection_speech_end_threshold = "500"
-    machine_detection_speech_threshold = "1000"
-	machine_detection_silence_timeout = "2000"
-    machine_detection_timeout = "10"
-	record = true
-    send_digits = "1234"
-	sip_auth_password = "test2"
-    sip_auth_username = "test"
-    timeout = 5
-    trim = "trim-silence"
+  detect_answering_machine               = true
+  from                                   = "{{flow.channel.address}}"
+  to                                     = "{{contact.channel.address}}"
+  machine_detection                      = "Enable"
+  machine_detection_speech_end_threshold = "500"
+  machine_detection_speech_threshold     = "1000"
+  machine_detection_silence_timeout      = "2000"
+  machine_detection_timeout              = "10"
+  record                                 = true
+  send_digits                            = "1234"
+  sip_auth_password                      = "test2"
+  sip_auth_username                      = "test"
+  timeout                                = 5
+  trim                                   = "trim-silence"
 
-    offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

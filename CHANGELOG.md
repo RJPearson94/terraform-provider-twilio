@@ -1,3 +1,9 @@
+## v0.18.0 (unreleased)
+
+FEATURES
+
+- Update `twilio_studio_flow_widget_trigger` to include the `incoming_parent` transition
+
 ## v0.17.0 (2022-02-05)
 
 FEATURES

@@ -65,13 +65,13 @@ func TestAccDataSourceTwilioStudioFlowWidgetForkStream_complete(t *testing.T) {
 func testAccDataSourceTwilioStudioFlowWidgetForkStream_start() string {
 	return `
 data "twilio_studio_flow_widget_fork_stream" "fork_stream" {
-	name = "ForkStream"
+  name = "ForkStream"
 
-	stream_action = "start"
-	stream_name = "test"
-	stream_track = "inbound_track"
-    stream_transport_type = "websocket"
-    stream_url = "wss://test.com"
+  stream_action         = "start"
+  stream_name           = "test"
+  stream_track          = "inbound_track"
+  stream_transport_type = "websocket"
+  stream_url            = "wss://test.com"
 }
 `
 }
@@ -79,10 +79,10 @@ data "twilio_studio_flow_widget_fork_stream" "fork_stream" {
 func testAccDataSourceTwilioStudioFlowWidgetForkStream_stop() string {
 	return `
 data "twilio_studio_flow_widget_fork_stream" "fork_stream" {
-	name = "ForkStream"
+  name = "ForkStream"
 
-	stream_transport_type = "websocket"
-    stream_action = "stop"
+  stream_transport_type = "websocket"
+  stream_action         = "stop"
 }
 `
 }
@@ -90,30 +90,30 @@ data "twilio_studio_flow_widget_fork_stream" "fork_stream" {
 func testAccDataSourceTwilioStudioFlowWidgetForkStream_complete() string {
 	return `
 data "twilio_studio_flow_widget_fork_stream" "fork_stream" {
-	name = "ForkStream"
+  name = "ForkStream"
 
-	transitions {
-		next = "ForkStream"
-	}
+  transitions {
+    next = "ForkStream"
+  }
 
-    stream_action = "start"
-    stream_connector = "connector"
-	stream_name = "test"
-    stream_parameters {
-		key = "key"
-        value = "value"
-    }
-	stream_parameters {
-		key = "key2"
-        value = "value2"
-    }
-	stream_track = "inbound_track"
-	stream_transport_type = "siprec"
+  stream_action    = "start"
+  stream_connector = "connector"
+  stream_name      = "test"
+  stream_parameters {
+    key   = "key"
+    value = "value"
+  }
+  stream_parameters {
+    key   = "key2"
+    value = "value2"
+  }
+  stream_track          = "inbound_track"
+  stream_transport_type = "siprec"
 
-    offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

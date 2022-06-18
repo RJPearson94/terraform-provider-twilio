@@ -38,6 +38,10 @@ func dataSourceStudioFlowWidgetTrigger() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
+						"incoming_parent": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -77,6 +81,7 @@ func dataSourceStudioFlowWidgetTriggerRead(ctx context.Context, d *schema.Resour
 		nextTransitions.IncomingCall = utils.OptionalString(d, "transitions.0.incoming_call")
 		nextTransitions.IncomingMessage = utils.OptionalString(d, "transitions.0.incoming_message")
 		nextTransitions.IncomingRequest = utils.OptionalString(d, "transitions.0.incoming_request")
+		nextTransitions.IncomingParent = utils.OptionalString(d, "transitions.0.incoming_parent")
 	}
 
 	var offset *properties.Offset

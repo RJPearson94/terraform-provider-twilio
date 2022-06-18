@@ -65,8 +65,8 @@ func TestAccDataSourceTwilioStudioFlowWidgetEnqueueCall_complete(t *testing.T) {
 func testAccDataSourceTwilioStudioFlowWidgetEnqueueCall_task() string {
 	return `
 data "twilio_studio_flow_widget_enqueue_call" "enqueue_call" {
-	name = "EnqueueCall"
-	workflow_sid = "WWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  name         = "EnqueueCall"
+  workflow_sid = "WWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `
 }
@@ -74,8 +74,8 @@ data "twilio_studio_flow_widget_enqueue_call" "enqueue_call" {
 func testAccDataSourceTwilioStudioFlowWidgetEnqueueCall_queue() string {
 	return `
 data "twilio_studio_flow_widget_enqueue_call" "enqueue_call" {
-	name = "EnqueueCall"
-	queue_name = "Test"
+  name       = "EnqueueCall"
+  queue_name = "Test"
 }
 `
 }
@@ -83,27 +83,27 @@ data "twilio_studio_flow_widget_enqueue_call" "enqueue_call" {
 func testAccDataSourceTwilioStudioFlowWidgetEnqueueCall_complete() string {
 	return `
 data "twilio_studio_flow_widget_enqueue_call" "enqueue_call" {
-	name = "EnqueueCall"
+  name = "EnqueueCall"
 
-	transitions {
-		call_complete = "EnqueueCall"
-		call_failure = "EnqueueCall"
-		failed_to_enqueue = "EnqueueCall"
-	}
-	
-    priority = 1
-    task_attributes = jsonencode({
-		"test": "test"
-	})
-    timeout = 10
-    wait_url = "http://localhost.com"
-    wait_url_method = "POST"
-	workflow_sid = "WWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  transitions {
+    call_complete     = "EnqueueCall"
+    call_failure      = "EnqueueCall"
+    failed_to_enqueue = "EnqueueCall"
+  }
 
-    offset {
-		x = 10
-		y = 20
-	}
+  priority = 1
+  task_attributes = jsonencode({
+    "test" : "test"
+  })
+  timeout         = 10
+  wait_url        = "http://localhost.com"
+  wait_url_method = "POST"
+  workflow_sid    = "WWaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

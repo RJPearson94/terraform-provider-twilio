@@ -47,11 +47,11 @@ func TestAccDataSourceTwilioStudioFlowWidgetMakeHttpRequest_complete(t *testing.
 func testAccDataSourceTwilioStudioFlowWidgetMakeHttpRequest_basic() string {
 	return `
 data "twilio_studio_flow_widget_make_http_request" "make_http_request" {
-	name = "MakeHttpRequest"
+  name = "MakeHttpRequest"
 
-	method = "GET"
-    content_type = "application/x-www-form-urlencoded"
-    url = "https://test.com"
+  method       = "GET"
+  content_type = "application/x-www-form-urlencoded"
+  url          = "https://test.com"
 }
 `
 }
@@ -59,34 +59,34 @@ data "twilio_studio_flow_widget_make_http_request" "make_http_request" {
 func testAccDataSourceTwilioStudioFlowWidgetMakeHttpRequest_complete() string {
 	return `
 data "twilio_studio_flow_widget_make_http_request" "make_http_request" {
-	name = "MakeHttpRequest"
+  name = "MakeHttpRequest"
 
-	transitions {
-		failed = "MakeHttpRequest"
-		success = "MakeHttpRequest"
-	}
+  transitions {
+    failed  = "MakeHttpRequest"
+    success = "MakeHttpRequest"
+  }
 
-	method = "POST"
-    content_type = "application/json"
-    url = "https://test.com"
-	body = jsonencode({
-		"say": "Hello World"
-	})
+  method       = "POST"
+  content_type = "application/json"
+  url          = "https://test.com"
+  body = jsonencode({
+    "say" : "Hello World"
+  })
 
-	parameters {
-		key = "key"
-		value = "value"
-	}
+  parameters {
+    key   = "key"
+    value = "value"
+  }
 
-	parameters {
-		key = "key2"
-		value = "value2"
-	}
+  parameters {
+    key   = "key2"
+    value = "value2"
+  }
 
-    offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

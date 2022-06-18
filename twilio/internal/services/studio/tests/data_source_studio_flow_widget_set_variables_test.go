@@ -83,7 +83,7 @@ func TestAccDataSourceTwilioStudioFlowWidgetSetVariables_complete(t *testing.T) 
 func testAccDataSourceTwilioStudioFlowWidgetSetVariables_basic() string {
 	return `
 data "twilio_studio_flow_widget_set_variables" "set_variables" {
-	name = "SetVariables"
+  name = "SetVariables"
 }
 `
 }
@@ -91,12 +91,12 @@ data "twilio_studio_flow_widget_set_variables" "set_variables" {
 func testAccDataSourceTwilioStudioFlowWidgetSetVariables_withVariables() string {
 	return `
 data "twilio_studio_flow_widget_set_variables" "set_variables" {
-	name = "SetVariables"
+  name = "SetVariables"
 
-	variables {
-		key = "test"
-		value = "testValue"
-	}
+  variables {
+    key   = "test"
+    value = "testValue"
+  }
 }
 `
 }
@@ -104,17 +104,17 @@ data "twilio_studio_flow_widget_set_variables" "set_variables" {
 func testAccDataSourceTwilioStudioFlowWidgetSetVariables_withMultipleVariables() string {
 	return `
 data "twilio_studio_flow_widget_set_variables" "set_variables" {
-	name = "SetVariables"
+  name = "SetVariables"
 
-	variables {
-		key = "test"
-		value = "testValue"
-	}
+  variables {
+    key   = "test"
+    value = "testValue"
+  }
 
-	variables {
-		key = "test2"
-		value = "testValue2"
-	}
+  variables {
+    key   = "test2"
+    value = "testValue2"
+  }
 }
 `
 }
@@ -122,21 +122,21 @@ data "twilio_studio_flow_widget_set_variables" "set_variables" {
 func testAccDataSourceTwilioStudioFlowWidgetSetVariables_complete() string {
 	return `
 data "twilio_studio_flow_widget_set_variables" "set_variables" {
-	name = "SetVariables"
+  name = "SetVariables"
 
-	transitions {
-		next = "SetVariables"
-	}
+  transitions {
+    next = "SetVariables"
+  }
 
-	variables {
-		key = "test"
-		value = "testValue"
-	}
+  variables {
+    key   = "test"
+    value = "testValue"
+  }
 
-	offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

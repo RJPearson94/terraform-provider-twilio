@@ -160,7 +160,7 @@ func TestAccTwilioStudioFlow_withWidgets(t *testing.T) {
 					resource.TestCheckResourceAttr(stateResourceName, "friendly_name", "With widgets"),
 					resource.TestCheckResourceAttr(stateResourceName, "status", "published"),
 					resource.TestCheckResourceAttr(stateResourceName, "validate", "true"),
-					resource.TestCheckResourceAttr(stateResourceName, "definition", `{"description":"Flow with trigger widget","flags":{"allow_concurrent_calls":true},"initial_state":"Trigger","states":[{"name":"Trigger","properties":{"offset":{"x":200,"y":0}},"transitions":[{"event":"incomingCall"},{"event":"incomingMessage"},{"event":"incomingRequest"}],"type":"trigger"}]}`),
+					resource.TestCheckResourceAttr(stateResourceName, "definition", `{"description":"Flow with trigger widget","flags":{"allow_concurrent_calls":true},"initial_state":"Trigger","states":[{"name":"Trigger","properties":{"offset":{"x":200,"y":0}},"transitions":[{"event":"incomingCall"},{"event":"incomingMessage"},{"event":"incomingParent"},{"event":"incomingRequest"}],"type":"trigger"}]}`),
 				),
 			},
 		},
@@ -320,32 +320,32 @@ resource "twilio_studio_flow" "flow" {
 func testAccTwilioStudioFlow_withWidgets() string {
 	return `
 data "twilio_studio_flow_widget_trigger" "trigger" {
-	name = "Trigger"
-	
-	offset {
-		x = 200
-		y = 0
-	}
+  name = "Trigger"
+
+  offset {
+    x = 200
+    y = 0
+  }
 }
-	
+
 data "twilio_studio_flow_definition" "definition" {
-	description   = "Flow with trigger widget"
-	initial_state = data.twilio_studio_flow_widget_trigger.trigger.name
-	
-	flags {
-		allow_concurrent_calls = true
-	}
-	
-	states {
-		json = data.twilio_studio_flow_widget_trigger.trigger.json
-	}
+  description   = "Flow with trigger widget"
+  initial_state = data.twilio_studio_flow_widget_trigger.trigger.name
+
+  flags {
+    allow_concurrent_calls = true
+  }
+
+  states {
+    json = data.twilio_studio_flow_widget_trigger.trigger.json
+  }
 }
-	
+
 resource "twilio_studio_flow" "flow" {
-	friendly_name = "With widgets"
-	status        = "published"
-	definition    = data.twilio_studio_flow_definition.definition.json
-	validate      = true
+  friendly_name = "With widgets"
+  status        = "published"
+  definition    = data.twilio_studio_flow_definition.definition.json
+  validate      = true
 }
 `
 }

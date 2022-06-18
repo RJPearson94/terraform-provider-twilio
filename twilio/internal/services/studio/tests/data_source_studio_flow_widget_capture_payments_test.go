@@ -47,8 +47,8 @@ func TestAccDataSourceTwilioStudioFlowWidgetCapturePayments_complete(t *testing.
 func testAccDataSourceTwilioStudioFlowWidgetCapturePayments_basic() string {
 	return `
 data "twilio_studio_flow_widget_capture_payments" "capture_payments" {
-	name = "CapturePayments"
-	payment_token_type = "reusable"
+  name               = "CapturePayments"
+  payment_token_type = "reusable"
 }
 `
 }
@@ -56,46 +56,46 @@ data "twilio_studio_flow_widget_capture_payments" "capture_payments" {
 func testAccDataSourceTwilioStudioFlowWidgetCapturePayments_complete() string {
 	return `
 data "twilio_studio_flow_widget_capture_payments" "capture_payments" {
-	name = "CapturePayments"
+  name = "CapturePayments"
 
-	transitions {
-		hangup = "CapturePayments"
-		max_failed_attempts = "CapturePayments"
-		pay_interrupted = "CapturePayments"
-		provider_error = "CapturePayments"
-		success = "CapturePayments"
-		validation_error = "CapturePayments"
-	}
+  transitions {
+    hangup              = "CapturePayments"
+    max_failed_attempts = "CapturePayments"
+    pay_interrupted     = "CapturePayments"
+    provider_error      = "CapturePayments"
+    success             = "CapturePayments"
+    validation_error    = "CapturePayments"
+  }
 
-	currency = "usd"
-    description = "Pay Bill"
-    language = "en-GB"
-    max_attempts = 2
-	min_postal_code_length = 3
-    parameters  {
-		key = "key"
-        value = "value"
-    }
-	parameters  {
-		key = "key2"
-        value = "value2"
-    }
-	payment_amount = "10.99"
-    payment_connector = "stripe"
-    payment_method = "ACH_DEBIT"
-	payment_token_type = "reusable"
-	postal_code = "false"
-	security_code = true
-	timeout = 5
-    valid_card_types = [
-		"visa", 
-		"amex"
-	]
+  currency               = "usd"
+  description            = "Pay Bill"
+  language               = "en-GB"
+  max_attempts           = 2
+  min_postal_code_length = 3
+  parameters {
+    key   = "key"
+    value = "value"
+  }
+  parameters {
+    key   = "key2"
+    value = "value2"
+  }
+  payment_amount     = "10.99"
+  payment_connector  = "stripe"
+  payment_method     = "ACH_DEBIT"
+  payment_token_type = "reusable"
+  postal_code        = "false"
+  security_code      = true
+  timeout            = 5
+  valid_card_types = [
+    "visa",
+    "amex"
+  ]
 
-    offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

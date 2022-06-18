@@ -47,21 +47,21 @@ func TestAccDataSourceTwilioStudioFlowWidgetSplitBasedOn_complete(t *testing.T) 
 func testAccDataSourceTwilioStudioFlowWidgetSplitBasedOn_basic() string {
 	return `
 data "twilio_studio_flow_widget_split_based_on" "split_based_on" {
-	name = "SplitBasedOn"
+  name = "SplitBasedOn"
 
-	transitions {
-		matches {
-			next = "SplitBasedOn"
-			conditions {
-				arguments = ["{{contact.channel.address}}"]
-				friendly_name = "If value equal_to test"
-				type = "equal_to"
-				value = "test"
-			}
-		}
-	}
+  transitions {
+    matches {
+      next = "SplitBasedOn"
+      conditions {
+        arguments     = ["{{contact.channel.address}}"]
+        friendly_name = "If value equal_to test"
+        type          = "equal_to"
+        value         = "test"
+      }
+    }
+  }
 
-	input = "{{contact.channel.address}}"
+  input = "{{contact.channel.address}}"
 }
 `
 }
@@ -69,37 +69,37 @@ data "twilio_studio_flow_widget_split_based_on" "split_based_on" {
 func testAccDataSourceTwilioStudioFlowWidgetSplitBasedOn_complete() string {
 	return `
 data "twilio_studio_flow_widget_split_based_on" "split_based_on" {
-	name = "SplitBasedOn"
+  name = "SplitBasedOn"
 
-	transitions {
-		no_match = "SplitBasedOn"
-		matches {
-			next = "SplitBasedOn"
-			conditions {
-				arguments = ["{{contact.channel.address}}"]
-				friendly_name = "If value equal_to test"
-				type = "equal_to"
-				value = "test"
-			}
-		}
+  transitions {
+    no_match = "SplitBasedOn"
+    matches {
+      next = "SplitBasedOn"
+      conditions {
+        arguments     = ["{{contact.channel.address}}"]
+        friendly_name = "If value equal_to test"
+        type          = "equal_to"
+        value         = "test"
+      }
+    }
 
-		matches {
-			next = "SplitBasedOn"
-			conditions {
-				arguments = ["{{contact.channel.address}}"]
-				friendly_name = "If value not_equal_to test 2"
-				type = "not_equal_to"
-				value = "test 2"
-			}
-		}
-	}
+    matches {
+      next = "SplitBasedOn"
+      conditions {
+        arguments     = ["{{contact.channel.address}}"]
+        friendly_name = "If value not_equal_to test 2"
+        type          = "not_equal_to"
+        value         = "test 2"
+      }
+    }
+  }
 
-	input = "{{contact.channel.address}}"
+  input = "{{contact.channel.address}}"
 
-	offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

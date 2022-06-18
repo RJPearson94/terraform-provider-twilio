@@ -65,8 +65,8 @@ func TestAccDataSourceTwilioStudioFlowWidgetRunFunction_complete(t *testing.T) {
 func testAccDataSourceTwilioStudioFlowWidgetRunFunction_basic() string {
 	return `
 data "twilio_studio_flow_widget_run_function" "run_function" {
-	name = "RunFunction"
-	url = "https://test-function.twil.io/test-function"
+  name = "RunFunction"
+  url  = "https://test-function.twil.io/test-function"
 }
 `
 }
@@ -74,10 +74,10 @@ data "twilio_studio_flow_widget_run_function" "run_function" {
 func testAccDataSourceTwilioStudioFlowWidgetRunFunction_legacyService() string {
 	return `
 data "twilio_studio_flow_widget_run_function" "run_function" {
-	name = "RunFunction"
-	
-	service_sid = "default"
-    url = "https://test-function.twil.io/test-function"
+  name = "RunFunction"
+
+  service_sid = "default"
+  url         = "https://test-function.twil.io/test-function"
 }
 `
 }
@@ -85,30 +85,30 @@ data "twilio_studio_flow_widget_run_function" "run_function" {
 func testAccDataSourceTwilioStudioFlowWidgetRunFunction_complete() string {
 	return `
 data "twilio_studio_flow_widget_run_function" "run_function" {
-	name = "RunFunction"
-	
-    transitions {
-		fail = "RunFunction"
-		success = "RunFunction"
-	}
+  name = "RunFunction"
 
-    function_sid = "ZHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	environment_sid = "ZEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	service_sid = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    parameters {
-		key = "key"
-        value = "value"
-    }
-	parameters {
-		key = "key2"
-        value = "value2"
-    }
-    url = "https://test-function.twil.io/test-function"
+  transitions {
+    fail    = "RunFunction"
+    success = "RunFunction"
+  }
 
-	offset {
-		x = 10
-		y = 20
-	}
+  function_sid    = "ZHaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  environment_sid = "ZEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  service_sid     = "ZSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  parameters {
+    key   = "key"
+    value = "value"
+  }
+  parameters {
+    key   = "key2"
+    value = "value2"
+  }
+  url = "https://test-function.twil.io/test-function"
+
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

@@ -83,8 +83,8 @@ func TestAccDataSourceTwilioStudioFlowWidgetSayPlay_complete(t *testing.T) {
 func testAccDataSourceTwilioStudioFlowWidgetSayPlay_say() string {
 	return `
 data "twilio_studio_flow_widget_say_play" "say_play" {
-	name = "SayPlay"
-	say = "Hello World"
+  name = "SayPlay"
+  say  = "Hello World"
 }
 `
 }
@@ -92,8 +92,8 @@ data "twilio_studio_flow_widget_say_play" "say_play" {
 func testAccDataSourceTwilioStudioFlowWidgetSayPlay_play() string {
 	return `
 data "twilio_studio_flow_widget_say_play" "say_play" {
-	name = "SayPlay"
-	play = "http://localhost.com"
+  name = "SayPlay"
+  play = "http://localhost.com"
 }
 `
 }
@@ -101,8 +101,8 @@ data "twilio_studio_flow_widget_say_play" "say_play" {
 func testAccDataSourceTwilioStudioFlowWidgetSayPlay_digits() string {
 	return `
 data "twilio_studio_flow_widget_say_play" "say_play" {
-	name = "SayPlay"
-	digits = "123"
+  name   = "SayPlay"
+  digits = "123"
 }
 `
 }
@@ -110,21 +110,21 @@ data "twilio_studio_flow_widget_say_play" "say_play" {
 func testAccDataSourceTwilioStudioFlowWidgetSayPlay_complete() string {
 	return `
 data "twilio_studio_flow_widget_say_play" "say_play" {
-	name = "SayPlay"
+  name = "SayPlay"
 
-	transitions {
-		audio_complete = "SayPlay"
-	}
-	
-	language = "en-US"
-	loop = 2
-    say = "Test"
-    voice = "alice"
+  transitions {
+    audio_complete = "SayPlay"
+  }
 
-    offset {
-		x = 10
-		y = 20
-	}
+  language = "en-US"
+  loop     = 2
+  say      = "Test"
+  voice    = "alice"
+
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

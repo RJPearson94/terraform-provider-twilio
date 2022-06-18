@@ -28,6 +28,7 @@ data "twilio_studio_flow_widget_trigger" "trigger" {
   transitions {
     incoming_call    = "IncomingCallTransition"
     incoming_message = "IncomingMessageTransition"
+    incoming_parent  = "IncomingParentTransition"
     incoming_request = "IncomingRequestTransition"
   }
 
@@ -73,6 +74,7 @@ A `transitions` block supports the following:
 
 - `incoming_call` - (Optional) The widget to transition to when an incoming call is received
 - `incoming_message` - (Optional) The widget to transition to when an incoming message is received
+- `incoming_parent` - (Optional) The widget to transition to when the (sub)flow is called by another Studio flow
 - `incoming_request` - (Optional) The widget to transition to when an incoming request is received
 
 ---

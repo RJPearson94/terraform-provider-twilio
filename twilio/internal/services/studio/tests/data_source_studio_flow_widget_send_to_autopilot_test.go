@@ -47,8 +47,8 @@ func TestAccDataSourceTwilioStudioFlowWidgetSendToAutopilot_complete(t *testing.
 func testAccDataSourceTwilioStudioFlowWidgetSendToAutopilot_basic() string {
 	return `
 data "twilio_studio_flow_widget_send_to_autopilot" "send_to_autopilot" {
-	name = "SendToAutopilot"
-	autopilot_assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  name                    = "SendToAutopilot"
+  autopilot_assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
 `
 }
@@ -56,39 +56,39 @@ data "twilio_studio_flow_widget_send_to_autopilot" "send_to_autopilot" {
 func testAccDataSourceTwilioStudioFlowWidgetSendToAutopilot_complete() string {
 	return `
 data "twilio_studio_flow_widget_send_to_autopilot" "send_to_autopilot" {
-	name = "SendToAutopilot"
+  name = "SendToAutopilot"
 
-	transitions {
-		failure = "SendToAutopilot"
-		session_ended = "SendToAutopilot"
-		timeout = "SendToAutopilot"
-	}
+  transitions {
+    failure       = "SendToAutopilot"
+    session_ended = "SendToAutopilot"
+    timeout       = "SendToAutopilot"
+  }
 
-	attributes = jsonencode({
-		"name":"{{trigger.message.ChannelAttributes.from}}",
-		"channelType":"{{trigger.message.ChannelAttributes.channel_type}}",
-		"channelSid":"{{trigger.message.ChannelSid}}"
-	})
-	autopilot_assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	body = "Hello World"
-	channel_sid = "{{trigger.message.ChannelSid}}"
-	from = "test"
-    memory_parameters {
-        key = "key"
-        value = "value"
-    }
-	memory_parameters {
-        key = "key2"
-        value = "value2"
-    }
-	service_sid = "{{trigger.message.InstanceSid}}"
-    target_task = "Task"
-	timeout = 100
+  attributes = jsonencode({
+    "name" : "{{trigger.message.ChannelAttributes.from}}",
+    "channelType" : "{{trigger.message.ChannelAttributes.channel_type}}",
+    "channelSid" : "{{trigger.message.ChannelSid}}"
+  })
+  autopilot_assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  body                    = "Hello World"
+  channel_sid             = "{{trigger.message.ChannelSid}}"
+  from                    = "test"
+  memory_parameters {
+    key   = "key"
+    value = "value"
+  }
+  memory_parameters {
+    key   = "key2"
+    value = "value2"
+  }
+  service_sid = "{{trigger.message.InstanceSid}}"
+  target_task = "Task"
+  timeout     = 100
 
-	offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

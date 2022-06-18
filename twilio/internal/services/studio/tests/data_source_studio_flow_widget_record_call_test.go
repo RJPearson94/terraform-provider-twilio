@@ -47,8 +47,8 @@ func TestAccDataSourceTwilioStudioFlowWidgetRecordCall_complete(t *testing.T) {
 func testAccDataSourceTwilioStudioFlowWidgetRecordCall_basic() string {
 	return `
 data "twilio_studio_flow_widget_record_call" "record_call" {
-	name = "RecordCall"
-	record_call = false
+  name        = "RecordCall"
+  record_call = false
 }
 `
 }
@@ -56,27 +56,27 @@ data "twilio_studio_flow_widget_record_call" "record_call" {
 func testAccDataSourceTwilioStudioFlowWidgetRecordCall_complete() string {
 	return `
 data "twilio_studio_flow_widget_record_call" "record_call" {
-	name = "RecordCall"
+  name = "RecordCall"
 
-	transitions {
-		failed = "RecordCall"
-		success = "RecordCall"
-	}
+  transitions {
+    failed  = "RecordCall"
+    success = "RecordCall"
+  }
 
-	record_call = true
-    trim = "do-not-trim"
-    recording_status_callback_url = "http://localhost.com"
-    recording_status_callback_method = "GET"
-    recording_status_callback_events = [
-		"in-progress", 
-		"completed"
-	]
-    recording_channels = "mono"
+  record_call                      = true
+  trim                             = "do-not-trim"
+  recording_status_callback_url    = "http://localhost.com"
+  recording_status_callback_method = "GET"
+  recording_status_callback_events = [
+    "in-progress",
+    "completed"
+  ]
+  recording_channels = "mono"
 
-    offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }

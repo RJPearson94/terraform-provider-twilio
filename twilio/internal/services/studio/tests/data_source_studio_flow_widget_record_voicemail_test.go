@@ -47,7 +47,7 @@ func TestAccDataSourceTwilioStudioFlowWidgetRecordVoicemail_complete(t *testing.
 func testAccDataSourceTwilioStudioFlowWidgetRecordVoicemail_basic() string {
 	return `
 data "twilio_studio_flow_widget_record_voicemail" "record_voicemail" {
-	name = "RecordVoicemail"
+  name = "RecordVoicemail"
 }
 `
 }
@@ -55,27 +55,27 @@ data "twilio_studio_flow_widget_record_voicemail" "record_voicemail" {
 func testAccDataSourceTwilioStudioFlowWidgetRecordVoicemail_complete() string {
 	return `
 data "twilio_studio_flow_widget_record_voicemail" "record_voicemail" {
-	name = "RecordVoicemail"
+  name = "RecordVoicemail"
 
-	transitions {
-		hangup = "RecordVoicemail"
-		no_audio = "RecordVoicemail"
-		recording_complete = "RecordVoicemail"
-	}
+  transitions {
+    hangup             = "RecordVoicemail"
+    no_audio           = "RecordVoicemail"
+    recording_complete = "RecordVoicemail"
+  }
 
-	max_length = 1000
-	play_beep = "true"
-    recording_status_callback_url = "http://localhost.com/recording"
-    timeout = 10
-	finish_on_key = "1"
-	transcribe = true
-    transcription_callback_url = "http://localhost.com/transcript"
-	trim = "trim-silence"
+  max_length                    = 1000
+  play_beep                     = "true"
+  recording_status_callback_url = "http://localhost.com/recording"
+  timeout                       = 10
+  finish_on_key                 = "1"
+  transcribe                    = true
+  transcription_callback_url    = "http://localhost.com/transcript"
+  trim                          = "trim-silence"
 
-    offset {
-		x = 10
-		y = 20
-	}
+  offset {
+    x = 10
+    y = 20
+  }
 }
 `
 }
