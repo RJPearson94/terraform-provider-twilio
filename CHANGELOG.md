@@ -2,7 +2,21 @@
 
 FEATURES
 
-- Update `twilio_studio_flow_widget_trigger` to include the `incoming_parent` transition
+- **New Resource:** `twilio_verify_messaging_configuration` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/verify_messaging_configuration.md)
+- **New Resource:** `twilio_verify_service` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/verify_service.md)
+- **New Resource:** `twilio_verify_service_rate_limit` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/verify_service_rate_limit.md)
+- **New Resource:** `twilio_verify_service_rate_limit_bucket` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/verify_service_rate_limit_bucket.md)
+- **New Resource:** `twilio_verify_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/verify_webhook.md)
+- **New Data Source:** `twilio_verify_messaging_configuration` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/verify_messaging_configuration.md)
+- **New Data Source:** `twilio_verify_messaging_configurations` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/verify_messaging_configurations.md)
+- **New Data Source:** `twilio_verify_service` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/verify_service.md)
+- **New Data Source:** `twilio_verify_service_rate_limit` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/verify_service_rate_limit.md)
+- **New Data Source:** `twilio_verify_service_rate_limits` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/verify_service_rate_limits.md)
+- **New Data Source:** `twilio_verify_service_rate_limit_bucket` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/verify_service_rate_limit_bucket.md)
+- **New Data Source:** `twilio_verify_service_rate_limit_buckets` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/verify_service_rate_limit_buckets.md)
+- **New Data Source:** `twilio_verify_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/verify_webhook.md)
+- **New Data Source:** `twilio_verify_webhooks` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/verify_webhooks.md)
+- **Updated Data Source:** `twilio_studio_flow_widget_trigger` Add `transitions.0.incoming_parent` attribute
 
 ## v0.17.0 (2022-02-05)
 

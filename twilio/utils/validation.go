@@ -155,6 +155,12 @@ func IdentitySidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^RI[0-9a-fA-F]{32}$"), "")
 }
 
+// Mailer
+
+func MailerSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^MD[0-9a-fA-F]{32}$"), "")
+}
+
 // Messaging
 
 func MessagingAlphaSenderSidValidation() schema.SchemaValidateFunc {
@@ -289,6 +295,28 @@ func TaskRouterWorkerSidValidation() schema.SchemaValidateFunc {
 
 func TaskRouterWorkflowSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^WW[0-9a-fA-F]{32}$"), "")
+}
+
+// Verify
+
+func VerifyRateLimitBucketSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^BL[0-9a-fA-F]{32}$"), "")
+}
+
+func VerifyRateLimitSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^RK[0-9a-fA-F]{32}$"), "")
+}
+
+func VerifyServiceSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^VA[0-9a-fA-F]{32}$"), "")
+}
+
+func VerifyTemplateSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^HJ[0-9a-fA-F]{32}$"), "")
+}
+
+func VerifyWebhookSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^YW[0-9a-fA-F]{32}$"), "")
 }
 
 // Video

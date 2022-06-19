@@ -61,7 +61,7 @@ data "twilio_studio_flow_widget_trigger" "trigger" {
     incoming_call    = "Next"
     incoming_message = "Next"
     incoming_request = "Next"
-		incoming_parent  = "Next"
+    incoming_parent  = "Next"
   }
 
   offset {

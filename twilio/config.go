@@ -15,6 +15,7 @@ import (
 	studio "github.com/RJPearson94/twilio-sdk-go/service/studio/v2"
 	taskrouter "github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1"
 	trunking "github.com/RJPearson94/twilio-sdk-go/service/trunking/v1"
+	verify "github.com/RJPearson94/twilio-sdk-go/service/verify/v2"
 	video "github.com/RJPearson94/twilio-sdk-go/service/video/v1"
 	"github.com/RJPearson94/twilio-sdk-go/session"
 	"github.com/RJPearson94/twilio-sdk-go/session/credentials"
@@ -61,6 +62,7 @@ func (config *Config) Client() (interface{}, diag.Diagnostics) {
 		SIPTrunking:   trunking.New(sess, sdkConfig),
 		Studio:        studio.New(sess, sdkConfig),
 		TaskRouter:    taskrouter.New(sess, sdkConfig),
+		Verify:        verify.New(sess, sdkConfig),
 		Video:         video.New(sess, sdkConfig),
 	}
 	return client, nil
