@@ -1,4 +1,4 @@
-## v0.18.0 (unreleased)
+## v0.18.0 (2022-06-19)
 
 FEATURES
 
