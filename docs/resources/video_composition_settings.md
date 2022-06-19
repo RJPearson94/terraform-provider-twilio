@@ -38,10 +38,10 @@ resource "twilio_credentials_aws" "aws" {
 }
 
 resource "twilio_video_composition_settings" "composition_settings" {
-  friendly_name = "Composition Settings"
+  friendly_name       = "Composition Settings"
   aws_credentials_sid = twilio_credentials_aws.aws.sid
   aws_storage_enabled = true
-  aws_s3_url = "https://test-bucket.s3.amazonaws.com/compositions/"
+  aws_s3_url          = "https://test-bucket.s3.amazonaws.com/compositions/"
 }
 ```
 

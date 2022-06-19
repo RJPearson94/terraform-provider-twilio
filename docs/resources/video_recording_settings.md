@@ -38,10 +38,10 @@ resource "twilio_credentials_aws" "aws" {
 }
 
 resource "twilio_video_recording_settings" "recording_settings" {
-  friendly_name = "Recording Settings"
+  friendly_name       = "Recording Settings"
   aws_credentials_sid = twilio_credentials_aws.aws.sid
   aws_storage_enabled = true
-  aws_s3_url = "https://test-bucket.s3.amazonaws.com/recording/"
+  aws_s3_url          = "https://test-bucket.s3.amazonaws.com/recording/"
 }
 ```
 

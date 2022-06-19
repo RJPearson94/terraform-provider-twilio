@@ -3,7 +3,7 @@ page_title: "Twilio TaskRouter Workspace"
 subcategory: "TaskRouter"
 ---
 
-# twilio_taskrouter_workspace Resource
+# twilio_taskrouter_workspace Data Source
 
 Use this data source to access information about an existing TaskRouter workspace. See the [API docs](https://www.twilio.com/docs/taskrouter/api/workspace) for more information
 

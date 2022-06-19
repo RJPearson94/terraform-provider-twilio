@@ -47,7 +47,7 @@ resource "twilio_taskrouter_activity" "activity" {
 }
 
 resource "twilio_taskrouter_workspace_configuration" "workspace_configuration" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  workspace_sid        = twilio_taskrouter_workspace.workspace.sid
   default_activity_sid = twilio_taskrouter_activity.activity.sid
 }
 ```
@@ -67,7 +67,7 @@ data "twilio_taskrouter_activities" "activities" {
 }
 
 resource "twilio_taskrouter_workspace_configuration" "workspace_configuration" {
-  workspace_sid = twilio_taskrouter_workspace.workspace.sid
+  workspace_sid        = twilio_taskrouter_workspace.workspace.sid
   timeout_activity_sid = data.twilio_taskrouter_activities.activities.activities[0].sid
 }
 ```
