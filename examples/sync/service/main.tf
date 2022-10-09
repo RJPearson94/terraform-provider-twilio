@@ -1,0 +1,1 @@
+resource "twilio_sync_service" "service" {}

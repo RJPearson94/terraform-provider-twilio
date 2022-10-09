@@ -271,6 +271,12 @@ func StudioFlowWidgetLiquidTemplateValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile(`^\{[\{%].+[\}%]\}$`), "")
 }
 
+// Sync
+
+func SyncServiceSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^IS[0-9a-fA-F]{32}$"), "")
+}
+
 // TaskRouter
 
 func TaskRouterWorkspaceSidValidation() schema.SchemaValidateFunc {

@@ -141,8 +141,8 @@ The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/d
 
 ## Import
 
-A service can be imported using the `/Service/{sid}` format, e.g.
+A service can be imported using the `/Services/{sid}` format, e.g.
 
 ```shell
-terraform import twilio_verify_service.service /Service/VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+terraform import twilio_verify_service.service /Services/VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```

@@ -13,6 +13,7 @@ import (
 	proxy "github.com/RJPearson94/twilio-sdk-go/service/proxy/v1"
 	serverless "github.com/RJPearson94/twilio-sdk-go/service/serverless/v1"
 	studio "github.com/RJPearson94/twilio-sdk-go/service/studio/v2"
+	sync "github.com/RJPearson94/twilio-sdk-go/service/sync/v1"
 	taskrouter "github.com/RJPearson94/twilio-sdk-go/service/taskrouter/v1"
 	trunking "github.com/RJPearson94/twilio-sdk-go/service/trunking/v1"
 	verify "github.com/RJPearson94/twilio-sdk-go/service/verify/v2"
@@ -61,6 +62,7 @@ func (config *Config) Client() (interface{}, diag.Diagnostics) {
 		Serverless:    serverless.New(sess, sdkConfig),
 		SIPTrunking:   trunking.New(sess, sdkConfig),
 		Studio:        studio.New(sess, sdkConfig),
+		Sync:          sync.New(sess, sdkConfig),
 		TaskRouter:    taskrouter.New(sess, sdkConfig),
 		Verify:        verify.New(sess, sdkConfig),
 		Video:         video.New(sess, sdkConfig),

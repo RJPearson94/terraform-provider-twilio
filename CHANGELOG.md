@@ -1,3 +1,10 @@
+## v0.19.0 (unreleased)
+
+FEATURES
+
+- **New Resource:** `twilio_sync_service` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/sync_service.md)
+- **New Data Source:** `twilio_sync_service` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/sync_service.md)
+
 ## v0.18.0 (2022-06-19)
 
 FEATURES
