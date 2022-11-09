@@ -322,7 +322,7 @@ func TestAccTwilioVerifyService_defaultTemplate(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
 	friendlyName := acctest.RandString(10)
 	defaultTemplateSid := "HJca6f305ff106ab052a1b16caf180586f"
-	defaultTemplateSidDoNotShare := "HJca6f305ff106ab052a1b16caf180586f"
+	defaultTemplateSidDoNotShare := "HJ716ebfb1dbf3457befed3abf83c36a1e"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
