@@ -279,7 +279,7 @@ func TestAccTwilioVerifyService_invalidTotpSkew(t *testing.T) {
 	})
 }
 
-func TestAccTwilioVerifyWebhook_invalidPushApnCredentialSid(t *testing.T) {
+func TestAccTwilioVerifyService_invalidPushApnCredentialSid(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
@@ -292,7 +292,7 @@ func TestAccTwilioVerifyWebhook_invalidPushApnCredentialSid(t *testing.T) {
 	})
 }
 
-func TestAccTwilioVerifyWebhook_invalidPushFcmCredentialSid(t *testing.T) {
+func TestAccTwilioVerifyService_invalidPushFcmCredentialSid(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
@@ -305,7 +305,7 @@ func TestAccTwilioVerifyWebhook_invalidPushFcmCredentialSid(t *testing.T) {
 	})
 }
 
-func TestAccTwilioVerifyWebhook_invalidMailerSid(t *testing.T) {
+func TestAccTwilioVerifyService_invalidMailerSid(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
@@ -318,7 +318,43 @@ func TestAccTwilioVerifyWebhook_invalidMailerSid(t *testing.T) {
 	})
 }
 
-func TestAccTwilioVerifyWebhook_invalidDefaultTemplateSid(t *testing.T) {
+func TestAccTwilioVerifyService_defaultTemplate(t *testing.T) {
+	stateResourceName := fmt.Sprintf("%s.service", serviceResourceName)
+	friendlyName := acctest.RandString(10)
+	defaultTemplateSid := "HJca6f305ff106ab052a1b16caf180586f"
+	defaultTemplateSidDoNotShare := "HJca6f305ff106ab052a1b16caf180586f"
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { acceptance.PreCheck(t) },
+		ProviderFactories: acceptance.TestAccProviderFactories,
+		CheckDestroy:      testAccCheckTwilioVerifyServiceDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTwilioVerifyService_defaultTemplate(friendlyName, defaultTemplateSid),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVerifyServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "default_template_sid", defaultTemplateSid),
+				),
+			},
+			{
+				Config: testAccTwilioVerifyService_defaultTemplate(friendlyName, defaultTemplateSidDoNotShare),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVerifyServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "default_template_sid", defaultTemplateSidDoNotShare),
+				),
+			},
+			{
+				Config: testAccTwilioVerifyService_basic(friendlyName),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckTwilioVerifyServiceExists(stateResourceName),
+					resource.TestCheckResourceAttr(stateResourceName, "default_template_sid", ""),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTwilioVerifyService_invalidDefaultTemplateSid(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
 		ProviderFactories: acceptance.TestAccProviderFactories,
@@ -377,6 +413,15 @@ func testAccTwilioVerifyServiceImportStateIdFunc(name string) resource.ImportSta
 
 		return fmt.Sprintf("/Services/%s", rs.Primary.Attributes["sid"]), nil
 	}
+}
+
+func testAccTwilioVerifyService_defaultTemplate(friendlyName string, defaultTemplateSid string) string {
+	return fmt.Sprintf(`
+resource "twilio_verify_service" "service" {
+  friendly_name        = "%[1]s"
+  default_template_sid = "%[2]s"
+}
+`, friendlyName, defaultTemplateSid)
 }
 
 func testAccTwilioVerifyService_basic(friendlyName string) string {

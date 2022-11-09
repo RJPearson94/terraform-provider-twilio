@@ -1,3 +1,9 @@
+## v0.19.1 (unreleased)
+
+FIXES
+
+The `default_template_sid` attribute on the `twilio_verify_service` is now set when creating and updating the resource
+
 ## v0.19.0 (2022-10-09)
 
 FEATURES
