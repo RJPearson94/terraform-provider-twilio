@@ -1,3 +1,13 @@
+## v0.20.0 (unreleased)
+
+BREAKING CHANGES
+
+The `runtime` attribute on the `twilio_serverless_build` resource no longer supports the node12 runtime, this runtime was deprecated by Twilio an is no longer an option when deploying functions and assets
+
+FEATURES
+
+The `runtime` attribute on the `twilio_serverless_build` resource now supports the node16 runtime
+
 ## v0.19.1 (2022-11-09)
 
 FIXES
@@ -106,7 +116,7 @@ FIXES
 FEATURES
 
 - **New Data Source:** `twilio_twiml_app` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/twiml_app.md)
-- - **New Resource:** `twilio_twiml_app` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/twiml_app.md)
+- **New Resource:** `twilio_twiml_app` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/twiml_app.md)
 
 ## v0.11.0 (2021-05-09)
 

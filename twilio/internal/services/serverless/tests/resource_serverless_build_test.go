@@ -147,7 +147,7 @@ func TestAccTwilioServerlessBuild_dependenciesAndRuntime(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.build", buildResourceName)
 	uniqueName := acctest.RandString(10)
 	version := "3.6.2"
-	runtime := "node14"
+	runtime := "node16"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -178,7 +178,7 @@ func TestAccTwilioServerlessBuild_invalidRuntime(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioServerlessBuild_dependenciesAndRuntime(uniqueName, version, runtime),
-				ExpectError: regexp.MustCompile(`(?s)expected runtime to be one of \[node12 node14\], got python2`),
+				ExpectError: regexp.MustCompile(`(?s)expected runtime to be one of \[node14 node16\], got python2`),
 			},
 		},
 	})
@@ -601,7 +601,7 @@ resource "twilio_serverless_build" "build" {
     "xmldom"                  = "0.1.27"
     "@twilio/runtime-handler" = "1.0.1"
   }
-  runtime = "node14"
+  runtime = "node16"
 }
 `
 }
@@ -621,7 +621,7 @@ resource "twilio_serverless_build" "build" {
     "xmldom"                  = "0.1.27"
     "@twilio/runtime-handler" = "1.0.1"
   }
-  runtime = "node14"
+  runtime = "node16"
 }
 `
 }
@@ -641,7 +641,7 @@ resource "twilio_serverless_build" "build" {
     "xmldom"                  = "0.1.27"
     "@twilio/runtime-handler" = "1.0.1"
   }
-  runtime = "node14"
+  runtime = "node16"
 }
 `
 }

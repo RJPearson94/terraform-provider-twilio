@@ -211,8 +211,8 @@ func resourceServerlessBuild() *schema.Resource {
 				Computed: true,
 				ForceNew: true,
 				ValidateFunc: validation.StringInSlice([]string{
-					"node12",
 					"node14",
+					"node16",
 				}, false),
 			},
 			"status": {
