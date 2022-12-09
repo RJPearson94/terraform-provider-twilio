@@ -3,7 +3,7 @@ module github.com/RJPearson94/terraform-provider-twilio
 go 1.17
 
 require (
-	github.com/RJPearson94/twilio-sdk-go v0.22.0
+	github.com/RJPearson94/twilio-sdk-go v0.23.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.17.0
 	github.com/mitchellh/go-homedir v1.1.0
 )
@@ -18,7 +18,7 @@ require (
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator v9.31.0+incompatible // indirect
-	github.com/go-resty/resty/v2 v2.6.0 // indirect
+	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
@@ -54,7 +54,7 @@ require (
 	github.com/vmihailenco/tagparser v0.1.1 // indirect
 	github.com/zclconf/go-cty v1.10.0 // indirect
 	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e // indirect
-	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781 // indirect
+	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
 	golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
