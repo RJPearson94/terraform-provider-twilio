@@ -23,7 +23,7 @@ func TestAccDataSourceTwilioConversationsConfiguration_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "default_service_sid"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "default_closed_timer"),
-					resource.TestCheckResourceAttr(stateDataSourceName, "default_inactive_timer", ""),
+					resource.TestCheckResourceAttrSet(stateDataSourceName, "default_inactive_timer"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "default_messaging_service_sid"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "url"),
 				),
