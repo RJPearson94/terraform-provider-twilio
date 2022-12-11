@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
+	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/conversations/helper"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/utils"
 	"github.com/RJPearson94/twilio-sdk-go/service/conversations/v1/credential"
 	"github.com/RJPearson94/twilio-sdk-go/service/conversations/v1/credentials"
@@ -131,7 +132,7 @@ func resourceConversationsPushCredentialAPNRead(ctx context.Context, d *schema.R
 	d.Set("account_sid", getResponse.AccountSid)
 	d.Set("friendly_name", getResponse.FriendlyName)
 	d.Set("type", getResponse.Type)
-	d.Set("sandbox", getResponse.Sandbox)
+	d.Set("sandbox", helper.StringToBool(getResponse.Sandbox))
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {

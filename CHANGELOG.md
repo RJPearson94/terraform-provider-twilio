@@ -1,8 +1,14 @@
+# v0.21.0 (unreleased)
+
+FIXES
+
+The `sandbox` attribute is returned as a string from the API, so this caused an error when response was unmarshalled. This affected the `twilio_conversations_push_credential_apn` resource
+
 ## v0.20.0 (2022-11-23)
 
 BREAKING CHANGES
 
-The `runtime` attribute on the `twilio_serverless_build` resource no longer supports the node12 runtime, this runtime was deprecated by Twilio an is no longer an option when deploying functions and assets
+The `runtime` attribute on the `twilio_serverless_build` resource no longer supports the node12 runtime, this runtime was deprecated by Twilio and is no longer an option when deploying functions and assets
 
 FEATURES
 
