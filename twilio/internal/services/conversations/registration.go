@@ -12,6 +12,7 @@ func (r Registration) Name() string {
 // SupportedDataSources returns the supported Data Sources supported by this Service
 func (r Registration) SupportedDataSources() map[string]*schema.Resource {
 	return map[string]*schema.Resource{
+		"twilio_conversations_address_configuration": dataSourceConversationsAddressConfiguration(),
 		"twilio_conversations_configuration":         dataSourceConversationsConfiguration(),
 		"twilio_conversations_conversation_webhook":  dataSourceConversationsConversationWebhook(),
 		"twilio_conversations_conversation_webhooks": dataSourceConversationsConversationWebhooks(),
@@ -31,18 +32,21 @@ func (r Registration) SupportedDataSources() map[string]*schema.Resource {
 // SupportedResources returns the supported Resources supported by this Service
 func (r Registration) SupportedResources() map[string]*schema.Resource {
 	return map[string]*schema.Resource{
-		"twilio_conversations_configuration":                resourceConversationsConfiguration(),
-		"twilio_conversations_conversation_studio_webhook":  resourceConversationsConversationStudioWebhook(),
-		"twilio_conversations_conversation_trigger_webhook": resourceConversationsConversationTriggerWebhook(),
-		"twilio_conversations_conversation_webhook":         resourceConversationsConversationWebhook(),
-		"twilio_conversations_conversation":                 resourceConversationsConversation(),
-		"twilio_conversations_push_credential_apn":          resourceConversationsPushCredentialAPN(),
-		"twilio_conversations_push_credential_fcm":          resourceConversationsPushCredentialFCM(),
-		"twilio_conversations_role":                         resourceConversationsRole(),
-		"twilio_conversations_service_configuration":        resourceConversationsServiceConfiguration(),
-		"twilio_conversations_service_notification":         resourceConversationsServiceNotification(),
-		"twilio_conversations_service":                      resourceConversationsService(),
-		"twilio_conversations_user":                         resourceConversationsUser(),
-		"twilio_conversations_webhook":                      resourceConversationsWebhook(),
+		"twilio_conversations_address_configuration_default": resourceConversationsAddressConfigurationDefault(),
+		"twilio_conversations_address_configuration_studio":  resourceConversationsAddressConfigurationStudio(),
+		"twilio_conversations_address_configuration_webhook": resourceConversationsAddressConfigurationWebhook(),
+		"twilio_conversations_configuration":                 resourceConversationsConfiguration(),
+		"twilio_conversations_conversation_studio_webhook":   resourceConversationsConversationStudioWebhook(),
+		"twilio_conversations_conversation_trigger_webhook":  resourceConversationsConversationTriggerWebhook(),
+		"twilio_conversations_conversation_webhook":          resourceConversationsConversationWebhook(),
+		"twilio_conversations_conversation":                  resourceConversationsConversation(),
+		"twilio_conversations_push_credential_apn":           resourceConversationsPushCredentialAPN(),
+		"twilio_conversations_push_credential_fcm":           resourceConversationsPushCredentialFCM(),
+		"twilio_conversations_role":                          resourceConversationsRole(),
+		"twilio_conversations_service_configuration":         resourceConversationsServiceConfiguration(),
+		"twilio_conversations_service_notification":          resourceConversationsServiceNotification(),
+		"twilio_conversations_service":                       resourceConversationsService(),
+		"twilio_conversations_user":                          resourceConversationsUser(),
+		"twilio_conversations_webhook":                       resourceConversationsWebhook(),
 	}
 }

@@ -101,6 +101,10 @@ func ChatUserSidValidation() schema.SchemaValidateFunc {
 
 // Conversations
 
+func ConversationAddressConfigurationSidValidation() schema.SchemaValidateFunc {
+	return validation.StringMatch(regexp.MustCompile("^IG[0-9a-fA-F]{32}$"), "")
+}
+
 func ConversationServiceSidValidation() schema.SchemaValidateFunc {
 	return validation.StringMatch(regexp.MustCompile("^IS[0-9a-fA-F]{32}$"), "")
 }

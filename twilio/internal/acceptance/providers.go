@@ -21,6 +21,7 @@ type TestData struct {
 	AccountSid             string
 	PurchasablePhoneNumber string // TODO: Temp hack this needs to be looked up
 	PhoneNumberSid         string
+	PhoneNumber            string
 	FlexChannelServiceSid  string
 	PublicKey              string
 	AWSAccessKeyID         string
@@ -50,6 +51,7 @@ func InitialiseProviders() {
 			AccountSid:             os.Getenv("TWILIO_ACCOUNT_SID"),
 			PurchasablePhoneNumber: os.Getenv("TWILIO_PURCHASABLE_PHONE_NUMBER"), // TODO: Temp hack this needs to be looked up
 			PhoneNumberSid:         os.Getenv("TWILIO_PHONE_NUMBER_SID"),
+			PhoneNumber:            os.Getenv("TWILIO_PHONE_NUMBER"),
 			FlexChannelServiceSid:  os.Getenv("TWILIO_FLEX_CHANNEL_SERVICE_SID"),
 			PublicKey:              os.Getenv("TWILIO_PUBLIC_KEY"),
 			AWSAccessKeyID:         os.Getenv("TWILIO_AWS_ACCESS_KEY_ID"),     // I am using TWILIO_AWS_ACCESS_KEY_ID to ensure only the correct AWS credentials are sent to Twilio

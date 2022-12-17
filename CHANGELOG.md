@@ -4,6 +4,13 @@ FIXES
 
 The `sandbox` attribute is returned as a string from the API, so this caused an error when response was unmarshalled. This affected the `twilio_conversations_push_credential_apn` resource
 
+FEATURES
+
+- **New Resource:** `twilio_conversations_address_configuration_default` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_address_configuration_default.md)
+- **New Resource:** `twilio_conversations_address_configuration_studio` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_address_configuration_studio.md)
+- **New Resource:** `twilio_conversations_address_configuration_webhook` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/resources/conversations_address_configuration_webhook.md)
+- **New Data Source:** `twilio_conversations_address_configuration` [docs](https://github.com/RJPearson94/terraform-provider-twilio/blob/main/docs/data-sources/conversations_address_configuration.md)
+
 ## v0.20.0 (2022-11-23)
 
 BREAKING CHANGES
