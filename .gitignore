@@ -11,6 +11,7 @@
 .terraform/
 crash.log
 .terraform.lock.hcl
+.terragrunt-cache
 
 # Artefact
 terraform-provider-twilio
