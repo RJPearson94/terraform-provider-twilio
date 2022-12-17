@@ -22,6 +22,7 @@ The Terraform Twilio provider is a plugin for [Terraform](https://www.terraform.
 ## Documentation
 
 Documentation of the provider and all supported resources can be found [here](./docs)
+
 Documentation on managing sub-accounts can be found [here](./examples/account/sub-account/README.md)
 
 ## Installation
