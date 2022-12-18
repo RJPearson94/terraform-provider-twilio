@@ -47,6 +47,12 @@ func Provider() *schema.Provider {
 				DefaultFunc: schema.EnvDefaultFunc("TWILIO_API_SECRET", nil),
 				Description: "The API Key secret which should be used.",
 			},
+			"skip_credential_validation": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("TWILIO_SKIP_CREDENTIAL_VALIDATION", false),
+				Description: "Whether to disable credential validation",
+			},
 			"retry_attempts": {
 				Type:        schema.TypeInt,
 				Optional:    true,
@@ -58,6 +64,18 @@ func Provider() *schema.Provider {
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("TWILIO_BACKOFF_INTERVAL_IN_MS", 5000),
 				Description: "The time in ms to wait between each retry attempt",
+			},
+			"edge": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("TWILIO_EDGE", nil),
+				Description: "The edge location to use",
+			},
+			"region": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("TWILIO_REGION", nil),
+				Description: "The region to use",
 			},
 		},
 
@@ -87,13 +105,16 @@ func providerConfigure(p *schema.Provider) schema.ConfigureContextFunc {
 		terraformVersion := p.TerraformVersion
 
 		config := Config{
-			AccountSid:       d.Get("account_sid").(string),
-			AuthToken:        d.Get("auth_token").(string),
-			APIKey:           d.Get("api_key").(string),
-			APISecret:        d.Get("api_secret").(string),
-			RetryAttempts:    d.Get("retry_attempts").(int),
-			BackoffInterval:  d.Get("backoff_interval_in_ms").(int),
-			terraformVersion: terraformVersion,
+			AccountSid:               d.Get("account_sid").(string),
+			AuthToken:                d.Get("auth_token").(string),
+			APIKey:                   d.Get("api_key").(string),
+			APISecret:                d.Get("api_secret").(string),
+			SkipCredentialValidation: d.Get("skip_credential_validation").(bool),
+			RetryAttempts:            d.Get("retry_attempts").(int),
+			BackoffInterval:          d.Get("backoff_interval_in_ms").(int),
+			Edge:                     d.Get("edge").(string),
+			Region:                   d.Get("region").(string),
+			terraformVersion:         terraformVersion,
 		}
 
 		return config.Client()

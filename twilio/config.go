@@ -25,18 +25,21 @@ import (
 )
 
 type Config struct {
-	AccountSid       string
-	AuthToken        string
-	APIKey           string
-	APISecret        string
-	RetryAttempts    int
-	BackoffInterval  int
-	terraformVersion string
+	AccountSid               string
+	AuthToken                string
+	APIKey                   string
+	APISecret                string
+	SkipCredentialValidation bool
+	RetryAttempts            int
+	BackoffInterval          int
+	Edge                     string
+	Region                   string
+	terraformVersion         string
 }
 
 func (config *Config) Client() (interface{}, diag.Diagnostics) {
 
-	creds, err := credentials.New(getCredentials(config))
+	creds, err := sessionCredentials(config)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
@@ -45,6 +48,13 @@ func (config *Config) Client() (interface{}, diag.Diagnostics) {
 	sdkConfig := &client.Config{
 		RetryAttempts:   utils.Int(config.RetryAttempts),
 		BackoffInterval: utils.Int(config.BackoffInterval),
+	}
+
+	if config.Edge != "" {
+		sdkConfig.Edge = utils.String(config.Edge)
+	}
+	if config.Region != "" {
+		sdkConfig.Region = utils.String(config.Region)
 	}
 
 	client := &common.TwilioClient{
@@ -68,6 +78,14 @@ func (config *Config) Client() (interface{}, diag.Diagnostics) {
 		Video:         video.New(sess, sdkConfig),
 	}
 	return client, nil
+}
+
+func sessionCredentials(config *Config) (*credentials.Credentials, error) {
+	creds := getCredentials(config)
+	if config.SkipCredentialValidation == true {
+		return credentials.NewWithNoValidation(creds), nil
+	}
+	return credentials.New(creds)
 }
 
 func getCredentials(config *Config) credentials.TwilioCredentials {

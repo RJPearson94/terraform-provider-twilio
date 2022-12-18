@@ -1,3 +1,10 @@
+# v0.22.0 (unreleased)
+
+FEATURES
+
+- You can now ignore credential validation on a provider by setting the `skip_credential_validation` attribute. This allows you to manage a sub account and configure a provider to manage sub account resources in the same Terraform state.
+- You can now manage regional resources via the provider by setting the `edge` and `region` attributes on the provider. If these values are not supplied then the default region `us1` is used
+
 # v0.21.0 (2022-12-17)
 
 FIXES

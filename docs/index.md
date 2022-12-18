@@ -171,7 +171,10 @@ In addition to [generic provider arguments](https://www.terraform.io/docs/config
 - `api_key` - (Optional) An API key SID associate with the account. This value can be retrieved from the `TWILIO_API_KEY` environment variable
 - `api_secret` - (Optional) An secret value for the API Key. This value can be retrieved from the `TWILIO_API_SECRET` environment variable
 - `auth_token` - (Optional) The Auth token for the account. This value can be retrieved from the `TWILIO_AUTH_TOKEN` environment variable
+- `skip_credential_validation` - (Optional) Whether to skip credential validation. This setting aids with the management of sub-account resources when the sub account and sub-account resources are created in the same state. This should be used with caution, as requests may fail when planning or applying changes. This value can be retrieved from the `TWILIO_SKIP_CREDENTIAL_VALIDATION` environment variable. The default value is `false`
 - `retry_attempts` - (Optional) The maximum number of retry attempts. This value can be retrieved from the `TWILIO_RETRY_ATTEMPTS` environment variable. The default value is `3`
 - `backoff_interval_in_ms` - (Optional) The time in ms to wait between each retry attempt. This value can be retrieved from the `TWILIO_BACKOFF_INTERVAL_IN_MS` environment variable. The default value is `5000`
+- `edge` - (Optional) The edge location to use. This value can be retrieved from the `TWILIO_EDGE` environment variable.
+- `region` - (Optional) The region to use. This value can be retrieved from the `TWILIO_REGION` environment variable.
 
 **NOTE:** A valid API Key and Secret or Auth Token must be supplied
