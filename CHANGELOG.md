@@ -1,3 +1,10 @@
+# v0.23.0 (unreleased)
+
+FEATURES
+
+- **Updated Resource:** `twilio_serverless_service` Add `domain_base` attribute
+- **Updated Data Source:** `twilio_serverless_service` Add `domain_base` attribute
+
 # v0.22.0 (2022-12-18)
 
 FEATURES

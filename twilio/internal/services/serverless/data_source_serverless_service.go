@@ -48,6 +48,10 @@ func dataSourceServerlessService() *schema.Resource {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
+			"domain_base": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
 			"date_created": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -90,6 +94,7 @@ func dataSourceServerlessServiceRead(ctx context.Context, d *schema.ResourceData
 	d.Set("unique_name", getResponse.UniqueName)
 	d.Set("include_credentials", getResponse.IncludeCredentials)
 	d.Set("ui_editable", getResponse.UiEditable)
+	d.Set("domain_base", getResponse.DomainBase)
 	d.Set("date_created", getResponse.DateCreated.Format(time.RFC3339))
 
 	if getResponse.DateUpdated != nil {
