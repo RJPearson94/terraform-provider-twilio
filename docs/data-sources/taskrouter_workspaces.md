@@ -24,12 +24,12 @@ output "workspaces" {
 ### Search for Flex Task Assignment Workspace (applicable to Flex projects)
 
 ```hcl
-data "twilio_taskrouter_workspaces" "workspaces" {
+data "twilio_taskrouter_workspaces" "flex" {
   friendly_name = "Flex Task Assignment"
 }
 
 output "flex_workspace" {
-  value = data.twilio_taskrouter_workspaces.workspaces[0].sid
+  value = data.twilio_taskrouter_workspaces.flex.workspaces[0].sid
 }
 ```
 
