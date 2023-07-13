@@ -1,3 +1,9 @@
+# v0.23.1 (2023-07-13)
+
+NOTES
+
+Correct typo in workspaces documentation. Thanks to @mcclown for the PR
+
 # v0.23.0 (2022-12-20)
 
 FEATURES
