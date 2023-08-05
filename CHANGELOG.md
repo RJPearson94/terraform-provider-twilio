@@ -1,3 +1,9 @@
+# v0.24.0 (2023-08-05)
+
+NOTES
+
+Internal updates to use the latest version of the terraform provider sdk and update to go 1.20
+
 # v0.23.1 (2023-07-13)
 
 NOTES
