@@ -1,3 +1,9 @@
+# v0.25.0 (2023-10-06)
+
+NOTES
+
+Replace signing key as the previous one had expired
+
 # v0.24.0 (2023-08-05)
 
 NOTES
