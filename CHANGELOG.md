@@ -1,4 +1,4 @@
-# v0.26.0 (unreleased)
+# v0.26.0 (2023-10-23)
 
 BREAKING CHANGES
 
