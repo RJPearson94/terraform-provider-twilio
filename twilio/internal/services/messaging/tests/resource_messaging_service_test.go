@@ -181,7 +181,7 @@ func TestAccTwilioMessagingService_invalidFallbackMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioMessagingService_fallback(friendlyName, fallbackMethod, fallbackURL),
-				ExpectError: regexp.MustCompile(`(?s)expected fallback_method to be one of \[POST GET\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected fallback_method to be one of \["POST" "GET"\], got test`),
 			},
 		},
 	})
@@ -246,7 +246,7 @@ func TestAccTwilioMessagingService_invalidInboundMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioMessagingService_inbound(friendlyName, inboundMethod, inboundURL),
-				ExpectError: regexp.MustCompile(`(?s)expected inbound_method to be one of \[POST GET\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected inbound_method to be one of \["POST" "GET"\], got test`),
 			},
 		},
 	})

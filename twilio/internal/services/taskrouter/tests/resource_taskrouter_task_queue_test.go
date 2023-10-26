@@ -278,7 +278,7 @@ func TestAccTwilioTaskRouterTaskQueue_invalidTaskOrder(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTaskRouterTaskQueue_taskOrder(friendlyName, taskOrder),
-				ExpectError: regexp.MustCompile(`(?s)expected task_order to be one of \[LIFO FIFO\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected task_order to be one of \["LIFO" "FIFO"\], got test`),
 			},
 		},
 	})

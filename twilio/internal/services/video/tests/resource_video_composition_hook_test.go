@@ -212,7 +212,7 @@ func TestAccTwilioVideoCompositionHook_invalidFormat(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioVideoCompositionHook_format(friendlyName, audioSource, format),
-				ExpectError: regexp.MustCompile(`(?s)expected format to be one of \[mp4 webm\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected format to be one of \["mp4" "webm"\], got test`),
 			},
 		},
 	})
@@ -344,7 +344,7 @@ func TestAccTwilioVideoCompositionHook_invalidStatusCallbackMethod(t *testing.T)
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioVideoCompositionHook_statusCallback(friendlyName, audioSource, callbackURL, callbackMethod),
-				ExpectError: regexp.MustCompile(`(?s)expected status_callback_method to be one of \[GET POST\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected status_callback_method to be one of \["GET" "POST"\], got test`),
 			},
 		},
 	})

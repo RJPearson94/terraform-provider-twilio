@@ -288,7 +288,7 @@ func TestAccTwilioConversationsConversation_invalidState(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioConversationsConversation_state(friendlyName, state),
-				ExpectError: regexp.MustCompile(`(?s)expected state to be one of \[active inactive closed\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected state to be one of \["active" "inactive" "closed"\], got test`),
 			},
 		},
 	})

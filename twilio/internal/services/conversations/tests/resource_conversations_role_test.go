@@ -113,7 +113,7 @@ func TestAccTwilioConversationsRole_invalidPermission(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioConversationsRole_invalidPermission(),
-				ExpectError: regexp.MustCompile(`(?s)expected permissions.0 to be one of \[editOwnMessage deleteAnyMessage addParticipant editConversationAttributes editAnyParticipantAttributes editAnyMessage editConversationName editAnyMessageAttributes deleteOwnMessage editOwnMessageAttributes removeParticipant addNonChatParticipant editOwnParticipantAttributes deleteConversation editNotificationLevel sendMessage leaveConversation sendMediaMessage editAnyUserInfo removeParticipant createConversation editOwnUserInfo joinConversation\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected permissions.0 to be one of \["editOwnMessage" "deleteAnyMessage" "addParticipant" "editConversationAttributes" "editAnyParticipantAttributes" "editAnyMessage" "editConversationName" "editAnyMessageAttributes" "deleteOwnMessage" "editOwnMessageAttributes" "removeParticipant" "addNonChatParticipant" "editOwnParticipantAttributes" "deleteConversation" "editNotificationLevel" "sendMessage" "leaveConversation" "sendMediaMessage" "editAnyUserInfo" "removeParticipant" "createConversation" "editOwnUserInfo" "joinConversation"\], got test`),
 			},
 		},
 	})
@@ -188,7 +188,7 @@ func TestAccTwilioConversationsRole_invalidType(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioConversationsRole_invalidType(),
-				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \[conversation service\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \["conversation" "service"\], got test`),
 			},
 		},
 	})

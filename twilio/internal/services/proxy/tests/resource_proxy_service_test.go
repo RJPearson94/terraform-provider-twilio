@@ -235,7 +235,7 @@ func TestAccTwilioProxyService_invalidGeoMatchLevel(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioProxyService_geoMatchLevel(uniqueName, geoMatchLevel),
-				ExpectError: regexp.MustCompile(`(?s)expected geo_match_level to be one of \[area-code country extended-area-code\], got geo_match_level`),
+				ExpectError: regexp.MustCompile(`(?s)expected geo_match_level to be one of \["area-code" "country" "extended-area-code"\], got geo_match_level`),
 			},
 		},
 	})
@@ -280,7 +280,7 @@ func TestAccTwilioProxyService_invalidNumberSelectionBehaviour(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioProxyService_numberSelectionBehaviour(uniqueName, numberSelectionBehavior),
-				ExpectError: regexp.MustCompile(`(?s)expected number_selection_behavior to be one of \[avoid-sticky prefer-sticky\], got number_selection_behavior`),
+				ExpectError: regexp.MustCompile(`(?s)expected number_selection_behavior to be one of \["avoid-sticky" "prefer-sticky"\], got number_selection_behavior`),
 			},
 		},
 	})

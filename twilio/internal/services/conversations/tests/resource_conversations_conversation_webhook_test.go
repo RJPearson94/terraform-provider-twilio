@@ -160,7 +160,7 @@ func TestAccTwilioConversationsConversationWebhook_invalidMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioConversationsConversationWebhook_withMethod(friendlyName, method, webhookURL),
-				ExpectError: regexp.MustCompile(`(?s)expected method to be one of \[GET POST\], got DELETE`),
+				ExpectError: regexp.MustCompile(`(?s)expected method to be one of \["GET" "POST"\], got DELETE`),
 			},
 		},
 	})

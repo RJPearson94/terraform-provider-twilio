@@ -207,7 +207,7 @@ func TestAccTwilioConversationsAddressConfigurationWebhook_invalidType(t *testin
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioConversationsAddressConfigurationWebhook_invalidType(),
-				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \[sms whatsapp\], got type`),
+				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \["sms" "whatsapp"\], got type`),
 			},
 		},
 	})
@@ -220,7 +220,7 @@ func TestAccTwilioConversationsAddressConfigurationWebhook_invalidWebhookFilter(
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioConversationsAddressConfigurationWebhook_invalidWebhookFilter(),
-				ExpectError: regexp.MustCompile(`(?s)expected webhook_filters.0 to be one of \[onMessageAdded onMessageUpdated onMessageRemoved onConversationUpdated onConversationStateUpdated onConversationRemoved onParticipantAdded onParticipantUpdated onParticipantRemoved onDeliveryUpdated\], got unknown`),
+				ExpectError: regexp.MustCompile(`(?s)expected webhook_filters.0 to be one of \["onMessageAdded" "onMessageUpdated" "onMessageRemoved" "onConversationUpdated" "onConversationStateUpdated" "onConversationRemoved" "onParticipantAdded" "onParticipantUpdated" "onParticipantRemoved" "onDeliveryUpdated"\], got unknown`),
 			},
 		},
 	})
@@ -246,7 +246,7 @@ func TestAccTwilioConversationsAddressConfigurationWebhook_invalidWebhookMethod(
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioConversationsAddressConfigurationWebhook_invalidWebhookMethod(),
-				ExpectError: regexp.MustCompile(`(?s)expected webhook_method to be one of \[GET POST\], got webhook_method`),
+				ExpectError: regexp.MustCompile(`(?s)expected webhook_method to be one of \["GET" "POST"\], got webhook_method`),
 			},
 		},
 	})

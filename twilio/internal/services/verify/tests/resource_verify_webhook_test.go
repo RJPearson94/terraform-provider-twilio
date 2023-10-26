@@ -225,7 +225,7 @@ func TestAccTwilioVerifyWebhook_invalidEventType(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioVerifyWebhook_basic(friendlyName, eventType, webhookUrl),
-				ExpectError: regexp.MustCompile(`(?s)expected event_types\.0 to be one of \[\* factor\.created factor\.verified factor\.deleted challenge\.approved challenge\.denied\], got event_type`),
+				ExpectError: regexp.MustCompile(`(?s)expected event_types\.0 to be one of \[\* "factor\.created" "factor\.verified" "factor\.deleted" "challenge\.approved" "challenge\.denied"\], got event_type`),
 			},
 		},
 	})

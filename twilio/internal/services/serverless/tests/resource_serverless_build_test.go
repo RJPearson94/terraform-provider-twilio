@@ -178,7 +178,7 @@ func TestAccTwilioServerlessBuild_invalidRuntime(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioServerlessBuild_dependenciesAndRuntime(uniqueName, version, runtime),
-				ExpectError: regexp.MustCompile(`(?s)expected runtime to be one of \[node14 node16\], got python2`),
+				ExpectError: regexp.MustCompile(`(?s)expected runtime to be one of \["node14" "node16"\], got python2`),
 			},
 		},
 	})

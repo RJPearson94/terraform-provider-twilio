@@ -209,7 +209,7 @@ func TestAccTwilioSIPDomain_invalidVoiceMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioSIPDomain_voiceURLAndMethod(testData, domainName, url, method),
-				ExpectError: regexp.MustCompile(`(?s)expected voice.0.method to be one of \[GET POST\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected voice.0.method to be one of \["GET" "POST"\], got test`),
 			},
 		},
 	})
@@ -291,7 +291,7 @@ func TestAccTwilioSIPDomain_invalidVoiceFallbackMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioSIPDomain_voiceFallbackURLAndMethod(testData, domainName, url, method),
-				ExpectError: regexp.MustCompile(`(?s)expected voice.0.fallback_method to be one of \[GET POST\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected voice.0.fallback_method to be one of \["GET" "POST"\], got test`),
 			},
 		},
 	})
@@ -373,7 +373,7 @@ func TestAccTwilioSIPDomain_invalidVoiceStatusCallbackMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioSIPDomain_voiceStatusCallbackURLAndMethod(testData, domainName, url, method),
-				ExpectError: regexp.MustCompile(`(?s)expected voice.0.status_callback_method to be one of \[GET POST\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected voice.0.status_callback_method to be one of \["GET" "POST"\], got test`),
 			},
 		},
 	})

@@ -99,7 +99,7 @@ func TestAccTwilioConversationsWebhook_invalidMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioConversationsWebhook_withMethodAndUrls(method, preWebhookUrl, postWebhookUrl),
-				ExpectError: regexp.MustCompile(`(?s)expected method to be one of \[GET POST\], got DELETE`),
+				ExpectError: regexp.MustCompile(`(?s)expected method to be one of \["GET" "POST"\], got DELETE`),
 			},
 		},
 	})
@@ -148,7 +148,7 @@ func TestAccTwilioConversationsWebhook_invalidTarget(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioConversationsWebhook_withTarget(target),
-				ExpectError: regexp.MustCompile(`(?s)expected target to be one of \[webhook flex\], got studio`),
+				ExpectError: regexp.MustCompile(`(?s)expected target to be one of \["webhook" "flex"\], got studio`),
 			},
 		},
 	})
@@ -195,7 +195,7 @@ func TestAccTwilioConversationsWebhook_invalidFilter(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioConversationsWebhook_filters(filters),
-				ExpectError: regexp.MustCompile(`(?s)expected filters.0 to be one of \[onConversationAdd onConversationAdded onConversationRemove onConversationRemoved onConversationStateUpdated onConversationUpdate onConversationUpdated onDeliveryUpdated onMessageAdd onMessageAdded onMessageRemove onMessageRemoved onMessageUpdate onMessageUpdated onParticipantAdd onParticipantAdded onParticipantRemove onParticipantRemoved onParticipantUpdate onParticipantUpdated onUserAdded onUserUpdate onUserUpdated\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected filters.0 to be one of \["onConversationAdd" "onConversationAdded" "onConversationRemove" "onConversationRemoved" "onConversationStateUpdated" "onConversationUpdate" "onConversationUpdated" "onDeliveryUpdated" "onMessageAdd" "onMessageAdded" "onMessageRemove" "onMessageRemoved" "onMessageUpdate" "onMessageUpdated" "onParticipantAdd" "onParticipantAdded" "onParticipantRemove" "onParticipantRemoved" "onParticipantUpdate" "onParticipantUpdated" "onUserAdded" "onUserUpdate" "onUserUpdated"\], got test`),
 			},
 		},
 	})

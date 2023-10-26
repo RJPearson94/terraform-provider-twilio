@@ -220,7 +220,7 @@ func TestAccTwilioTwimlApp_invalidMessagingFallbackMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTwimlApp_messagingFallback(testData, fallbackUrl, fallbackMethod),
-				ExpectError: regexp.MustCompile(`(?s)expected messaging.0.fallback_method to be one of \[GET POST\], got DELETE`),
+				ExpectError: regexp.MustCompile(`(?s)expected messaging.0.fallback_method to be one of \["GET" "POST"\], got DELETE`),
 			},
 		},
 	})
@@ -289,7 +289,7 @@ func TestAccTwilioTwimlApp_invalidMessagingMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTwimlApp_messaging(testData, url, method),
-				ExpectError: regexp.MustCompile(`(?s)expected messaging.0.method to be one of \[GET POST\], got DELETE`),
+				ExpectError: regexp.MustCompile(`(?s)expected messaging.0.method to be one of \["GET" "POST"\], got DELETE`),
 			},
 		},
 	})
@@ -387,7 +387,7 @@ func TestAccTwilioTwimlApp_invalidVoiceStatusCallbackMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTwimlApp_voiceStatusCallback(testData, statusCallbackUrl, statusCallbackMethod),
-				ExpectError: regexp.MustCompile(`(?s)expected voice.0.status_callback_method to be one of \[GET POST\], got DELETE`),
+				ExpectError: regexp.MustCompile(`(?s)expected voice.0.status_callback_method to be one of \["GET" "POST"\], got DELETE`),
 			},
 		},
 	})
@@ -455,7 +455,7 @@ func TestAccTwilioTwimlApp_invalidVoiceFallbackMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTwimlApp_voiceFallback(testData, fallbackUrl, fallbackMethod),
-				ExpectError: regexp.MustCompile(`(?s)expected voice.0.fallback_method to be one of \[GET POST\], got DELETE`),
+				ExpectError: regexp.MustCompile(`(?s)expected voice.0.fallback_method to be one of \["GET" "POST"\], got DELETE`),
 			},
 		},
 	})
@@ -524,7 +524,7 @@ func TestAccTwilioTwimlApp_invalidVoiceMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTwimlApp_voice(testData, url, method),
-				ExpectError: regexp.MustCompile(`(?s)expected voice.0.method to be one of \[GET POST\], got DELETE`),
+				ExpectError: regexp.MustCompile(`(?s)expected voice.0.method to be one of \["GET" "POST"\], got DELETE`),
 			},
 		},
 	})

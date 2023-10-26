@@ -70,7 +70,7 @@ func TestAccTwilioTaskRouterWorkspace_invalidOrderQueue(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTaskRouterWorkspace_basic(friendlyName, queueOrder),
-				ExpectError: regexp.MustCompile(`(?s)expected prioritize_queue_order to be one of \[LIFO FIFO\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected prioritize_queue_order to be one of \["LIFO" "FIFO"\], got test`),
 			},
 		},
 	})
@@ -279,7 +279,7 @@ func TestAccTwilioTaskRouterWorkspace_invalidEventFilters(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioTaskRouterWorkspace_eventCallback(friendlyName, eventFilters, callbackURL),
-				ExpectError: regexp.MustCompile(`(?s)expected event_filters.0 to be one of \[task.created task.completed task.canceled task.deleted task.updated task.wrapup task-queue.entered task-queue.moved task-queue.timeout reservation.created reservation.accepted reservation.rejected reservation.timeout reservation.canceled reservation.rescinded reservation.completed workflow.entered workflow.timeout workflow.target-matched worker.activity.update worker.attributes.update worker.capacity.update worker.channel.availability.update\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected event_filters.0 to be one of \["task.created" "task.completed" "task.canceled" "task.deleted" "task.updated" "task.wrapup" "task-queue.entered" "task-queue.moved" "task-queue.timeout" "reservation.created" "reservation.accepted" "reservation.rejected" "reservation.timeout" "reservation.canceled" "reservation.rescinded" "reservation.completed" "workflow.entered" "workflow.timeout" "workflow.target-matched" "worker.activity.update" "worker.attributes.update" "worker.capacity.update" "worker.channel.availability.update"\], got test`),
 			},
 		},
 	})

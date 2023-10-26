@@ -91,7 +91,7 @@ func TestAccTwilioServerlessFunctionFunction_invalidVisibility(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioServerlessFunction_basic(uniqueName, friendlyName, visibility),
-				ExpectError: regexp.MustCompile(`(?s)expected visibility to be one of \[public protected private\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected visibility to be one of \["public" "protected" "private"\], got test`),
 			},
 		},
 	})

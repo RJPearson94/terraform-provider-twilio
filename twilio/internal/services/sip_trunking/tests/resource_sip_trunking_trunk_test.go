@@ -180,7 +180,7 @@ func TestAccTwilioSIPTrunkingTrunk_invalidRecordingMode(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioSIPTrunkingTrunk_recording(mode, trim),
-				ExpectError: regexp.MustCompile(`(?s)expected recording.0.trim to be one of \[trim-silence do-not-trim\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected recording.0.trim to be one of \["trim-silence" "do-not-trim"\], got test`),
 			},
 		},
 	})
@@ -196,7 +196,7 @@ func TestAccTwilioSIPTrunkingTrunk_invalidRecordingTrim(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioSIPTrunkingTrunk_recording(mode, trim),
-				ExpectError: regexp.MustCompile(`(?s)expected recording.0.mode to be one of \[do-not-record record-from-ringing record-from-answer record-from-ringing-dual record-from-answer-dual\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected recording.0.mode to be one of \["do-not-record" "record-from-ringing" "record-from-answer" "record-from-ringing-dual" "record-from-answer-dual"\], got test`),
 			},
 		},
 	})
@@ -243,7 +243,7 @@ func TestAccTwilioSIPTrunkingTrunk_invalidDisasterRecoveryMethod(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioSIPTrunkingTrunk_disasterRecovery(method, url),
-				ExpectError: regexp.MustCompile(`(?s)expected disaster_recovery_method to be one of \[GET POST\], got DELETE`),
+				ExpectError: regexp.MustCompile(`(?s)expected disaster_recovery_method to be one of \["GET" "POST"\], got DELETE`),
 			},
 		},
 	})
@@ -393,7 +393,7 @@ func TestAccTwilioSIPTrunkingTrunk_invalidTransferMode(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioSIPTrunkingTrunk_transferMode(transferMode),
-				ExpectError: regexp.MustCompile(`(?s)expected transfer_mode to be one of \[enable-all sip-only disable-all\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected transfer_mode to be one of \["enable-all" "sip-only" "disable-all"\], got test`),
 			},
 		},
 	})

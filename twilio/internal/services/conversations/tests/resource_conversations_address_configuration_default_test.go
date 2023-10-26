@@ -123,7 +123,7 @@ func TestAccTwilioConversationsAddressConfigurationDefault_invalidType(t *testin
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioConversationsAddressConfigurationDefault_invalidType(),
-				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \[sms whatsapp\], got type`),
+				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \["sms" "whatsapp"\], got type`),
 			},
 		},
 	})

@@ -73,7 +73,7 @@ func TestAccTwilioChatRole_invalidType(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioChatRole_basic(friendlyName, roleType, permissions),
-				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \[channel deployment\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected type to be one of \["channel" "deployment"\], got test`),
 			},
 		},
 	})

@@ -134,7 +134,7 @@ func TestAccTwilioAccountSubAccount_invalidStatus(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioAccountSubAccount_status(status),
-				ExpectError: regexp.MustCompile(`(?s)expected status to be one of \[closed suspended active\], got test`),
+				ExpectError: regexp.MustCompile(`(?s)expected status to be one of \["closed" "suspended" "active"\], got test`),
 			},
 		},
 	})
