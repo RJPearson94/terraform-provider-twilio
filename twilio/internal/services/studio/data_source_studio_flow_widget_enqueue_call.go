@@ -129,17 +129,6 @@ func dataSourceStudioFlowWidgetEnqueueCallRead(ctx context.Context, d *schema.Re
 		}
 	}
 
-	parameters := []widgets.SendToAutopilotMemoryParameter{}
-	if v, ok := d.GetOk("memory_parameters"); ok {
-		for _, parameter := range v.([]interface{}) {
-			parameterMap := parameter.(map[string]interface{})
-			parameters = append(parameters, widgets.SendToAutopilotMemoryParameter{
-				Key:   parameterMap["key"].(string),
-				Value: parameterMap["value"].(string),
-			})
-		}
-	}
-
 	widget := &widgets.EnqueueCall{
 		Name:            name,
 		NextTransitions: nextTransitions,

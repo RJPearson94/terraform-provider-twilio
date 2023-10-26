@@ -28,7 +28,7 @@ func TestAccDataSourceTwilioStudioFlow_complete(t *testing.T) {
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "friendly_name"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "status"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "definition"),
-					resource.TestCheckResourceAttr(stateDataSourceName, "commit_message", ""),
+					resource.TestCheckResourceAttr(stateDataSourceName, "commit_message", "Updated via Terraform"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "id"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "account_sid"),
 					resource.TestCheckResourceAttrSet(stateDataSourceName, "revision"),

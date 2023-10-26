@@ -5,7 +5,6 @@ import (
 	"github.com/RJPearson94/twilio-sdk-go/client"
 	accounts "github.com/RJPearson94/twilio-sdk-go/service/accounts/v1"
 	api "github.com/RJPearson94/twilio-sdk-go/service/api/v2010"
-	autopilot "github.com/RJPearson94/twilio-sdk-go/service/autopilot/v1"
 	chat "github.com/RJPearson94/twilio-sdk-go/service/chat/v2"
 	conversations "github.com/RJPearson94/twilio-sdk-go/service/conversations/v1"
 	flex "github.com/RJPearson94/twilio-sdk-go/service/flex/v1"
@@ -63,7 +62,6 @@ func (config *Config) Client() (interface{}, diag.Diagnostics) {
 
 		Accounts:      accounts.New(sess, sdkConfig),
 		API:           api.New(sess, sdkConfig),
-		Autopilot:     autopilot.New(sess, sdkConfig),
 		Chat:          chat.New(sess, sdkConfig),
 		Conversations: conversations.New(sess, sdkConfig),
 		Flex:          flex.New(sess, sdkConfig),

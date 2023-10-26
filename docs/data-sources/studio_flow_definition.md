@@ -11,28 +11,9 @@ For more information on Studio, see the product [page](https://www.twilio.com/st
 
 ## Example Usage
 
-### Studio Flow definition with Trigger, Send to Flex and Send to Autopilot widgets
+### Studio Flow definition with Trigger and Send to Flex widgets
 
 ```hcl
-data "twilio_studio_flow_widget_send_to_autopilot" "send_to_autopilot" {
-  name = "SendToAutopilot"
-
-  offset {
-    x = 200
-    y = 240
-  }
-
-  transitions {
-    failure = data.twilio_studio_flow_widget_send_to_flex.send_to_flex.name
-    timeout = data.twilio_studio_flow_widget_send_to_flex.send_to_flex.name
-  }
-
-  autopilot_assistant_sid = "UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  from                    = "{{flow.channel.address}}"
-  body                    = "{{trigger.message.Body}}"
-  timeout                 = 14400
-}
-
 data "twilio_studio_flow_widget_send_to_flex" "send_to_flex" {
   name = "SendMessageToAgent"
 
@@ -54,7 +35,7 @@ data "twilio_studio_flow_widget_trigger" "trigger" {
   name = "Trigger"
 
   transitions {
-    incoming_message = data.twilio_studio_flow_widget_send_to_autopilot.send_to_autopilot.name
+    incoming_message = data.twilio_studio_flow_widget_send_to_flex.send_to_flex.name
   }
 
   offset {
@@ -77,10 +58,6 @@ data "twilio_studio_flow_definition" "definition" {
 
   states {
     json = data.twilio_studio_flow_widget_send_to_flex.send_to_flex.json
-  }
-
-  states {
-    json = data.twilio_studio_flow_widget_send_to_autopilot.send_to_autopilot.json
   }
 }
 ```

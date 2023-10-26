@@ -79,6 +79,7 @@ func resourceStudioFlow() *schema.Resource {
 			"commit_message": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "Updated via Terraform",
 			},
 			"validate": {
 				Type:     schema.TypeBool,
@@ -216,7 +217,7 @@ func validateRequest(ctx context.Context, d *schema.ResourceData, meta interface
 			FriendlyName:  d.Get("friendly_name").(string),
 			Status:        d.Get("status").(string),
 			Definition:    definitionJSONString,
-			CommitMessage: utils.OptionalStringWithEmptyStringOnChange(d, "commit_message"),
+			CommitMessage: utils.OptionalString(d, "commit_message"),
 		}
 
 		resp, err := client.FlowValidation.ValidateWithContext(ctx, validateInput)

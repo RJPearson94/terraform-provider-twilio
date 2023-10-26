@@ -3,7 +3,6 @@ package twilio
 import (
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/common"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/account"
-	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/autopilot"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/chat"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/conversations"
 	"github.com/RJPearson94/terraform-provider-twilio/twilio/internal/services/credentials"
@@ -27,7 +26,6 @@ import (
 func SupportedServices() []common.ServiceRegistration {
 	return []common.ServiceRegistration{
 		account.Registration{},
-		autopilot.Registration{},
 		chat.Registration{},
 		credentials.Registration{},
 		conversations.Registration{},

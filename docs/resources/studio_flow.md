@@ -47,7 +47,7 @@ The following arguments are supported:
 - `status` - (Mandatory) The status of the Studio flow. Valid values include `draft` and `published`
 - `definition` - (Mandatory) The flow definition JSON
 - `validate` - (Optional) Whether to validate the flow definition JSON before creating a new revision. The default is `false`
-- `commit_message` - (Optional) Description of the changes made
+- `commit_message` - (Optional) Description of the changes made. The default is `Updated via Terraform`
 
 ## Attributes Reference
 

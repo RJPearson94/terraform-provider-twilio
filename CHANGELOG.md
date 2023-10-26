@@ -1,3 +1,14 @@
+# v0.26.0 (unreleased)
+
+BREAKING CHANGES
+
+Remove Autopilot resources as the service has reached end of life
+Remove `twilio_studio_flow_widget_send_to_autopilot` resource as Autopilot has reached end of life
+
+NOTES
+
+- Update `twilio_studio_flow` to set a default commit message, as the Twilio API seems to struggle when a commit message is not supplied or removed
+
 # v0.25.0 (2023-10-06)
 
 NOTES

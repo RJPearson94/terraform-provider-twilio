@@ -29,7 +29,6 @@ func (r Registration) SupportedDataSources() map[string]*schema.Resource {
 		"twilio_studio_flow_widget_say_play":                dataSourceStudioFlowWidgetSayPlay(),
 		"twilio_studio_flow_widget_send_and_wait_for_reply": dataSourceStudioFlowWidgetSendAndWaitForReply(),
 		"twilio_studio_flow_widget_send_message":            dataSourceStudioFlowWidgetSendMessage(),
-		"twilio_studio_flow_widget_send_to_autopilot":       dataSourceStudioFlowWidgetSendToAutopilot(),
 		"twilio_studio_flow_widget_send_to_flex":            dataSourceStudioFlowWidgetSendToFlex(),
 		"twilio_studio_flow_widget_set_variables":           dataSourceStudioFlowWidgetSetVariables(),
 		"twilio_studio_flow_widget_split_based_on":          dataSourceStudioFlowWidgetSplitBasedOn(),
