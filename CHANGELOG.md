@@ -1,3 +1,9 @@
+# v0.26.1 (2023-10-29)
+
+FIXES
+
+- Change `twilio_studio_flow` resource to use the output of the create and update functions instead of re-fetching the data to mitigate an eventual consistency issue which cause the provider to panic. Detailed decription can be found at https://github.com/RJPearson94/terraform-provider-twilio/issues/86#issuecomment-1784152926
+
 # v0.26.0 (2023-10-23)
 
 BREAKING CHANGES

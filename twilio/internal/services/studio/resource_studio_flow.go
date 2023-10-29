@@ -135,7 +135,30 @@ func resourceStudioFlowCreate(ctx context.Context, d *schema.ResourceData, meta 
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceStudioFlowRead(ctx, d, meta)
+
+	// This is a duplicate of resourceStudioFlowRead as the API is eventually consistent and was causing issues with the provider
+	d.Set("sid", createResult.Sid)
+	d.Set("account_sid", createResult.AccountSid)
+	d.Set("friendly_name", createResult.FriendlyName)
+
+	json, err := structure.FlattenJsonToString(createResult.Definition)
+	if err != nil {
+		return diag.Errorf("Unable to flatten definition json to string")
+	}
+	d.Set("definition", json)
+	d.Set("status", createResult.Status)
+	d.Set("revision", createResult.Revision)
+	d.Set("commit_message", createResult.CommitMessage)
+	d.Set("valid", createResult.Valid)
+	d.Set("date_created", createResult.DateCreated.Format(time.RFC3339))
+
+	if createResult.DateUpdated != nil {
+		d.Set("date_updated", createResult.DateUpdated.Format(time.RFC3339))
+	}
+
+	d.Set("url", createResult.URL)
+	d.Set("webhook_url", createResult.WebhookURL)
+	return nil
 }
 
 func resourceStudioFlowRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -171,7 +194,6 @@ func resourceStudioFlowRead(ctx context.Context, d *schema.ResourceData, meta in
 
 	d.Set("url", getResponse.URL)
 	d.Set("webhook_url", getResponse.WebhookURL)
-
 	return nil
 }
 
@@ -195,7 +217,30 @@ func resourceStudioFlowUpdate(ctx context.Context, d *schema.ResourceData, meta 
 	}
 
 	d.SetId(updateResp.Sid)
-	return resourceStudioFlowRead(ctx, d, meta)
+
+	// This is a duplicate of resourceStudioFlowRead as the API is eventually consistent and was causing issues with the provider
+	d.Set("sid", updateResp.Sid)
+	d.Set("account_sid", updateResp.AccountSid)
+	d.Set("friendly_name", updateResp.FriendlyName)
+
+	json, err := structure.FlattenJsonToString(updateResp.Definition)
+	if err != nil {
+		return diag.Errorf("Unable to flatten definition json to string")
+	}
+	d.Set("definition", json)
+	d.Set("status", updateResp.Status)
+	d.Set("revision", updateResp.Revision)
+	d.Set("commit_message", updateResp.CommitMessage)
+	d.Set("valid", updateResp.Valid)
+	d.Set("date_created", updateResp.DateCreated.Format(time.RFC3339))
+
+	if updateResp.DateUpdated != nil {
+		d.Set("date_updated", updateResp.DateUpdated.Format(time.RFC3339))
+	}
+
+	d.Set("url", updateResp.URL)
+	d.Set("webhook_url", updateResp.WebhookURL)
+	return nil
 }
 
 func resourceStudioFlowDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
