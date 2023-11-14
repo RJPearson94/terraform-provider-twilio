@@ -16,7 +16,7 @@ For more information on Serverless (also known as Runtime), see the product [pag
 ### SID
 
 ```hcl
-data "twilio_serverless_build" "build" {
+data "twilio_serverless_service" "build" {
   sid = "ZSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 ```
@@ -24,7 +24,7 @@ data "twilio_serverless_build" "build" {
 ### Unique Name
 
 ```hcl
-data "twilio_serverless_build" "build" {
+data "twilio_serverless_service" "build" {
   unique_name = "UniqueName"
 }
 ```
