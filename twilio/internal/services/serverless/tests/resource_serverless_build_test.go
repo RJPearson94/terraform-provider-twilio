@@ -147,7 +147,7 @@ func TestAccTwilioServerlessBuild_dependenciesAndRuntime(t *testing.T) {
 	stateResourceName := fmt.Sprintf("%s.build", buildResourceName)
 	uniqueName := acctest.RandString(10)
 	version := "3.6.2"
-	runtime := "node18"
+	runtime := "node22"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          func() { acceptance.PreCheck(t) },
@@ -178,7 +178,7 @@ func TestAccTwilioServerlessBuild_invalidRuntime(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccTwilioServerlessBuild_dependenciesAndRuntime(uniqueName, version, runtime),
-				ExpectError: regexp.MustCompile(`(?s)expected runtime to be one of \["node16" "node18"\], got python2`),
+				ExpectError: regexp.MustCompile(`(?s)expected runtime to be one of \["node16" "node18" "node20" "node22"\], got python2`),
 			},
 		},
 	})

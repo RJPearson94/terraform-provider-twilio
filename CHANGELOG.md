@@ -1,3 +1,10 @@
+# v0.27.0 (2025-05-24)
+
+FEATURES
+
+The `runtime` attribute on the `twilio_serverless_build` resource now supports the node20 and node22 runtime
+
+
 # v0.26.1 (2023-10-29)
 
 FIXES
