@@ -57,57 +57,68 @@ func resourceServerlessAsset() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this asset by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this asset",
 			},
 			"service_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.ServerlessServiceSidValidation(),
+				Description:  "The SID of the Serverless service. Changing this forces a new resource",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringLenBetween(1, 255),
+				Description:  "A human-readable label for the asset",
 			},
 			"latest_version_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the latest version of the asset",
 			},
 			"source": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"content"},
+				Description:   "The path to the file containing the asset content. Conflicts with `content`",
 			},
 			"source_hash": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"content"},
+				Description:   "A hash of the source file, used to detect changes. Conflicts with `content`",
 			},
 			"content": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"source"},
+				Description:   "The inline content of the asset. Conflicts with `source`",
 			},
 			"content_file_name": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"source"},
+				Description:   "The file name to use when uploading inline content. Conflicts with `source`",
 			},
 			"content_type": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The MIME type of the asset content (e.g. `text/html`)",
 			},
 			"path": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringLenBetween(1, 255),
+				Description:  "The URL path at which the asset will be accessible",
 			},
 			"visibility": {
 				Type:     schema.TypeString,
@@ -117,18 +128,22 @@ func resourceServerlessAsset() *schema.Resource {
 					"protected",
 					"private",
 				}, false),
+				Description: "The access control for the asset. Valid values are `public`, `protected`, `private`",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the asset was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the asset was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the asset resource",
 			},
 		},
 

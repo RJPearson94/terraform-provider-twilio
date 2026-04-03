@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Address Configuration"
+page_title: "twilio_conversations_address_configuration Data Source - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_address_configuration Data Source
@@ -21,41 +23,46 @@ output "address_configuration" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the address configuration
+- `sid` (String) The SID of the address configuration to retrieve
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the address configuration (Same as the `sid`)
-- `sid` - The SID of the address configuration (Same as the `id`)
-- `account_sid` - The account SID associated with the address configuration
-- `auto_creation` - A `auto_creation` block as documented below
-- `address` - The phone number or whatsapp number that has been configured
-- `type` - The address type
-- `date_created` - The date in RFC3339 format that the address configuration was created
-- `date_updated` - The date in RFC3339 format that the address configuration was updated
-- `url` - The URL of the address configuration
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this address configuration
+- `address` (String) The address (e.g. phone number) for the configuration
+- `auto_creation` (List of Object) The auto-creation settings for the address configuration (see [below for nested schema](#nestedatt--auto_creation))
+- `date_created` (String) The date and time the address configuration was created, in RFC 3339 format
+- `date_updated` (String) The date and time the address configuration was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the address configuration
+- `id` (String) The ID of this resource.
+- `type` (String) The type of address
+- `url` (String) The absolute URL of the address configuration resource
 
-A `auto_creation` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `service_sid` - The conversation service associated with the address configuration
-- `integration_type` - The integration type used
-- `enabled` - Whether conversation should auto-create when messages are received at the configured address
-- `flow_sid` - The SID for the studio flow which will be called
-- `retry_count` - The number of attempts to retry a failed webhook call
-- `webhook_url` - The URL that is called when an event is triggered
-- `webhook_filters` - A list of events that triggers a call to the webhook URL
-- `webhook_method` - The HTTP method used to call the webhook URL
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 5 minutes) Used when retrieving address configuration
+<a id="nestedatt--auto_creation"></a>
+### Nested Schema for `auto_creation`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `flow_sid` (String)
+- `integration_type` (String)
+- `retry_count` (String)
+- `service_sid` (String)
+- `webhook_filters` (List of String)
+- `webhook_method` (String)
+- `webhook_url` (String)

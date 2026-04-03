@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Activities"
+page_title: "twilio_taskrouter_activities Data Source - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_activities Data Source
@@ -21,36 +23,40 @@ output "activities" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `workspace_sid` - (Mandatory) The SID of the workspace activities are associated with
-- `friendly_name` - (Optional) Search for all activities which have the friendly name specified
-- `available` - (Optional) Search for all activities which have the specified available state
+- `workspace_sid` (String) The SID of the TaskRouter workspace
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `available` (Boolean) Filter activities by availability
+- `friendly_name` (String) Filter activities by friendly name
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `workspace_sid`)
-- `workspace_sid` - The SID of the workspace the activities are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the activities
-- `activities` - A list of `activity` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the activities
+- `activities` (List of Object) A list of activities in the workspace (see [below for nested schema](#nestedatt--activities))
+- `id` (String) The ID of this resource.
 
-An `activity` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the activity
-- `friendly_name` - The name of the activity
-- `available` - Whether the activity is available to accept tasks in Task Router
-- `date_created` - The date in RFC3339 format that the activity was created
-- `date_updated` - The date in RFC3339 format that the activity was updated
-- `url` - The URL of the activity
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving the activities
+<a id="nestedatt--activities"></a>
+### Nested Schema for `activities`
+
+Read-Only:
+
+- `available` (Boolean)
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `sid` (String)
+- `url` (String)

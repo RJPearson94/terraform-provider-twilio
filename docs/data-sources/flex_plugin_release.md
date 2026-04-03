@@ -1,9 +1,11 @@
 ---
-page_title: "Twilio Flex Plugin Release"
+page_title: "twilio_flex_plugin_release Data Source - twilio"
 subcategory: "Flex"
+description: |-
+  
 ---
 
-# twilio_flex_plugin_release Resource
+# twilio_flex_plugin_release Data Source
 
 Use this data source to access information about an existing Twilio Flex plugin release resource. See the [API docs](https://www.twilio.com/docs/flex/developer/plugins/api/release) for more information
 
@@ -23,25 +25,27 @@ output "plugin_release" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the plugin release
+- `sid` (String) The SID of the Flex plugin release to look up
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the plugin release (Same as the `sid`)
-- `sid` - The SID of the plugin release (Same as the `id`)
-- `account_sid` - The account SID associated with the plugin release
-- `configuration_sid` - The SID of the configuration associated with the release
-- `date_created` - The date in RFC3339 format that the plugin release was created
-- `url` - The URL of the plugin release
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this plugin release
+- `configuration_sid` (String) The SID of the plugin configuration associated with this release
+- `date_created` (String) The date and time the plugin release was created, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `url` (String) The absolute URL of the plugin release resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/release/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the plugin release
+Optional:
+
+- `read` (String)

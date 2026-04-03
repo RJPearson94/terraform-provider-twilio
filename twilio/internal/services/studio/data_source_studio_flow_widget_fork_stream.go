@@ -18,37 +18,43 @@ func dataSourceStudioFlowWidgetForkStream() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"json": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source",
 			},
 			"transitions": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The next widget(s) to transition to after this widget",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"next": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget after the stream is started or stopped",
 						},
 					},
 				},
 			},
 			"offset": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The position of this widget in the Studio visual editor",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"x": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The x-axis position. Defaults to 0",
 						},
 						"y": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The y-axis position. Defaults to 0",
 						},
 					},
 				},
@@ -57,6 +63,7 @@ func dataSourceStudioFlowWidgetForkStream() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The unique name of this widget within the flow, used to reference it in transitions",
 			},
 			"stream_action": {
 				Type:     schema.TypeString,
@@ -65,29 +72,35 @@ func dataSourceStudioFlowWidgetForkStream() *schema.Resource {
 					"start",
 					"stop",
 				}, false),
+				Description: "Whether to start or stop the audio stream. Valid values: `start`, `stop`",
 			},
 			"stream_connector": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The name of the SIPREC connector when using `siprec` transport",
 			},
 			"stream_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "A friendly name for the stream, used to reference it when stopping",
 			},
 			"stream_parameters": {
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Description: "Additional key/value parameters to send to the remote stream service",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"key": {
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "The parameter name",
 						},
 						"value": {
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "The parameter value",
 						},
 					},
 				},
@@ -100,6 +113,7 @@ func dataSourceStudioFlowWidgetForkStream() *schema.Resource {
 					"inbound_track",
 					"outbound_track",
 				}, false),
+				Description: "Which audio track(s) to stream. Valid values: `both_tracks`, `inbound_track`, `outbound_track`",
 			},
 			"stream_transport_type": {
 				Type:     schema.TypeString,
@@ -108,6 +122,7 @@ func dataSourceStudioFlowWidgetForkStream() *schema.Resource {
 					"siprec",
 					"websocket",
 				}, false),
+				Description: "The transport protocol for the stream. Valid values: `siprec`, `websocket`",
 			},
 			"stream_url": {
 				Type:     schema.TypeString,
@@ -116,6 +131,7 @@ func dataSourceStudioFlowWidgetForkStream() *schema.Resource {
 					utils.StudioFlowWidgetLiquidTemplateValidation(),
 					validation.StringMatch(regexp.MustCompile(`^wss://.+$`), ""),
 				),
+				Description: "The WebSocket URL (`wss://`) to stream audio to when using `websocket` transport",
 			},
 		},
 	}

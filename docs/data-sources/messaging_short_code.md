@@ -1,9 +1,11 @@
 ---
-page_title: "Twilio Programmable Messaging Short Code"
+page_title: "twilio_messaging_short_code Data Source - twilio"
 subcategory: "Programmable Messaging"
+description: |-
+  
 ---
 
-# twilio_messaging_short_code Resource
+# twilio_messaging_short_code Data Source
 
 Use this data source to access information about an existing Programmable Messaging short code resource. See the [API docs](https://www.twilio.com/docs/sms/services/api/shortcode-resource) for more information
 
@@ -24,30 +26,31 @@ output "short_code" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the short code is associated with
-- `sid` - (Mandatory) The SID of the short code
+- `service_sid` (String) The SID of the messaging service the short code is associated with
+- `sid` (String) The SID of the short code
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the short code (Same as the `sid`)
-- `sid` - The SID of the Twilio short code associated with the messaging service (Same as the `id`)
-- `service_sid` - The messaging service SID associated with the short code
-- `account_sid` - The account SID associated with the short code
-- `capabilities` - The capabilities that are enabled for the short code
-- `country_code` - The country code of the short code
-- `short_code` - The short code
-- `date_created` - The date in RFC3339 format that the messaging short code resource was created
-- `date_updated` - The date in RFC3339 format that the messaging short code resource was updated
-- `url` - The URL of the messaging short code resource
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this short code
+- `capabilities` (List of String) The list of capabilities for the short code
+- `country_code` (String) The two-character ISO country code of the short code
+- `date_created` (String) The date and time the short code was created, in RFC 3339 format
+- `date_updated` (String) The date and time the short code was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `short_code` (String) The short code value
+- `url` (String) The absolute URL of the short code resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the short code
+Optional:
+
+- `read` (String)

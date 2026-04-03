@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Available Local Phone Numbers"
+page_title: "twilio_phone_number_available_local_numbers Data Source - twilio"
 subcategory: "Phone Numbers"
+description: |-
+  
 ---
 
 # twilio_phone_number_available_local_numbers Data Source
@@ -22,87 +24,97 @@ output "available_local_numbers" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The SID of the account the phone number is associated with
-- `iso_country` - (Mandatory) The ISO country to search for phone numbers
-- `limit` - (Optional) The maximum number of available phone numbers to return
-- `area_code` - (Optional) To search for phone numbers in an area code
-- `allow_beta_numbers` - (Optional) Whether to include beta phone numbers
-- `contains_number_pattern` - (Optional) The pattern to search for phone numbers
-- `exclude_address_requirements` - (Optional) A `exclude_address_requirement` block as documented below
-- `location` - (Optional) A `location` block as documented below
-- `capabilities` - (Optional) A `capability` block as documented below
+- `account_sid` (String) The SID of the account to search for available local phone numbers
+- `iso_country` (String) The ISO 3166-1 alpha-2 country code to search for available local phone numbers
 
----
+### Optional
 
-An `exclude_address_requirement` block supports the following:
+- `allow_beta_numbers` (Boolean) Whether to include beta phone numbers in the search results
+- `area_code` (Number) The area code to filter available phone numbers by
+- `capabilities` (Block List, Max: 1) A block to filter available phone numbers by their capabilities (see [below for nested schema](#nestedblock--capabilities))
+- `contains_number_pattern` (String) A pattern to match phone numbers against, using '*' as a wildcard
+- `exclude_address_requirements` (Block List, Max: 1) A block to exclude phone numbers that require an address (see [below for nested schema](#nestedblock--exclude_address_requirements))
+- `limit` (Number) The maximum number of results to return
+- `location` (Block List, Max: 1) A block to filter available phone numbers by location (see [below for nested schema](#nestedblock--location))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `all` - Whether to exclude phone numbers which have any address requirements
-- `local` - Whether to exclude phone numbers which have local address requirements
-- `foreign` - Whether to exclude phone numbers which have foreign address requirements
+### Read-Only
 
----
+- `available_phone_numbers` (List of Object) A list of available local phone numbers matching the search criteria (see [below for nested schema](#nestedatt--available_phone_numbers))
+- `id` (String) The ID of this resource.
 
-A `location` block supports the following:
+<a id="nestedblock--capabilities"></a>
+### Nested Schema for `capabilities`
 
-- `in_postal_code` - To search for phone numbers in the postal area
-- `in_region` - To search for phone numbers in a region
-- `in_lata` - To search for phone numbers in a Local Address and Transport Area (LATA)
-- `in_locality` - To search for phone numbers in a specific locality
-- `in_rate_center` - To search for phone numbers in a specific rate center
-- `near_number` - To search for phone numbers near an existing phone number
-- `near_lat_long` - To search for phone numbers near a latitude and longitude
-- `distance` - To search for phone numbers within n miles of a lat long or number
+Optional:
 
----
+- `fax_enabled` (Boolean) Whether to filter for fax-capable phone numbers
+- `mms_enabled` (Boolean) Whether to filter for MMS-capable phone numbers
+- `sms_enabled` (Boolean) Whether to filter for SMS-capable phone numbers
+- `voice_enabled` (Boolean) Whether to filter for voice-capable phone numbers
 
-A `capability` block supports the following:
 
-- `fax_enabled` - Whether to include fax enabled phone numbers
-- `sms_enabled` - Whether to include sms enabled phone numbers
-- `mms_enabled` - Whether to include mms enabled phone numbers
-- `voice_enabled` - Whether to include voice-enabled phone numbers
+<a id="nestedblock--exclude_address_requirements"></a>
+### Nested Schema for `exclude_address_requirements`
 
-## Attributes Reference
+Optional:
 
-The following attributes are exported:
+- `all` (Boolean) Whether to exclude phone numbers that require any address
+- `foreign` (Boolean) Whether to exclude phone numbers that require a foreign address
+- `local` (Boolean) Whether to exclude phone numbers that require a local address
 
-- `id` - The ID of the phone number (Same as the `sid`)
-- `sid` - The SID of the phone number (Same as the `id`)
-- `account_sid` - The account SID the phone number is associated with
-- `iso_country` - The ISO country of the phone number to each
-- `available_phone_numbers` - A list of `available_phone_number` blocks as documented below
 
----
+<a id="nestedblock--location"></a>
+### Nested Schema for `location`
 
-An `available_phone_number` block supports the following:
+Optional:
 
-- `friendly_name` - The friendly name of the phone number
-- `phone_number` - The phone number
-- `address_requirements` - The address requirements of the phone number
-- `capabilities` - A `capability` block as documented below
-- `lata` - The Local Address and Transport Area (LATA) of the phone number
-- `rate_center` - The rate centre of the phone number
-- `latitude` - The latitude of the phone number's location
-- `longitude` - The longitude of the phone number's location
-- `locality` - The locality of the phone number's location
-- `region` - The state or providence abbreviation of the phone number's location
-- `postal_code` - The postal code of the phone number's location
+- `distance` (Number) The distance in miles from the `near_number` or `near_lat_long` to search within
+- `in_lata` (String) The LATA to filter available phone numbers by
+- `in_locality` (String) The locality (city) to filter available phone numbers by
+- `in_postal_code` (String) The postal code to filter available phone numbers by
+- `in_rate_center` (String) The rate center to filter available phone numbers by
+- `in_region` (String) The region (state or province) to filter available phone numbers by
+- `near_lat_long` (String) A latitude/longitude coordinate pair to search near, specified as `latitude,longitude`
+- `near_number` (String) A phone number to search near
 
----
 
-A `capability` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `fax` - Whether the phone number supports fax
-- `sms` - Whether the phone number supports SMS
-- `mms` - Whether the phone number supports MMS
-- `voice` - Whether the phone number supports voice
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving the phone numbers
+<a id="nestedatt--available_phone_numbers"></a>
+### Nested Schema for `available_phone_numbers`
+
+Read-Only:
+
+- `address_requirements` (String)
+- `beta` (Boolean)
+- `capabilities` (List of Object) (see [below for nested schema](#nestedobjatt--available_phone_numbers--capabilities))
+- `friendly_name` (String)
+- `lata` (String)
+- `latitude` (String)
+- `locality` (String)
+- `longitude` (String)
+- `phone_number` (String)
+- `postal_code` (String)
+- `rate_center` (String)
+- `region` (String)
+
+<a id="nestedobjatt--available_phone_numbers--capabilities"></a>
+### Nested Schema for `available_phone_numbers.capabilities`
+
+Read-Only:
+
+- `fax` (Boolean)
+- `mms` (Boolean)
+- `sms` (Boolean)
+- `voice` (Boolean)

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Phone Number"
+page_title: "twilio_phone_number Resource - twilio"
 subcategory: "Phone Numbers"
+description: |-
+  
 ---
 
 # twilio_phone_number Resource
@@ -47,181 +49,154 @@ output "phone_number" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The SID of the account to associate the phone number with. Changing this forces a new resource to be created.
-- `friendly_name` - (Optional) The friendly name of the phone number
-- `phone_number` - (Optional) The phone number to purchase. Changing this forces a new resource to be created. Conflicts with `area_code` and `search_criteria`.
-- `area_code` - (Optional) The area code to purchase a phone number in. Changing this forces a new resource to be created. Conflicts with `phone_number` and `search_criteria`.
-- `search_criteria` - (Optional) A `search_criteria` block as documented below. Conflicts with `area_code` and `phone_number`.
-- `address_sid` - (Optional) The address SID the phone number is associated with
-- `emergency_address_sid` - (Optional) The emergency address SID the phone number is associated with
-- `emergency_status` - (Optional) The emergency status of the phone number. Valid values are `Active` or `Inactive`
-- `messaging` - (Optional) A `messaging` block as documented below
-- `trunk_sid` - (Optional) The trunk SID the phone number is associated with
-- `voice` - (Optional) A `voice` block as documented below. Conflicts with `fax`.
-- `fax` - (Optional) A `fax` block as documented below. Conflicts with `voice`.
-- `identity_sid` - (Optional) The identity SID the phone number is associated with
-- `bundle_sid` - (Optional) The bundle SID the phone number is associated with
-- `status_callback_url` - (Optional) The URL to call on each status change
-- `status_callback_method` - (Optional) The HTTP method that should be used to call the status callback URL. The default value is `POST`
+- `account_sid` (String) The SID of the account that owns this phone number. Changing this forces a new resource
 
-~> Either the `phone_number`, `area_code` or `search_criteria` must be set
+### Optional
 
-!> if the Twilio API doesn't return the voice receive mode field (this field hasn't been returned since Programmable Fax was disabled on some projects), then the provider will assume the configuration is for voice
+- `address_sid` (String) The SID of the address associated with this phone number
+- `area_code` (String) The area code of the phone number to purchase. Exactly one of `phone_number`, `area_code`, or `search_criteria` must be specified. Changing this forces a new resource
+- `bundle_sid` (String) The SID of the regulatory compliance bundle associated with this phone number
+- `emergency_address_sid` (String) The SID of the emergency address associated with this phone number
+- `emergency_status` (String) The emergency calling status of the phone number. Valid values are `Active` or `Inactive`
+- `fax` (Block List, Max: 1) A block to configure fax settings for the phone number. Conflicts with `voice` (see [below for nested schema](#nestedblock--fax))
+- `friendly_name` (String) A human-readable label for the phone number
+- `identity_sid` (String) The SID of the identity resource associated with this phone number
+- `messaging` (Block List, Max: 1) A block to configure messaging settings for the phone number (see [below for nested schema](#nestedblock--messaging))
+- `phone_number` (String) The phone number in E.164 format to purchase. Exactly one of `phone_number`, `area_code`, or `search_criteria` must be specified. Changing this forces a new resource
+- `search_criteria` (Block List, Max: 1) A block to define search criteria for finding an available phone number to purchase. Exactly one of `phone_number`, `area_code`, or `search_criteria` must be specified. Changing this forces a new resource (see [below for nested schema](#nestedblock--search_criteria))
+- `status_callback_method` (String) The HTTP method used to call the status callback URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `status_callback_url` (String) The URL to call for status callback events on the phone number
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `trunk_sid` (String) The SID of the SIP trunk to route voice calls to
+- `voice` (Block List, Max: 1) A block to configure voice settings for the phone number. Conflicts with `fax` (see [below for nested schema](#nestedblock--voice))
 
----
+### Read-Only
 
-A `messaging` block supports the following:
+- `address_requirements` (String) The type of address required for this phone number
+- `beta` (Boolean) Whether the phone number is a beta number new to the Twilio platform
+- `capabilities` (List of Object) The set of boolean capabilities of the phone number (see [below for nested schema](#nestedatt--capabilities))
+- `date_created` (String) The date and time the phone number was created, in RFC 3339 format
+- `date_updated` (String) The date and time the phone number was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `origin` (String) The origin of the phone number, such as `twilio` or `hosted`
+- `sid` (String) The unique SID assigned to this phone number by Twilio
+- `status` (String) The current status of the phone number
 
-- `application_sid` - (Optional) The application SID which should be called on each incoming message
-- `url` - (Optional) The URL which should be called on each incoming message
-- `method` - (Optional) The HTTP method that should be used to call the URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method that should be used to call the fallback URL. Valid values are `GET` or `POST`. The default value is `POST`
+<a id="nestedblock--fax"></a>
+### Nested Schema for `fax`
 
----
+Optional:
 
-A `voice` block supports the following:
+- `application_sid` (String) The SID of the TwiML application to handle incoming faxes
+- `fallback_method` (String) The HTTP method used to call the fax fallback URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `fallback_url` (String) The URL to call when an error occurs while retrieving or executing the TwiML for incoming faxes
+- `method` (String) The HTTP method used to call the fax URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `url` (String) The URL to call when the phone number receives an incoming fax
 
-- `application_sid` - (Optional) The application SID which should be called on each incoming call
-- `url` - (Optional) The URL which should be called on each incoming call
-- `method` - (Optional) The HTTP method that should be used to call the URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method that should be used to call the fallback URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `caller_id_lookup` - (Optional) Whether caller ID lookup is enabled for the phone number. The default value is `false`
 
----
+<a id="nestedblock--messaging"></a>
+### Nested Schema for `messaging`
 
-A `fax` block supports the following:
+Optional:
 
-- `application_sid` - (Optional) The application SID which should be called on each incoming fax
-- `url` - (Optional) The URL which should be called on each incoming fax
-- `method` - (Optional) The HTTP method that should be used to call the URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method that should be used to call the fallback URL. Valid values are `GET` or `POST`. The default value is `POST`
+- `application_sid` (String) The SID of the TwiML application to handle incoming messages
+- `fallback_method` (String) The HTTP method used to call the messaging fallback URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `fallback_url` (String) The URL to call when an error occurs while retrieving or executing the TwiML for incoming messages
+- `method` (String) The HTTP method used to call the messaging URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `url` (String) The URL to call when the phone number receives an incoming message
 
----
 
-- `type` - (Mandatory) The type of phone number to purchase. Valid values are `local`, `mobile` or `toll_free`
-- `iso_country` - (Mandatory) The ISO country to find a phone number
-- `area_code` - (Optional) To find a phone number in an area code
-- `allow_beta_numbers` - (Optional) Whether to include beta phone number in the search
-- `contains_number_pattern` - (Optional) The pattern to find a phone numbers
-- `exclude_address_requirements` - (Optional) A `exclude_address_requirement` block as documented below
-- `location` - (Optional) A `location` block as documented below
-- `capabilities` - (Optional) A `capability` block as documented below
+<a id="nestedblock--search_criteria"></a>
+### Nested Schema for `search_criteria`
 
----
+Required:
 
-An `exclude_address_requirement` block supports the following:
+- `iso_country` (String) The ISO 3166-1 alpha-2 country code to search for available phone numbers. Changing this forces a new resource
+- `type` (String) The type of phone number to search for. Valid values are `local`, `mobile`, or `toll_free`. Changing this forces a new resource
 
-- `all` - Whether to find a phone number that does not have any address requirements
-- `local` - Whether to find a phone number that does not have local address requirements
-- `foreign` - Whether to find a phone number that does not have foreign address requirements
+Optional:
 
----
+- `allow_beta_numbers` (Boolean) Whether to include beta phone numbers in the search results. Changing this forces a new resource
+- `area_code` (Number) The area code to filter available phone numbers by. Changing this forces a new resource
+- `capabilities` (Block List, Max: 1) A block to filter available phone numbers by their capabilities. Changing this forces a new resource (see [below for nested schema](#nestedblock--search_criteria--capabilities))
+- `contains_number_pattern` (String) A pattern to match phone numbers against, using '*' as a wildcard. Changing this forces a new resource
+- `exclude_address_requirements` (Block List, Max: 1) A block to exclude phone numbers that require an address. Changing this forces a new resource (see [below for nested schema](#nestedblock--search_criteria--exclude_address_requirements))
+- `location` (Block List, Max: 1) A block to filter available phone numbers by location. Changing this forces a new resource (see [below for nested schema](#nestedblock--search_criteria--location))
 
-A `location` block supports the following:
+<a id="nestedblock--search_criteria--capabilities"></a>
+### Nested Schema for `search_criteria.capabilities`
 
-- `in_postal_code` - To find a phone number in the postal area
-- `in_region` - To find a phone number in a region
-- `in_lata` - To find a phone number in a Local Address and Transport Area (LATA)
-- `in_locality` - To find a phone number in a specific locality
-- `in_rate_center` - To find a phone number in a specific rate center
-- `near_number` - To find a phone number near an existing phone number
-- `near_lat_long` - To find a phone number near a latitude and longitude
-- `distance` - To find a phone number within n miles of a lat long or number
+Optional:
 
----
+- `fax_enabled` (Boolean) Whether to filter for fax-capable phone numbers. Changing this forces a new resource
+- `mms_enabled` (Boolean) Whether to filter for MMS-capable phone numbers. Changing this forces a new resource
+- `sms_enabled` (Boolean) Whether to filter for SMS-capable phone numbers. Changing this forces a new resource
+- `voice_enabled` (Boolean) Whether to filter for voice-capable phone numbers. Changing this forces a new resource
 
-A `capability` block supports the following:
 
-- `fax_enabled` - Whether to find a fax-enabled phone number
-- `sms_enabled` - Whether to find an sms-enabled phone number
-- `mms_enabled` - Whether to find an mms-enabled phone number
-- `voice_enabled` - Whether to find a voice-enabled phone number
+<a id="nestedblock--search_criteria--exclude_address_requirements"></a>
+### Nested Schema for `search_criteria.exclude_address_requirements`
 
-## Attributes Reference
+Optional:
 
-The following attributes are exported:
+- `all` (Boolean) Whether to exclude phone numbers that require any address. Changing this forces a new resource
+- `foreign` (Boolean) Whether to exclude phone numbers that require a foreign address. Changing this forces a new resource
+- `local` (Boolean) Whether to exclude phone numbers that require a local address. Changing this forces a new resource
 
-- `id` - The ID of the phone number (Same as the `sid`)
-- `sid` - The SID of the phone number (Same as the `id`)
-- `account_sid` - The account SID the phone number is associated with
-- `friendly_name` - The friendly name of the phone number
-- `phone_number` - The phone number
-- `address_sid` - The address SID the phone number is associated with
-- `address_requirements` - The address requirements of the phone number
-- `beta` - Whether the phone number is in beta on the platform
-- `capabilities` - A `capability` block as documented below
-- `emergency_address_sid` - The emergency address SID the phone number is associated with
-- `emergency_status` - The emergency status of the phone number
-- `messaging` - A `messaging` block as documented below
-- `trunk_sid` - The trunk SID the phone number is associated with
-- `voice` - A `voice` block as documented below
-- `fax` - A `fax` block as documented below
-- `identity_sid` - The identity SID the phone number is associated with
-- `bundle_sid` - The bundle SID the phone number is associated with
-- `status` - The status of the phone number
-- `status_callback_url` - The URL to call on each status change
-- `status_callback_method` - The HTTP method which should be used to call the status callback URL
-- `origin` - The origin of the phone number
-- `date_created` - The date in RFC3339 format that the phone number was created
-- `date_updated` - The date in RFC3339 format that the phone number was updated
 
-!> the `voice` block will be defaulted to if the Twilio API doesn't return the voice receive mode field, this data isn't being returned since Programmable Fax was disabled on some accounts
+<a id="nestedblock--search_criteria--location"></a>
+### Nested Schema for `search_criteria.location`
 
----
+Optional:
 
-A `capability` block supports the following:
+- `distance` (Number) The distance in miles from the `near_number` or `near_lat_long` to search within. Changing this forces a new resource
+- `in_lata` (String) The LATA to filter available phone numbers by. Changing this forces a new resource
+- `in_locality` (String) The locality (city) to filter available phone numbers by. Changing this forces a new resource
+- `in_postal_code` (String) The postal code to filter available phone numbers by. Changing this forces a new resource
+- `in_rate_center` (String) The rate center to filter available phone numbers by. Changing this forces a new resource
+- `in_region` (String) The region (state or province) to filter available phone numbers by. Changing this forces a new resource
+- `near_lat_long` (String) A latitude/longitude coordinate pair to search near, specified as `latitude,longitude`. Changing this forces a new resource
+- `near_number` (String) A phone number to search near. Changing this forces a new resource
 
-- `fax` - Whether the phone number supports fax
-- `sms` - Whether the phone number supports SMS
-- `mms` - Whether the phone number supports MMS
-- `voice` - Whether the phone number supports voice
 
----
 
-A `messaging` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `application_sid` - The application SID which should be called on each incoming message
-- `url` - The URL which should be called on each incoming message
-- `method` - The HTTP method which should be used to call the URL
-- `fallback_url` - The fallback URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method which should be used to call the fallback URL
+Optional:
 
----
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
-A `voice` block supports the following:
 
-- `application_sid` - The application SID which should be called on each incoming call
-- `url` - The URL which should be called on each incoming call
-- `method` - The HTTP method which should be used to call the URL
-- `fallback_url` - The fallback URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method which should be used to call the fallback URL
-- `caller_id_lookup` - Whether caller ID lookup is enabled for the phone number
+<a id="nestedblock--voice"></a>
+### Nested Schema for `voice`
 
----
+Optional:
 
-A `fax` block supports the following:
+- `application_sid` (String) The SID of the TwiML application to handle incoming voice calls
+- `caller_id_lookup` (Boolean) Whether to perform a caller ID lookup on incoming voice calls. Defaults to `false`
+- `fallback_method` (String) The HTTP method used to call the voice fallback URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `fallback_url` (String) The URL to call when an error occurs while retrieving or executing the TwiML for incoming voice calls
+- `method` (String) The HTTP method used to call the voice URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `url` (String) The URL to call when the phone number receives an incoming voice call
 
-- `application_sid` - The application SID which should be called on each incoming fax
-- `url` - The URL which should be called on each incoming fax
-- `method` - The HTTP method which should be used to call the URL
-- `fallback_url` - The fallback URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method which should be used to call the fallback URL
 
-## Timeouts
+<a id="nestedatt--capabilities"></a>
+### Nested Schema for `capabilities`
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+Read-Only:
 
-- `create` - (Defaults to 10 minutes) Used when creating the phone number
-- `update` - (Defaults to 10 minutes) Used when updating the phone number
-- `read` - (Defaults to 5 minutes) Used when retrieving the phone number
-- `delete` - (Defaults to 10 minutes) Used when deleting the phone number
+- `fax` (Boolean)
+- `mms` (Boolean)
+- `sms` (Boolean)
+- `voice` (Boolean)
 
 ## Import
 

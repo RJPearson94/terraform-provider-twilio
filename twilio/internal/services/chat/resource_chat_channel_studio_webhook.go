@@ -52,51 +52,61 @@ func resourceChatChannelStudioWebhook() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this channel studio webhook by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this channel studio webhook",
 			},
 			"service_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.ChatServiceSidValidation(),
+				Description:  "The SID of the Programmable Chat service. Changing this forces a new resource",
 			},
 			"channel_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.ChatChannelSidValidation(),
+				Description:  "The SID of the chat channel. Changing this forces a new resource",
 			},
 			"type": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The type of the channel webhook",
 			},
 			"flow_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: utils.StudioFlowSidValidation(),
+				Description:  "The SID of the Studio Flow to trigger",
 			},
 			"retry_count": {
 				Type:         schema.TypeInt,
 				Optional:     true,
 				Default:      3,
 				ValidateFunc: validation.IntBetween(0, 3),
+				Description:  "The number of retry attempts for failed webhook requests. Defaults to `3`",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the channel studio webhook was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the channel studio webhook was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the channel studio webhook resource",
 			},
 		},
 	}

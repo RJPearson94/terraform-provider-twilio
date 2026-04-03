@@ -29,32 +29,38 @@ func resourceIamApiKey() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this API key by Twilio",
 			},
 			"account_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.AccountSidValidation(),
+				Description:  "The SID of the account that owns this API key. Changing this forces a new resource",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.StringLenBetween(0, 64),
+				Description:  "A human-readable label for the API key. Must be between 0 and 64 characters",
 			},
 			"secret": {
-				Type:      schema.TypeString,
-				Computed:  true,
-				Sensitive: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Sensitive:   true,
+				Description: "The secret for the API key, used for authentication. Sensitive -- will not be shown in logs or plans. Only available on initial creation",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the API key was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the API key was last updated, in RFC 3339 format",
 			},
 		},
 	}

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Chat Channel"
+page_title: "twilio_chat_channel Resource - twilio"
 subcategory: "Programmable Chat"
+description: |-
+  
 ---
 
 # twilio_chat_channel Resource
@@ -24,43 +26,41 @@ resource "twilio_chat_channel" "channel" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The Service SID to associate the channel with. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The friendly name of the channel
-- `unique_name` - (Optional) The unique name of the channel
-- `attributes` - (Optional) JSON string of channel attributes. The default value is `{}`
-- `type` - (Optional) The type of channel. Valid values are `public` or `private`. The default value is `public`. Changing this forces a new resource to be created
+- `service_sid` (String) The SID of the Programmable Chat service. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `attributes` (String) A JSON string of custom attributes for the channel. Defaults to `{}`
+- `friendly_name` (String) A human-readable label for the channel
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `type` (String) The visibility of the channel. Valid values are `public` or `private`. Defaults to `public`. Changing this forces a new resource
+- `unique_name` (String) A unique name for the channel
 
-- `id` - The ID of the channel (Same as the `sid`)
-- `sid` - The SID of the channel (Same as the `id`)
-- `account_sid` - The account SID associated with the channel
-- `service_sid` - The service SID associated with the channel
-- `friendly_name` - The friendly name of the channel
-- `unique_name` - The unique name of the channel
-- `attributes` - JSON string of channel attributes
-- `type` - The type of channel
-- `created_by` - Who created the chat channel
-- `members_count` - The number of members that are associated with the channel
-- `messages_count` - The number of messages that are associated with the channel
-- `date_created` - The date in RFC3339 format that the channel was created
-- `date_updated` - The date in RFC3339 format that the channel was updated
-- `url` - The URL of the channel
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this channel
+- `created_by` (String) The identity of the user that created the channel
+- `date_created` (String) The date and time the channel was created, in RFC 3339 format
+- `date_updated` (String) The date and time the channel was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `members_count` (Number) The number of members in the channel
+- `messages_count` (Number) The number of messages in the channel
+- `sid` (String) The unique SID assigned to this channel by Twilio
+- `url` (String) The absolute URL of the channel resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the channel
-- `update` - (Defaults to 10 minutes) Used when updating the channel
-- `read` - (Defaults to 5 minutes) Used when retrieving the channel
-- `delete` - (Defaults to 10 minutes) Used when deleting the channel
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

@@ -46,26 +46,31 @@ func resourceFlexPluginRelease() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this plugin release by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this plugin release",
 			},
 			"configuration_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.FlexPluginConfigurationSidValidation(),
+				Description:  "The SID of the plugin configuration to deploy as a release. Changing this forces a new resource",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the plugin release was created, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the plugin release resource",
 			},
 		},
 	}

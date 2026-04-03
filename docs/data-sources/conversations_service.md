@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Service"
+page_title: "twilio_conversations_service Data Source - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_service Data Source
@@ -21,25 +23,27 @@ output "service" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the service
+- `sid` (String) The SID of the conversations service to retrieve
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the service (Same as the `sid`)
-- `sid` - The SID of the service (Same as the `id`)
-- `friendly_name` - The friendly name of the service
-- `date_created` - The date in RFC3339 format that the service was created
-- `date_updated` - The date in RFC3339 format that the service was updated
-- `url` - The URL of the service
+### Read-Only
 
-## Timeouts
+- `date_created` (String) The date and time the conversations service was created, in RFC 3339 format
+- `date_updated` (String) The date and time the conversations service was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the conversations service
+- `id` (String) The ID of this resource.
+- `url` (String) The absolute URL of the conversations service resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the service
+Optional:
+
+- `read` (String)

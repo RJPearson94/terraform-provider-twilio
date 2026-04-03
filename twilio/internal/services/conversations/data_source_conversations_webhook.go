@@ -20,35 +20,42 @@ func dataSourceConversationsWebhook() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this webhook",
 			},
 			"target": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The target of the webhook",
 			},
 			"method": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The HTTP method for the webhook",
 			},
 			"pre_webhook_url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The URL called before an event is sent to the webhook",
 			},
 			"post_webhook_url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The URL called after an event is sent to the webhook",
 			},
 			"filters": {
-				Type:     schema.TypeList,
-				Computed: true,
+				Type:        schema.TypeList,
+				Computed:    true,
+				Description: "The list of webhook event triggers subscribed to",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the webhook resource",
 			},
 		},
 	}

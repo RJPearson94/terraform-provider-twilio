@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Configuration"
+page_title: "twilio_conversations_configuration Data Source - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_configuration Data Source
@@ -19,26 +21,25 @@ output "configuration" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Optional
 
-N/A - This data source has no arguments
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-## Attributes Reference
+### Read-Only
 
-The following attributes are exported:
+- `account_sid` (String) The SID of the account that owns this configuration
+- `default_closed_timer` (String) The default ISO 8601 duration after which a conversation will be automatically closed
+- `default_inactive_timer` (String) The default ISO 8601 duration after which a conversation will be marked as inactive
+- `default_messaging_service_sid` (String) The SID of the default messaging service
+- `default_service_sid` (String) The SID of the default conversations service
+- `id` (String) The ID of this resource.
+- `url` (String) The absolute URL of the configuration resource
 
-- `id` - The ID of the service (Same as the `account_sid`)
-- `account_sid` - The account SID associated with the configuration (Same as the `id`)
-- `default_service_sid` - The default conversation service to associate newly created conversations with
-- `default_closed_timer` - The default ISO8601 duration before a conversation will be marked as closed
-- `default_inactive_timer` - The default ISO8601 duration before a conversation will be marked as inactive
-- `default_messaging_service_sid` - The default messaging service to associate newly created conversations with
-- `url` - The URL of the configuration
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-## Timeouts
+Optional:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `read` - (Defaults to 5 minutes) Used when retrieving the configuration
+- `read` (String)

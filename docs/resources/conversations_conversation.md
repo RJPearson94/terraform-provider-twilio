@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Conversation"
+page_title: "twilio_conversations_conversation Resource - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_conversation Resource
@@ -23,58 +25,54 @@ resource "twilio_conversations_conversation" "conversation" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The service SID to associate the conversation with. Changing this forces a new resource to be created
-- `unique_name` - (Optional) The unique name of the conversation
-- `friendly_name` - (Optional) The friendly name of the conversation. The length of the string must be between `0` and `256` characters (inclusive)
-- `attributes` - (Optional) JSON string of attributes. The default value is `{}`
-- `messaging_service_sid` - (Optional) The messaging service SID to associate the conversation with
-- `state` - (Optional) The state of the conversation. Valid values are `active`, `inactive` or `closed`. The default value is `active`
-- `timers` - (Optional) A `timer` block as documented below.
+- `service_sid` (String) The SID of the conversations service. Changing this forces a new resource
 
----
+### Optional
 
-A `timer` block supports the following:
+- `attributes` (String) A JSON string of attributes associated with the conversation. Defaults to `{}`
+- `friendly_name` (String) A human-readable label for the conversation
+- `messaging_service_sid` (String) The SID of the messaging service associated with the conversation
+- `state` (String) The state of the conversation. Valid values are `active`, `inactive`, or `closed`. Defaults to `active`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `timers` (Block List, Max: 1) Timer settings for the conversation (see [below for nested schema](#nestedblock--timers))
+- `unique_name` (String) A unique, developer-assigned name for the conversation
 
-- `closed` - (Optional) ISO8601 duration before a conversation will be marked as closed
-- `inactive` - (Optional) ISO8601 duration before a conversation will be marked as inactive
+### Read-Only
 
-## Attributes Reference
+- `account_sid` (String) The SID of the account that owns this conversation
+- `date_created` (String) The date and time the conversation was created, in RFC 3339 format
+- `date_updated` (String) The date and time the conversation was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this conversation by Twilio
+- `url` (String) The absolute URL of the conversation resource
 
-The following attributes are exported:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `id` - The ID of the conversation (Same as the `sid`)
-- `sid` - The SID of the conversation (Same as the `id`)
-- `account_sid` - The account SID associated with the conversation
-- `service_sid` - The service SID associated with the conversation
-- `unique_name` - The unique name of the conversation
-- `friendly_name` - The friendly name of the conversation
-- `attributes` - JSON string of attributes
-- `messaging_service_sid` - The messaging service SID associated with the conversation
-- `state` - The state of the conversation
-- `timers` - A `timer` block as documented below
-- `date_created` - The date in RFC3339 format that the conversation was created
-- `date_updated` - The date in RFC3339 format that the conversation was updated
-- `url` - The URL of the conversation
+Optional:
 
----
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
-A `timer` block supports the following:
 
-- `date_closed` - The date in RFC3339 format that the conversation will close
-- `date_inactive` - The date in RFC3339 format that the conversation will be marked as inactive
+<a id="nestedblock--timers"></a>
+### Nested Schema for `timers`
 
-## Timeouts
+Optional:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+- `closed` (String) ISO 8601 duration after which the conversation will be automatically closed
+- `inactive` (String) ISO 8601 duration after which the conversation will be marked as inactive
 
-- `create` - (Defaults to 10 minutes) Used when creating the conversation
-- `update` - (Defaults to 10 minutes) Used when updating the conversation
-- `read` - (Defaults to 5 minutes) Used when retrieving the conversation
-- `delete` - (Defaults to 10 minutes) Used when deleting the conversation
+Read-Only:
+
+- `date_closed` (String) The date and time the conversation will be closed, in RFC 3339 format
+- `date_inactive` (String) The date and time the conversation will be marked as inactive, in RFC 3339 format
 
 ## Import
 

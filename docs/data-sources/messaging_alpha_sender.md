@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Messaging Alpha Sender"
+page_title: "twilio_messaging_alpha_sender Data Source - twilio"
 subcategory: "Programmable Messaging"
+description: |-
+  
 ---
 
 # twilio_messaging_alpha_sender Data Source
@@ -24,29 +26,30 @@ output "alpha_sender" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the alpha sender is associated with
-- `sid` - (Mandatory) The SID of the alpha sender
+- `service_sid` (String) The SID of the messaging service the alpha sender is associated with
+- `sid` (String) The SID of the alpha sender
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the alpha sender resource (Same as the `sid`)
-- `sid` - The SID of the alpha sender resource (Same as the `id`)
-- `service_sid` - The messaging service SID associated with the alpha sender
-- `account_sid` - The account SID associated with the alpha sender
-- `capabilities` - The capabilities that are enabled for the alpha sender
-- `alpha_sender` - The alpha sender name associated with the messaging service
-- `date_created` - The date in RFC3339 format that the messaging alpha sender resource was created
-- `date_updated` - The date in RFC3339 format that the messaging alpha sender resource was updated
-- `url` - The URL of the messaging alpha sender resource
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this alpha sender
+- `alpha_sender` (String) The alphanumeric sender ID string
+- `capabilities` (List of String) The list of capabilities for the alpha sender
+- `date_created` (String) The date and time the alpha sender was created, in RFC 3339 format
+- `date_updated` (String) The date and time the alpha sender was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `url` (String) The absolute URL of the alpha sender resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the alpha sender
+Optional:
+
+- `read` (String)

@@ -17,45 +17,53 @@ func dataSourceStudioFlowWidgetRecordVoicemail() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"json": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source",
 			},
 			"transitions": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The next widget(s) to transition to after this widget",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"hangup": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when the caller hangs up during recording",
 						},
 						"no_audio": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when no audio is detected during recording",
 						},
 						"recording_complete": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when the voicemail recording completes successfully",
 						},
 					},
 				},
 			},
 			"offset": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The position of this widget in the Studio visual editor",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"x": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The x-axis position. Defaults to 0",
 						},
 						"y": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The y-axis position. Defaults to 0",
 						},
 					},
 				},
@@ -64,6 +72,7 @@ func dataSourceStudioFlowWidgetRecordVoicemail() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The unique name of this widget within the flow, used to reference it in transitions",
 			},
 			"trim": {
 				Type:     schema.TypeString,
@@ -75,10 +84,12 @@ func dataSourceStudioFlowWidgetRecordVoicemail() *schema.Resource {
 						"do-not-trim",
 					}, false),
 				),
+				Description: "Whether to trim silence from the recording. Valid values: `trim-silence`, `do-not-trim`",
 			},
 			"transcribe": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Whether to transcribe the voicemail recording",
 			},
 			"transcription_callback_url": {
 				Type:     schema.TypeString,
@@ -87,6 +98,7 @@ func dataSourceStudioFlowWidgetRecordVoicemail() *schema.Resource {
 					utils.StudioFlowWidgetLiquidTemplateValidation(),
 					validation.IsURLWithHTTPorHTTPS,
 				),
+				Description: "The HTTP/HTTPS URL to receive the transcription result",
 			},
 			"play_beep": {
 				Type:     schema.TypeString,
@@ -98,6 +110,7 @@ func dataSourceStudioFlowWidgetRecordVoicemail() *schema.Resource {
 						"false",
 					}, false),
 				),
+				Description: "Whether to play a beep before starting the recording. Valid values: `true`, `false`",
 			},
 			"recording_status_callback_url": {
 				Type:     schema.TypeString,
@@ -106,19 +119,23 @@ func dataSourceStudioFlowWidgetRecordVoicemail() *schema.Resource {
 					utils.StudioFlowWidgetLiquidTemplateValidation(),
 					validation.IsURLWithHTTPorHTTPS,
 				),
+				Description: "The HTTP/HTTPS URL to receive recording status callback events",
 			},
 			"finish_on_key": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The DTMF key that ends the recording (e.g. `#`)",
 			},
 			"timeout": {
-				Type:     schema.TypeInt,
-				Optional: true,
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Description: "The number of seconds of silence before the recording automatically stops",
 			},
 			"max_length": {
 				Type:         schema.TypeInt,
 				Optional:     true,
 				ValidateFunc: validation.IntBetween(1, 14400),
+				Description:  "The maximum recording length in seconds (1–14400)",
 			},
 		},
 	}

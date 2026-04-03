@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Task Queues"
+page_title: "twilio_taskrouter_task_queues Data Source - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_task_queues Data Source
@@ -21,40 +23,44 @@ output "task_queues" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `workspace_sid` - (Mandatory) The SID of the workspace the task queues are associated with
+- `workspace_sid` (String) The SID of the TaskRouter workspace
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `workspace_sid`)
-- `workspace_sid` - The SID of the workspace the task queues are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the task queues
-- `task_queues` - A list of `task_queue` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the task queues
+- `id` (String) The ID of this resource.
+- `task_queues` (List of Object) A list of task queues in the workspace (see [below for nested schema](#nestedatt--task_queues))
 
-A `task_queue` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the task queue
-- `friendly_name` - The name of the task queue
-- `task_order` - How TaskRouter will assign workers tasks on the queue
-- `assignment_activity_name` - The assignment activity name for the task queue
-- `assignment_activity_sid` - The assignment activity SID for the task queue
-- `reservation_activity_name` - The reservation activity name for the task queue
-- `reservation_activity_sid` - The reservation activity SID for the task queue
-- `target_workers` - Worker selection criteria for any tasks that enter the task queue
-- `max_reserved_workers` - The max number of workers to create a reservation for
-- `date_created` - The date in RFC3339 format that the task queue was created
-- `date_updated` - The date in RFC3339 format that the task queue was updated
-- `url` - The URL of the task queue
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving task queues
+<a id="nestedatt--task_queues"></a>
+### Nested Schema for `task_queues`
+
+Read-Only:
+
+- `assignment_activity_name` (String)
+- `assignment_activity_sid` (String)
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `max_reserved_workers` (Number)
+- `reservation_activity_name` (String)
+- `reservation_activity_sid` (String)
+- `sid` (String)
+- `target_workers` (String)
+- `task_order` (String)
+- `url` (String)

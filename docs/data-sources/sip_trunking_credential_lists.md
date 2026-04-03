@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Trunking Credential Lists"
+page_title: "twilio_sip_trunking_credential_lists Data Source - twilio"
 subcategory: "SIP Trunking"
+description: |-
+  
 ---
 
 # twilio_sip_trunking_credential_lists Data Source
@@ -21,33 +23,37 @@ output "credential_lists" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `trunk_sid` - (Mandatory) The SID of the SIP trunk the credential lists are associated with
+- `trunk_sid` (String) The SID of the SIP trunk to retrieve credential lists for
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `trunk_sid`)
-- `trunk_sid` - The SID of the SIP trunk the credential lists are associated with (Same as `id`)
-- `account_sid` - The account SID associated with the credential lists
-- `credential_lists` - A list of `credential_list` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the SIP trunk credential lists
+- `credential_lists` (List of Object) A list of credential lists associated with the SIP trunk (see [below for nested schema](#nestedatt--credential_lists))
+- `id` (String) The ID of this resource.
 
-A `credential_list` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the credential list
-- `friendly_name` - The friendly name of the credential list
-- `date_created` - The date in RFC3339 format that the credential list was created
-- `date_updated` - The date in RFC3339 format that the credential list was updated
-- `url` - The URL of the credential list resource
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving credential lists
+<a id="nestedatt--credential_lists"></a>
+### Nested Schema for `credential_lists`
+
+Read-Only:
+
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `sid` (String)
+- `url` (String)

@@ -50,35 +50,41 @@ func resourceTwimlApp() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this TwiML application by Twilio",
 			},
 			"account_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.AccountSidValidation(),
+				Description:  "The SID of the account that owns this TwiML application. Changing this forces a new resource",
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "A human-readable label for the TwiML application",
 			},
 			"messaging": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Computed: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "A block to configure messaging settings for the TwiML application",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"status_callback_url": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+							Description:  "The URL to call for messaging status callback events",
 						},
 						"fallback_url": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+							Description:  "The URL to call when an error occurs retrieving or executing the TwiML for incoming messages",
 						},
 						"fallback_method": {
 							Type:     schema.TypeString,
@@ -88,11 +94,13 @@ func resourceTwimlApp() *schema.Resource {
 								"GET",
 								"POST",
 							}, false),
+							Description: "The HTTP method used to call the messaging fallback URL. Valid values are `GET` or `POST`. Defaults to `POST`",
 						},
 						"url": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+							Description:  "The URL to call when the application receives an incoming message",
 						},
 						"method": {
 							Type:     schema.TypeString,
@@ -102,26 +110,30 @@ func resourceTwimlApp() *schema.Resource {
 								"GET",
 								"POST",
 							}, false),
+							Description: "The HTTP method used to call the messaging URL. Valid values are `GET` or `POST`. Defaults to `POST`",
 						},
 					},
 				},
 			},
 			"voice": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Computed: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "A block to configure voice settings for the TwiML application",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"caller_id_lookup": {
-							Type:     schema.TypeBool,
-							Optional: true,
-							Default:  false,
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Default:     false,
+							Description: "Whether to perform a caller ID lookup on incoming voice calls. Defaults to `false`",
 						},
 						"fallback_url": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+							Description:  "The URL to call when an error occurs retrieving or executing the TwiML for incoming voice calls",
 						},
 						"fallback_method": {
 							Type:     schema.TypeString,
@@ -131,11 +143,13 @@ func resourceTwimlApp() *schema.Resource {
 								"GET",
 								"POST",
 							}, false),
+							Description: "The HTTP method used to call the voice fallback URL. Valid values are `GET` or `POST`. Defaults to `POST`",
 						},
 						"url": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+							Description:  "The URL to call when the application receives an incoming voice call",
 						},
 						"method": {
 							Type:     schema.TypeString,
@@ -145,11 +159,13 @@ func resourceTwimlApp() *schema.Resource {
 								"GET",
 								"POST",
 							}, false),
+							Description: "The HTTP method used to call the voice URL. Valid values are `GET` or `POST`. Defaults to `POST`",
 						},
 						"status_callback_url": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+							Description:  "The URL to call for voice status callback events",
 						},
 						"status_callback_method": {
 							Type:     schema.TypeString,
@@ -159,17 +175,20 @@ func resourceTwimlApp() *schema.Resource {
 								"GET",
 								"POST",
 							}, false),
+							Description: "The HTTP method used to call the voice status callback URL. Valid values are `GET` or `POST`. Defaults to `POST`",
 						},
 					},
 				},
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the TwiML application was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the TwiML application was last updated, in RFC 3339 format",
 			},
 		},
 	}

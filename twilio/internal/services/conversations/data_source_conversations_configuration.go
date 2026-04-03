@@ -20,28 +20,34 @@ func dataSourceConversationsConfiguration() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this configuration",
 			},
 			"default_service_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the default conversations service",
 			},
 			"default_closed_timer": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The default ISO 8601 duration after which a conversation will be automatically closed",
 			},
 			"default_inactive_timer": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The default ISO 8601 duration after which a conversation will be marked as inactive",
 			},
 			"default_messaging_service_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the default messaging service",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the configuration resource",
 			},
 		},
 	}

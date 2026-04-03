@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Credentials"
+page_title: "twilio_sip_credentials Data Source - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_credentials Data Source
@@ -20,35 +22,36 @@ output "credentials" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The SID of the account the credentials are associated with
-- `credential_list_sid` - (Mandatory) The SID of the credential list the credentials are associated with
+- `account_sid` (String) The SID of the account that owns the SIP credentials
+- `credential_list_sid` (String) The SID of the credential list to retrieve credentials from
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource in the format `account_sid/credential_list_sid`
-- `account_sid` - The SID of the account the credentials are associated with
-- `credential_list_sid` - The SID of the credential list the credentials are associated with
-- `credentials` - A list of `credential` blocks as documented below
+### Read-Only
 
----
+- `credentials` (List of Object) A list of SIP credentials in the credential list (see [below for nested schema](#nestedatt--credentials))
+- `id` (String) The ID of this resource.
 
-A `credential` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the credential
-- `username` - The credential username
-- `date_created` - The date in RFC3339 format that the credential was created
-- `date_updated` - The date in RFC3339 format that the credential was updated
+Optional:
 
-!> For security reasons, the API does not return the password so cannot be returned in the data lookup
+- `read` (String)
 
-## Timeouts
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedatt--credentials"></a>
+### Nested Schema for `credentials`
 
-- `read` - (Defaults to 10 minutes) Used when retrieving the credentials
+Read-Only:
+
+- `date_created` (String)
+- `date_updated` (String)
+- `sid` (String)
+- `username` (String)

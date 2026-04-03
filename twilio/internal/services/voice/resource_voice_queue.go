@@ -48,41 +48,49 @@ func resourceVoiceQueue() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this queue by Twilio",
 			},
 			"account_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.AccountSidValidation(),
+				Description:  "The SID of the account to create the queue in. Changing this forces a new resource",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringLenBetween(1, 64),
+				Description:  "A human-readable label for the queue (1–64 characters)",
 			},
 			"max_size": {
 				Type:         schema.TypeInt,
 				Optional:     true,
 				Default:      100,
 				ValidateFunc: validation.IntBetween(1, 5000),
+				Description:  "The maximum number of calls that can be in the queue at one time (1–5000). Defaults to `100`",
 			},
 			"average_wait_time": {
-				Type:     schema.TypeInt,
-				Computed: true,
+				Type:        schema.TypeInt,
+				Computed:    true,
+				Description: "The average wait time of calls currently in the queue, in seconds",
 			},
 			"current_size": {
-				Type:     schema.TypeInt,
-				Computed: true,
+				Type:        schema.TypeInt,
+				Computed:    true,
+				Description: "The current number of calls in the queue",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the queue was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the queue was last updated, in RFC 3339 format",
 			},
 		},
 	}

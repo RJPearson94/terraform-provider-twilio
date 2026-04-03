@@ -45,38 +45,45 @@ func resourceSIPDomainIPAccessControlListMapping() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this SIP domain IP access control list mapping by Twilio",
 			},
 			"account_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.AccountSidValidation(),
+				Description:  "The SID of the account that owns this SIP domain IP access control list mapping. Changing this forces a new resource",
 			},
 			"domain_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.SIPDomainSidValidation(),
+				Description:  "The SID of the SIP domain to map the IP access control list to. Changing this forces a new resource",
 			},
 			"ip_access_control_list_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.SIPIPAccessControlListSidValidation(),
+				Description:  "The SID of the IP access control list to map to the domain for call authentication. Changing this forces a new resource",
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A human-readable label for the SIP domain IP access control list mapping",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP domain IP access control list mapping was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP domain IP access control list mapping was last updated, in RFC 3339 format",
 			},
 		},
 	}

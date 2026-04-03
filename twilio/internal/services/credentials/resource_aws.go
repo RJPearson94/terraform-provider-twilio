@@ -29,8 +29,9 @@ func resourceCredentialsAWS() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this AWS credential by Twilio",
 			},
 			"account_sid": {
 				Type:         schema.TypeString,
@@ -38,33 +39,40 @@ func resourceCredentialsAWS() *schema.Resource {
 				ForceNew:     true,
 				Computed:     true,
 				ValidateFunc: utils.AccountSidValidation(),
+				Description:  "The SID of the account that owns this AWS credential. Changing this forces a new resource",
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "A human-readable label for the AWS credential",
 			},
 			"aws_access_key_id": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "The AWS access key ID used to authenticate with AWS services. Changing this forces a new resource",
 			},
 			"aws_secret_access_key": {
-				Type:      schema.TypeString,
-				Required:  true,
-				ForceNew:  true,
-				Sensitive: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Sensitive:   true,
+				Description: "The AWS secret access key used to authenticate with AWS services. Sensitive -- will not be shown in logs or plans. Changing this forces a new resource",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the AWS credential was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the AWS credential was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the AWS credential resource",
 			},
 		},
 	}

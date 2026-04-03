@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Gather input on call"
+page_title: "twilio_studio_flow_widget_gather_input_on_call Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_gather_input_on_call Data Source
@@ -67,49 +69,50 @@ data "twilio_studio_flow_widget_gather_input_on_call" "gather_input_on_call" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the gather input on call widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `finish_on_key` - (Optional) The keypress which will cause the data to be submitted
-- `gather_language` - (Optional) The language which the NLU engine will try to interpret
-- `hints` - (Optional) A list of hints
-- `language` - (Optional) The language to use when speaking the message. This argument conflicts with `play`
-- `loop` - (Optional) The number of times to say/ play content
-- `number_of_digits` - (Optional) The number of digits to wait for before submitting the data
-- `play` - (Optional) The URL of media content to play. This value can be either a liquid template or a URL
-- `profanity_filter` - (Optional) Whether profanity should be redacted from the speech results. This value can be either a liquid template or the string `true` or `false`
-- `say` - (Optional) The text to say
-- `speech_model` - (Optional) The NLU model that should be used to interpret the speech. This value can be either a liquid template or the string `default`, `numbers_and_commands` or `phone_call`
-- `speech_timeout` - (Optional) The amount of time in seconds of silence to wait for before timing out. This value can be the string `auto` or a positive integer as a string
-- `stop_gather` - (Optional) Whether Twilio should listen for a keypress to stop capturing digits from the caller
-- `timeout` - (Optional) The amount of time in seconds to wait for the caller to press a key
-- `voice` - (Optional) The voice to use when speaking the message. This argument conflicts with `play`
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
 
-~> Exactly one of the following arguments: `play` or `say` must be specified
-~> Due to data type and validation restrictions liquid templates are not supported for the `loop`, `number_of_digits`, `stop_gather` and `timeout` arguments. Please see the widget documentation to determine whether other arguments support liquid templates
+### Optional
 
----
+- `finish_on_key` (String) The DTMF key that signals the end of digit input (e.g. `#`)
+- `gather_language` (String) The language for automatic speech recognition (e.g. `en-US`)
+- `hints` (List of String) A list of words or phrases to improve speech recognition accuracy
+- `language` (String) The language for text-to-speech when using `say`. Conflicts with `play`
+- `loop` (Number) How many times to repeat the prompt before timing out. Use 0 for infinite loop
+- `number_of_digits` (Number) The exact number of DTMF digits to collect before automatically submitting
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `play` (String) URL of the audio file to play as a prompt. Exactly one of `say` or `play` must be set
+- `profanity_filter` (String) Whether to filter profanity from speech recognition results. Valid values: `true`, `false`
+- `say` (String) Text to speak to the caller as a prompt using text-to-speech. Exactly one of `say` or `play` must be set
+- `speech_model` (String) The speech recognition model to use. Valid values: `default`, `numbers_and_commands`, `phone_call`
+- `speech_timeout` (String) The duration of silence (in seconds) before speech recognition ends, or `auto` for automatic detection
+- `stop_gather` (Boolean) Whether to allow a keypress to stop the current audio and submit the gathered input
+- `timeout` (Number) The number of seconds to wait for a DTMF keypress before timing out (1–30)
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
+- `voice` (String) The text-to-speech voice to use when using `say` (e.g. `alice`). Conflicts with `play`
 
-A `transitions` block supports the following:
+### Read-Only
 
-- `keypress` - (Optional) The widget to transition to when the data is collected via key presses
-- `speech` - (Optional) The widget to transition to when the data is collected via speech
-- `timeout` - (Optional) The widget to transition to when the timeout limit has been reached
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
----
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-An `offset` block supports the following:
+Optional:
 
-- `x` - (Optional) The x coordinate to display the gather input on call widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the gather input on call widget in the Studio console. The default value is `0`
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
-## Attributes Reference
 
-The following attributes are exported:
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
 
-- `id` - The name of the gather input on call widget
-- `json` - The JSON state definition for the gather input on call widget
+Optional:
+
+- `keypress` (String) The name of the next widget when the caller presses a key (DTMF input)
+- `speech` (String) The name of the next widget when speech input is detected
+- `timeout` (String) The name of the next widget when the gather times out without input

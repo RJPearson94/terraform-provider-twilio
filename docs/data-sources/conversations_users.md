@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Users"
+page_title: "twilio_conversations_users Data Source - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_users Data Source
@@ -21,38 +23,42 @@ output "users" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the users are associated with
+- `service_sid` (String) The SID of the conversations service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `service_sid`)
-- `account_sid` - The SID of the account the users are associated with
-- `service_sid` - The SID of the service the users are associated with (Same as the `id`)
-- `users` - A list of `user` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these users
+- `id` (String) The ID of this resource.
+- `users` (List of Object) The list of users (see [below for nested schema](#nestedatt--users))
 
-A `user` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the user
-- `identity` - The identity of the user
-- `friendly_name` - The friendly name of the user
-- `role_sid` - The SID of the role associated with the user
-- `attributes` - JSON string of user attributes
-- `is_notifiable` - Whether the user can be reached by push notification
-- `is_online` - Whether the user has an active connection to the service
-- `date_created` - The date in RFC3339 format that the user was created
-- `date_updated` - The date in RFC3339 format that the user was updated
-- `url` - The URL of the user
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving users
+<a id="nestedatt--users"></a>
+### Nested Schema for `users`
+
+Read-Only:
+
+- `attributes` (String)
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `identity` (String)
+- `is_notifiable` (Boolean)
+- `is_online` (Boolean)
+- `role_sid` (String)
+- `sid` (String)
+- `url` (String)

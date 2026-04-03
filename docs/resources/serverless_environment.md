@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Environment"
+page_title: "twilio_serverless_environment Resource - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_environment Resource
@@ -25,37 +27,37 @@ resource "twilio_serverless_environment" "environment" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The serverless service SID to associate the environment with. Changing this forces a new resource to be created
-- `unique_name` - (Mandatory) The unique name of the environment. The length of the string must be between `1` and `100` characters (inclusive)
-- `domain_suffix` - (Optional) The domain suffix of the environment. The length of the string must be between `1` and `16` characters (inclusive)
+- `service_sid` (String) The SID of the Serverless service. Changing this forces a new resource
+- `unique_name` (String) A unique, developer-assigned name for the environment. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `domain_suffix` (String) A URL-friendly suffix appended to the environment's domain name. Changing this forces a new resource
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the environment (Same as the `sid`)
-- `sid` - The SID of the environment (Same as the `id`)
-- `account_sid` - The account SID of the environment is deployed into
-- `service_sid` - The service SID of the environment is managed under
-- `build_sid` - The build SID of the current build deployed to the environment
-- `unique_name` - The unique name of the environment
-- `domain_suffix` - The domain suffix of the environment
-- `domain_name` - The domain name of the environment
-- `date_created` - The date in RFC3339 format that the environment was created
-- `date_updated` - The date in RFC3339 format that the environment was updated
-- `url` - The URL of the environment
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this environment
+- `build_sid` (String) The SID of the build currently deployed to this environment
+- `date_created` (String) The date and time the environment was created, in RFC 3339 format
+- `date_updated` (String) The date and time the environment was last updated, in RFC 3339 format
+- `domain_name` (String) The fully qualified domain name for this environment
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this environment by Twilio
+- `url` (String) The absolute URL of the environment resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the environment
-- `read` - (Defaults to 5 minutes) Used when retrieving the environment
-- `delete` - (Defaults to 10 minutes) Used when deleting the environment
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
 
 ## Import
 

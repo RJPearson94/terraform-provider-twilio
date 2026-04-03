@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Trigger"
+page_title: "twilio_studio_flow_widget_trigger Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_trigger Data Source
@@ -60,33 +62,37 @@ data "twilio_studio_flow_definition" "definition" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the trigger widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
 
----
+### Optional
 
-A `transitions` block supports the following:
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
 
-- `incoming_call` - (Optional) The widget to transition to when an incoming call is received
-- `incoming_message` - (Optional) The widget to transition to when an incoming message is received
-- `incoming_parent` - (Optional) The widget to transition to when the (sub)flow is called by another Studio flow
-- `incoming_request` - (Optional) The widget to transition to when an incoming request is received
+### Read-Only
 
----
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
-An `offset` block supports the following:
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-- `x` - (Optional) The x coordinate to display the trigger widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the trigger widget in the Studio console. The default value is `0`
+Optional:
 
-## Attributes Reference
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
-The following attributes are exported:
 
-- `id` - The name of the trigger widget
-- `json` - The JSON state definition for the trigger widget
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
+
+Optional:
+
+- `incoming_call` (String) The name of the next widget when the flow is triggered by an incoming call
+- `incoming_message` (String) The name of the next widget when the flow is triggered by an incoming message
+- `incoming_parent` (String) The name of the next widget when the flow is triggered by a parent flow
+- `incoming_request` (String) The name of the next widget when the flow is triggered by an incoming REST API request

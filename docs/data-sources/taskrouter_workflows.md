@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Workflows"
+page_title: "twilio_taskrouter_workflows Data Source - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_workflows Data Source
@@ -21,39 +23,43 @@ output "workflows" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `workspace_sid` - (Mandatory) The SID of the workspace the workflows are associated with
-- `friendly_name` - (Optional) Search for all workflows which have the friendly name specified
+- `workspace_sid` (String) The SID of the TaskRouter workspace
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `friendly_name` (String) Filter workflows by friendly name
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `workspace_sid`)
-- `workspace_sid` - The SID of the workspace the workflows are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the workflows
-- `workflows` - A list of `workflow` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the workflows
+- `id` (String) The ID of this resource.
+- `workflows` (List of Object) A list of workflows in the workspace (see [below for nested schema](#nestedatt--workflows))
 
-A `workflow` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the workflow
-- `friendly_name` - The name of the workflow
-- `configuration` - JSON string of workflow configuration
-- `assignment_callback_url` - Assignment callback URL
-- `fallback_assignment_callback_url` - Fallback assignment callback URL
-- `task_reservation_timeout` - Maximum time the task can be unassigned for before it times out
-- `document_content_type` - The MIME type of the document
-- `date_created` - The date in RFC3339 format that the workflow was created
-- `date_updated` - The date in RFC3339 format that the workflow was updated
-- `url` - The URL of the workflow
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving workflows
+<a id="nestedatt--workflows"></a>
+### Nested Schema for `workflows`
+
+Read-Only:
+
+- `assignment_callback_url` (String)
+- `configuration` (String)
+- `date_created` (String)
+- `date_updated` (String)
+- `document_content_type` (String)
+- `fallback_assignment_callback_url` (String)
+- `friendly_name` (String)
+- `sid` (String)
+- `task_reservation_timeout` (Number)
+- `url` (String)

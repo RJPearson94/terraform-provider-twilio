@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Verify Webhook"
+page_title: "twilio_verify_webhook Resource - twilio"
 subcategory: "Verify"
+description: |-
+  
 ---
 
 # twilio_verify_webhook Resource
@@ -24,44 +26,40 @@ resource "twilio_verify_webhook" "webhook" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `event_types` - (Mandatory) The list of events which trigger a webhook call. Valid values are `*`, `factor.created`, `factor.verified`, `factor.deleted`, `challenge.approved` or `challenge.denied`
-- `friendly_name` - (Mandatory) The friendly name of the webhook
-- `service_sid` - (Mandatory) The service SID to associate the webhook with. Changing this forces a new resource to be created
-- `webhook_url` - (Mandatory) The webhook URL
-  ~> Webhook URL must use HTTPS
-- `status` - (Optional) The webhook status. Valid values are `enabled` or `disabled`. The default value is `enabled`
-- `version` - (Optional) The webhook version. Valid values are `v1` or `v2`. The default value is `v2`
+- `event_types` (List of String) The list of events that trigger the webhook. Valid values: `*`, `factor.created`, `factor.verified`, `factor.deleted`, `challenge.approved`, `challenge.denied`
+- `friendly_name` (String) A human-readable label for the webhook
+- `service_sid` (String) The SID of the Verify service. Changing this forces a new resource
+- `webhook_url` (String) The HTTPS URL that Twilio calls when an event occurs
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `status` (String) The status of the webhook. Valid values: `enabled`, `disabled`. Defaults to `enabled`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `version` (String) The webhook version. Valid values: `v1`, `v2`. Defaults to `v2`
 
-- `id` - The ID of the webhook (Same as the `sid`)
-- `sid` - The SID of the webhook (Same as the `id`)
-- `account_sid` - The account SID the webhook is associated with
-- `service_sid` - The service SID the webhook is associated with
-- `friendly_name` - The friendly name of the webhook
-- `event_types` - The list of events which trigger a webhook call
-- `status` - The webhook status
-- `version` - The webhook version.
-- `webhook_url` - The webhook URL
-- `webhook_method` - The HTTP method to trigger the webhook
-- `date_created` - The date in RFC3339 format that the webhook was created
-- `date_updated` - The date in RFC3339 format that the webhook was updated
-- `url` - The URL of the webhook
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this webhook
+- `date_created` (String) The date and time the webhook was created, in RFC 3339 format
+- `date_updated` (String) The date and time the webhook was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this webhook by Twilio
+- `url` (String) The absolute URL of the webhook resource
+- `webhook_method` (String) The HTTP method used when calling the webhook URL
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the webhook
-- `update` - (Defaults to 10 minutes) Used when updating the webhook
-- `read` - (Defaults to 5 minutes) Used when retrieving the webhook
-- `delete` - (Defaults to 10 minutes) Used when deleting the webhook
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

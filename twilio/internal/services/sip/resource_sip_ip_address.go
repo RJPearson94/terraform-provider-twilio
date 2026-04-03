@@ -49,43 +49,51 @@ func resourceSIPIPAddress() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this SIP IP address by Twilio",
 			},
 			"account_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.AccountSidValidation(),
+				Description:  "The SID of the account that owns this SIP IP address. Changing this forces a new resource",
 			},
 			"ip_access_control_list_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.SIPIPAccessControlListSidValidation(),
+				Description:  "The SID of the IP access control list that this IP address belongs to. Changing this forces a new resource",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "A human-readable label for the SIP IP address",
 			},
 			"ip_address": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.IsIPAddress,
+				Description:  "The IP address to allow or deny in the access control list",
 			},
 			"cidr_length_prefix": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  32,
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     32,
+				Description: "The CIDR prefix length for the IP address range. Defaults to `32`",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP IP address was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP IP address was last updated, in RFC 3339 format",
 			},
 		},
 	}

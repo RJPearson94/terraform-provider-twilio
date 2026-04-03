@@ -49,17 +49,20 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this SIP trunk by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this SIP trunk",
 			},
 			"cnam_lookup_enabled": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Whether CNAM (Caller Name) lookup is enabled for the trunk. Defaults to `false`",
 			},
 			"disaster_recovery_method": {
 				Type:     schema.TypeString,
@@ -68,26 +71,31 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 					"GET",
 					"POST",
 				}, false),
+				Description: "The HTTP method used to call the disaster recovery URL. Valid values are `GET` or `POST`",
 			},
 			"disaster_recovery_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL to call in the event of a disaster recovery failover",
 			},
 			"domain_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The unique domain name for the SIP trunk",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.StringLenBetween(0, 64),
+				Description:  "A human-readable label for the SIP trunk (up to 64 characters)",
 			},
 			"recording": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Computed: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "A block to configure recording settings for the SIP trunk",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"mode": {
@@ -101,6 +109,7 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 								"record-from-ringing-dual",
 								"record-from-answer-dual",
 							}, false),
+							Description: "The recording mode for the SIP trunk. Valid values are `do-not-record`, `record-from-ringing`, `record-from-answer`, `record-from-ringing-dual`, or `record-from-answer-dual`. Defaults to `do-not-record`",
 						},
 						"trim": {
 							Type:     schema.TypeString,
@@ -110,14 +119,16 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 								"trim-silence",
 								"do-not-trim",
 							}, false),
+							Description: "Whether to trim silence from recordings. Valid values are `trim-silence` or `do-not-trim`. Defaults to `do-not-trim`",
 						},
 					},
 				},
 			},
 			"secure": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Whether secure SIP (SIPS) is required for the trunk. Defaults to `false`",
 			},
 			"transfer_mode": {
 				Type:     schema.TypeString,
@@ -128,29 +139,35 @@ func resourceSIPTrunkingTrunk() *schema.Resource {
 					"sip-only",
 					"disable-all",
 				}, false),
+				Description: "The call transfer mode for the SIP trunk. Valid values are `enable-all`, `sip-only`, or `disable-all`. Defaults to `disable-all`",
 			},
 			"auth_type": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The authentication type configured for the SIP trunk",
 			},
 			"auth_type_set": {
-				Type:     schema.TypeList,
-				Computed: true,
+				Type:        schema.TypeList,
+				Computed:    true,
+				Description: "The set of authentication types configured for the SIP trunk",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP trunk was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP trunk was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the SIP trunk resource",
 			},
 		},
 	}

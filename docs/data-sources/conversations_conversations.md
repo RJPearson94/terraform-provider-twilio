@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Conversations"
+page_title: "twilio_conversations_conversations Data Source - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_conversations Data Source
@@ -21,45 +23,50 @@ output "conversations" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the conversations are associated with
+- `service_sid` (String) The SID of the conversations service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `service_sid`)
-- `account_sid` - The SID of the account the conversations are associated with
-- `service_sid` - The SID of the service the conversations are associated with (Same as the `id`)
-- `conversations` - A list of `conversation` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these conversations
+- `conversations` (List of Object) The list of conversations (see [below for nested schema](#nestedatt--conversations))
+- `id` (String) The ID of this resource.
 
-A `conversation` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the conversation
-- `unique_name` - The unique name of the conversation
-- `friendly_name` - The friendly name of the conversation
-- `attributes` - JSON string of attributes
-- `messaging_service_sid` - The messaging service SID associated with the conversation
-- `state` - The state of the conversation
-- `timers` - A `timer` block as documented below
-- `date_created` - The date in RFC3339 format that the conversation was created
-- `date_updated` - The date in RFC3339 format that the conversation was updated
-- `url` - The URL of the conversation
+Optional:
 
----
+- `read` (String)
 
-A `timer` block supports the following:
 
-- `date_closed` - The date in RFC3339 format that the conversation will close
-- `date_inactive` - The date in RFC3339 format that the conversation will be marked as inactive
+<a id="nestedatt--conversations"></a>
+### Nested Schema for `conversations`
 
-## Timeouts
+Read-Only:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+- `attributes` (String)
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `messaging_service_sid` (String)
+- `sid` (String)
+- `state` (String)
+- `timers` (List of Object) (see [below for nested schema](#nestedobjatt--conversations--timers))
+- `unique_name` (String)
+- `url` (String)
 
-- `read` - (Defaults to 10 minutes) Used when retrieving conversations
+<a id="nestedobjatt--conversations--timers"></a>
+### Nested Schema for `conversations.timers`
+
+Read-Only:
+
+- `date_closed` (String)
+- `date_inactive` (String)

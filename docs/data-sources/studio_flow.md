@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow"
+page_title: "twilio_studio_flow Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow Data Source
@@ -21,30 +23,34 @@ output "definition" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the Studio flow
+- `sid` (String) The SID of the Studio flow to read
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the Studio flow (Same as the `sid`)
-- `sid` - The SID of the Studio flow (Same as the `id`)
-- `friendly_name` - The name of the Studio flow
-- `definition` - The flow definition JSON
-- `status` - The status of the Studio flow
-- `revision` - The revision number of the Studio flow
-- `valid` - Whether the Studio flow is valid
-- `date_created` - The date in RFC3339 format that the Studio flow was created
-- `date_updated` - The date in RFC3339 format that the Studio flow was updated
-- `url` - The URL of the Studio flow
-- `webhook_url` - The webhook URL of the Studio flow
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this flow
+- `commit_message` (String) The description of the changes made in the current flow revision
+- `date_created` (String) The date and time the flow was created, in RFC 3339 format
+- `date_updated` (String) The date and time the flow was last updated, in RFC 3339 format
+- `definition` (String) A JSON string defining the flow structure
+- `friendly_name` (String) The human-readable label for the flow
+- `id` (String) The ID of this resource.
+- `revision` (Number) The current revision number of the flow
+- `status` (String) The lifecycle status of the flow. Either `draft` or `published`
+- `url` (String) The absolute URL of the flow resource
+- `valid` (Boolean) Whether the flow definition passed Twilio's validation checks
+- `webhook_url` (String) The webhook URL used to trigger this flow via the REST API
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the Studio flow
+Optional:
+
+- `read` (String)

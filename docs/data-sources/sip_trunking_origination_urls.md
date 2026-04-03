@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Trunking Origination URLs"
+page_title: "twilio_sip_trunking_origination_urls Data Source - twilio"
 subcategory: "SIP Trunking"
+description: |-
+  
 ---
 
 # twilio_sip_trunking_origination_urls Data Source
@@ -21,37 +23,41 @@ output "origination_urls" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `trunk_sid` - (Mandatory) The SID of the SIP trunk the origination URLs are associated with
+- `trunk_sid` (String) The SID of the SIP trunk to retrieve origination URLs for
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `trunk_sid`)
-- `trunk_sid` - The SID of the SIP trunk the origination URLs are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the origination URLs
-- `origination_urls` - A list of `origination_url` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the SIP trunk origination URLs
+- `id` (String) The ID of this resource.
+- `origination_urls` (List of Object) A list of origination URLs associated with the SIP trunk (see [below for nested schema](#nestedatt--origination_urls))
 
-An `origination_url` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the origination URL
-- `enabled` - Whether the origination URL is enabled
-- `friendly_name` - The friendly name of the origination URL
-- `priority` - The priority/ importance of the origination URL
-- `sip_url` - The SIP address to route origination calls to
-- `weight` - The weight/ share which is used to determine where the traffic is routed with origination URL of the same priority
-- `date_created` - The date in RFC3339 format that the origination URL was created
-- `date_updated` - The date in RFC3339 format that the origination URL was updated
-- `url` - The URL of the origination URL resource
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving origination URLs
+<a id="nestedatt--origination_urls"></a>
+### Nested Schema for `origination_urls`
+
+Read-Only:
+
+- `date_created` (String)
+- `date_updated` (String)
+- `enabled` (Boolean)
+- `friendly_name` (String)
+- `priority` (Number)
+- `sid` (String)
+- `sip_url` (String)
+- `url` (String)
+- `weight` (Number)

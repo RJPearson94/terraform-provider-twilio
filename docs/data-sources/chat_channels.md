@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Chat Channels"
+page_title: "twilio_chat_channels Data Source - twilio"
 subcategory: "Programmable Chat"
+description: |-
+  
 ---
 
 # twilio_chat_channels Data Source
@@ -23,39 +25,43 @@ output "channels" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the channels are associated with
+- `service_sid` (String) The SID of the Programmable Chat service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `service_sid`)
-- `account_sid` - The SID of the account the channels are associated with
-- `service_sid` - The SID of the service the channels are associated with (Same as the `id`)
-- `channels` - A list of `channel` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the channels
+- `channels` (List of Object) The list of channels (see [below for nested schema](#nestedatt--channels))
+- `id` (String) The ID of this resource.
 
-A `channel` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the channel
-- `friendly_name` - The friendly name of the channel
-- `unique_name` - The unique name of the channel
-- `attributes` - JSON string of channel attributes
-- `type` - The type of channel
-- `created_by` - Who created the chat channel
-- `members_count` - The number of members that are associated with the channel
-- `messages_count` - The number of messages that are associated with the channel
-- `date_created` - The date in RFC3339 format that the channel was created
-- `date_updated` - The date in RFC3339 format that the channel was updated
-- `url` - The URL of the channel
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving channels
+<a id="nestedatt--channels"></a>
+### Nested Schema for `channels`
+
+Read-Only:
+
+- `attributes` (String)
+- `created_by` (String)
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `members_count` (Number)
+- `messages_count` (Number)
+- `sid` (String)
+- `type` (String)
+- `unique_name` (String)
+- `url` (String)

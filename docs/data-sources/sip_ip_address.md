@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP IP Address"
+page_title: "twilio_sip_ip_address Data Source - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_ip_address Data Source
@@ -21,30 +23,30 @@ output "ip_address" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The SID of the account the IP address is associated with
-- `ip_access_control_list_sid` - (Mandatory) The SID of the IP access control list the IP address is associated with
-- `sid` - (Mandatory) The SID of the IP address
+- `account_sid` (String) The SID of the account that owns this SIP IP address
+- `ip_access_control_list_sid` (String) The SID of the IP access control list that this IP address belongs to
+- `sid` (String) The SID of the SIP IP address to look up
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the IP address (Same as the `sid`)
-- `sid` - The SID of the IP address (Same as the `id`)
-- `account_sid` - The account SID associated with the IP address
-- `ip_access_control_list_sid` - The IP access control list SID associated with the IP address
-- `friendly_name` - The friendly name of the IP address
-- `ip_address` - The IP address of the resource
-- `cidr_length_prefix` - The CIDR length prefix for the IP address
-- `date_created` - The date in RFC3339 format that the IP address was created
-- `date_updated` - The date in RFC3339 format that the IP address was updated
+### Read-Only
 
-## Timeouts
+- `cidr_length_prefix` (Number) The CIDR prefix length for the IP address range
+- `date_created` (String) The date and time the SIP IP address was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP IP address was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the SIP IP address
+- `id` (String) The ID of this resource.
+- `ip_address` (String) The IP address in the access control list
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the IP address details
+Optional:
+
+- `read` (String)

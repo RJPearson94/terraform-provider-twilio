@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Push Credentials (APN)"
+page_title: "twilio_conversations_push_credential_apn Resource - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_push_credential_apn Resource
@@ -19,39 +21,38 @@ resource "twilio_conversations_push_credential_apn" "push_credential_apn" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `friendly_name` - (Mandatory) The friendly name of the push credentials. The length of the string must be between `1` and `64` characters (inclusive)
-- `certificate` - (Mandatory) The APN certificate
-- `private_key` - (Mandatory) The APN private key
-- `sandbox` - (Optional) Whether to use the sandbox APN. The default value is `false`
+- `certificate` (String) The APN service certificate
+- `friendly_name` (String) A human-readable label for the APN push credential
+- `private_key` (String, Sensitive) The APN service private key
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `sandbox` (Boolean) Whether to use the APN sandbox environment. Defaults to `false`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the push credentials (Same as the `sid`)
-- `sid` - The SID of the push credentials (Same as the `id`)
-- `account_sid` - The account SID associated with the push credentials
-- `friendly_name` - The friendly name of the push credentials
-- `certificate` - The APN certificate
-- `private_key` - The APN private key
-- `type` - What notification service the credentials are for. The value will be `apn`
-- `sandbox` - Whether to use the sandbox APN
-- `date_created` - The date in RFC3339 format that the push credentials were created
-- `date_updated` - The date in RFC3339 format that the push credentials were updated
-- `url` - The URL of the push credentials
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this APN push credential
+- `date_created` (String) The date and time the APN push credential was created, in RFC 3339 format
+- `date_updated` (String) The date and time the APN push credential was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this APN push credential by Twilio
+- `type` (String) The type of push credential
+- `url` (String) The absolute URL of the APN push credential resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the push credentials
-- `update` - (Defaults to 10 minutes) Used when updating the push credentials
-- `read` - (Defaults to 5 minutes) Used when retrieving the push credentials
-- `delete` - (Defaults to 10 minutes) Used when deleting the push credentials
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

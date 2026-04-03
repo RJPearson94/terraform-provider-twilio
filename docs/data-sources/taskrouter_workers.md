@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Workers"
+page_title: "twilio_taskrouter_workers Data Source - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_workers Data Source
@@ -21,45 +23,49 @@ output "workers" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `workspace_sid` - (Mandatory) The SID of the workspace the workers are associated with
-- `activity_name` - (Optional) Search for all workers that have the activity specified
-- `activity_sid` - (Optional) Search for all workers that have the activity specified
-- `available` - (Optional) Search for all workers that have the specified available state
-- `friendly_name` - (Optional) Search for all workers that have the friendly name specified
-- `target_workers_expression` - (Optional) Search for all workers that match the expression specified
-- `task_queue_name` - (Optional) Search for all workers that are eligible to read from the task queue specified
-- `task_queue_sid` - (Optional) Search for all workers that are eligible to read from the task queue specified
+- `workspace_sid` (String) The SID of the TaskRouter workspace
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `activity_name` (String) Filter workers by activity name
+- `activity_sid` (String) Filter workers by activity SID
+- `available` (Boolean) Filter workers by availability
+- `friendly_name` (String) Filter workers by friendly name
+- `target_workers_expression` (String) Filter workers by a target workers expression
+- `task_queue_name` (String) Filter workers by task queue name
+- `task_queue_sid` (String) Filter workers by task queue SID
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `workspace_sid`)
-- `workspace_sid` - The SID of the workspace the workers are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the workers
-- `workers` - A list of `worker` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the workers
+- `id` (String) The ID of this resource.
+- `workers` (List of Object) A list of workers in the workspace (see [below for nested schema](#nestedatt--workers))
 
-A `worker` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the worker
-- `friendly_name` - The name of the worker
-- `attributes` - JSON string of worker attributes
-- `activity_sid` - Activity SID to be assigned to the worker
-- `activity_name` - Friendly name of the activity
-- `available` - Is the worker available to receive tasks
-- `date_created` - The date in RFC3339 format that the worker was created
-- `date_updated` - The date in RFC3339 format that the worker was updated
-- `date_status_changed` - The date in RFC3339 format that the worker status was changed
-- `url` - The URL of the worker
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving workers
+<a id="nestedatt--workers"></a>
+### Nested Schema for `workers`
+
+Read-Only:
+
+- `activity_name` (String)
+- `activity_sid` (String)
+- `attributes` (String)
+- `available` (Boolean)
+- `date_created` (String)
+- `date_status_changed` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `sid` (String)
+- `url` (String)

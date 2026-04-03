@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Chat Channel Member"
+page_title: "twilio_chat_channel_member Data Source - twilio"
 subcategory: "Programmable Chat"
+description: |-
+  
 ---
 
 # twilio_chat_channel_member Data Source
@@ -25,34 +27,34 @@ output "member" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the channel member is associated with
-- `channel_sid` - (Mandatory) The SID of the channel the member is associated with
-- `sid` - (Mandatory) The SID of the channel member
+- `channel_sid` (String) The SID of the chat channel
+- `service_sid` (String) The SID of the Programmable Chat service
+- `sid` (String) The SID of the channel member
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the channel member (Same as the `sid`)
-- `sid` - The SID of the channel member (Same as the `id`)
-- `account_sid` - The account SID associated with the channel member
-- `service_sid` - The service SID associated with the channel member
-- `channel_sid` - The channel SID associated with the channel member
-- `identity` - The identity of the chat member
-- `attributes` - JSON string of member attributes
-- `role_sid` - The role SID assignment to the member
-- `last_consumed_message_index` - The index of the last message read by the member
-- `last_consumption_timestamp` - The timestamp of the last message read by the member
-- `date_created` - The date in RFC3339 format that the channel member was created
-- `date_updated` - The date in RFC3339 format that the channel member was updated
-- `url` - The URL of the channel member
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this channel member
+- `attributes` (String) A JSON string of custom attributes for the channel member
+- `date_created` (String) The date and time the channel member was created, in RFC 3339 format
+- `date_updated` (String) The date and time the channel member was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `identity` (String) The unique identity string of the member
+- `last_consumed_message_index` (Number) The index of the last message the member has read in the channel
+- `last_consumption_timestamp` (String) The date and time the member last consumed a message, in RFC 3339 format
+- `role_sid` (String) The SID of the role assigned to the channel member
+- `url` (String) The absolute URL of the channel member resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the channel member
+Optional:
+
+- `read` (String)

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Flex Plugin Configuration"
+page_title: "twilio_flex_plugin_configuration Data Source - twilio"
 subcategory: "Flex"
+description: |-
+  
 ---
 
 # twilio_flex_plugin_configuration Data Source
@@ -23,43 +25,34 @@ output "plugin_configuration" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the plugin configuration
+- `sid` (String) The SID of the Flex plugin configuration to look up
 
-## Attributes Reference
+### Read-Only
 
-The following attributes are exported:
+- `account_sid` (String) The SID of the account that owns this plugin configuration
+- `archived` (Boolean) Whether the plugin configuration has been archived
+- `date_created` (String) The date and time the plugin configuration was created, in RFC 3339 format
+- `description` (String) A description of the plugin configuration
+- `id` (String) The ID of this resource.
+- `name` (String) The name of the plugin configuration
+- `plugins` (List of Object) A list of plugins included in this configuration (see [below for nested schema](#nestedatt--plugins))
+- `url` (String) The absolute URL of the plugin configuration resource
 
-- `id` - The ID of the plugin configuration (Same as the `sid`)
-- `sid` - The SID of the plugin configuration (Same as the `id`)
-- `account_sid` - The account SID associated with the plugin configuration
-- `name` - (Mandatory) The name of the plugin configuration
-- `description` - (Optional) The description of the plugin configuration
-- `plugins` - A `plugin` block as documented below
-- `archived` - Whether the plugin configuration has been archived
-- `date_created` - The date in RFC3339 format that the plugin configuration was created
-- `url` - The URL of the plugin configuration
+<a id="nestedatt--plugins"></a>
+### Nested Schema for `plugins`
 
----
+Read-Only:
 
-A `plugin` block supports the following:
-
-- `plugin_version_sid` - The SID of the plugin version associated with the configuration
-- `plugin_sid` - The SID of the plugin associated with the configuration
-- `plugin_url` - The URL of the hosted plugin bundle
-- `private` - Whether credentials are required to access the plugin
-- `unique_name` - The unique name of the plugin
-- `private` - Whether credentials are required to access the plugin
-- `phase` - The phase number of the plugin
-- `version` - The version of the plugin
-- `date_created` - The date in RFC3339 format that the plugin was created
-- `url` - The URL of the plugin
-
-## Timeouts
-
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `read` - (Defaults to 5 minutes) Used when retrieving the plugin configuration
+- `date_created` (String)
+- `phase` (Number)
+- `plugin_sid` (String)
+- `plugin_url` (String)
+- `plugin_version_sid` (String)
+- `private` (Boolean)
+- `unique_name` (String)
+- `url` (String)
+- `version` (String)

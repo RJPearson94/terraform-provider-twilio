@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Workspace Configuration"
+page_title: "twilio_taskrouter_workspace_configuration Resource - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_workspace_configuration Resource
@@ -72,29 +74,29 @@ resource "twilio_taskrouter_workspace_configuration" "workspace_configuration" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `workspace_sid` - (Mandatory) The SID of the workspace
-- `default_activity_sid` - (Optional) SID of the default activity
-- `timeout_activity_sid` - (Optional) SID of the timeout activity
+- `workspace_sid` (String) The SID of the TaskRouter workspace. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `default_activity_sid` (String) The SID of the default activity for the workspace
+- `timeout_activity_sid` (String) The SID of the timeout activity for the workspace
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the workspace (Same as the `workspace_sid`)
-- `workspace_sid` - The SID of the workspace (Same as the `id`)
-- `default_activity_name` - Name of the default activity
-- `default_activity_sid` - SID of the default activity
-- `timeout_activity_name` - Name of the timeout activity
-- `timeout_activity_sid` - SID of the timeout activity
+### Read-Only
 
-## Timeouts
+- `default_activity_name` (String) The name of the default activity for the workspace
+- `id` (String) The ID of this resource.
+- `timeout_activity_name` (String) The name of the timeout activity for the workspace
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the workspace configuration
-- `update` - (Defaults to 10 minutes) Used when updating the workspace configuration
-- `read` - (Defaults to 5 minutes) Used when retrieving the workspace configuration
+Optional:
+
+- `create` (String)
+- `read` (String)
+- `update` (String)

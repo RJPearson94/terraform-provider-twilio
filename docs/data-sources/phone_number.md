@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Phone Number"
+page_title: "twilio_phone_number Data Source - twilio"
 subcategory: "Phone Numbers"
+description: |-
+  
 ---
 
 # twilio_phone_number Data Source
@@ -20,85 +22,92 @@ output "phone_number" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The SID of the account the phone number is associated with
-- `sid` - (Mandatory) The SID of the phone number
+- `account_sid` (String) The SID of the account that owns this phone number
+- `sid` (String) The SID of the phone number to look up
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the phone number (Same as the `sid`)
-- `sid` - The SID of the phone number (Same as the `id`)
-- `account_sid` - The account SID the phone number is associated with
-- `friendly_name` - The friendly name of the phone number
-- `phone_number` - The phone number
-- `address_sid` - The address SID the phone number is associated with
-- `address_requirements` - The address requirements of the phone number
-- `beta` - Whether the phone number is in beta on the platform
-- `capabilities` - A `capability` block as documented below
-- `emergency_address_sid` - The emergency address SID the phone number is associated with
-- `emergency_status` - The emergency status of the phone number
-- `messaging` - A `messaging` block as documented below
-- `trunk_sid` - The trunk SID the phone number is associated with
-- `voice` - A `voice` block as documented below
-- `fax` - A `fax` block as documented below
-- `identity_sid` - The identity SID the phone number is associated with
-- `bundle_sid` - The bundle SID the phone number is associated with
-- `status` - The status of the phone number
-- `status_callback_url` - The URL to call on each status change
-- `status_callback_method` - The HTTP method which should be used to call the status callback URL
-- `origin` - The origin of the phone number
-- `date_created` - The date in RFC3339 format that the phone number was created
-- `date_updated` - The date in RFC3339 format that the phone number was updated
+### Read-Only
 
-!> the `voice` block will be defaulted to if the Twilio API doesn't return the voice receive mode field, this data isn't being returned since Programmable Fax was disabled on some accounts
+- `address_requirements` (String) The type of address required for this phone number
+- `address_sid` (String) The SID of the address associated with this phone number
+- `beta` (Boolean) Whether the phone number is a beta number new to the Twilio platform
+- `bundle_sid` (String) The SID of the regulatory compliance bundle associated with this phone number
+- `capabilities` (List of Object) The set of boolean capabilities of the phone number (see [below for nested schema](#nestedatt--capabilities))
+- `date_created` (String) The date and time the phone number was created, in RFC 3339 format
+- `date_updated` (String) The date and time the phone number was last updated, in RFC 3339 format
+- `emergency_address_sid` (String) The SID of the emergency address associated with this phone number
+- `emergency_status` (String) The emergency calling status of the phone number
+- `fax` (List of Object) The fax settings for the phone number (see [below for nested schema](#nestedatt--fax))
+- `friendly_name` (String) A human-readable label for the phone number
+- `id` (String) The ID of this resource.
+- `identity_sid` (String) The SID of the identity resource associated with this phone number
+- `messaging` (List of Object) The messaging settings for the phone number (see [below for nested schema](#nestedatt--messaging))
+- `origin` (String) The origin of the phone number, such as `twilio` or `hosted`
+- `phone_number` (String) The phone number in E.164 format
+- `status` (String) The current status of the phone number
+- `status_callback_method` (String) The HTTP method used to call the status callback URL
+- `status_callback_url` (String) The URL called for status callback events on the phone number
+- `trunk_sid` (String) The SID of the SIP trunk that handles voice calls for this phone number
+- `voice` (List of Object) The voice settings for the phone number (see [below for nested schema](#nestedatt--voice))
 
----
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-A `capability` block supports the following:
+Optional:
 
-- `fax` - Whether the phone number supports fax
-- `sms` - Whether the phone number supports SMS
-- `mms` - Whether the phone number supports MMS
-- `voice` - Whether the phone number supports voice
+- `read` (String)
 
----
 
-A `messaging` block supports the following:
+<a id="nestedatt--capabilities"></a>
+### Nested Schema for `capabilities`
 
-- `application_sid` - The application SID which should be called on each incoming message
-- `url` - The URL which should be called on each incoming message
-- `method` - The HTTP method which should be used to call the URL
-- `fallback_url` - The fallback URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method which should be used to call the fallback URL
+Read-Only:
 
----
+- `fax` (Boolean)
+- `mms` (Boolean)
+- `sms` (Boolean)
+- `voice` (Boolean)
 
-A `voice` block supports the following:
 
-- `application_sid` - The application SID which should be called on each incoming call
-- `url` - The URL which should be called on each incoming call
-- `method` - The HTTP method which should be used to call the URL
-- `fallback_url` - The fallback URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method which should be used to call the fallback URL
-- `caller_id_lookup` - Whether caller ID lookup is enabled for the phone number
+<a id="nestedatt--fax"></a>
+### Nested Schema for `fax`
 
----
+Read-Only:
 
-A `fax` block supports the following:
+- `application_sid` (String)
+- `fallback_method` (String)
+- `fallback_url` (String)
+- `method` (String)
+- `url` (String)
 
-- `application_sid` - The application SID which should be called on each incoming fax
-- `url` - The URL which should be called on each incoming fax
-- `method` - The HTTP method which should be used to call the URL
-- `fallback_url` - The fallback URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method which should be used to call the fallback URL
 
-## Timeouts
+<a id="nestedatt--messaging"></a>
+### Nested Schema for `messaging`
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+Read-Only:
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the phone number details
+- `application_sid` (String)
+- `fallback_method` (String)
+- `fallback_url` (String)
+- `method` (String)
+- `url` (String)
+
+
+<a id="nestedatt--voice"></a>
+### Nested Schema for `voice`
+
+Read-Only:
+
+- `application_sid` (String)
+- `caller_id_lookup` (Boolean)
+- `fallback_method` (String)
+- `fallback_url` (String)
+- `method` (String)
+- `url` (String)

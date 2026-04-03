@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Address Configuration - Default"
+page_title: "twilio_conversations_address_configuration_default Resource - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_address_configuration_default Resource
@@ -20,41 +22,39 @@ resource "twilio_conversations_address_configuration_default" "address_configura
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `address` - (Required) The phone number or whatsapp number to be configured
-- `type` - (Required) The address type. Valid values include: `sms` or `whatsapp`
-- `service_sid` - (Optional) The conversation service to associate the address configuration with. If no value is supplied the default conversation service will be used
-- `friendly_name` - (Optional) The friendly name of the address configuration
-- `enabled` - (Optional) Whether conversation should auto-create when messages are received at the configured address
+- `address` (String) The address (e.g. phone number) for the configuration. Changing this forces a new resource
+- `type` (String) The type of address. Valid values are `sms` or `whatsapp`. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `enabled` (Boolean) Whether auto-creation is enabled for this address configuration. Defaults to `true`
+- `friendly_name` (String) A human-readable label for the address configuration
+- `service_sid` (String) The SID of the conversations service
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the address configuration (Same as the `sid`)
-- `sid` - The SID of the address configuration (Same as the `id`)
-- `account_sid` - The account SID associated with the address configuration
-- `address` - The phone number or whatsapp number that has been configured
-- `type` - The address type
-- `service_sid` - The conversation service associated with the address configuration
-- `integration_type` - The integration type used. This should always be set to `default`
-- `friendly_name` - The friendly name of the address configuration
-- `enabled` - Whether conversation should auto-create when messages are received at the configured address
-- `date_created` - The date in RFC3339 format that the address configuration was created
-- `date_updated` - The date in RFC3339 format that the address configuration was updated
-- `url` - The URL of the address configuration
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this address configuration
+- `date_created` (String) The date and time the address configuration was created, in RFC 3339 format
+- `date_updated` (String) The date and time the address configuration was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `integration_type` (String) The type of auto-creation integration
+- `sid` (String) The unique SID assigned to this address configuration by Twilio
+- `url` (String) The absolute URL of the address configuration resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the address configuration
-- `update` - (Defaults to 10 minutes) Used when updating the address configuration
-- `read` - (Defaults to 5 minutes) Used when retrieving the address configuration
-- `delete` - (Defaults to 10 minutes) Used when deleting the address configuration
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

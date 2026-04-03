@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Activity"
+page_title: "twilio_taskrouter_activity Resource - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_activity Resource
@@ -27,36 +29,36 @@ resource "twilio_taskrouter_activity" "activity" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `friendly_name` - (Mandatory) The name of the activity
-- `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the activity with. Changing this forces a new resource to be created
-- `available` - (Optional) Whether the activity is available to accept tasks in TaskRouter. Changing this forces a new resource to be created
+- `friendly_name` (String) A human-readable label for the activity
+- `workspace_sid` (String) The SID of the TaskRouter workspace. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `available` (Boolean) Whether the worker is available when in this activity state. Changing this forces a new resource
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the activity (Same as the `sid`)
-- `sid` - The SID of the activity (Same as the `id`)
-- `account_sid` - The account SID of the activity is deployed into
-- `workspace_sid` - The workspace SID to create the activity under.
-- `friendly_name` - The name of the activity
-- `available` - Whether the activity is available to accept tasks in TaskRouter
-- `date_created` - The date in RFC3339 format that the activity was created
-- `date_updated` - The date in RFC3339 format that the activity was updated
-- `url` - The URL of the activity
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this activity
+- `date_created` (String) The date and time the activity was created, in RFC 3339 format
+- `date_updated` (String) The date and time the activity was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this activity by Twilio
+- `url` (String) The absolute URL of the activity resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the activity
-- `update` - (Defaults to 10 minutes) Used when updating the activity
-- `read` - (Defaults to 5 minutes) Used when retrieving the activity
-- `delete` - (Defaults to 10 minutes) Used when deleting the activity
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

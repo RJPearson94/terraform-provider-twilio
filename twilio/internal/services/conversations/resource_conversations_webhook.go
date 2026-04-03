@@ -27,8 +27,9 @@ func resourceConversationsWebhook() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this webhook",
 			},
 			"target": {
 				Type:     schema.TypeString,
@@ -38,6 +39,7 @@ func resourceConversationsWebhook() *schema.Resource {
 					"webhook",
 					"flex",
 				}, false),
+				Description: "The target of the webhook. Valid values are `webhook` or `flex`",
 			},
 			"method": {
 				Type:     schema.TypeString,
@@ -46,24 +48,28 @@ func resourceConversationsWebhook() *schema.Resource {
 					"GET",
 					"POST",
 				}, false),
-				Computed: true,
+				Computed:    true,
+				Description: "The HTTP method for the webhook. Valid values are `GET` or `POST`",
 			},
 			"pre_webhook_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Computed:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL called before an event is sent to the webhook",
 			},
 			"post_webhook_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Computed:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL called after an event is sent to the webhook",
 			},
 			"filters": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				Description: "The list of webhook event triggers to subscribe to",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 					ValidateFunc: validation.StringInSlice([]string{
@@ -94,8 +100,9 @@ func resourceConversationsWebhook() *schema.Resource {
 				},
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the webhook resource",
 			},
 		},
 	}

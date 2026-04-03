@@ -18,41 +18,48 @@ func dataSourceStudioFlowWidgetMakeHttpRequest() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"json": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source",
 			},
 			"transitions": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The next widget(s) to transition to after this widget",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"failed": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when the HTTP request fails",
 						},
 						"success": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when the HTTP request succeeds",
 						},
 					},
 				},
 			},
 			"offset": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The position of this widget in the Studio visual editor",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"x": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The x-axis position. Defaults to 0",
 						},
 						"y": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The y-axis position. Defaults to 0",
 						},
 					},
 				},
@@ -61,10 +68,12 @@ func dataSourceStudioFlowWidgetMakeHttpRequest() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The unique name of this widget within the flow, used to reference it in transitions",
 			},
 			"body": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The request body content for POST requests",
 			},
 			"content_type": {
 				Type:     schema.TypeString,
@@ -73,11 +82,13 @@ func dataSourceStudioFlowWidgetMakeHttpRequest() *schema.Resource {
 					"application/x-www-form-urlencoded",
 					"application/json",
 				}, false),
+				Description: "The Content-Type header for the request. Valid values: `application/x-www-form-urlencoded`, `application/json`",
 			},
 			"charset": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "utf-8",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "utf-8",
+				Description: "The character encoding for the request body. Defaults to `utf-8`",
 			},
 			"method": {
 				Type:     schema.TypeString,
@@ -86,21 +97,25 @@ func dataSourceStudioFlowWidgetMakeHttpRequest() *schema.Resource {
 					"GET",
 					"POST",
 				}, false),
+				Description: "The HTTP method for the request. Valid values: `GET`, `POST`",
 			},
 			"parameters": {
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Description: "Key/value parameters to include in the request as query parameters (GET) or form data (POST)",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"key": {
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "The parameter name",
 						},
 						"value": {
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "The parameter value",
 						},
 					},
 				},
@@ -112,6 +127,7 @@ func dataSourceStudioFlowWidgetMakeHttpRequest() *schema.Resource {
 					utils.StudioFlowWidgetLiquidTemplateValidation(),
 					validation.IsURLWithHTTPorHTTPS,
 				),
+				Description: "The HTTP/HTTPS URL to send the request to. Supports Liquid template expressions",
 			},
 		},
 	}

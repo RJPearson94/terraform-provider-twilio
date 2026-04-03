@@ -51,24 +51,28 @@ func resourceChatRole() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this role by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this role",
 			},
 			"service_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.ChatServiceSidValidation(),
+				Description:  "The SID of the Programmable Chat service. Changing this forces a new resource",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "A human-readable label for the role. Changing this forces a new resource",
 			},
 			"type": {
 				Type:     schema.TypeString,
@@ -78,25 +82,30 @@ func resourceChatRole() *schema.Resource {
 					"channel",
 					"deployment",
 				}, false),
+				Description: "The type of role. Valid values are `channel` or `deployment`. Changing this forces a new resource",
 			},
 			"permissions": {
-				Type:     schema.TypeList,
-				Required: true,
+				Type:        schema.TypeList,
+				Required:    true,
+				Description: "The list of permissions granted to the role",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the role was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the role was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the role resource",
 			},
 		},
 	}

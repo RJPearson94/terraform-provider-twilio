@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Capture payments"
+page_title: "twilio_studio_flow_widget_capture_payments Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_capture_payments Data Source
@@ -67,59 +69,63 @@ data "twilio_studio_flow_widget_capture_payments" "capture_payments" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the capture payments widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `payment_token_type` - (Optional) The payment type. Valid values include: `one-time` or `reusable`
-- `payment_connector` - (Optional) The unique name of a Payment Gateway Connector
-- `payment_amount` - (Optional) The amount to charge
-- `description` - (Optional) A description of the the payment
-- `language` - (Optional) The language to use when asking the caller for card details
-- `min_postal_code_length` - (Optional) The minimum length of an acceptable postal code
-- `timeout` - (Optional) The time in seconds to wait for a caller to press a digit on there phone before validating the digits which have been captured
-- `max_attempts` - (Optional) The maximum number of attempts at capturing the card details
-- `security_code` - (Optional) Whether to ask the caller for the security code of their card
-- `currency` - (Optional) The currency to use when charging the card
-- `postal_code` - (Optional) The postal code to use when not prompting the caller for their postal code
-- `payment_method` - (Optional) The method of payment. Valid values include: `ACH_DEBIT` or `CREDIT_CARD`
-- `bank_account_type` - (Optional) The type of bank account which is being charged. Valid values include: `COMMERCIAL_CHECKING`, `COMMERCIAL_SAVINGS`, `CONSUMER_CHECKING` or `CONSUMER_SAVINGS`
-- `valid_card_types` - (Optional) The list of cards which are supported. Valid values for items in the list include: `amex`, `diners-club`, `discover`, `enroute`, `jcb`, `maestro`, `master-card`, `optima` or `visa`
-- `parameters` - (Optional) A list of `parameter` blocks as documented below
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
 
-~> Due to data type and validation restrictions liquid templates are not supported for the `payment_token_type`, `min_postal_code_length`, `timeout`, `max_attempts`, `security_code`, `payment_method`, `bank_account_type` and `valid_card_types` (items) arguments. Please see the widget documentation to determine whether other arguments support liquid templates
+### Optional
 
----
+- `bank_account_type` (String) The bank account type for ACH payments. Valid values: `COMMERCIAL_CHECKING`, `COMMERCIAL_SAVINGS`, `CONSUMER_CHECKING`, `CONSUMER_SAVINGS`
+- `currency` (String) The currency for the payment amount as an ISO 4217 code (e.g. `USD`)
+- `description` (String) A human-readable description of what is being charged
+- `language` (String) The language for payment prompts (e.g. `en-US`)
+- `max_attempts` (Number) The maximum number of allowed payment input attempts before the `max_failed_attempts` transition fires
+- `min_postal_code_length` (Number) The minimum number of digits required for postal code input
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `parameters` (Block List) Additional key/value parameters to pass to the payment connector (see [below for nested schema](#nestedblock--parameters))
+- `payment_amount` (String) The amount to charge, as a string (e.g. `20.00`)
+- `payment_connector` (String) The unique name of the payment connector to use for processing
+- `payment_method` (String) The payment method to collect. Valid values: `ACH_DEBIT`, `CREDIT_CARD`
+- `payment_token_type` (String) Whether to generate a one-time or reusable payment token. Valid values: `one-time`, `reusable`
+- `postal_code` (String) Whether to prompt for a postal code. Set to `false` to disable, or provide a pre-filled value
+- `security_code` (Boolean) Whether to prompt the caller for the card security code (CVV)
+- `timeout` (Number) The timeout in seconds to wait for a digit between inputs
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
+- `valid_card_types` (List of String) The card brands to accept. Valid values: `amex`, `diners-club`, `discover`, `enroute`, `jcb`, `maestro`, `master-card`, `optima`, `visa`
 
-A `parameter` block supports the following:
+### Read-Only
 
-- `key` - (Mandatory) The parameter name/ key to pass with the payment
-- `value` - (Mandatory) The value of the parameter to pass with the payment
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
----
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-A `transitions` block supports the following:
+Optional:
 
-- `hangup` - (Optional) The widget to transition to when the caller hangs up
-- `max_failed_attempts` - (Optional) The widget to transition to when the maximum number of failed attempts is reached
-- `pay_interrupted` - (Optional) The widget to transition to when the payment is interrupted/ stopped by the caller pressing `*`
-- `provider_error` - (Optional) The widget to transition to when an error occurs calling the payment provider
-- `success` - (Optional) The widget to transition to when the payment is successfully processed
-- `validation_error` - (Optional) The widget to transition to when invalid input is received
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
----
 
-An `offset` block supports the following:
+<a id="nestedblock--parameters"></a>
+### Nested Schema for `parameters`
 
-- `x` - (Optional) The x coordinate to display the capture payments widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the capture payments widget in the Studio console. The default value is `0`
+Required:
 
-## Attributes Reference
+- `key` (String) The parameter name
+- `value` (String) The parameter value
 
-The following attributes are exported:
 
-- `id` - The name of the capture payments widget
-- `json` - The JSON state definition for the capture payments widget
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
+
+Optional:
+
+- `hangup` (String) The name of the next widget when the caller hangs up
+- `max_failed_attempts` (String) The name of the next widget when the maximum number of failed payment attempts is reached
+- `pay_interrupted` (String) The name of the next widget when the payment capture is interrupted
+- `provider_error` (String) The name of the next widget when the payment provider returns an error
+- `success` (String) The name of the next widget when payment is successfully captured
+- `validation_error` (String) The name of the next widget when a payment input validation error occurs

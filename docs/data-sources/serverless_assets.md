@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Assets"
+page_title: "twilio_serverless_assets Data Source - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_assets Data Source
@@ -23,40 +25,40 @@ output "assets" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the assets are associated with
+- `service_sid` (String) The SID of the Serverless service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `service_sid`)
-- `service_sid` - The SID of the service the assets are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the assets
-- `assets` - A list of `asset` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these assets
+- `assets` (List of Object) A list of assets belonging to the Serverless service (see [below for nested schema](#nestedatt--assets))
+- `id` (String) The ID of this resource.
 
-An `asset` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the asset
-- `friendly_name` - The name of the asset
-- `content_file_name` - The name of the file
-- `latest_version_sid` - The SID of the latest asset version
-- `source` - The relative path to the asset file
-- `source_hash` - A hash of the asset file to trigger deployments
-- `content_type` - The file MIME-type
-- `path` - The request URI path
-- `visibility` - The visibility of the asset
-- `date_created` - The date in RFC3339 format that the asset was created
-- `date_updated` - The date in RFC3339 format that the asset was updated
-- `url` - The URL of the asset
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving assets
+<a id="nestedatt--assets"></a>
+### Nested Schema for `assets`
+
+Read-Only:
+
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `latest_version_sid` (String)
+- `path` (String)
+- `sid` (String)
+- `url` (String)
+- `visibility` (String)

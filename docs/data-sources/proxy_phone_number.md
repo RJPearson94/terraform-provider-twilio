@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Proxy Phone Number"
+page_title: "twilio_proxy_phone_number Data Source - twilio"
 subcategory: "Proxy"
+description: |-
+  
 ---
 
 # twilio_proxy_phone_number Data Source
@@ -24,51 +26,54 @@ output "phone_number" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the phone number is associated with
-- `sid` - (Mandatory) The SID of the phone number
+- `service_sid` (String) The SID of the Proxy service
+- `sid` (String) The SID of the Proxy phone number to read
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the proxy phone number resource (Same as the `sid`)
-- `sid` - The SID of a Twilio phone number associated with the proxy (Same as the `id`)
-- `account_sid` - The account SID of the phone number resource is deployed into
-- `service_sid` - The SID of a Twilio proxy service
-- `is_reserved` - Whether the phone number is reserved
-- `phone_number` - The phone number associated with the proxy
-- `friendly_name` - The friendly name of the phone number
-- `iso_country` - The ISO country of the phone number
-- `in_use` - The number of active calls associated with the phone number
-- `capabilities` - A `capabilities` block as documented below.
-- `date_created` - The date in RFC3339 format that the proxy phone number resource was created
-- `date_updated` - The date in RFC3339 format that the proxy phone number resource was updated
-- `url` - The URL of the proxy phone number resource
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this Proxy phone number
+- `capabilities` (List of Object) The capabilities of the Proxy phone number (see [below for nested schema](#nestedatt--capabilities))
+- `date_created` (String) The date and time the Proxy phone number was created, in RFC 3339 format
+- `date_updated` (String) The date and time the Proxy phone number was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the Proxy phone number
+- `id` (String) The ID of this resource.
+- `in_use` (Number) The number of active Proxy sessions assigned to this phone number
+- `is_reserved` (Boolean) Whether the phone number is reserved and not assigned to a Proxy session
+- `iso_country` (String) The ISO country code of the phone number
+- `phone_number` (String) The phone number in E.164 format
+- `url` (String) The absolute URL of the Proxy phone number resource
 
-A `capabilities` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `fax_inbound` - Whether the phone number can accept inbound faxes
-- `fax_outbound` - Whether the phone number can send outbound faxes
-- `mms_inbound` - Whether the phone number can accept inbound MMS's
-- `mms_outbound` - Whether the phone number can send outbound MMS's
-- `restriction_fax_domestic` - Whether the phone number is restricted to domestic faxes
-- `restriction_mms_domestic` - Whether the phone number is restricted to domestic MMS's
-- `restriction_sms_domestic` - Whether the phone number is restricted to domestic SMS's
-- `restriction_voice_domestic` - Whether the phone number is restricted to domestic voice calls
-- `sip_trunking` - Whether the phone number supports SIP trunking
-- `sms_inbound` - Whether the phone number can accept inbound SMS's
-- `sms_outbound` - Whether the phone number can send outbound SMS's
-- `voice_inbound` - Whether the phone number can accept inbound voice calls
-- `voice_outbound` - Whether the phone number can make outbound voice calls
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the phone number
+<a id="nestedatt--capabilities"></a>
+### Nested Schema for `capabilities`
+
+Read-Only:
+
+- `fax_inbound` (Boolean)
+- `fax_outbound` (Boolean)
+- `mms_inbound` (Boolean)
+- `mms_outbound` (Boolean)
+- `restriction_fax_domestic` (Boolean)
+- `restriction_mms_domestic` (Boolean)
+- `restriction_sms_domestic` (Boolean)
+- `restriction_voice_domestic` (Boolean)
+- `sip_trunking` (Boolean)
+- `sms_inbound` (Boolean)
+- `sms_outbound` (Boolean)
+- `voice_inbound` (Boolean)
+- `voice_outbound` (Boolean)

@@ -19,33 +19,39 @@ func dataSourceStudioFlowWidgetSplitBasedOn() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"json": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source",
 			},
 			"transitions": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The conditional routing rules and fallback transition for this widget",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"matches": {
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:        schema.TypeList,
+							Optional:    true,
+							Description: "A list of match rules, each routing to a different widget based on conditions",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"next": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "The name of the next widget when all conditions in this match are satisfied",
 									},
 									"conditions": {
-										Type:     schema.TypeList,
-										Required: true,
-										MinItems: 1,
+										Type:        schema.TypeList,
+										Required:    true,
+										MinItems:    1,
+										Description: "The list of conditions that must all be true for this match to fire",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"arguments": {
-													Type:     schema.TypeList,
-													Required: true,
+													Type:        schema.TypeList,
+													Required:    true,
+													Description: "The arguments to pass to the condition operator",
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -54,6 +60,7 @@ func dataSourceStudioFlowWidgetSplitBasedOn() *schema.Resource {
 													Type:         schema.TypeString,
 													Required:     true,
 													ValidateFunc: validation.StringIsNotEmpty,
+													Description:  "A human-readable label for this condition",
 												},
 												"type": {
 													Type:     schema.TypeString,
@@ -77,11 +84,13 @@ func dataSourceStudioFlowWidgetSplitBasedOn() *schema.Resource {
 														"is_before_date",
 														"is_after_date",
 													}, false),
+													Description: "The comparison operator. Valid values: `equal_to`, `not_equal_to`, `matches_any_of`, `does_not_match_any_of`, `is_blank`, `is_not_blank`, `regex`, `contains`, `does_not_contain`, `starts_with`, `does_not_start_with`, `less_than`, `greater_than`, `is_before_time`, `is_after_time`, `is_before_date`, `is_after_date`",
 												},
 												"value": {
 													Type:         schema.TypeString,
 													Required:     true,
 													ValidateFunc: validation.StringIsNotEmpty,
+													Description:  "The value to compare the input against",
 												},
 											},
 										},
@@ -90,27 +99,31 @@ func dataSourceStudioFlowWidgetSplitBasedOn() *schema.Resource {
 							},
 						},
 						"no_match": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when none of the match conditions are satisfied",
 						},
 					},
 				},
 			},
 			"offset": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The position of this widget in the Studio visual editor",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"x": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The x-axis position. Defaults to 0",
 						},
 						"y": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The y-axis position. Defaults to 0",
 						},
 					},
 				},
@@ -119,11 +132,13 @@ func dataSourceStudioFlowWidgetSplitBasedOn() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The unique name of this widget within the flow, used to reference it in transitions",
 			},
 			"input": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The value or Liquid template expression to evaluate against the match conditions (e.g. `{{widgets.my_widget.parsed.status}}`)",
 			},
 		},
 	}

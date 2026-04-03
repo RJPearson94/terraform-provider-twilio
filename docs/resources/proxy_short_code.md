@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Proxy Short Code"
+page_title: "twilio_proxy_short_code Resource - twilio"
 subcategory: "Proxy"
+description: |-
+  
 ---
 
 # twilio_proxy_short_code Resource
@@ -25,56 +27,58 @@ resource "twilio_proxy_short_code" "short_code" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of a Twilio proxy service. Changing this forces a new resource to be created
-- `sid` - (Optional) The SID of a Twilio short code resource to associate with the proxy. Changing this forces a new resource to be created
-- `is_reserved` - (Optional) Whether the short code is reserved
+- `service_sid` (String) The SID of the Proxy service. Changing this forces a new resource
+- `sid` (String) The SID of the Twilio short code to add to the Proxy service. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `is_reserved` (Boolean) Whether the short code is reserved and not assigned to a Proxy session
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the proxy short code resource (Same as the `sid`)
-- `sid` - The SID of a Twilio short code associated with the proxy (Same as the `id`)
-- `account_sid` - The account SID of the short code resource is deployed into
-- `service_sid` - The SID of a Twilio proxy service
-- `is_reserved` - Whether the short code is reserved
-- `short_code` - The short code associated with the SID
-- `iso_country` - The ISO country associated with the SID
-- `capabilities` - A `capabilities` block as documented below.
-- `date_created` - The date in RFC3339 format that the proxy short code resource was created
-- `date_updated` - The date in RFC3339 format that the proxy short code resource was updated
-- `url` - The URL of the proxy short code resource
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this Proxy short code
+- `capabilities` (List of Object) The capabilities of the Proxy short code (see [below for nested schema](#nestedatt--capabilities))
+- `date_created` (String) The date and time the Proxy short code was created, in RFC 3339 format
+- `date_updated` (String) The date and time the Proxy short code was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `iso_country` (String) The ISO country code of the short code
+- `short_code` (String) The short code value
+- `url` (String) The absolute URL of the Proxy short code resource
 
-A `capabilities` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `fax_inbound` - Whether the short code can accept inbound faxes
-- `fax_outbound` - Whether the short code can send outbound faxes
-- `mms_inbound` - Whether the short code can accept inbound MMS's
-- `mms_outbound` - Whether the short code can send outbound MMS's
-- `restriction_fax_domestic` - Whether the short code is restricted to domestic faxes
-- `restriction_mms_domestic` - Whether the short code is restricted to domestic MMS'
-- `restriction_sms_domestic` - Whether the short code is restricted to domestic SMS's
-- `restriction_voice_domestic` - Whether the short code is restricted to domestic voice calls
-- `sip_trunking` - Whether the short code supports SIP trunking
-- `sms_inbound` - Whether the short code can accept inbound SMS's
-- `sms_outbound` - Whether the short code can send outbound SMS's
-- `voice_inbound` - Whether the short code can accept inbound voice calls
-- `voice_outbound` - Whether the short code can make outbound voice calls
+Optional:
 
-## Timeouts
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `create` - (Defaults to 10 minutes) Used when creating the short code
-- `update` - (Defaults to 10 minutes) Used when updating the short code
-- `read` - (Defaults to 5 minutes) Used when retrieving the short code
-- `delete` - (Defaults to 10 minutes) Used when deleting the short code
+<a id="nestedatt--capabilities"></a>
+### Nested Schema for `capabilities`
+
+Read-Only:
+
+- `fax_inbound` (Boolean)
+- `fax_outbound` (Boolean)
+- `mms_inbound` (Boolean)
+- `mms_outbound` (Boolean)
+- `restriction_fax_domestic` (Boolean)
+- `restriction_mms_domestic` (Boolean)
+- `restriction_sms_domestic` (Boolean)
+- `restriction_voice_domestic` (Boolean)
+- `sip_trunking` (Boolean)
+- `sms_inbound` (Boolean)
+- `sms_outbound` (Boolean)
+- `voice_inbound` (Boolean)
+- `voice_outbound` (Boolean)
 
 ## Import
 

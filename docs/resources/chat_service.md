@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Chat Service"
+page_title: "twilio_chat_service Resource - twilio"
 subcategory: "Programmable Chat"
+description: |-
+  
 ---
 
 # twilio_chat_service Resource
@@ -19,172 +21,123 @@ resource "twilio_chat_service" "service" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `friendly_name` - (Mandatory) The friendly name of the service. The length of the string must be between `1` and `256` characters (inclusive)
-- `limits` - (Optional) A `limits` block as documented below.
-- `media` - (Optional) A `media` block as documented below.
-- `notifications` - (Optional) A `notifications` block as documented below.
-- `post_webhook_retry_count` - (Optional) The number of attempt to retry a failed webhook call. The default value is `0`
-- `post_webhook_url` - (Optional) The webhook url
-- `pre_webhook_retry_count` - (Optional) The number of attempt to retry a failed webhook call. The default value is `0`
-- `pre_webhook_url` - (Optional) The webhook url
-- `webhook_filters` - (Optional) The events which trigger the webhook
-- `webhook_method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`. The default value is `POST`
-- `reachability_enabled` - (Optional) Whether the reachability indicator (for Programmable Chat) is enabled. The default value is `false`
-- `read_status_enabled` - (Optional) Whether the message consumption horizon (for Programmable Chat) is enabled. The default value is `true`
-- `typing_indicator_timeout` - (Optional) How many seconds should the service wait after receiving a `started typing` event before assuming a user is no longer typing. The default value is `5`
+- `friendly_name` (String) A human-readable label for the chat service
 
----
+### Optional
 
-A `limits` block supports the following:
+- `limits` (Block List, Max: 1) The limits configuration for the chat service (see [below for nested schema](#nestedblock--limits))
+- `media` (Block List, Max: 1) The media configuration for the chat service (see [below for nested schema](#nestedblock--media))
+- `notifications` (Block List, Max: 1) The notification configuration for the chat service (see [below for nested schema](#nestedblock--notifications))
+- `post_webhook_retry_count` (Number) The number of retry attempts for post-event webhook requests. Defaults to `0`
+- `post_webhook_url` (String) The URL for post-event webhook requests
+- `pre_webhook_retry_count` (Number) The number of retry attempts for pre-event webhook requests. Defaults to `0`
+- `pre_webhook_url` (String) The URL for pre-event webhook requests
+- `reachability_enabled` (Boolean) Whether the reachability indicator is enabled for the chat service. Defaults to `false`
+- `read_status_enabled` (Boolean) Whether the message read status feature is enabled. Defaults to `true`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `typing_indicator_timeout` (Number) The duration in seconds after which a typing indicator times out. Defaults to `5`
+- `webhook_filters` (List of String) The list of webhook event triggers to subscribe to
+- `webhook_method` (String) The HTTP method used for webhook requests. Valid values are `POST` or `GET`. Defaults to `POST`
 
-- `channel_members` - (Optional) The max number of members that can be added to a channel. The value must be between `1` and `1000` (inclusive). The default value is `100`
-- `user_channels` - (Optional) The max number of users that can be a member of. The value must be between `1` and `1000` (inclusive). The default value is `250`
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this chat service
+- `date_created` (String) The date and time the chat service was created, in RFC 3339 format
+- `date_updated` (String) The date and time the chat service was last updated, in RFC 3339 format
+- `default_channel_creator_role_sid` (String) The SID of the default role assigned to the creator of a channel
+- `default_channel_role_sid` (String) The SID of the default role assigned to members of a channel
+- `default_service_role_sid` (String) The SID of the default role assigned to users of the chat service
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this chat service by Twilio
+- `url` (String) The absolute URL of the chat service resource
 
-A `media` block supports the following:
+<a id="nestedblock--limits"></a>
+### Nested Schema for `limits`
 
-- `compatibility_message` - (Optional) The placeholder message for media messages which has no text
+Optional:
 
----
+- `channel_members` (Number) The maximum number of members allowed in a channel. Defaults to `100`
+- `user_channels` (Number) The maximum number of channels a user can join. Defaults to `250`
 
-A `notifications` block supports the following:
 
-- `log_enabled` - (Optional) Whether notification logs are enabled. The default value is `false`
-- `new_message` - (Optional) A `new_message` block as documented below.
-- `added_to_channel` - (Optional) A `added_to_channel` block as documented below.
-- `invited_to_channel` - (Optional) A `added_to_channel` block as documented below.
-- `removed_from_channel` - (Optional) A `removed_from_channel` block as documented below.
+<a id="nestedblock--media"></a>
+### Nested Schema for `media`
 
----
+Optional:
 
-A `new_message` block supports the following:
+- `compatibility_message` (String) The message to display when a media message has no text fallback
 
-- `enabled` - (Optional) Whether notifications for a new message are enabled. The default value is `false`
-- `template` - (Optional) The template message that is sent when a new message is received
-- `sound` - (Optional) The sound played when the notification is activated
-- `badge_count_enabled` - (Optional) Whether bade counts are enabled. The default value is `false`
+Read-Only:
 
----
+- `size_limit_mb` (Number) The maximum media file size in megabytes
 
-An `added_to_channel` block supports the following:
 
-- `enabled` - (Optional) Whether notifications for a user being added to a channel are enabled. The default value is `false`
-- `template` - (Optional) The template message that is sent when the notification is activated
-- `sound` - (Optional) The sound played when the notification is activated
+<a id="nestedblock--notifications"></a>
+### Nested Schema for `notifications`
 
----
+Optional:
 
-An `invited_to_channel` block supports the following:
+- `added_to_channel` (Block List, Max: 1) The notification settings for being added to a channel (see [below for nested schema](#nestedblock--notifications--added_to_channel))
+- `invited_to_channel` (Block List, Max: 1) The notification settings for being invited to a channel (see [below for nested schema](#nestedblock--notifications--invited_to_channel))
+- `log_enabled` (Boolean) Whether notification logging is enabled. Defaults to `false`
+- `new_message` (Block List, Max: 1) The notification settings for new messages (see [below for nested schema](#nestedblock--notifications--new_message))
+- `removed_from_channel` (Block List, Max: 1) The notification settings for being removed from a channel (see [below for nested schema](#nestedblock--notifications--removed_from_channel))
 
-- `enabled` - (Optional) Whether notifications for a user being invited to a channel are enabled. The default value is `false`
-- `template` - (Optional) The template message that is sent when the notification is activated
-- `sound` - (Optional) The sound played when the notification is activated
+<a id="nestedblock--notifications--added_to_channel"></a>
+### Nested Schema for `notifications.added_to_channel`
 
----
+Optional:
 
-A `removed_from_channel` block supports the following:
+- `enabled` (Boolean) Whether added-to-channel notifications are enabled. Defaults to `false`
+- `sound` (String) The sound to play for added-to-channel notifications
+- `template` (String) The notification template for being added to a channel
 
-- `enabled` - (Optional) Whether notifications for a user being removed from a channel are enabled. The default value is `false`
-- `template` - (Optional) The template message that is sent when the notification is activated
-- `sound` - (Optional) The sound played when the notification is activated
 
-## Attributes Reference
+<a id="nestedblock--notifications--invited_to_channel"></a>
+### Nested Schema for `notifications.invited_to_channel`
 
-The following attributes are exported:
+Optional:
 
-- `id` - The ID of the service (Same as the `sid`)
-- `sid` - The SID of the service (Same as the `id`)
-- `account_sid` - The account SID associated with the service
-- `default_channel_creator_role_sid` - The Role SID that is associated with a user when they join a new channel
-- `default_channel_role_sid` - The Role SID that is associated with a user when they are added to a channel
-- `default_service_role_sid` - The Role SID that is associated with a user when they are added to the service
-- `friendly_name` - The friendly name of the service
-- `limits` - A `limits` block as documented below.
-- `media` - A `media` block as documented below.
-- `notifications` - A `notifications` block as documented below.
-- `post_webhook_retry_count` - The number of attempts to retry a failed webhook call
-- `post_webhook_url` - The webhook URL
-- `pre_webhook_retry_count` - The number of attempts to retry a failed webhook call
-- `pre_webhook_url` - The webhook URL
-- `webhook_filters` - The events which trigger the webhook
-- `webhook_method` - The HTTP method to trigger the webhook
-- `reachability_enabled` - Whether the reachability indicator (for Programmable Chat) is enabled
-- `read_status_enabled` - Whether the message consumption horizon (for Programmable Chat) is enabled
-- `typing_indicator_timeout` - How many seconds should the service wait after receiving a `started typing` event before assuming a user is no longer typing
-- `date_created` - The date in RFC3339 format that the service was created
-- `date_updated` - The date in RFC3339 format that the service was updated
-- `url` - The URL of the service
+- `enabled` (Boolean) Whether invited-to-channel notifications are enabled. Defaults to `false`
+- `sound` (String) The sound to play for invited-to-channel notifications
+- `template` (String) The notification template for being invited to a channel
 
----
 
-A `limits` block supports the following:
+<a id="nestedblock--notifications--new_message"></a>
+### Nested Schema for `notifications.new_message`
 
-- `channel_members` - he max number of members that can be added to a channel
-- `user_channels` - The max number of users that can be a member of
+Optional:
 
----
+- `badge_count_enabled` (Boolean) Whether the badge count is enabled for new message notifications. Defaults to `false`
+- `enabled` (Boolean) Whether new message notifications are enabled. Defaults to `false`
+- `sound` (String) The sound to play for new message notifications
+- `template` (String) The notification template for new messages
 
-A `media` block supports the following:
 
-- `compatibility_message` - The placeholder message for media messages which has no text
-- `size_limit_mb` - The media file size limit in Mb
+<a id="nestedblock--notifications--removed_from_channel"></a>
+### Nested Schema for `notifications.removed_from_channel`
 
----
+Optional:
 
-A `notifications` block supports the following:
+- `enabled` (Boolean) Whether removed-from-channel notifications are enabled. Defaults to `false`
+- `sound` (String) The sound to play for removed-from-channel notifications
+- `template` (String) The notification template for being removed from a channel
 
-- `log_enabled` - Whether notification logs are enabled
-- `new_message` - A `new_message` block as documented below.
-- `added_to_channel` - A `added_to_channel` block as documented below.
-- `invited_to_channel` - A `added_to_channel` block as documented below.
-- `removed_from_channel` - A `removed_from_channel` block as documented below.
 
----
 
-A `new_message` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `enabled` - Whether notifications for a new message are enabled
-- `template` - The template message that is sent when a new message is received
-- `sound` - The sound played when the notification is activated
-- `badge_count_enabled` - Whether bade counts are enabled
+Optional:
 
----
-
-An `added_to_channel` block supports the following:
-
-- `enabled` - Whether notifications for a user being added to a channel are enabled
-- `template` - The template message that is sent when the notification is activated
-- `sound` - The sound played when the notification is activated
-
----
-
-An `invited_to_channel` block supports the following:
-
-- `enabled` - Whether notifications for a user being invited to a channel are enabled
-- `template` - The template message that is sent when the notification is activated
-- `sound` - The sound played when the notification is activated
-
----
-
-A `removed_from_channel` block supports the following:
-
-- `enabled` - Whether notifications for a user being removed from a channel are enabled
-- `template` - The template message that is sent when the notification is activated
-- `sound` - The sound played when the notification is activated
-
-## Timeouts
-
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `create` - (Defaults to 10 minutes) Used when creating the role
-- `update` - (Defaults to 10 minutes) Used when updating the role
-- `read` - (Defaults to 5 minutes) Used when retrieving the role
-- `delete` - (Defaults to 10 minutes) Used when deleting the role
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

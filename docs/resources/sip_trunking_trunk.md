@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Trunking Trunk"
+page_title: "twilio_sip_trunking_trunk Resource - twilio"
 subcategory: "SIP Trunking"
+description: |-
+  
 ---
 
 # twilio_sip_trunking_trunk Resource
@@ -17,62 +19,49 @@ resource "twilio_sip_trunking_trunk" "trunk" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Optional
 
-- `cnam_lookup_enabled` - (Optional) Whether Caller ID Name is enabled on the SIP trunk. The default value is `false`
-- `disaster_recovery_url` - (Optional) The URL to call in event of disaster recovery
-- `disaster_recovery_method` - (Optional) The HTTP method which should be used to call the disaster recovery URL. Valid values are `POST` or `GET`
-- `domain_name` - (Optional) The domain name of the SIP trunk
-- `friendly_name` - (Optional) The friendly name of the SIP trunk. The length of the string must be between `0` and `64` characters (inclusive)
-- `recording` - (Optional) A `recording` block as documented below
-- `secure` - (Optional) Whether secure trunking is enabled on the SIP trunk. The default value is `false`
-- `transfer_mode` - (Optional) The call transfer configuration on the SIP trunk. Valid values are `enable-all`, `sip-only` or `disable-all`. The default value is `disable-all`
+- `cnam_lookup_enabled` (Boolean) Whether CNAM (Caller Name) lookup is enabled for the trunk. Defaults to `false`
+- `disaster_recovery_method` (String) The HTTP method used to call the disaster recovery URL. Valid values are `GET` or `POST`
+- `disaster_recovery_url` (String) The URL to call in the event of a disaster recovery failover
+- `domain_name` (String) The unique domain name for the SIP trunk
+- `friendly_name` (String) A human-readable label for the SIP trunk (up to 64 characters)
+- `recording` (Block List, Max: 1) A block to configure recording settings for the SIP trunk (see [below for nested schema](#nestedblock--recording))
+- `secure` (Boolean) Whether secure SIP (SIPS) is required for the trunk. Defaults to `false`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `transfer_mode` (String) The call transfer mode for the SIP trunk. Valid values are `enable-all`, `sip-only`, or `disable-all`. Defaults to `disable-all`
 
----
+### Read-Only
 
-A `recording` block supports the following:
+- `account_sid` (String) The SID of the account that owns this SIP trunk
+- `auth_type` (String) The authentication type configured for the SIP trunk
+- `auth_type_set` (List of String) The set of authentication types configured for the SIP trunk
+- `date_created` (String) The date and time the SIP trunk was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP trunk was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this SIP trunk by Twilio
+- `url` (String) The absolute URL of the SIP trunk resource
 
-- `mode` - (Optional) The recording mode configuration for the SIP trunk. Valid values are `do-not-record`, `record-from-ringing`, `record-from-answer`, `record-from-ringing-dual` or `record-from-answer-dual`. The default value is `do-not-record`
-- `trim` - (Optional) The recording trim configuration for the SIP trunk. Valid values are `trim-silence` or `do-not-trim`. The default value is `do-not-trim`
+<a id="nestedblock--recording"></a>
+### Nested Schema for `recording`
 
-## Attributes Reference
+Optional:
 
-The following attributes are exported:
+- `mode` (String) The recording mode for the SIP trunk. Valid values are `do-not-record`, `record-from-ringing`, `record-from-answer`, `record-from-ringing-dual`, or `record-from-answer-dual`. Defaults to `do-not-record`
+- `trim` (String) Whether to trim silence from recordings. Valid values are `trim-silence` or `do-not-trim`. Defaults to `do-not-trim`
 
-- `id` - The ID of the SIP trunk (Same as the `sid`)
-- `sid` - The SID of the SIP trunk (Same as the `id`)
-- `account_sid` - The account SID the SIP trunk is associated with
-- `cnam_lookup_enabled` - Whether caller ID Name is enabled on the SIP trunk
-- `disaster_recovery_url` - The URL to call in event of disaster recovery
-- `disaster_recovery_method` - The HTTP method which should be used to call the disaster recovery URL
-- `domain_name` - The domain name of the SIP trunk
-- `friendly_name` - The friendly name of the SIP trunk
-- `recording` - A `recording` block as documented below
-- `secure` - Whether secure trunking is enabled on the SIP trunk
-- `transfer_mode` - The call transfer configuration on the SIP trunk
-- `auth_type` - The auth configuration on the SIP trunk
-- `auth_type_set` - The auth typeset on the SIP trunk
-- `date_created` - The date in RFC3339 format that the SIP trunk was created
-- `date_updated` - The date in RFC3339 format that the SIP trunk was updated
-- `url` - The URL of the SIP trunk resource
 
----
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-A `recording` block supports the following:
+Optional:
 
-- `mode` - The recording mode configuration for the SIP trunk
-- `trim` - The recording trim configuration for the SIP trunk
-
-## Timeouts
-
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `create` - (Defaults to 10 minutes) Used when creating the SIP trunk
-- `update` - (Defaults to 10 minutes) Used when updating the SIP trunk
-- `read` - (Defaults to 5 minutes) Used when retrieving the SIP trunk
-- `delete` - (Defaults to 10 minutes) Used when deleting the SIP trunk
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

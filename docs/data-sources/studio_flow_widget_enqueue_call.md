@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Enqueue call"
+page_title: "twilio_studio_flow_widget_enqueue_call Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_enqueue_call Data Source
@@ -57,42 +59,43 @@ data "twilio_studio_flow_widget_enqueue_call" "enqueue_call" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the enqueue call widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `priority` - (Optional) The priority of the task in the queue. This argument conflicts with `queue_name`
-- `queue_name` - (Optional) The name of the queue to place the call on
-- `task_attributes` - (Optional) A JSON string of attributes to be passed with the task. This argument conflicts with `queue_name`
-- `timeout` - (Optional) The time in seconds which the task can remain on the queue before timing out. This argument conflicts with `queue_name`
-- `wait_url` - (Optional) The URL for custom hold music
-- `wait_url_method` - (Optional) The HTTP method to be used when calling the URL. Valid values include: `GET` or `POST`
-- `workflow_sid` - (Optional) The SID of the TasksRouter workflow which will handle the task
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
 
-~> Either the `queue_name` or `workflow_sid` argument must be set
-~> Due to data type and validation restrictions liquid templates are not supported for the `priority`, `task_attributes`, `wait_url`, `wait_url_method` and `workflow_sid` arguments. Please see the widget documentation to determine whether other arguments support liquid templates
+### Optional
 
----
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `priority` (Number) The priority of the TaskRouter task created for this call. Conflicts with `queue_name`
+- `queue_name` (String) The name of the Twilio queue to enqueue the call into. At least one of `workflow_sid` or `queue_name` must be set
+- `task_attributes` (String) A JSON string of attributes to attach to the TaskRouter task. Conflicts with `queue_name`
+- `timeout` (Number) The number of seconds to wait for a worker to accept the task before timing out. Conflicts with `queue_name`
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
+- `wait_url` (String) The HTTP/HTTPS URL of the TwiML document to execute while the caller waits in the queue
+- `wait_url_method` (String) The HTTP method to use when fetching the `wait_url` document. Valid values: `GET`, `POST`
+- `workflow_sid` (String) The SID of the TaskRouter workflow to route the call through. At least one of `workflow_sid` or `queue_name` must be set
 
-A `transitions` block supports the following:
+### Read-Only
 
-- `call_complete` - (Optional) The widget to transition to when the call the enqueue action URL is requested
-- `call_failure` - (Optional) The widget to transition to when a system error occurs
-- `failed_to_enqueue` - (Optional) The widget to transition to when the call fails to enqueue
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
----
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-An `offset` block supports the following:
+Optional:
 
-- `x` - (Optional) The x coordinate to display the enqueue call widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the enqueue call widget in the Studio console. The default value is `0`
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
-## Attributes Reference
 
-The following attributes are exported:
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
 
-- `id` - The name of the enqueue call widget
-- `json` - The JSON state definition for the enqueue call widget
+Optional:
+
+- `call_complete` (String) The name of the next widget when the enqueued call completes
+- `call_failure` (String) The name of the next widget when the enqueued call fails
+- `failed_to_enqueue` (String) The name of the next widget when the call cannot be added to the queue or workflow

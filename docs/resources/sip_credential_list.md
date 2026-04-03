@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Credential List"
+page_title: "twilio_sip_credential_list Resource - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_credential_list Resource
@@ -16,32 +18,33 @@ resource "twilio_sip_credential_list" "credential_list" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The account SID to associate the credential list with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The friendly name of the credential list
+- `account_sid` (String) The SID of the account that owns this SIP credential list. Changing this forces a new resource
+- `friendly_name` (String) A human-readable label for the SIP credential list
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the credential list (Same as the `sid` )
-- `sid` - The SID of the credential list (Same as the `id`)
-- `account_sid` - The account SID associated with the credential list
-- `friendly_name` - The friendly name of the credential list
-- `date_created` - The date in RFC3339 format that the credential list was created
-- `date_updated` - The date in RFC3339 format that the credential list was updated
+### Read-Only
 
-## Timeouts
+- `date_created` (String) The date and time the SIP credential list was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP credential list was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this SIP credential list by Twilio
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the credential list
-- `update` - (Defaults to 10 minutes) Used when updating the credential list
-- `read` - (Defaults to 5 minutes) Used when retrieving the credential list
-- `delete` - (Defaults to 10 minutes) Used when deleting the credential list
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

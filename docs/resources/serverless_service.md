@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Service"
+page_title: "twilio_serverless_service Resource - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_service Resource
@@ -20,39 +22,38 @@ resource "twilio_serverless_service" "service" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `unique_name` - (Mandatory) The unique name of the service. The length of the string must be between `1` and `50` characters (inclusive)
-- `friendly_name` - (Mandatory) The name of the service. The length of the string must be between `1` and `255` characters (inclusive)
-- `include_credentials` - (Optional) Whether or not credentials are included in the service runtime. The default value is `true`
-- `ui_editable` - (Optional) Whether or not the service is editable in the console. The default value is `false`
+- `friendly_name` (String) A human-readable label for the service
+- `unique_name` (String) A unique, developer-assigned name for the Serverless service. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `include_credentials` (Boolean) Whether to inject account credentials into a function invocation context. Defaults to `true`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `ui_editable` (Boolean) Whether the service's properties and sub-resources can be edited in the Twilio Console. Defaults to `false`
 
-- `id` - The ID of the service (Same as the `sid`)
-- `sid` - The SID of the service (Same as the `id`)
-- `account_sid` - The account SID of the service is deployed into
-- `unique_name` - The unique name of the service
-- `friendly_name` - The name of the service
-- `include_credentials` - Whether or not credentials are included in the service runtime
-- `ui_editable` - Whether or not the service is editable in the console
-- `domain_base` - The base name of the service
-- `date_created` - The date in RFC3339 format that the service was created
-- `date_updated` - The date in RFC3339 format that the service was updated
-- `url` - The URL of the service
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this service
+- `date_created` (String) The date and time the service was created, in RFC 3339 format
+- `date_updated` (String) The date and time the service was last updated, in RFC 3339 format
+- `domain_base` (String) The base domain name for this service, used to compose the URLs of the service's environments
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this service by Twilio
+- `url` (String) The absolute URL of the service resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the service
-- `update` - (Defaults to 10 minutes) Used when updating the service
-- `read` - (Defaults to 5 minutes) Used when retrieving the service
-- `delete` - (Defaults to 10 minutes) Used when deleting the service
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

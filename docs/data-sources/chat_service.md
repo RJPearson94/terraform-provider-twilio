@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Chat Service"
+page_title: "twilio_chat_service Data Source - twilio"
 subcategory: "Programmable Chat"
+description: |-
+  
 ---
 
 # twilio_chat_service Data Source
@@ -23,98 +25,113 @@ output "service" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the service
+- `sid` (String) The SID of the chat service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the service (Same as the `sid`)
-- `sid` - The SID of the service (Same as the `id`)
-- `account_sid` - The account SID associated with the service
-- `default_channel_creator_role_sid` - The role SID that is associated with a user when they join a new channel
-- `default_channel_role_sid` - The role SID that is associated with a user when they are added to a channel
-- `default_service_role_sid` - The role SID that is associated with a user when they are added to the service
-- `friendly_name` - The friendly name of the service
-- `limits` - A `limits` block as documented below.
-- `media` - A `media` block as documented below.
-- `notifications` - A `notifications` block as documented below.
-- `post_webhook_retry_count` - The number of attempts to retry a failed webhook call
-- `post_webhook_url` - The webhook URL
-- `pre_webhook_retry_count` - The number of attempts to retry a failed webhook call
-- `pre_webhook_url` - The webhook URL
-- `webhook_filters` - The events which trigger the webhook
-- `webhook_method` - The HTTP method to trigger the webhook
-- `reachability_enabled` - Whether the reachability indicator (for Programmable Chat) is enabled
-- `read_status_enabled` - Whether the message consumption horizon (for Programmable Chat) is enabled
-- `typing_indicator_timeout` - How many seconds should the service wait after receiving a `started typing` event before assuming a user is no longer typing
-- `date_created` - The date in RFC3339 format that the service was created
-- `date_updated` - The date in RFC3339 format that the service was updated
-- `url` - The URL of the service
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this chat service
+- `date_created` (String) The date and time the chat service was created, in RFC 3339 format
+- `date_updated` (String) The date and time the chat service was last updated, in RFC 3339 format
+- `default_channel_creator_role_sid` (String) The SID of the default role assigned to the creator of a channel
+- `default_channel_role_sid` (String) The SID of the default role assigned to members of a channel
+- `default_service_role_sid` (String) The SID of the default role assigned to users of the chat service
+- `friendly_name` (String) A human-readable label for the chat service
+- `id` (String) The ID of this resource.
+- `limits` (List of Object) The limits configuration for the chat service (see [below for nested schema](#nestedatt--limits))
+- `media` (List of Object) The media configuration for the chat service (see [below for nested schema](#nestedatt--media))
+- `notifications` (List of Object) The notification configuration for the chat service (see [below for nested schema](#nestedatt--notifications))
+- `post_webhook_retry_count` (Number) The number of retry attempts for post-event webhook requests
+- `post_webhook_url` (String) The URL for post-event webhook requests
+- `pre_webhook_retry_count` (Number) The number of retry attempts for pre-event webhook requests
+- `pre_webhook_url` (String) The URL for pre-event webhook requests
+- `reachability_enabled` (Boolean) Whether the reachability indicator is enabled for the chat service
+- `read_status_enabled` (Boolean) Whether the message read status feature is enabled
+- `typing_indicator_timeout` (Number) The duration in seconds after which a typing indicator times out
+- `url` (String) The absolute URL of the chat service resource
+- `webhook_filters` (List of String) The list of webhook event triggers subscribed to
+- `webhook_method` (String) The HTTP method used for webhook requests
 
-A `limits` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `channel_members` - he max number of members that can be added to a channel
-- `user_channels` - The max number of users that can be a member of
+Optional:
 
----
+- `read` (String)
 
-A `media` block supports the following:
 
-- `compatibility_message` - The placeholder message for media messages which has no text
-- `size_limit_mb` - The media file size limit in Mb
+<a id="nestedatt--limits"></a>
+### Nested Schema for `limits`
 
----
+Read-Only:
 
-A `notifications` block supports the following:
+- `channel_members` (Number)
+- `user_channels` (Number)
 
-- `log_enabled` - Whether notification logs are enabled
-- `new_message` - A `new_message` block as documented below.
-- `added_to_channel` - A `added_to_channel` block as documented below.
-- `invited_to_channel` - A `added_to_channel` block as documented below.
-- `removed_from_channel` - A `removed_from_channel` block as documented below.
 
----
+<a id="nestedatt--media"></a>
+### Nested Schema for `media`
 
-A `new_message` block supports the following:
+Read-Only:
 
-- `enabled` - Whether notifications for a new message are enabled
-- `template` - The template message that is sent when a new message is received
-- `sound` - The sound played when the notification is activated
-- `badge_count_enabled` - Whether bade counts are enabled
+- `compatibility_message` (String)
+- `size_limit_mb` (Number)
 
----
 
-An `added_to_channel` block supports the following:
+<a id="nestedatt--notifications"></a>
+### Nested Schema for `notifications`
 
-- `enabled` - Whether notifications for a user being added to a channel are enabled
-- `template` - The template message that is sent when the notification is activated
-- `sound` - The sound played when the notification is activated
+Read-Only:
 
----
+- `added_to_channel` (List of Object) (see [below for nested schema](#nestedobjatt--notifications--added_to_channel))
+- `invited_to_channel` (List of Object) (see [below for nested schema](#nestedobjatt--notifications--invited_to_channel))
+- `log_enabled` (Boolean)
+- `new_message` (List of Object) (see [below for nested schema](#nestedobjatt--notifications--new_message))
+- `removed_from_channel` (List of Object) (see [below for nested schema](#nestedobjatt--notifications--removed_from_channel))
 
-An `invited_to_channel` block supports the following:
+<a id="nestedobjatt--notifications--added_to_channel"></a>
+### Nested Schema for `notifications.added_to_channel`
 
-- `enabled` - Whether notifications for a user being invited to a channel are enabled
-- `template` - The template message that is sent when the notification is activated
-- `sound` - The sound played when the notification is activated
+Read-Only:
 
----
+- `enabled` (Boolean)
+- `sound` (String)
+- `template` (String)
 
-A `removed_from_channel` block supports the following:
 
-- `enabled` - Whether notifications for a user being removed from a channel are enabled
-- `template` - The template message that is sent when the notification is activated
-- `sound` - The sound played when the notification is activated
+<a id="nestedobjatt--notifications--invited_to_channel"></a>
+### Nested Schema for `notifications.invited_to_channel`
 
-## Timeouts
+Read-Only:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+- `enabled` (Boolean)
+- `sound` (String)
+- `template` (String)
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the role
+
+<a id="nestedobjatt--notifications--new_message"></a>
+### Nested Schema for `notifications.new_message`
+
+Read-Only:
+
+- `badge_count_enabled` (Boolean)
+- `enabled` (Boolean)
+- `sound` (String)
+- `template` (String)
+
+
+<a id="nestedobjatt--notifications--removed_from_channel"></a>
+### Nested Schema for `notifications.removed_from_channel`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `sound` (String)
+- `template` (String)

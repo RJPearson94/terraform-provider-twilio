@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Account Addresses"
+page_title: "twilio_account_addresses Data Source - twilio"
 subcategory: "Account"
+description: |-
+  
 ---
 
 # twilio_account_addresses Data Source
@@ -19,41 +21,45 @@ output "addresses" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The SID of the account the addresses are associated with
+- `account_sid` (String) The SID of the account to list addresses for
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `account_sid`)
-- `account_sid` - The SID of the account the addresses are associated with (Same as the `id`)
-- `addresses` - A list of `address` blocks as documented below
+### Read-Only
 
----
+- `addresses` (List of Object) A list of addresses associated with the account (see [below for nested schema](#nestedatt--addresses))
+- `id` (String) The ID of this resource.
 
-An `address` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the address
-- `friendly_name` - The friendly name of the address
-- `customer_name` - The customer/ business name
-- `street` - The address street
-- `street_secondary` - The address secondary street
-- `city` - The address city
-- `region` - The address region
-- `postal_code` - The address postal code
-- `iso_country` - The address ISO country
-- `emergency_enabled` - Whether emergency calling is enabled for the address
-- `validated` - Whether the address has been validated
-- `verified` - Whether the address has been verified
-- `date_created` - The date in RFC3339 format that the address was created
-- `date_updated` - The date in RFC3339 format that the address was updated
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving addresses
+<a id="nestedatt--addresses"></a>
+### Nested Schema for `addresses`
+
+Read-Only:
+
+- `city` (String)
+- `customer_name` (String)
+- `date_created` (String)
+- `date_updated` (String)
+- `emergency_enabled` (Boolean)
+- `friendly_name` (String)
+- `iso_country` (String)
+- `postal_code` (String)
+- `region` (String)
+- `sid` (String)
+- `street` (String)
+- `street_secondary` (String)
+- `validated` (Boolean)
+- `verified` (Boolean)

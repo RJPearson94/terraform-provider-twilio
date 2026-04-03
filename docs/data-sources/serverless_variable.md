@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Variable"
+page_title: "twilio_serverless_variable Data Source - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_variable Data Source
@@ -25,31 +27,31 @@ output "variable" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the variable is associated with
-- `environment_sid` - (Mandatory) The SID of the environment the variable is associated with
-- `sid` - (Mandatory) The SID of the variable
+- `environment_sid` (String) The SID of the Serverless environment
+- `service_sid` (String) The SID of the Serverless service
+- `sid` (String) The SID of the Serverless variable
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the environment variable (Same as the `sid`)
-- `sid` - The SID of the environment variable (Same as the `id`)
-- `account_sid` - The account SID of the environment variable is deployed into
-- `service_sid` - The service SID of the environment variable is deployed into
-- `environment_sid` - The environment SID of the environment variable is managed under
-- `key` - The environment variable key
-- `value` - The environment variable value
-- `date_created` - The date in RFC3339 format that the environment variable was created
-- `date_updated` - The date in RFC3339 format that the environment variable was updated
-- `url` - The URL of the environment variable
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this variable
+- `date_created` (String) The date and time the variable was created, in RFC 3339 format
+- `date_updated` (String) The date and time the variable was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `key` (String) The name of the environment variable
+- `url` (String) The absolute URL of the variable resource
+- `value` (String) The value of the environment variable
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the environment variable
+Optional:
+
+- `read` (String)

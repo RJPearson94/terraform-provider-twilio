@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Run function"
+page_title: "twilio_studio_flow_widget_run_function Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_run_function Data Source
@@ -51,45 +53,49 @@ data "twilio_studio_flow_widget_run_function" "run_function" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the run function widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `environment_sid` - (Optional) The SID of a Serverless environment
-- `function_sid` - (Optional) The SID of a Serverless function
-- `parameters` - (Optional) A list of `parameter` blocks as documented below
-- `service_sid` - (Optional) The SID of a Serverless service or default, if you are using the legacy functions and assets
-- `url` - (Mandatory) The function URL to call/ invoke
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
+- `url` (String) The HTTPS URL of the Serverless function to execute
 
-~> Due to data type and validation restrictions liquid templates are not supported for the `environment_sid`, `function_sid`, `service_sid` and `url` arguments. Please see the widget documentation to determine whether other arguments support liquid templates
+### Optional
 
----
+- `environment_sid` (String) The SID of the Serverless environment to execute the function in
+- `function_sid` (String) The SID of the Serverless function to execute
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `parameters` (Block List) Key/value parameters to pass to the function as arguments (see [below for nested schema](#nestedblock--parameters))
+- `service_sid` (String) The SID of the Serverless service containing the function, or `default` for the default service
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
 
-A `parameter` block supports the following:
+### Read-Only
 
-- `key` - (Mandatory) The parameter name/ key to pass to the function
-- `value` - (Mandatory) The value of the parameter to pass to the function
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
----
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-A `transitions` block supports the following:
+Optional:
 
-- `fail` - (Optional) The widget to transition to when the function fails to invoke or the function returns a 4xx or 5xx status code
-- `success` - (Optional) The widget to transition to when the function is successfully invoked
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
----
 
-An `offset` block supports the following:
+<a id="nestedblock--parameters"></a>
+### Nested Schema for `parameters`
 
-- `x` - (Optional) The x coordinate to display the run function widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the run function widget in the Studio console. The default value is `0`
+Required:
 
-## Attributes Reference
+- `key` (String) The parameter name
+- `value` (String) The parameter value
 
-The following attributes are exported:
 
-- `id` - The name of the run function widget
-- `json` - The JSON state definition for the run function widget
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
+
+Optional:
+
+- `fail` (String) The name of the next widget when the function execution fails
+- `success` (String) The name of the next widget when the function executes successfully

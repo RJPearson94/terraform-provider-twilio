@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Add TwiML redirect"
+page_title: "twilio_studio_flow_widget_add_twiml_redirect Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_add_twiml_redirect Data Source
@@ -43,35 +45,39 @@ data "twilio_studio_flow_widget_add_twiml_redirect" "add_twiml_redirect" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the add TwiML redirect widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `method` - (Optional) The HTTP method to be used when calling the URL. This value can be either a liquid template or the string `GET` or `POST`
-- `timeout` - (Optional) The time in seconds to wait for the redirect to complete and return control to the Studio flow. This value can be either a liquid template or a number string in the range `0` to `14400` (inclusive)
-- `url` - (Mandatory) The URL where the call/ message will be redirected to. This value can be either a liquid template or a URL
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
+- `url` (String) The absolute URL of the TwiML document to redirect to. Must be an HTTP/HTTPS URL or a Liquid template expression
 
----
+### Optional
 
-A `transitions` block supports the following:
+- `method` (String) The HTTP method to use when fetching the TwiML document. Valid values: `GET`, `POST`
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `timeout` (String) The timeout in seconds for the TwiML redirect request (0–14400)
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
 
-- `fail` - (Optional) The widget to transition to when the redirect fails
-- `return` - (Optional) The widget to transition to when the redirect completes and the flow execution should continue
-- `timeout` - (Optional) The widget to transition to when the redirect timeout is reached
+### Read-Only
 
----
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
-An `offset` block supports the following:
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-- `x` - (Optional) The x coordinate to display the add TwiML redirect widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the add TwiML redirect widget in the Studio console. The default value is `0`
+Optional:
 
-## Attributes Reference
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
-The following attributes are exported:
 
-- `id` - The name of the add TwiML redirect widget
-- `json` - The JSON state definition for the add TwiML redirect widget
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
+
+Optional:
+
+- `fail` (String) The name of the next widget when the TwiML redirect request fails
+- `return` (String) The name of the next widget when the TwiML redirect completes and returns
+- `timeout` (String) The name of the next widget when the TwiML redirect request times out

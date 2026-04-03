@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Verify Messaging Configuration"
+page_title: "twilio_verify_messaging_configuration Resource - twilio"
 subcategory: "Verify"
+description: |-
+  
 ---
 
 # twilio_verify_messaging_configuration Resource
@@ -27,35 +29,35 @@ resource "twilio_verify_messaging_configuration" "messaging_configuration" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `country_code` - (Mandatory) The country code the messaging configuration will be used for. Changing this forces a new resource to be created
-- `messaging_service_sid` - (Mandatory) The messaging service SID which will be associated with the messaging configuration
-- `service_sid` - (Mandatory) The service SID to associate the messaging configuration with. Changing this forces a new resource to be created
+- `country_code` (String) The ISO-3166-1 country code of the messaging configuration. Changing this forces a new resource
+- `messaging_service_sid` (String) The SID of the messaging service to associate with this configuration
+- `service_sid` (String) The SID of the Verify service. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the messaging configuration
-- `account_sid` - The account SID the messaging configuration is associated into
-- `country_code` - The country code the messaging configuration is associated with
-- `messaging_service_sid` - The messaging service SID which will be associated with the messaging configuration
-- `service_sid` - The service SID the messaging configuration is associated with
-- `date_created` - The date in RFC3339 format that the messaging configuration was created
-- `date_updated` - The date in RFC3339 format that the messaging configuration was updated
-- `url` - The URL of the messaging configuration
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this messaging configuration
+- `date_created` (String) The date and time the messaging configuration was created, in RFC 3339 format
+- `date_updated` (String) The date and time the messaging configuration was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `url` (String) The absolute URL of the messaging configuration resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the messaging configuration
-- `update` - (Defaults to 10 minutes) Used when updating the messaging configuration
-- `read` - (Defaults to 5 minutes) Used when retrieving the messaging configuration
-- `delete` - (Defaults to 10 minutes) Used when deleting the messaging configuration
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

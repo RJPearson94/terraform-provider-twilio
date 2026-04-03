@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Service Notification"
+page_title: "twilio_conversations_service_notification Data Source - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_service_notification Data Source
@@ -21,51 +23,60 @@ output "service_notification" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the notification configuration is associated with
+- `service_sid` (String) The SID of the conversations service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the service (Same as the `service_sid`)
-- `service_sid` - The service SID associated with the notification configuration (Same as the `id`)
-- `new_message` - A `new_message` block as documented below.
-- `added_to_conversation` - An `added_to_conversation` block as documented below.
-- `removed_from_conversation` - A `removed_from_conversation` block as documented below.
-- `log_enabled` - (Optional) Whether notification logging is enabled
-- `url` - The URL of the notification configuration
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this service notification
+- `added_to_conversation` (List of Object) Notification settings for when a user is added to a conversation (see [below for nested schema](#nestedatt--added_to_conversation))
+- `id` (String) The ID of this resource.
+- `log_enabled` (Boolean) Whether notification logging is enabled for the service
+- `new_message` (List of Object) Notification settings for new messages (see [below for nested schema](#nestedatt--new_message))
+- `removed_from_conversation` (List of Object) Notification settings for when a user is removed from a conversation (see [below for nested schema](#nestedatt--removed_from_conversation))
+- `url` (String) The absolute URL of the service notification resource
 
-A `new_message` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `enabled` - Whether new message notifications are enabled
-- `template` - The message template which is used when a new message is added to the conversation
-- `sound` - The sound played when a new message is added to the conversation
-- `badge_count_enabled` - Whether message badges are enabled for the conversation
+Optional:
 
----
+- `read` (String)
 
-An `added_to_conversation` block supports the following:
 
-- `enabled` - Whether notifications for users being added to the conversation are enabled
-- `template` - The message template which is used when a user is added to the conversation
-- `sound` - The sound played when a user is added to the conversation
+<a id="nestedatt--added_to_conversation"></a>
+### Nested Schema for `added_to_conversation`
 
----
+Read-Only:
 
-A `removed_from_conversation` block supports the following:
+- `enabled` (Boolean)
+- `sound` (String)
+- `template` (String)
 
-- `enabled` - Whether notifications for users being removed from the conversation are enabled
-- `template` - The message template which is used when a user is removed from the conversation
-- `sound` - The sound played when a user is removed from the conversation
 
-## Timeouts
+<a id="nestedatt--new_message"></a>
+### Nested Schema for `new_message`
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+Read-Only:
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the notification configuration
+- `badge_count_enabled` (Boolean)
+- `enabled` (Boolean)
+- `sound` (String)
+- `template` (String)
+
+
+<a id="nestedatt--removed_from_conversation"></a>
+### Nested Schema for `removed_from_conversation`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `sound` (String)
+- `template` (String)

@@ -44,40 +44,48 @@ func resourceSIPTrunkingIPAccessControlList() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this SIP trunk IP access control list by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this SIP trunk IP access control list",
 			},
 			"trunk_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.SIPTrunkSidValidation(),
+				Description:  "The SID of the SIP trunk to associate the IP access control list with. Changing this forces a new resource",
 			},
 			"ip_access_control_list_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.SIPIPAccessControlListSidValidation(),
+				Description:  "The SID of the IP access control list to associate with the trunk. Changing this forces a new resource",
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A human-readable label for the SIP trunk IP access control list",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP trunk IP access control list was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP trunk IP access control list was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the SIP trunk IP access control list resource",
 			},
 		},
 	}

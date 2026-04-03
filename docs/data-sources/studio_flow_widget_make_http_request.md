@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Make HTTP request"
+page_title: "twilio_studio_flow_widget_make_http_request Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_make_http_request Data Source
@@ -58,46 +60,50 @@ data "twilio_studio_flow_widget_make_http_request" "make_http_request" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the make HTTP request widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `body` - (Optional) The request body
-- `charset` - (Optional) The character encoding of the request body. The default is `utf-8`
-- `content_type` - (Mandatory) The content type of the request body. Valid values include: `application/x-www-form-urlencoded` or `application/json`
-- `method` - (Mandatory) The HTTP method to be used when calling the URL. Valid values include: `GET` or `POST`
-- `parameters` - (Optional) A list of `parameter` blocks as documented below
-- `url` - (Mandatory) The URL which will be called. This value can be either a liquid template or a URL
+- `content_type` (String) The Content-Type header for the request. Valid values: `application/x-www-form-urlencoded`, `application/json`
+- `method` (String) The HTTP method for the request. Valid values: `GET`, `POST`
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
+- `url` (String) The HTTP/HTTPS URL to send the request to. Supports Liquid template expressions
 
-~> Due to data type and validation restrictions liquid templates are not supported for the `content_type` and `method` arguments. Please see the widget documentation to determine whether other arguments support liquid templates
+### Optional
 
----
+- `body` (String) The request body content for POST requests
+- `charset` (String) The character encoding for the request body. Defaults to `utf-8`
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `parameters` (Block List) Key/value parameters to include in the request as query parameters (GET) or form data (POST) (see [below for nested schema](#nestedblock--parameters))
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
 
-A `parameter` block supports the following:
+### Read-Only
 
-- `key` - (Mandatory) The parameter name/ key to pass to the HTTP request
-- `value` - (Mandatory) The value of the parameter to pass to the HTTP request
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
----
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-A `transitions` block supports the following:
+Optional:
 
-- `failed` - (Optional) The widget to transition to when the HTTP request fails
-- `success` - (Optional) The widget to transition to when the HTTP request returns a 20X status code
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
----
 
-An `offset` block supports the following:
+<a id="nestedblock--parameters"></a>
+### Nested Schema for `parameters`
 
-- `x` - (Optional) The x coordinate to display the make HTTP request widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the make HTTP request widget in the Studio console. The default value is `0`
+Required:
 
-## Attributes Reference
+- `key` (String) The parameter name
+- `value` (String) The parameter value
 
-The following attributes are exported:
 
-- `id` - The name of the make HTTP request widget
-- `json` - The JSON state definition for the make HTTP request widget
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
+
+Optional:
+
+- `failed` (String) The name of the next widget when the HTTP request fails
+- `success` (String) The name of the next widget when the HTTP request succeeds

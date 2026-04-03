@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Service Configuration"
+page_title: "twilio_conversations_service_configuration Data Source - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_service_configuration Data Source
@@ -21,26 +23,28 @@ output "configuration" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the configuration is associated with
+- `service_sid` (String) The SID of the conversations service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the service (Same as the `service_sid`)
-- `service_sid` - The service SID associated with the configuration (Same as the `id`)
-- `default_chat_service_role_sid` - The default role assigned to users when they are added to the service
-- `default_conversation_creator_role_sid` - The default role assigned to creator users when they join a new conversation
-- `default_conversation_role_sid` - The default role assigned to users when they join a new conversation
-- `reachability_enabled` - Whether Programmable Chat's reachability indicator is enabled or not
-- `url` - The URL of the service configuration
+### Read-Only
 
-## Timeouts
+- `default_chat_service_role_sid` (String) The SID of the default role assigned to users when they join the service
+- `default_conversation_creator_role_sid` (String) The SID of the default role assigned to the creator of a conversation
+- `default_conversation_role_sid` (String) The SID of the default role assigned to users when they are added to a conversation
+- `id` (String) The ID of this resource.
+- `reachability_enabled` (Boolean) Whether the reachability indicator is enabled for the service
+- `url` (String) The absolute URL of the service configuration resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the service configuration
+Optional:
+
+- `read` (String)

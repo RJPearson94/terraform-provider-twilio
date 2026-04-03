@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow"
+page_title: "twilio_studio_flow Resource - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow Resource
@@ -39,42 +41,41 @@ resource "twilio_studio_flow" "flow" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `friendly_name` - (Mandatory) The name of the Studio flow
-- `status` - (Mandatory) The status of the Studio flow. Valid values include `draft` and `published`
-- `definition` - (Mandatory) The flow definition JSON
-- `validate` - (Optional) Whether to validate the flow definition JSON before creating a new revision. The default is `false`
-- `commit_message` - (Optional) Description of the changes made. The default is `Updated via Terraform`
+- `definition` (String) A JSON string defining the flow structure. Use the `twilio_studio_flow_definition` data source to build this value
+- `friendly_name` (String) A human-readable label for the flow, unique within the account
+- `status` (String) The lifecycle status of the flow. Valid values: `draft`, `published`
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `commit_message` (String) A description of the changes made in this flow revision. Defaults to "Updated via Terraform"
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `validate` (Boolean) Whether to validate the flow definition against the Twilio API before saving. Defaults to false
 
-- `id` - The ID of the Studio flow (Same as the `sid`)
-- `sid` - The SID of the Studio flow (Same as the `id`)
-- `friendly_name` - The name of the Studio flow
-- `definition` - The flow definition JSON
-- `status` - The status of the Studio flow
-- `revision` - The revision number of the Studio flow
-- `valid` - Whether the Studio flow is valid
-- `date_created` - The date in RFC3339 format that the Studio flow was created
-- `date_updated` - The date in RFC3339 format that the Studio flow was updated
-- `url` - The URL of the Studio flow
-- `webhook_url` - The webhook URL of the Studio flow
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this flow
+- `date_created` (String) The date and time the flow was created, in RFC 3339 format
+- `date_updated` (String) The date and time the flow was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `revision` (Number) The current revision number of the flow
+- `sid` (String) The unique SID assigned to this flow by Twilio
+- `url` (String) The absolute URL of the flow resource
+- `valid` (Boolean) Whether the flow definition passed Twilio's validation checks
+- `webhook_url` (String) The webhook URL used to trigger this flow via the REST API
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the Studio flow
-- `update` - (Defaults to 10 minutes) Used when updating the Studio flow
-- `read` - (Defaults to 5 minutes) Used when retrieving the Studio flow
-- `delete` - (Defaults to 10 minutes) Used when deleting the Studio flow
+Optional:
 
-!> When request validation is enabled, the request is constrained by its own create timeout as defined above
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP IP Addresses"
+page_title: "twilio_sip_ip_addresses Data Source - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_ip_addresses Data Source
@@ -20,35 +22,38 @@ output "ip_addresses" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The SID of the account the IP addresses are associated with
-- `ip_access_control_list_sid` - (Mandatory) The SID of the IP access control list the IP addresses are associated with
+- `account_sid` (String) The SID of the account that owns the SIP IP addresses
+- `ip_access_control_list_sid` (String) The SID of the IP access control list to retrieve IP addresses from
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource in the format `account_sid/ip_access_control_list_sid`
-- `account_sid` - The SID of the account the IP addresses are associated with
-- `ip_access_control_list_sid` - The SID of the credential list the IP addresses are associated with
-- `ip_addresses` - A list of `ip_address` blocks as documented below
+### Read-Only
 
----
+- `id` (String) The ID of this resource.
+- `ip_addresses` (List of Object) A list of IP addresses in the IP access control list (see [below for nested schema](#nestedatt--ip_addresses))
 
-An `ip_address` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the IP address
-- `friendly_name` - The friendly name of the IP address
-- `ip_address` - The IP address of the resource
-- `cidr_length_prefix` - The CIDR length prefix for the IP address
-- `date_created` - The date in RFC3339 format that the IP address was created
-- `date_updated` - The date in RFC3339 format that the IP address was updated
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving the IP addresses
+<a id="nestedatt--ip_addresses"></a>
+### Nested Schema for `ip_addresses`
+
+Read-Only:
+
+- `cidr_length_prefix` (Number)
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `ip_address` (String)
+- `sid` (String)

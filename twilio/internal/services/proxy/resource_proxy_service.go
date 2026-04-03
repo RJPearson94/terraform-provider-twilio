@@ -47,32 +47,38 @@ func resourceProxyService() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this Proxy service by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this Proxy service",
 			},
 			"chat_instance_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: utils.ChatServiceSidValidation(),
+				Description:  "The SID of the Chat service instance to associate with the Proxy service",
 			},
 			"unique_name": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringLenBetween(1, 191),
+				Description:  "A unique, developer-assigned name for the Proxy service. Must be between 1 and 191 characters",
 			},
 			"default_ttl": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  0,
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     0,
+				Description: "The default time-to-live (TTL) for sessions in the Proxy service, in seconds. Defaults to `0`",
 			},
 			"callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL to receive callback events for the Proxy service",
 			},
 			"geo_match_level": {
 				Type:     schema.TypeString,
@@ -83,6 +89,7 @@ func resourceProxyService() *schema.Resource {
 					"country",
 					"extended-area-code",
 				}, false),
+				Description: "The geographic area for matching proxy numbers. Valid values are `area-code`, `country`, or `extended-area-code`. Defaults to `country`",
 			},
 			"number_selection_behavior": {
 				Type:     schema.TypeString,
@@ -92,28 +99,34 @@ func resourceProxyService() *schema.Resource {
 					"avoid-sticky",
 					"prefer-sticky",
 				}, false),
+				Description: "The behavior for selecting proxy numbers. Valid values are `avoid-sticky` or `prefer-sticky`. Defaults to `prefer-sticky`",
 			},
 			"intercept_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL to receive intercept callback events for the Proxy service",
 			},
 			"out_of_session_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL to receive out-of-session callback events for the Proxy service",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the Proxy service was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the Proxy service was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the Proxy service resource",
 			},
 		},
 	}

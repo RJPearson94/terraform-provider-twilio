@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Definition"
+page_title: "twilio_studio_flow_definition Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_definition Data Source
@@ -95,30 +97,34 @@ resource "twilio_studio_flow" "flow" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `description` - (Mandatory) A description of the flow
-- `flags` - (Optional) A `flags` block as documented below
-- `initial_state` - (Mandatory) The first state to transition to when executing the flow
-- `states` - (Mandatory) A list of `state` blocks as documented below
+- `description` (String) A human-readable description of the flow's purpose
+- `initial_state` (String) The name of the widget that handles the flow's entry point (typically the Trigger widget)
+- `states` (Block List, Min: 1) The list of widget states that make up the flow. Use the widget data sources (e.g. `twilio_studio_flow_widget_trigger`) to generate each state's JSON (see [below for nested schema](#nestedblock--states))
 
----
+### Optional
 
-A `flags` block supports the following:
+- `flags` (Block List, Max: 1) Optional feature flags controlling flow execution behaviour (see [below for nested schema](#nestedblock--flags))
 
-- `allow_concurrent_calls` - (Mandatory) Whether the flow should allow concurrent calls
+### Read-Only
 
----
+- `id` (String) The ID of this resource.
+- `json` (String) The assembled JSON flow definition, suitable for use in the `definition` argument of `twilio_studio_flow`
 
-A `state` block supports the following:
+<a id="nestedblock--states"></a>
+### Nested Schema for `states`
 
-- `json` - (Mandatory) A JSON string of the state definition
+Required:
 
-## Attributes Reference
+- `json` (String) The JSON representation of a single widget state, produced by a widget data source
 
-The following attributes are exported:
 
-- `id` - The ID of the flow definition
-- `json` - The JSON for the flow definition
+<a id="nestedblock--flags"></a>
+### Nested Schema for `flags`
+
+Required:
+
+- `allow_concurrent_calls` (Boolean) Whether the flow allows multiple simultaneous executions for the same contact

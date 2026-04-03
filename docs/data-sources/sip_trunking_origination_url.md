@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Trunking Origination URL"
+page_title: "twilio_sip_trunking_origination_url Data Source - twilio"
 subcategory: "SIP Trunking"
+description: |-
+  
 ---
 
 # twilio_sip_trunking_origination_url Data Source
@@ -22,32 +24,33 @@ output "origination_url" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `trunk_sid` - (Mandatory) The SID of the SIP trunk the origination URL is associated with
-- `sid` - (Mandatory) The SID of the origination URL
+- `sid` (String) The SID of the SIP trunk origination URL to look up
+- `trunk_sid` (String) The SID of the SIP trunk the origination URL belongs to
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the origination URL (Same as the `sid`)
-- `sid` - The SID of the origination URL (Same as the `id`)
-- `account_sid` - The account SID the origination URL is associated with
-- `trunk_sid` - The SID of the SIP trunk the origination URL is associated with
-- `enabled` - Whether the origination URL is enabled
-- `friendly_name` - The friendly name of the origination URL
-- `priority` - The priority/ importance of the origination URL
-- `sip_url` - The SIP address to route origination calls to
-- `weight` - The weight/ share which is used to determine where the traffic is routed with origination URL of the same priority
-- `date_created` - The date in RFC3339 format that the origination URL was created
-- `date_updated` - The date in RFC3339 format that the origination URL was updated
-- `url` - The URL of the origination URL resource
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this SIP trunk origination URL
+- `date_created` (String) The date and time the SIP trunk origination URL was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP trunk origination URL was last updated, in RFC 3339 format
+- `enabled` (Boolean) Whether the origination URL is enabled and available for use
+- `friendly_name` (String) A human-readable label for the SIP trunk origination URL
+- `id` (String) The ID of this resource.
+- `priority` (Number) The priority of the origination URL. Lower values have higher priority
+- `sip_url` (String) The SIP address to route origination calls to
+- `url` (String) The absolute URL of the SIP trunk origination URL resource
+- `weight` (Number) The weight of the origination URL, used for load balancing among URLs with the same priority
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the origination URL details
+Optional:
+
+- `read` (String)

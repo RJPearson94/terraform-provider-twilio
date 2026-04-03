@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Say/ Play"
+page_title: "twilio_studio_flow_widget_say_play Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_say_play Data Source
@@ -38,39 +40,40 @@ data "twilio_studio_flow_widget_say_play" "say_play" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the say/ play widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `digits` - (Optional) The digits to send as DTMF tones
-- `language` - (Optional) The language to use when speaking the message. This argument conflicts with `digits` and `play`
-- `loop` - (Optional) The number of times to say/ play content
-- `play` - (Optional) The URL of media content to play. This value can be either a liquid template or a URL
-- `say` - (Optional) The text to say
-- `voice` - (Optional) The voice to use when speaking the message. This argument conflicts with `digits` and `play`
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
 
-~> Exactly one of the following arguments: `digits`, `play` or `say` must be specified
-~> Due to data type and validation restrictions liquid templates are not supported for the `loop` argument. Please see the widget documentation to determine whether other arguments support liquid templates
+### Optional
 
----
+- `digits` (String) DTMF digits to play to the caller. Exactly one of `digits`, `play`, or `say` must be set
+- `language` (String) The language for text-to-speech (e.g. `en-US`). Conflicts with `digits` and `play`
+- `loop` (Number) How many times to repeat the audio or speech. Use 0 for infinite loop
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `play` (String) URL of the audio file to play. Exactly one of `digits`, `play`, or `say` must be set
+- `say` (String) Text to speak to the caller using text-to-speech. Exactly one of `digits`, `play`, or `say` must be set
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
+- `voice` (String) The text-to-speech voice to use (e.g. `alice`). Conflicts with `digits` and `play`
 
-A `transitions` block supports the following:
+### Read-Only
 
-- `audio_complete` - (Optional) The widget to transition to when the message has been read or the audio content has been played
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
----
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-An `offset` block supports the following:
+Optional:
 
-- `x` - (Optional) The x coordinate to display the say/ play widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the say/ play widget in the Studio console. The default value is `0`
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
-## Attributes Reference
 
-The following attributes are exported:
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
 
-- `id` - The name of the say/ play widget
-- `json` - The JSON state definition for the say/ play widget
+Optional:
+
+- `audio_complete` (String) The name of the next widget when audio playback or text-to-speech finishes

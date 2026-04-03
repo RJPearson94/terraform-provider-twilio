@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Sync Service"
+page_title: "twilio_sync_service Resource - twilio"
 subcategory: "Sync"
+description: |-
+  
 ---
 
 # twilio_sync_service Resource
@@ -25,44 +27,37 @@ resource "twilio_sync_service" "service" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Optional
 
-- `acl_enabled` - (Optional) Whether access control lists are enabled. The default value is `false`
-- `friendly_name` - (Optional) The friendly name of the service
-- `reachability_debouncing_enabled` - (Optional) Whether endpoint_disconnected event should occur when the reachability_debouncing_window is reached. The default value is `false`
-- `reachability_debouncing_window` - (Optional) The reachability event delay in milliseconds. The value must be between `1000` and `30000` (inclusive). The default value is `5000`
-- `reachability_webhooks_enabled` - (Optional) Whether the service should call the webhook url on client connections. The default value is `false`
-- `webhook_url` - (Optional) The URL called when Sync objects are changed
-- `webhooks_from_rest_enabled` - (Optional) Whether the service should call the webhook url on updates via the REST API. The default value is `false`
+- `acl_enabled` (Boolean) Whether token identities in the Sync service must be granted access to Sync objects via the Permissions API. Defaults to `false`
+- `friendly_name` (String) A human-readable label for the Sync service
+- `reachability_debouncing_enabled` (Boolean) Whether every endpoint_disconnected event should fire after a configurable delay. Defaults to `false`
+- `reachability_debouncing_window` (Number) The reachability event delay, in milliseconds, between 1000 and 30000. Defaults to `5000`
+- `reachability_webhooks_enabled` (Boolean) Whether the service instance should call the webhook_url when client endpoints connect or disconnect from Sync. Defaults to `false`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `webhook_url` (String) The URL to which Sync will send webhooks. Must be a valid HTTP or HTTPS URL
+- `webhooks_from_rest_enabled` (Boolean) Whether the service instance should call the webhook_url when the REST API is used to update Sync objects. Defaults to `false`
 
-## Attributes Reference
+### Read-Only
 
-The following attributes are exported:
+- `account_sid` (String) The SID of the account that owns this Sync service
+- `date_created` (String) The date and time the Sync service was created, in RFC 3339 format
+- `date_updated` (String) The date and time the Sync service was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this Sync service by Twilio
+- `url` (String) The absolute URL of the Sync service resource
 
-- `id` - The ID of the service (Same as the `sid`)
-- `sid` - The SID of the service (Same as the `id`)
-- `account_sid` - The account SID the service is associated with
-- `acl_enabled` - Whether access control lists are enabled
-- `friendly_name` - The friendly name of the service
-- `reachability_debouncing_enabled` - Whether endpoint_disconnected event should occur when the reachability_debouncing_window is reached
-- `reachability_debouncing_window` - The reachability event delay in milliseconds
-- `reachability_webhooks_enabled` - Whether the service should call the webhook url on client connections
-- `webhook_url` - The URL called when Sync objects are changed
-- `webhooks_from_rest_enabled` - Whether the service should call the webhook url on updates via the REST API
-- `date_created` - The date in RFC3339 format that the service was created
-- `date_updated` - The date in RFC3339 format that the service was updated
-- `url` - The URL of the service
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-## Timeouts
+Optional:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `create` - (Defaults to 10 minutes) Used when creating the service
-- `update` - (Defaults to 10 minutes) Used when updating the service
-- `read` - (Defaults to 5 minutes) Used when retrieving the service
-- `delete` - (Defaults to 10 minutes) Used when deleting the service
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

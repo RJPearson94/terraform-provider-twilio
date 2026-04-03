@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TwiML App"
+page_title: "twilio_twiml_app Resource - twilio"
 subcategory: "TwiML"
+description: |-
+  
 ---
 
 # twilio_twiml_app Resource
@@ -29,80 +31,61 @@ resource "twilio_twiml_app" "app" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The account SID to associate the application with. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The friendly name of the application
-- `messaging` - (Optional) A `messaging` block as documented below.
-- `voice` - (Optional) A `voice` block as documented below.
+- `account_sid` (String) The SID of the account that owns this TwiML application. Changing this forces a new resource
 
----
+### Optional
 
-A `messaging` block supports the following:
+- `friendly_name` (String) A human-readable label for the TwiML application
+- `messaging` (Block List, Max: 1) A block to configure messaging settings for the TwiML application (see [below for nested schema](#nestedblock--messaging))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `voice` (Block List, Max: 1) A block to configure voice settings for the TwiML application (see [below for nested schema](#nestedblock--voice))
 
-- `url` - (Optional) The URL which should be called on each incoming message
-- `method` - (Optional) The HTTP method that should be used to call the URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method that should be used to call the fallback URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `status_callback_url` (Optional) The URL to POST message status information to
+### Read-Only
 
----
+- `date_created` (String) The date and time the TwiML application was created, in RFC 3339 format
+- `date_updated` (String) The date and time the TwiML application was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this TwiML application by Twilio
 
-A `voice` block supports the following:
+<a id="nestedblock--messaging"></a>
+### Nested Schema for `messaging`
 
-- `url` - (Optional) The URL which should be called on each incoming call
-- `method` - (Optional) The HTTP method that should be used to call the URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method that should be used to call the fallback URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `caller_id_lookup` - (Optional) Whether caller ID lookup is enabled for the phone number. The default value is `false`
-- `status_callback_url` (Optional) The URL to send status information to
-- `status_callback_method` (Optional) The HTTP method that should be used to call the status callback URL. Valid values are `GET` or `POST`. The default value is `POST`
+Optional:
 
-## Attributes Reference
+- `fallback_method` (String) The HTTP method used to call the messaging fallback URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `fallback_url` (String) The URL to call when an error occurs retrieving or executing the TwiML for incoming messages
+- `method` (String) The HTTP method used to call the messaging URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `status_callback_url` (String) The URL to call for messaging status callback events
+- `url` (String) The URL to call when the application receives an incoming message
 
-The following attributes are exported:
 
-- `id` - The ID of the application (Same as the `sid`)
-- `sid` - The SID of the application (Same as the `id`)
-- `account_sid` - The account SID the application is associated with
-- `friendly_name` - The friendly name of the application
-- `messaging` - A `messaging` block as documented below.
-- `voice` - A `voice` block as documented below.
-- `date_created` - The date in RFC3339 format that the application was created
-- `date_updated` - The date in RFC3339 format that the application was updated
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
----
+Optional:
 
-A `messaging` block supports the following:
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
-- `url` - The URL which should be called on each incoming message
-- `method` - The HTTP method that should be used to call the URL
-- `fallback_url` - The URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method that should be used to call the fallback URL
-- `status_callback_url` The URL to POST message status information to
 
----
+<a id="nestedblock--voice"></a>
+### Nested Schema for `voice`
 
-A `voice` block supports the following:
+Optional:
 
-- `url` - The URL which should be called on each incoming call
-- `method` - The HTTP method that should be used to call the URL
-- `fallback_url` - The URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method that should be used to call the fallback URL
-- `caller_id_lookup` - Whether caller ID lookup is enabled for the phone number
-- `status_callback_url` - The URL to send status information to
-- `status_callback_method` The HTTP method that should be used to call the status callback URL
-
-## Timeouts
-
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `create` - (Defaults to 10 minutes) Used when creating the application
-- `update` - (Defaults to 10 minutes) Used when updating the application
-- `read` - (Defaults to 5 minutes) Used when retrieving the application
-- `delete` - (Defaults to 10 minutes) Used when deleting the application
+- `caller_id_lookup` (Boolean) Whether to perform a caller ID lookup on incoming voice calls. Defaults to `false`
+- `fallback_method` (String) The HTTP method used to call the voice fallback URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `fallback_url` (String) The URL to call when an error occurs retrieving or executing the TwiML for incoming voice calls
+- `method` (String) The HTTP method used to call the voice URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `status_callback_method` (String) The HTTP method used to call the voice status callback URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `status_callback_url` (String) The URL to call for voice status callback events
+- `url` (String) The URL to call when the application receives an incoming voice call
 
 ## Import
 

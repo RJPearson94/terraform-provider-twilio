@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Push Credentials (FCM)"
+page_title: "twilio_conversations_push_credential_fcm Resource - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_push_credential_fcm Resource
@@ -18,35 +20,36 @@ resource "twilio_conversations_push_credential_fcm" "push_credential_fcm" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `friendly_name` - (Mandatory) The friendly name of the push credentials. The length of the string must be between `1` and `64` characters (inclusive)
-- `secret` - (Mandatory) The FCM secret
+- `friendly_name` (String) A human-readable label for the FCM push credential
+- `secret` (String, Sensitive) The FCM server key or secret
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the push credentials (Same as the `sid`)
-- `sid` - The SID of the push credentials (Same as the `id`)
-- `account_sid` - The account SID associated with the push credentials
-- `friendly_name` - The friendly name of the push credentials
-- `secret` - The FCM secret
-- `type` - What type of notification service the credentials are for. The value will be `fcm`
-- `date_created` - The date in RFC3339 format that the push credentials were created
-- `date_updated` - The date in RFC3339 format that the push credentials were updated
-- `url` - The URL of the push credentials
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this FCM push credential
+- `date_created` (String) The date and time the FCM push credential was created, in RFC 3339 format
+- `date_updated` (String) The date and time the FCM push credential was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this FCM push credential by Twilio
+- `type` (String) The type of push credential
+- `url` (String) The absolute URL of the FCM push credential resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the push credentials
-- `update` - (Defaults to 10 minutes) Used when updating the push credentials
-- `read` - (Defaults to 5 minutes) Used when retrieving the push credentials
-- `delete` - (Defaults to 10 minutes) Used when deleting the push credentials
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

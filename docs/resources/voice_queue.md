@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Voice Queue"
+page_title: "twilio_voice_queue Resource - twilio"
 subcategory: "Voice"
+description: |-
+  
 ---
 
 # twilio_voice_queue Resource
@@ -16,36 +18,36 @@ resource "twilio_voice_queue" "queue" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The account SID to associate the queue with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The friendly name of the queue. The length of the string must be between `1` and `64` characters (inclusive)
-- `max_size` - (Optional) The maximum number of calls which can be on the queue. The value must be between `1` and `5000` (inclusive). The default value is `100`
+- `account_sid` (String) The SID of the account to create the queue in. Changing this forces a new resource
+- `friendly_name` (String) A human-readable label for the queue (1–64 characters)
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `max_size` (Number) The maximum number of calls that can be in the queue at one time (1–5000). Defaults to `100`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the queue (Same as the `sid`)
-- `sid` - The SID of the queue (Same as the `id`)
-- `account_sid` - The account SID the queue is associated with
-- `friendly_name` - The friendly name of the queue
-- `max_size` - The maximum number of calls which can be on the queue
-- `average_wait_time` - The average wait time of calls on the queue
-- `current_size` - The current size of the queue
-- `date_created` - The date in RFC3339 format that the queue was created
-- `date_updated` - The date in RFC3339 format that the queue was updated
+### Read-Only
 
-## Timeouts
+- `average_wait_time` (Number) The average wait time of calls currently in the queue, in seconds
+- `current_size` (Number) The current number of calls in the queue
+- `date_created` (String) The date and time the queue was created, in RFC 3339 format
+- `date_updated` (String) The date and time the queue was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this queue by Twilio
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the queue
-- `update` - (Defaults to 10 minutes) Used when updating the queue
-- `read` - (Defaults to 5 minutes) Used when retrieving the queue
-- `delete` - (Defaults to 10 minutes) Used when deleting the queue
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Messaging Service"
+page_title: "twilio_messaging_service Data Source - twilio"
 subcategory: "Programmable Messaging"
+description: |-
+  
 ---
 
 # twilio_messaging_service Data Source
@@ -23,38 +25,40 @@ output "service" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the service
+- `sid` (String) The SID of the messaging service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the service (Same as the `sid`)
-- `sid` - The SID of the service (Same as the `id`)
-- `account_sid` - The account SID associated with the service
-- `friendly_name` - The friendly name of the service
-- `area_code_geomatch` - Whether to use attempt to use a local phone number to send a message
-- `fallback_method` - The HTTP method to call the fallback URL
-- `fallback_to_long_code` - Whether to attempt to use a long code to resent a message when delivery of a message fails using a short code
-- `fallback_url` - The URL which will be called when an error occurs fetching or executing the TwiML from the inbound request URL.
-- `inbound_method` - The HTTP method to call the inbound request URL
-- `inbound_request_url` - The URL which will be called when an inbound message is received for any associated short code or phone number
-- `mms_converter` - Whether to convert MMS messages to SMS messages and include a URL to the content when the carrier cannot receive MMS messages
-- `smart_encoding` - Whether to enable detection and replacement of Unicode characters that are easy to miss
-- `status_callback_url` - The URL which will be called when a message delivery status is changed
-- `sticky_sender` - Whether to ensure the end-user receives messages from the same phone number
-- `use_inbound_webhook_on_number` - Whether to use the webhook that is configured on the phone number
-- `validity_period` - How long (in seconds) messages sent from the messaging service are valid for
-- `date_created` - The date in RFC3339 format that the service was created
-- `date_updated` - The date in RFC3339 format that the service was updated
-- `url` - The URL of the service
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this messaging service
+- `area_code_geomatch` (Boolean) Whether area code geomatch is enabled on the messaging service
+- `date_created` (String) The date and time the messaging service was created, in RFC 3339 format
+- `date_updated` (String) The date and time the messaging service was last updated, in RFC 3339 format
+- `fallback_method` (String) The HTTP method used to call the fallback URL
+- `fallback_to_long_code` (Boolean) Whether fallback to long code is enabled for the messaging service
+- `fallback_url` (String) The URL to call when an inbound message error is received
+- `friendly_name` (String) A human-readable label for the messaging service
+- `id` (String) The ID of this resource.
+- `inbound_method` (String) The HTTP method used to call the inbound request URL
+- `inbound_request_url` (String) The URL to call when a message is received by any phone number or short code in the messaging service
+- `mms_converter` (Boolean) Whether the MMS converter is enabled for the messaging service
+- `smart_encoding` (Boolean) Whether smart encoding is enabled for the messaging service
+- `status_callback_url` (String) The URL to call when a message status change event is received
+- `sticky_sender` (Boolean) Whether sticky sender is enabled on the messaging service
+- `url` (String) The absolute URL of the messaging service resource
+- `use_inbound_webhook_on_number` (Boolean) Whether the inbound webhook on the phone number is used for incoming messages
+- `validity_period` (Number) The number of seconds that the messaging service will keep a message in the sending queue before it is considered failed
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the service
+Optional:
+
+- `read` (String)

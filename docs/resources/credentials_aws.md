@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio AWS Credentials"
+page_title: "twilio_credentials_aws Resource - twilio"
 subcategory: "Credentials"
+description: |-
+  
 ---
 
 # twilio_credentials_aws Resource
@@ -39,32 +41,33 @@ resource "twilio_credentials_aws" "aws" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Optional) The SID of a sub account to associate the public key resource with. Changing this forces a new resource to be created
-- `aws_secret_access_key` - (Mandatory) The AWS Secret Access Key to associate with the AWS credential resource. Changing this forces a new resource to be created
-- `aws_access_key_id` - (Mandatory) The AWS Access Key ID to associate with the AWS credential resource. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The friendly name of the AWS credential resource
+- `aws_access_key_id` (String) The AWS access key ID used to authenticate with AWS services. Changing this forces a new resource
+- `aws_secret_access_key` (String, Sensitive) The AWS secret access key used to authenticate with AWS services. Sensitive -- will not be shown in logs or plans. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `account_sid` (String) The SID of the account that owns this AWS credential. Changing this forces a new resource
+- `friendly_name` (String) A human-readable label for the AWS credential
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the AWS credential resource (Same as the `sid`)
-- `sid` - The SID of the AWS credential resource (Same as the `id`)
-- `account_sid` - The account SID associated with the AWS credential resource
-- `friendly_name` - The friendly name of the AWS credential resource
-- `date_created` - The date in RFC3339 format that the AWS credential resource was created
-- `date_updated` - The date in RFC3339 format that the AWS credential resource was updated
-- `url` - The URL of the AWS credential resource
+### Read-Only
 
-## Timeouts
+- `date_created` (String) The date and time the AWS credential was created, in RFC 3339 format
+- `date_updated` (String) The date and time the AWS credential was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this AWS credential by Twilio
+- `url` (String) The absolute URL of the AWS credential resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the AWS credential resource
-- `update` - (Defaults to 10 minutes) Used when updating the AWS credential resource
-- `read` - (Defaults to 5 minutes) Used when retrieving the AWS credential resource
-- `delete` - (Defaults to 10 minutes) Used when deleting the AWS credential resource
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)

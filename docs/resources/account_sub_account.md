@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Sub Account"
+page_title: "twilio_account_sub_account Resource - twilio"
 subcategory: "Account"
+description: |-
+  
 ---
 
 # twilio_account_sub_account Resource
@@ -19,35 +21,33 @@ resource "twilio_account_sub_account" "sub_account" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Optional
 
-- `friendly_name` - (Optional) The friendly name of the account
-- `status` - (Optional) The status of the account. Valid values are `closed`, `suspended` or `active`. The default value is `active`
+- `friendly_name` (String) A human-readable label for the sub-account
+- `status` (String) The status of the sub-account. Valid values are `active`, `suspended`, or `closed`. Defaults to `active`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-## Attributes Reference
+### Read-Only
 
-The following attributes are exported:
+- `auth_token` (String, Sensitive) The authorization token for the sub-account. Sensitive -- will not be shown in logs or plans
+- `date_created` (String) The date and time the sub-account was created, in RFC 3339 format
+- `date_updated` (String) The date and time the sub-account was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `owner_account_sid` (String) The SID of the parent account that owns this sub-account
+- `sid` (String) The unique SID assigned to this sub-account by Twilio
+- `type` (String) The type of the account (e.g., `Trial` or `Full`)
 
-- `id` - The ID of the account (Same as the `sid`)
-- `sid` - The SID of the account (Same as the `id`)
-- `friendly_name` - The friendly name of the account
-- `status` - The status of the account
-- `owner_account_sid` - The SID of the parent/ owner account
-- `type` - The type of account
-- `auth_token` - The auth token for the account
-- `date_created` - The date in RFC3339 format that the account was created
-- `date_updated` - The date in RFC3339 format that the account was updated
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-## Timeouts
+Optional:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `create` - (Defaults to 10 minutes) Used when creating the account
-- `update` - (Defaults to 10 minutes) Used when updating the account
-- `read` - (Defaults to 5 minutes) Used when retrieving the account
-- `delete` - (Defaults to 10 minutes) Used when deleting the account
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

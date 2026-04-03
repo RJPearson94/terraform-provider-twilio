@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Functions"
+page_title: "twilio_serverless_functions Data Source - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_functions Data Source
@@ -23,40 +25,41 @@ output "functions" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the functions are associated with
+- `service_sid` (String) The SID of the Serverless service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `service_sid`)
-- `service_sid` - The SID of the service the functions are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the functions
-- `functions` - A list of `function` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these functions
+- `functions` (List of Object) A list of functions belonging to the Serverless service (see [below for nested schema](#nestedatt--functions))
+- `id` (String) The ID of this resource.
 
-A `function` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the function
-- `friendly_name` - The name of the function
-- `content_file_name` - The name of the file
-- `latest_version_sid` - The SID of the latest function version
-- `source` - The relative path to the function file
-- `source_hash` - A hash of the function file to trigger deployments
-- `content_type` - The file MIME-type
-- `path` - The request URI path
-- `visibility` - The visibility of the function
-- `date_created` - The date in RFC3339 format that the function was created
-- `date_updated` - The date in RFC3339 format that the function was updated
-- `url` - The URL of the function
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving functions
+<a id="nestedatt--functions"></a>
+### Nested Schema for `functions`
+
+Read-Only:
+
+- `content` (String)
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `latest_version_sid` (String)
+- `path` (String)
+- `sid` (String)
+- `url` (String)
+- `visibility` (String)

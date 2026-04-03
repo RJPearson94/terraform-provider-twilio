@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Video Recording Settings"
+page_title: "twilio_video_recording_settings Data Source - twilio"
 subcategory: "Video"
+description: |-
+  
 ---
 
 # twilio_video_recording_settings Data Source
@@ -15,27 +17,27 @@ Use this data source to access information about the default recording settings.
 data "twilio_video_recording_settings" "recording_settings" {}
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Optional
 
-N/A - This data source has no arguments
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-## Attributes Reference
+### Read-Only
 
-The following attributes are exported:
+- `account_sid` (String) The SID of the account that owns this video recording settings
+- `aws_credentials_sid` (String) The SID of the stored AWS credentials for external S3 recording storage
+- `aws_s3_url` (String) The URL of the AWS S3 bucket where recordings are stored
+- `aws_storage_enabled` (Boolean) Whether recordings are stored in an external AWS S3 bucket
+- `encryption_enabled` (Boolean) Whether recordings are encrypted at rest
+- `encryption_key_sid` (String) The SID of the stored encryption key used for at-rest encryption of recordings
+- `friendly_name` (String) A human-readable label for the video recording settings
+- `id` (String) The ID of this resource.
+- `url` (String) The absolute URL of the video recording settings resource
 
-- `id` - The ID of the recording settings (Same as the `account_sid`)
-- `account_sid` - The account SID the recording settings is associated with
-- `aws_credentials_sid` - The SID of the AWS credentials supplied to Twilio which are used to store recordings in your S3 bucket
-- `aws_s3_url` - The URL of the S3 bucket where recordings are stored
-- `aws_storage_enabled` - (Optional) Whether recordings are stored in your S3 bucket
-- `encryption_enabled` - Whether encrypted recordings is enabled
-- `encryption_key_sid` - The SID of the credential supplied to Twilio which is used to encrypt the recordings
-- `url` - The URL of the recording settings
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-## Timeouts
+Optional:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `read` - (Defaults to 5 minutes) Used when retrieving the default recording settings
+- `read` (String)

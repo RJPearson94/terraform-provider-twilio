@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Chat Channel Webhooks"
+page_title: "twilio_chat_channel_webhooks Data Source - twilio"
 subcategory: "Programmable Chat"
+description: |-
+  
 ---
 
 # twilio_chat_channel_webhooks Data Source
@@ -26,48 +28,51 @@ output "webhooks" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the channel webhooks are associated with
-- `channel_sid` - (Mandatory) The SID of the channel the webhooks are associated with
+- `channel_sid` (String) The SID of the chat channel
+- `service_sid` (String) The SID of the Programmable Chat service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource in the format `service_sid/channel_sid`
-- `account_sid` - The SID of the account the channel webhooks are associated with
-- `service_sid` - The SID of the service the channel webhooks are associated with
-- `channel_sid` - The SID of the channel the webhooks are associated with
-- `webhooks` - A list of `webhook` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the channel webhooks
+- `id` (String) The ID of this resource.
+- `webhooks` (List of Object) The list of channel webhooks (see [below for nested schema](#nestedatt--webhooks))
 
-A `webhook` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the channel webhook
-- `type` - The type of webhook
-- `configuration` - The `configuration` block as documented below
-- `date_created` - The date in RFC3339 format that the channel webhook was created
-- `date_updated` - The date in RFC3339 format that the channel webhook was updated
-- `url` - The URL of the channel webhook
+Optional:
 
----
+- `read` (String)
 
-A `configuration` block supports the following:
 
-- `method` - The HTTP method to trigger the channel webhook
-- `webhook_url` - The webhook URL
-- `filters` - The filter conditions that trigger the channel webhook
-- `retry_count` - The number of attempts to retry a failed channel webhook call
-- `flow_sid` - The SID for the studio flow which will be called
-- `retry_count` - The number of attempts to retry a failed channel webhook call
-- `triggers` - The keywords which trigger the channel webhook
+<a id="nestedatt--webhooks"></a>
+### Nested Schema for `webhooks`
 
-## Timeouts
+Read-Only:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+- `configuration` (List of Object) (see [below for nested schema](#nestedobjatt--webhooks--configuration))
+- `date_created` (String)
+- `date_updated` (String)
+- `sid` (String)
+- `type` (String)
+- `url` (String)
 
-- `read` - (Defaults to 10 minutes) Used when retrieving channel webhooks
+<a id="nestedobjatt--webhooks--configuration"></a>
+### Nested Schema for `webhooks.configuration`
+
+Read-Only:
+
+- `filters` (List of String)
+- `flow_sid` (String)
+- `method` (String)
+- `retry_count` (Number)
+- `triggers` (List of String)
+- `webhook_url` (String)

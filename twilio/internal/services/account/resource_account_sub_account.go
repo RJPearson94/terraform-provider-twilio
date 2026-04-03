@@ -49,22 +49,26 @@ func resourceAccountSubAccount() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this sub-account by Twilio",
 			},
 			"owner_account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the parent account that owns this sub-account",
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Description: "A human-readable label for the sub-account",
 			},
 			"auth_token": {
-				Type:      schema.TypeString,
-				Computed:  true,
-				Sensitive: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Sensitive:   true,
+				Description: "The authorization token for the sub-account. Sensitive -- will not be shown in logs or plans",
 			},
 			"status": {
 				Type:     schema.TypeString,
@@ -75,18 +79,22 @@ func resourceAccountSubAccount() *schema.Resource {
 					"suspended",
 					"active",
 				}, false),
+				Description: "The status of the sub-account. Valid values are `active`, `suspended`, or `closed`. Defaults to `active`",
 			},
 			"type": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The type of the account (e.g., `Trial` or `Full`)",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the sub-account was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the sub-account was last updated, in RFC 3339 format",
 			},
 		},
 	}

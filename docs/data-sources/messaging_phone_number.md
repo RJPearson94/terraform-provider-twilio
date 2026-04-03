@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Messaging Phone Number"
+page_title: "twilio_messaging_phone_number Data Source - twilio"
 subcategory: "Programmable Messaging"
+description: |-
+  
 ---
 
 # twilio_messaging_phone_number Data Source
@@ -24,30 +26,31 @@ output "phone_number" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the phone number is associated with
-- `sid` - (Mandatory) The SID of the phone number
+- `service_sid` (String) The SID of the messaging service the phone number is associated with
+- `sid` (String) The SID of the phone number
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the phone number (Same as the `sid`)
-- `sid` - The SID of the Twilio phone number associated with the messaging service (Same as the `id`)
-- `service_sid` - The messaging service SID associated with the phone number
-- `account_sid` - The account SID associated with the phone number
-- `capabilities` - The capabilities that are enabled for the phone number
-- `country_code` - The country code of the phone number
-- `phone_number` - The phone number
-- `date_created` - The date in RFC3339 format that the messaging phone number resource was created
-- `date_updated` - The date in RFC3339 format that the messaging phone number resource was updated
-- `url` - The URL of the messaging phone number resource
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this phone number
+- `capabilities` (List of String) The list of capabilities for the phone number
+- `country_code` (String) The two-character ISO country code of the phone number
+- `date_created` (String) The date and time the phone number was created, in RFC 3339 format
+- `date_updated` (String) The date and time the phone number was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `phone_number` (String) The phone number in E.164 format
+- `url` (String) The absolute URL of the phone number resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the phone number resource
+Optional:
+
+- `read` (String)

@@ -18,45 +18,53 @@ func dataSourceStudioFlowWidgetSendToFlex() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"json": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source",
 			},
 			"transitions": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The next widget(s) to transition to after this widget",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"call_complete": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when the Flex interaction completes",
 						},
 						"call_failure": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when the Flex interaction fails",
 						},
 						"failed_to_enqueue": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when the task cannot be enqueued to Flex",
 						},
 					},
 				},
 			},
 			"offset": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The position of this widget in the Studio visual editor",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"x": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The x-axis position. Defaults to 0",
 						},
 						"y": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The y-axis position. Defaults to 0",
 						},
 					},
 				},
@@ -65,30 +73,36 @@ func dataSourceStudioFlowWidgetSendToFlex() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The unique name of this widget within the flow, used to reference it in transitions",
 			},
 			"attributes": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
+				Description:      "A JSON string of custom attributes to attach to the TaskRouter task",
 			},
 			"channel_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: utils.TaskRouterTaskChannelSidValidation(),
+				Description:  "The SID of the TaskRouter task channel (e.g. voice, chat) to use for routing in Flex",
 			},
 			"priority": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The priority of the TaskRouter task, as a string integer",
 			},
 			"timeout": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The number of seconds before the TaskRouter task times out, as a string integer",
 			},
 			"wait_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The HTTP/HTTPS URL of the TwiML document to execute while the caller waits for a Flex agent",
 			},
 			"wait_url_method": {
 				Type:     schema.TypeString,
@@ -97,11 +111,13 @@ func dataSourceStudioFlowWidgetSendToFlex() *schema.Resource {
 					"GET",
 					"POST",
 				}, false),
+				Description: "The HTTP method to use when fetching the `wait_url` document. Valid values: `GET`, `POST`",
 			},
 			"workflow_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: utils.TaskRouterWorkflowSidValidation(),
+				Description:  "The SID of the TaskRouter workflow to route the task through in Flex",
 			},
 		},
 	}

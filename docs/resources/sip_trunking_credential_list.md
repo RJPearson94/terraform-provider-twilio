@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Trunking Credential List"
+page_title: "twilio_sip_trunking_credential_list Resource - twilio"
 subcategory: "SIP Trunking"
+description: |-
+  
 ---
 
 # twilio_sip_trunking_credential_list Resource
@@ -25,34 +27,35 @@ resource "twilio_sip_trunking_credential_list" "credential_list" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `trunk_sid` - (Mandatory) The trunk SID to associate the credential list with. Changing this forces a new resource to be created
-- `credential_list_sid` - (Mandatory) The SIP credential list SID to associate the credential list with. Changing this forces a new resource to be created
+- `credential_list_sid` (String) The SID of the SIP credential list to associate with the trunk. Changing this forces a new resource
+- `trunk_sid` (String) The SID of the SIP trunk to associate the credential list with. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the credential list (Same as the `sid` & `credential_list_sid`)
-- `sid` - The SID of the credential list (Same as the `id` & `credential_list_sid`)
-- `account_sid` - The account SID associated with the credential list
-- `trunk_sid` - The trunk SID associated with the credential list
-- `credential_list_sid` - The SIP credential list SID associated with the credential list
-- `friendly_name` - The friendly name of the credential list
-- `date_created` - The date in RFC3339 format that the credential list was created
-- `date_updated` - The date in RFC3339 format that the credential list was updated
-- `url` - The URL of the credential list resource
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this SIP trunk credential list
+- `date_created` (String) The date and time the SIP trunk credential list was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP trunk credential list was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the SIP trunk credential list
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this SIP trunk credential list by Twilio
+- `url` (String) The absolute URL of the SIP trunk credential list resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the credential list
-- `read` - (Defaults to 5 minutes) Used when retrieving the credential list
-- `delete` - (Defaults to 10 minutes) Used when deleting the credential list
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
 
 ## Import
 

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Flex Flow"
+page_title: "twilio_flex_flow Resource - twilio"
 subcategory: "Flex"
+description: |-
+  
 ---
 
 # twilio_flex_flow Resource
@@ -24,80 +26,58 @@ resource "twilio_flex_flow" "flow" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `channel_type` - (Mandatory) The type of channel which is integrated with the flow. Valid values are `web`, `sms`, `facebook`, `whatsapp`, `line` or `custom`
-- `chat_service_sid` - (Mandatory) The chat service SID to associate with the flow
-- `friendly_name` - (Mandatory) The friendly name of the flow
-- `integration` - (Mandatory) A `integration` block as documented below
-- `contact_identity` - (Optional) The contact identity for the channel
-- `enabled` - (Optional) Whether the flow is active. The default value is `false`
-- `integration_type` - (Optional) The type of integration with the flow. Valid values are `studio`, `external` or `task`
-- `janitor_enabled` - (Optional) Clean up chat channels and proxy sessions when the task is completed. The default value is `false`
-- `long_lived` - (Optional) Whether to reuse the same channel for any future interactions with the customer. The default value is `false`
+- `channel_type` (String) The channel type of the Flex flow. Valid values are `web`, `sms`, `facebook`, `whatsapp`, `line`, or `custom`
+- `chat_service_sid` (String) The SID of the chat service associated with the Flex flow
+- `friendly_name` (String) A human-readable label for the Flex flow
+- `integration` (Block List, Min: 1, Max: 1) The integration settings for the Flex flow (see [below for nested schema](#nestedblock--integration))
 
----
+### Optional
 
-An `integration` block supports the following:
+- `contact_identity` (String) The channel contact identity for the Flex flow
+- `enabled` (Boolean) Whether the Flex flow is enabled. Defaults to `false`
+- `integration_type` (String) The type of integration. Valid values are `studio`, `external`, or `task`
+- `janitor_enabled` (Boolean) Whether the janitor is enabled to clean up expired channels. Defaults to `false`
+- `long_lived` (Boolean) Whether the Flex flow channel is long-lived. Defaults to `false`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `channel` - (Optional) The channel to send new tasks too
-- `creation_on_message` - (Optional) Whether to create a task when the first message arrives
-- `flow_sid` - (Optional) The SID of the flow
-- `priority` - (Optional) The priority assigned to any new task that is received
-- `retry_count` - (Optional) The number of times a webhook request should be retried if the initial request fails. The value must be between `0` and `3` (inclusive)
-- `timeout` - (Optional) The timeout set for any new task that is received
-- `url` - (Optional) The webhook URL
-- `workflow_sid` - (Optional) The SID of the workflow to send tasks to
-- `workspace_sid` - (Optional) The SID of the workspace to send tasks to
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this Flex flow
+- `date_created` (String) The date and time the Flex flow was created, in RFC 3339 format
+- `date_updated` (String) The date and time the Flex flow was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this Flex flow by Twilio
+- `url` (String) The absolute URL of the Flex flow resource
 
-## Attributes Reference
+<a id="nestedblock--integration"></a>
+### Nested Schema for `integration`
 
-The following attributes are exported:
+Optional:
 
-- `id` - The ID of the flow (Same as the `sid`)
-- `sid` - The SID of the flow (Same as the `id`)
-- `account_sid` - The account SID associated with the flow
-- `channel_type` - The type of channel which is integrated with the flow
-- `chat_service_sid` - The chat service SID associated with the flow
-- `friendly_name` - The friendly name of the flow
-- `contact_identity` - The contact identity for the channel
-- `enabled` - Whether the flow is active
-- `integration_type` - The type of integration with the flow
-- `janitor_enabled` - Clean up chat channels and proxy sessions when the task is completed
-- `long_lived` - Whether to reuse the same channel for any future interactions with the customer
-- `integration` - A `integration` block as documented below
-- `date_created` - The date in RFC3339 format that the flow was created
-- `date_updated` - The date in RFC3339 format that the flow was updated
-- `url` - The URL of the flow
+- `channel` (String) The channel for the integration
+- `creation_on_message` (Boolean) Whether to create a task when a message is received
+- `flow_sid` (String) The SID of the Studio flow for the integration
+- `priority` (Number) The priority of the task in TaskRouter
+- `retry_count` (Number) The number of times to retry the integration. Valid values are between `0` and `3`
+- `timeout` (Number) The timeout in seconds for the integration
+- `url` (String) The URL for an external integration. Must use HTTP or HTTPS
+- `workflow_sid` (String) The SID of the TaskRouter workflow for the integration
+- `workspace_sid` (String) The SID of the TaskRouter workspace for the integration
 
----
 
-An `integration` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `channel` - The channel to send new tasks too
-- `creation_on_message` - Whether to create a task when the first message arrives
-- `flow_sid` - The SID of the flow
-- `priority` - The priority assigned to any new task that is received
-- `retry_count` - The number of times a webhook request should be retried if the initial request fails
-- `timeout` - The timeout set for any new task that is received
-- `url` - The webhook URL
-- `workflow_sid` - The SID of the workflow to send tasks to
-- `workspace_sid` - The SID of the workspace to send tasks to
+Optional:
 
----
-
-## Timeouts
-
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `create` - (Defaults to 10 minutes) Used when creating the flow
-- `update` - (Defaults to 10 minutes) Used when updating the flow
-- `read` - (Defaults to 5 minutes) Used when retrieving the flow
-- `delete` - (Defaults to 10 minutes) Used when deleting the flow
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

@@ -48,27 +48,32 @@ func resourceVerifyWebhook() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this webhook by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this webhook",
 			},
 			"service_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.VerifyServiceSidValidation(),
+				Description:  "The SID of the Verify service. Changing this forces a new resource",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "A human-readable label for the webhook",
 			},
 			"event_types": {
-				Type:     schema.TypeList,
-				Required: true,
+				Type:        schema.TypeList,
+				Required:    true,
+				Description: "The list of events that trigger the webhook. Valid values: `*`, `factor.created`, `factor.verified`, `factor.deleted`, `challenge.approved`, `challenge.denied`",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 					ValidateFunc: validation.StringInSlice([]string{
@@ -93,7 +98,8 @@ func resourceVerifyWebhook() *schema.Resource {
 					"enabled",
 					"disabled",
 				}, false),
-				Default: "enabled",
+				Default:     "enabled",
+				Description: "The status of the webhook. Valid values: `enabled`, `disabled`. Defaults to `enabled`",
 			},
 			"version": {
 				Type:     schema.TypeString,
@@ -102,28 +108,34 @@ func resourceVerifyWebhook() *schema.Resource {
 					"v1",
 					"v2",
 				}, false),
-				Default: "v2",
+				Default:     "v2",
+				Description: "The webhook version. Valid values: `v1`, `v2`. Defaults to `v2`",
 			},
 			"webhook_url": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.IsURLWithHTTPS,
+				Description:  "The HTTPS URL that Twilio calls when an event occurs",
 			},
 			"webhook_method": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The HTTP method used when calling the webhook URL",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the webhook was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the webhook was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the webhook resource",
 			},
 		},
 	}

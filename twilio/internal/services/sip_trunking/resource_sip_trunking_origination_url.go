@@ -48,54 +48,65 @@ func resourceSIPTrunkingOriginationURL() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this SIP trunk origination URL by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this SIP trunk origination URL",
 			},
 			"trunk_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.SIPTrunkSidValidation(),
+				Description:  "The SID of the SIP trunk to add the origination URL to. Changing this forces a new resource",
 			},
 			"enabled": {
-				Type:     schema.TypeBool,
-				Required: true,
+				Type:        schema.TypeBool,
+				Required:    true,
+				Description: "Whether the origination URL is enabled and available for use",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "A human-readable label for the SIP trunk origination URL",
 			},
 			"priority": {
 				Type:         schema.TypeInt,
 				Required:     true,
 				ValidateFunc: validation.IntBetween(0, 65535),
+				Description:  "The priority of the origination URL, from 0 to 65535. Lower values have higher priority",
 			},
 			"sip_url": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringMatch(regexp.MustCompile("^sip:.+$"), ""),
+				Description:  "The SIP address to route origination calls to, must start with `sip:`",
 			},
 			"weight": {
 				Type:         schema.TypeInt,
 				Required:     true,
 				ValidateFunc: validation.IntBetween(0, 65535),
+				Description:  "The weight of the origination URL, from 0 to 65535. Used for load balancing among URLs with the same priority",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP trunk origination URL was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP trunk origination URL was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the SIP trunk origination URL resource",
 			},
 		},
 	}

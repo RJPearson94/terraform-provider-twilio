@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Trunking Phone Numbers"
+page_title: "twilio_sip_trunking_phone_numbers Data Source - twilio"
 subcategory: "SIP Trunking"
+description: |-
+  
 ---
 
 # twilio_sip_trunking_phone_numbers Data Source
@@ -21,84 +23,93 @@ output "phone_numbers" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `trunk_sid` - (Mandatory) The SID of the SIP trunk the phone numbers are associated with
+- `trunk_sid` (String) The SID of the SIP trunk to retrieve phone numbers for
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `trunk_sid`)
-- `trunk_sid` - The SID of the SIP trunk the phone numbers are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the phone numbers
-- `phone_numbers` - A list of `phone_number` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the SIP trunk phone numbers
+- `id` (String) The ID of this resource.
+- `phone_numbers` (List of Object) A list of phone numbers associated with the SIP trunk (see [below for nested schema](#nestedatt--phone_numbers))
 
-A `phone_number` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the phone number
-- `friendly_name` - The friendly name of the phone number
-- `phone_number` - The phone number
-- `address_requirements` - The address requirements of the phone number
-- `beta` - Whether the phone number is in beta on the platform
-- `capabilities` - A `capability` block as documented below
-- `messaging` - A `messaging` block as documented below
-- `voice` - A `voice` block as documented below
-- `fax` - A `fax` block as documented below
-- `status_callback_url` - The URL to call on each status change
-- `status_callback_method` - The HTTP method which should be used to call the status callback URL
-- `date_created` - The date in RFC3339 format that the phone number was created
-- `date_updated` - The date in RFC3339 format that the phone number was updated
-- `url` - The URL of the phone number resource
+Optional:
 
-!> the `voice` block will be defaulted to if the Twilio API doesn't return the voice receive mode field, this data isn't being returned since Programmable Fax was disabled on some accounts
+- `read` (String)
 
----
 
-A `capability` block supports the following:
+<a id="nestedatt--phone_numbers"></a>
+### Nested Schema for `phone_numbers`
 
-- `fax` - Whether the phone number supports fax
-- `sms` - Whether the phone number supports SMS
-- `mms` - Whether the phone number supports MMS
-- `voice` - Whether the phone number supports voice
+Read-Only:
 
----
+- `address_requirements` (String)
+- `beta` (Boolean)
+- `capabilities` (List of Object) (see [below for nested schema](#nestedobjatt--phone_numbers--capabilities))
+- `date_created` (String)
+- `date_updated` (String)
+- `fax` (List of Object) (see [below for nested schema](#nestedobjatt--phone_numbers--fax))
+- `friendly_name` (String)
+- `messaging` (List of Object) (see [below for nested schema](#nestedobjatt--phone_numbers--messaging))
+- `phone_number` (String)
+- `sid` (String)
+- `status_callback_method` (String)
+- `status_callback_url` (String)
+- `url` (String)
+- `voice` (List of Object) (see [below for nested schema](#nestedobjatt--phone_numbers--voice))
 
-A `messaging` block supports the following:
+<a id="nestedobjatt--phone_numbers--capabilities"></a>
+### Nested Schema for `phone_numbers.capabilities`
 
-- `application_sid` - The application SID which should be called on each incoming message
-- `url` - The URL which should be called on each incoming message
-- `method` - The HTTP method which should be used to call the URL
-- `fallback_url` - The fallback URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method which should be used to call the fallback URL
+Read-Only:
 
----
+- `fax` (Boolean)
+- `mms` (Boolean)
+- `sms` (Boolean)
+- `voice` (Boolean)
 
-A `voice` block supports the following:
 
-- `application_sid` - The application SID which should be called on each incoming call
-- `url` - The URL which should be called on each incoming call
-- `method` - The HTTP method which should be used to call the URL
-- `fallback_url` - The fallback URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method which should be used to call the fallback URL
-- `caller_id_lookup` - Whether caller ID lookup is enabled for the phone number
+<a id="nestedobjatt--phone_numbers--fax"></a>
+### Nested Schema for `phone_numbers.fax`
 
----
+Read-Only:
 
-A `fax` block supports the following:
+- `application_sid` (String)
+- `fallback_method` (String)
+- `fallback_url` (String)
+- `method` (String)
+- `url` (String)
 
-- `application_sid` - The application SID which should be called on each incoming fax
-- `url` - The URL which should be called on each incoming fax
-- `method` - The HTTP method which should be used to call the URL
-- `fallback_url` - The fallback URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method which should be used to call the fallback URL
 
-## Timeouts
+<a id="nestedobjatt--phone_numbers--messaging"></a>
+### Nested Schema for `phone_numbers.messaging`
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+Read-Only:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving phone numbers
+- `application_sid` (String)
+- `fallback_method` (String)
+- `fallback_url` (String)
+- `method` (String)
+- `url` (String)
+
+
+<a id="nestedobjatt--phone_numbers--voice"></a>
+### Nested Schema for `phone_numbers.voice`
+
+Read-Only:
+
+- `application_sid` (String)
+- `caller_id_lookup` (Boolean)
+- `fallback_method` (String)
+- `fallback_url` (String)
+- `method` (String)
+- `url` (String)

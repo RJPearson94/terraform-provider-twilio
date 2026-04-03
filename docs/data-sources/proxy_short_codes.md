@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Proxy Short Codes"
+page_title: "twilio_proxy_short_codes Data Source - twilio"
 subcategory: "Proxy"
+description: |-
+  
 ---
 
 # twilio_proxy_short_codes Data Source
@@ -23,54 +25,59 @@ output "short_codes" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the short codes are associated with
+- `service_sid` (String) The SID of the Proxy service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `service_sid`)
-- `service_sid` - The SID of the proxy service the short codes are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the short code
-- `short_codes` - A list of `short_code` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this Proxy service
+- `id` (String) The ID of this resource.
+- `short_codes` (List of Object) A list of short codes associated with the Proxy service (see [below for nested schema](#nestedatt--short_codes))
 
-A `short_code` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the Twilio short code associated with the proxy service
-- `is_reserved` - Whether the short code is reserved
-- `short_code` - The short code associated with the SID
-- `iso_country` - The ISO country associated with the SID
-- `capabilities` - A `capabilities` block as documented below.
-- `date_created` - The date in RFC3339 format that the proxy short code resource was created
-- `date_updated` - The date in RFC3339 format that the proxy short code resource was updated
-- `url` - The URL of the proxy short code resource
+Optional:
 
----
+- `read` (String)
 
-A `capabilities` block supports the following:
 
-- `fax_inbound` - Whether the short code can accept inbound faxes
-- `fax_outbound` - Whether the short code can send outbound faxes
-- `mms_inbound` - Whether the short code can accept inbound MMS's
-- `mms_outbound` - Whether the short code can send outbound MMS's
-- `restriction_fax_domestic` - Whether the short code is restricted to domestic faxes
-- `restriction_mms_domestic` - Whether the short code is restricted to domestic MMS'
-- `restriction_sms_domestic` - Whether the short code is restricted to domestic SMS's
-- `restriction_voice_domestic` - Whether the short code is restricted to domestic voice calls
-- `sip_trunking` - Whether the short code supports SIP trunking
-- `sms_inbound` - Whether the short code can accept inbound SMS's
-- `sms_outbound` - Whether the short code can send outbound SMS's
-- `voice_inbound` - Whether the short code can accept inbound voice calls
-- `voice_outbound` - Whether the short code can make outbound voice calls
+<a id="nestedatt--short_codes"></a>
+### Nested Schema for `short_codes`
 
-## Timeouts
+Read-Only:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+- `capabilities` (List of Object) (see [below for nested schema](#nestedobjatt--short_codes--capabilities))
+- `date_created` (String)
+- `date_updated` (String)
+- `is_reserved` (Boolean)
+- `iso_country` (String)
+- `short_code` (String)
+- `sid` (String)
+- `url` (String)
 
-- `read` - (Defaults to 10 minutes) Used when retrieving short codes
+<a id="nestedobjatt--short_codes--capabilities"></a>
+### Nested Schema for `short_codes.capabilities`
+
+Read-Only:
+
+- `fax_inbound` (Boolean)
+- `fax_outbound` (Boolean)
+- `mms_inbound` (Boolean)
+- `mms_outbound` (Boolean)
+- `restriction_fax_domestic` (Boolean)
+- `restriction_mms_domestic` (Boolean)
+- `restriction_sms_domestic` (Boolean)
+- `restriction_voice_domestic` (Boolean)
+- `sip_trunking` (Boolean)
+- `sms_inbound` (Boolean)
+- `sms_outbound` (Boolean)
+- `voice_inbound` (Boolean)
+- `voice_outbound` (Boolean)

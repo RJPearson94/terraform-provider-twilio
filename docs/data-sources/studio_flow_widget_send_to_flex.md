@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Send to Flex"
+page_title: "twilio_studio_flow_widget_send_to_flex Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_send_to_flex Data Source
@@ -52,41 +54,43 @@ data "twilio_studio_flow_widget_send_to_flex" "send_to_flex" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the send to flex widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `attributes` - (Optional) A JSON string of the task attributes
-- `channel_sid` - (Mandatory) The SID of the Flex/ TaskRouter channel to associate with the task
-- `priority` - (Optional) A string to represent the priority of the task
-- `timeout` - (Optional) A string to represent the time in seconds which the task can live for
-- `wait_url` - (Optional) The URL for custom wait/ hold music
-- `wait_url_method` - (Optional) The method to be used to request the wait/ hold music
-- `workflow_sid` - (Mandatory) The SID of the TaskRouter workflow to assign the user to
+- `channel_sid` (String) The SID of the TaskRouter task channel (e.g. voice, chat) to use for routing in Flex
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
+- `workflow_sid` (String) The SID of the TaskRouter workflow to route the task through in Flex
 
-~> Due to data type and validation restrictions liquid templates are not supported for the `attributes` (liquid templates can be used to set the attribute values), `channel_sid`, `wait_url`, `wait_url_method` and `workflow_sid` arguments. Please see the widget documentation to determine whether other arguments support liquid templates
+### Optional
 
----
+- `attributes` (String) A JSON string of custom attributes to attach to the TaskRouter task
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `priority` (String) The priority of the TaskRouter task, as a string integer
+- `timeout` (String) The number of seconds before the TaskRouter task times out, as a string integer
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
+- `wait_url` (String) The HTTP/HTTPS URL of the TwiML document to execute while the caller waits for a Flex agent
+- `wait_url_method` (String) The HTTP method to use when fetching the `wait_url` document. Valid values: `GET`, `POST`
 
-A `transitions` block supports the following:
+### Read-Only
 
-- `call_complete` - (Optional) The widget to transition to when the call is complete/ task is created
-- `call_failure` - (Optional) The widget to transition to when the call failed/ task fails to create
-- `failed_to_enqueue` - (Optional) The widget to transition to when the task failed to create or the call failed to enqueue
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
----
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-An `offset` block supports the following:
+Optional:
 
-- `x` - (Optional) The x coordinate to display the send to flex widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the send to flex widget in the Studio console. The default value is `0`
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
-## Attributes Reference
 
-The following attributes are exported:
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
 
-- `id` - The name of the send to flex widget
-- `json` - The JSON state definition for the send to flex widget
+Optional:
+
+- `call_complete` (String) The name of the next widget when the Flex interaction completes
+- `call_failure` (String) The name of the next widget when the Flex interaction fails
+- `failed_to_enqueue` (String) The name of the next widget when the task cannot be enqueued to Flex

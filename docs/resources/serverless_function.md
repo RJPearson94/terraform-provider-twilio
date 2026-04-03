@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Function"
+page_title: "twilio_serverless_function Resource - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_function Resource
@@ -35,50 +37,43 @@ EOF
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The serverless service SID to associate the function with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The name of the function. The length of the string must be between `1` and `255` characters (inclusive)
-- `content_file_name` - (Optional) The name of the file. Conflicts with `source`
-- `content` - (Optional) The file contents as string. Conflicts with `source`
-- `source` - (Optional) The relative path to the function file. Conflicts with `content`
-- `source_hash` - (Optional) A hash of the function file to trigger deployments. Conflicts with `content`
-- `content_type` - (Mandatory) The file MIME-type
-- `path` - (Mandatory) The request URI path. The length of the string must be between `1` and `255` characters (inclusive)
-- `visibility` - (Mandatory) The visibility of the function. Valid values are `public` or `protected` or `private`
+- `content_type` (String) The MIME type of the function source (e.g. `application/javascript`)
+- `friendly_name` (String) A human-readable label for the function
+- `path` (String) The URL path at which the function will be accessible
+- `service_sid` (String) The SID of the Serverless service. Changing this forces a new resource
+- `visibility` (String) The access control for the function. Valid values are `public`, `protected`, `private`
 
-~> Either `source` or `content` need to be specified
+### Optional
 
-## Attributes Reference
+- `content` (String) The inline content of the function source code. Conflicts with `source`
+- `content_file_name` (String) The file name to use when uploading inline content. Conflicts with `source`
+- `source` (String) The path to the file containing the function source code. Conflicts with `content`
+- `source_hash` (String) A hash of the source file, used to detect changes. Conflicts with `content`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-The following attributes are exported:
+### Read-Only
 
-- `id` - The ID of the function (Same as the `sid`)
-- `sid` - The SID of the function (Same as the `id`)
-- `account_sid` - The account SID of the function is deployed into
-- `service_sid` - The service SID of the function is managed under
-- `friendly_name` - The name of the function
-- `content_file_name` - The name of the file
-- `latest_version_sid` - The SID of the latest function version
-- `source` - The relative path to the function file
-- `source_hash` - A hash of the function file to trigger deployments
-- `content_type` - The file MIME-type
-- `path` - The request URI path
-- `visibility` - The visibility of the function
-- `date_created` - The date in RFC3339 format that the function was created
-- `date_updated` - The date in RFC3339 format that the function was updated
-- `url` - The URL of the function
+- `account_sid` (String) The SID of the account that owns this function
+- `date_created` (String) The date and time the function was created, in RFC 3339 format
+- `date_updated` (String) The date and time the function was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `latest_version_sid` (String) The SID of the latest version of the function
+- `sid` (String) The unique SID assigned to this function by Twilio
+- `url` (String) The absolute URL of the function resource
 
-## Timeouts
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+Optional:
 
-- `create` - (Defaults to 10 minutes) Used when creating the function
-- `update` - (Defaults to 10 minutes) Used when updating the function
-- `read` - (Defaults to 5 minutes) Used when retrieving the function
-- `delete` - (Defaults to 10 minutes) Used when deleting the function
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

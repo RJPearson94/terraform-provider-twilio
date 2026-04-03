@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Credential"
+page_title: "twilio_sip_credential Resource - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_credential Resource
@@ -23,37 +25,35 @@ resource "twilio_sip_credential" "credential" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The account SID to associate the credential with. Changing this forces a new resource to be created
-- `credential_list_sid` - (Mandatory) The credential list SID to associate the credential with. Changing this forces a new resource to be created
-- `username` - (Mandatory) The credential username. Changing this forces a new resource to be created. The length of the string must be between `1` and `64` characters (inclusive)
-- `password` - (Mandatory) The credential password. The length of the string must be between at least `12` characters and contain at least 1 `uppercase character`, 1 `lowercase character` and 1 `number`.
+- `account_sid` (String) The SID of the account that owns this SIP credential. Changing this forces a new resource
+- `credential_list_sid` (String) The SID of the credential list that this SIP credential belongs to. Changing this forces a new resource
+- `password` (String, Sensitive) The password for the SIP credential. Must be at least 12 characters and contain an uppercase letter, lowercase letter, and number. Sensitive -- will not be shown in logs or plans
+- `username` (String) The username for the SIP credential (1 to 32 characters). Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the credential (Same as the `sid` )
-- `sid` - The SID of the credential (Same as the `id`)
-- `account_sid` - The account SID associated with the credential
-- `credential_list_sid` - The credential list SID associated with the credential
-- `username` - The credential username
-- `date_created` - The date in RFC3339 format that the credential was created
-- `date_updated` - The date in RFC3339 format that the credential was updated
+### Read-Only
 
-!> For security reasons, the API does not return the password. So if the password is changed outside of Terraform then the drift may not be detected
+- `date_created` (String) The date and time the SIP credential was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP credential was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this SIP credential by Twilio
 
-## Timeouts
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+Optional:
 
-- `create` - (Defaults to 10 minutes) Used when creating the credential
-- `update` - (Defaults to 10 minutes) Used when updating the credential
-- `read` - (Defaults to 5 minutes) Used when retrieving the credential
-- `delete` - (Defaults to 10 minutes) Used when deleting the credential
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Chat Roles"
+page_title: "twilio_chat_roles Data Source - twilio"
 subcategory: "Programmable Chat"
+description: |-
+  
 ---
 
 # twilio_chat_roles Data Source
@@ -23,35 +25,39 @@ output "roles" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the roles are associated with
+- `service_sid` (String) The SID of the Programmable Chat service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `service_sid`)
-- `account_sid` - The SID of the account the channels are associated with
-- `service_sid` - The SID of the service the channels are associated with (Same as the `id`)
-- `roles` - A list of `role` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the roles
+- `id` (String) The ID of this resource.
+- `roles` (List of Object) The list of roles (see [below for nested schema](#nestedatt--roles))
 
-A `role` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the role
-- `friendly_name` - The friendly name of the role
-- `type` - The type of role
-- `permissions` - The list of permissions the role has
-- `date_created` - The date in RFC3339 format that the role was created
-- `date_updated` - The date in RFC3339 format that the role was updated
-- `url` - The URL of the role
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving roles
+<a id="nestedatt--roles"></a>
+### Nested Schema for `roles`
+
+Read-Only:
+
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `permissions` (List of String)
+- `sid` (String)
+- `type` (String)
+- `url` (String)

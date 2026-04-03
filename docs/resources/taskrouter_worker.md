@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Worker"
+page_title: "twilio_taskrouter_worker Resource - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_worker Resource
@@ -66,41 +68,40 @@ resource "twilio_taskrouter_worker" "worker" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the worker with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The name of the worker
-- `attributes` - (Optional) JSON string of worker attributes. The default value is `{}`
-- `activity_sid` - (Optional) Activity SID to be assigned to the worker
+- `friendly_name` (String) A human-readable label for the worker
+- `workspace_sid` (String) The SID of the TaskRouter workspace. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `activity_sid` (String) The SID of the activity the worker should be set to
+- `attributes` (String) A JSON string of attributes for the worker. Defaults to `{}`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the worker (Same as the `sid`)
-- `sid` - The SID of the worker (Same as the `id`)
-- `account_sid` - The account SID of the worker is deployed into
-- `workspace_sid` - The workspace SID to create the worker under
-- `friendly_name` - The name of the worker
-- `attributes` - JSON string of worker attributes
-- `activity_sid` - Activity SID to be assigned to the worker
-- `activity_name` - Friendly name of the activity
-- `available` - Is the worker available to receive tasks
-- `date_created` - The date in RFC3339 format that the worker was created
-- `date_updated` - The date in RFC3339 format that the worker was updated
-- `date_status_changed` - The date in RFC3339 format that the worker status was changed
-- `url` - The URL of the worker
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this worker
+- `activity_name` (String) The friendly name of the worker's current activity
+- `available` (Boolean) Whether the worker is available to receive tasks
+- `date_created` (String) The date and time the worker was created, in RFC 3339 format
+- `date_status_changed` (String) The date and time the worker's activity status last changed, in RFC 3339 format
+- `date_updated` (String) The date and time the worker was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this worker by Twilio
+- `url` (String) The absolute URL of the worker resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the worker
-- `update` - (Defaults to 10 minutes) Used when updating the worker
-- `read` - (Defaults to 5 minutes) Used when retrieving the worker
-- `delete` - (Defaults to 10 minutes) Used when deleting the worker
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

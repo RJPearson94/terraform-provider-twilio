@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Verify Service"
+page_title: "twilio_verify_service Data Source - twilio"
 subcategory: "Verify"
+description: |-
+  
 ---
 
 # twilio_verify_service Data Source
@@ -21,54 +23,60 @@ output "service" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the service
+- `sid` (String) The SID of the Verify service to fetch
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the service (Same as the `sid`)
-- `sid` - The SID of the service (Same as the `id`)
-- `account_sid` - The account SID of the service is associated with
-- `friendly_name` - The friendly name of the service
-- `code_length` - The length of the verification code to send
-- `custom_code_enabled` - Whether to allow the code to be generated via custom code
-- `do_not_share_warning_enabled` - Whether to include a warning to not share the code with anyone
-- `dtmf_input_required` - Whether to request the user presses a key when the code is delivered over the phone
-- `default_template_sid` - The default template SID that will be used using the verification process
-- `lookup_enabled` - Whether to perform a lookup when starting the verification process
-- `mailer_sid` - The mailer SID to associate with the service
-- `psd2_enabled` - Whether to pass PSD2 parameters when starting the verification process
-- `push` - A `push` block as documented below.
-- `skip_sms_to_landlines` - Whether to skip sending SMS's to landline numbers
-- `totp` - A `totp` block as documented below
-- `tts_name` - The name of the Text to Speech service to use when sending verification code over the phone
-- `date_created` - The date in RFC3339 format that the service was created
-- `date_updated` - The date in RFC3339 format that the service was updated
-- `url` - The URL of the service
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this Verify service
+- `code_length` (Number) The length of the verification code
+- `custom_code_enabled` (Boolean) Whether sending verifications with a custom code is enabled
+- `date_created` (String) The date and time the Verify service was created, in RFC 3339 format
+- `date_updated` (String) The date and time the Verify service was last updated, in RFC 3339 format
+- `default_template_sid` (String) The SID of the default verification template used by this Verify service
+- `do_not_share_warning_enabled` (Boolean) Whether a warning not to share the verification code is included in the SMS body
+- `dtmf_input_required` (Boolean) Whether the user must press a key to deliver the verification code via phone call
+- `friendly_name` (String) A human-readable label for the Verify service
+- `id` (String) The ID of this resource.
+- `lookup_enabled` (Boolean) Whether a phone number lookup is performed with each verification
+- `mailer_sid` (String) The SID of the mailer service associated with this Verify service
+- `psd2_enabled` (Boolean) Whether PSD2 transaction parameters are passed when starting a verification
+- `push` (List of Object) Push notification configuration for the Verify service (see [below for nested schema](#nestedatt--push))
+- `skip_sms_to_landlines` (Boolean) Whether SMS verifications to landlines are skipped
+- `totp` (List of Object) Time-based one-time password (TOTP) configuration for the Verify service (see [below for nested schema](#nestedatt--totp))
+- `tts_name` (String) The name of the text-to-speech voice used for phone call verifications
+- `url` (String) The absolute URL of the Verify service resource
 
-A `push` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `apn_credential_sid` - The APN credentials SID to associate with the service
-- `fcm_credential_sid` - The FCM credentials SID to associate with the service
+Optional:
 
----
+- `read` (String)
 
-A `totp` block supports the following:
 
-- `issuer` - The TOTP issuer for the service
-- `time_step` - The number of seconds between generating new TOTP code
-- `code_length` - The number of digits in the generated TOTP code
-- `skew` - The number of codes in the past and future that will be accepted
+<a id="nestedatt--push"></a>
+### Nested Schema for `push`
 
-## Timeouts
+Read-Only:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+- `apn_credential_sid` (String)
+- `fcm_credential_sid` (String)
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the service
+
+<a id="nestedatt--totp"></a>
+### Nested Schema for `totp`
+
+Read-Only:
+
+- `code_length` (Number)
+- `issuer` (String)
+- `skew` (Number)
+- `time_step` (Number)

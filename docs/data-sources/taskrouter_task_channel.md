@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Task Channel"
+page_title: "twilio_taskrouter_task_channel Data Source - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_task_channel Data Source
@@ -37,33 +39,31 @@ output "task_channel" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `workspace_sid` - (Mandatory) The SID of the workspace the task channel is associated with
-- `sid` - (Optional) The SID of the task channel
-- `unique_name` - (Optional) The unique name of the task channel
+- `workspace_sid` (String) The SID of the TaskRouter workspace
 
-~> Either `sid` or `unique_name` must be specified
+### Optional
 
-## Attributes Reference
+- `sid` (String) The SID of the task channel to retrieve. Exactly one of `sid` or `unique_name` must be specified
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `unique_name` (String) The unique name of the task channel to retrieve. Exactly one of `sid` or `unique_name` must be specified
 
-The following attributes are exported:
+### Read-Only
 
-- `id` - The ID of the task channel (Same as the `sid`)
-- `sid` - The SID of the task channel (Same as the `id`)
-- `account_sid` - The account SID of the task channel is deployed into
-- `workspace_sid` - The workspace SID to create the task channel under
-- `friendly_name` - The name of the task channel
-- `unique_name` - The unique name of the task channel
-- `channel_optimized_routing` - Whether the task channel should prioritise idle workers
-- `date_created` - The date in RFC3339 format that the task channel was created
-- `date_updated` - The date in RFC3339 format that the task channel was updated
-- `url` - The URL of the task channel
+- `account_sid` (String) The SID of the account that owns this task channel
+- `channel_optimized_routing` (Boolean) Whether the task channel prioritizes optimized routing
+- `date_created` (String) The date and time the task channel was created, in RFC 3339 format
+- `date_updated` (String) The date and time the task channel was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the task channel
+- `id` (String) The ID of this resource.
+- `url` (String) The absolute URL of the task channel resource
 
-## Timeouts
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+Optional:
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the task channel
+- `read` (String)

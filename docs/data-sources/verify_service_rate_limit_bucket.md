@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Verify Service Rate Limit Bucket"
+page_title: "twilio_verify_service_rate_limit_bucket Data Source - twilio"
 subcategory: "Verify"
+description: |-
+  
 ---
 
 # twilio_verify_service_rate_limit_bucket Data Source
@@ -23,31 +25,31 @@ output "rate_limit_bucket" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the service rate limit bucket
-- `service_sid` - (Mandatory) The service SID the rate limit bucket is associated with
-- `rate_limit_sid` - (Mandatory) The rate limit SID the rate limit bucket is associated with
+- `rate_limit_sid` (String) The SID of the rate limit that this bucket belongs to
+- `service_sid` (String) The SID of the Verify service
+- `sid` (String) The SID of the rate limit bucket to fetch
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the rate limit bucket (Same as the `sid`)
-- `sid` - The SID of the rate limit bucket (Same as the `id`)
-- `account_sid` - The account SID of the rate limit bucket is associated with
-- `service_sid` - The service SID the rate limit bucket is associated with
-- `rate_limit_sid` - The rate limit SID the rate limit bucket is associated with
-- `max` - The maximum number of requests that can occur during the interval
-- `interval` - The duration (in seconds) which the rate limit will be monitored/ enforced
-- `date_created` - The date in RFC3339 format that the rate limit bucket was created
-- `date_updated` - The date in RFC3339 format that the rate limit bucket was updated
-- `url` - The URL of the rate limit bucket
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this rate limit bucket
+- `date_created` (String) The date and time the rate limit bucket was created, in RFC 3339 format
+- `date_updated` (String) The date and time the rate limit bucket was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `interval` (Number) The time interval in seconds for the rate limit bucket
+- `max` (Number) The maximum number of requests permitted in the given time interval
+- `url` (String) The absolute URL of the rate limit bucket resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the service rate limit bucket
+Optional:
+
+- `read` (String)

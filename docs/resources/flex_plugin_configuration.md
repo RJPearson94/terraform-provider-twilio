@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Flex Plugin Configuration"
+page_title: "twilio_flex_plugin_configuration Resource - twilio"
 subcategory: "Flex"
+description: |-
+  
 ---
 
 # twilio_flex_plugin_configuration Resource
@@ -42,56 +44,54 @@ resource "twilio_flex_plugin_configuration" "plugin_configuration" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the plugin configuration. Changing this forces a new resource to be created
-- `description` - (Optional) The description of the plugin configuration. Changing this forces a new resource to be created
-- `plugins` - (Optional) A list of `plugin` blocks as documented below. Changing this forces a new resource to be created
+- `name` (String) The name of the plugin configuration. Changing this forces a new resource
 
----
+### Optional
 
-A `plugin` block supports the following:
+- `description` (String) A description of the plugin configuration. Changing this forces a new resource
+- `plugins` (Block List) A list of plugin versions to include in this configuration. Changing this forces a new resource (see [below for nested schema](#nestedblock--plugins))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `plugin_version_sid` - (Mandatory) The SID of the plugin version to associate with the configuration. Changing this forces a new resource to be created
+### Read-Only
 
-## Attributes Reference
+- `account_sid` (String) The SID of the account that owns this plugin configuration
+- `archived` (Boolean) Whether the plugin configuration has been archived
+- `date_created` (String) The date and time the plugin configuration was created, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this plugin configuration by Twilio
+- `url` (String) The absolute URL of the plugin configuration resource
 
-The following attributes are exported:
+<a id="nestedblock--plugins"></a>
+### Nested Schema for `plugins`
 
-- `id` - The ID of the plugin configuration (Same as the `sid`)
-- `sid` - The SID of the plugin configuration (Same as the `id`)
-- `account_sid` - The account SID associated with the plugin configuration
-- `name` - (Mandatory) The name of the plugin configuration
-- `description` - (Optional) The description of the plugin configuration
-- `plugins` - A `plugin` block as documented below
-- `archived` - Whether the plugin configuration has been archived
-- `date_created` - The date in RFC3339 format that the plugin configuration was created
-- `url` - The URL of the plugin configuration
+Required:
 
----
+- `plugin_version_sid` (String) The SID of the plugin version to include in the configuration. Changing this forces a new resource
 
-A `plugin` block supports the following:
+Read-Only:
 
-- `plugin_version_sid` - The SID of the plugin version associated with the configuration
-- `plugin_sid` - The SID of the plugin associated with the configuration
-- `plugin_url` - The URL of the hosted plugin bundle
-- `private` - Whether credentials are required to access the plugin
-- `unique_name` - The unique name of the plugin
-- `private` - Whether credentials are required to access the plugin
-- `phase` - The phase number of the plugin
-- `version` - The version of the plugin
-- `date_created` - The date in RFC3339 format that the plugin was created
-- `url` - The URL of the plugin
+- `date_created` (String) The date and time the plugin was created, in RFC 3339 format
+- `phase` (Number) The load order phase of the plugin
+- `plugin_sid` (String) The SID of the plugin
+- `plugin_url` (String) The hosted URL of the plugin bundle
+- `private` (Boolean) Whether the plugin version is private
+- `unique_name` (String) The unique name of the plugin
+- `url` (String) The absolute URL of the plugin resource
+- `version` (String) The version string of the plugin
 
-## Timeouts
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the plugin configuration
-- `read` - (Defaults to 5 minutes) Used when retrieving the plugin configuration
-- `delete` - (Defaults to 10 minutes) Used when retrieving the plugin configuration
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
 
 ## Import
 

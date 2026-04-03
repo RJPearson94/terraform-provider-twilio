@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Conversation Webhooks"
+page_title: "twilio_conversations_conversation_webhooks Data Source - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_conversation_webhooks Data Source
@@ -24,47 +26,51 @@ output "webhooks" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the webhooks are associated with
-- `conversation_sid` - (Mandatory) The SID of the conversation the webhooks are associated with
+- `conversation_sid` (String) The SID of the conversation
+- `service_sid` (String) The SID of the conversations service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource in the format `service_sid/conversation_sid`
-- `account_sid` - The SID of the account the conversation webhooks are associated with
-- `service_sid` - The SID of the service the conversation webhooks are associated with
-- `conversation_sid` - The SID of the conversation the webhooks are associated with
-- `webhooks` - A list of `webhook` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these conversation webhooks
+- `id` (String) The ID of this resource.
+- `webhooks` (List of Object) The list of conversation webhooks (see [below for nested schema](#nestedatt--webhooks))
 
-A `webhook` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the conversation webhook
-- `type` - The type of webhook
-- `configuration` - The `configuration` block as documented below
-- `date_created` - The date in RFC3339 format that the conversation webhook was created
-- `date_updated` - The date in RFC3339 format that the conversation webhook was updated
-- `url` - The URL of the conversation webhook
+Optional:
 
----
+- `read` (String)
 
-A `configuration` block supports the following:
 
-- `method` - The HTTP method to trigger the conversation webhook
-- `webhook_url` - The webhook URL
-- `filters` - The filter conditions that trigger the conversation webhook
-- `replay_after` - Message Index to replay messages from
-- `flow_sid` - The SID for the studio flow which will be called
-- `triggers` - The keywords which trigger the conversation webhook
+<a id="nestedatt--webhooks"></a>
+### Nested Schema for `webhooks`
 
-## Timeouts
+Read-Only:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+- `configuration` (List of Object) (see [below for nested schema](#nestedobjatt--webhooks--configuration))
+- `date_created` (String)
+- `date_updated` (String)
+- `sid` (String)
+- `target` (String)
+- `url` (String)
 
-- `read` - (Defaults to 10 minutes) Used when retrieving conversation webhooks
+<a id="nestedobjatt--webhooks--configuration"></a>
+### Nested Schema for `webhooks.configuration`
+
+Read-Only:
+
+- `filters` (List of String)
+- `flow_sid` (Number)
+- `method` (String)
+- `replay_after` (Number)
+- `triggers` (List of String)
+- `webhook_url` (String)

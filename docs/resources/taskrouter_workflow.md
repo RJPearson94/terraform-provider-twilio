@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Workflow"
+page_title: "twilio_taskrouter_workflow Resource - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_workflow Resource
@@ -37,43 +39,40 @@ resource "twilio_taskrouter_workflow" "workflow" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the workflow with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The name of the workflow
-- `configuration` - (Mandatory) JSON string of workflow configuration
-- `assignment_callback_url` - (Optional) Assignment callback URL
-- `fallback_assignment_callback_url` - (Optional) Fallback assignment callback URL
-- `task_reservation_timeout` - (Optional) Maximum time the task can be unassigned for before it times out. The value must be between `1` and `86400` seconds (inclusive). The default value is `120`
+- `configuration` (String) A JSON string of the workflow configuration
+- `friendly_name` (String) A human-readable label for the workflow
+- `workspace_sid` (String) The SID of the TaskRouter workspace. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `assignment_callback_url` (String) The URL to call when a task is assigned to a worker
+- `fallback_assignment_callback_url` (String) The URL to call when a task assignment event is not handled by the primary callback
+- `task_reservation_timeout` (Number) The timeout in seconds for a task reservation (1-86400). Defaults to `120`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the workflow (Same as the `sid`)
-- `sid` - The SID of the workflow (Same as the `id`)
-- `account_sid` - The account SID of the workflow is deployed into
-- `workspace_sid` - The workspace SID to create the workflow under
-- `friendly_name` - The name of the workflow
-- `configuration` - JSON string of workflow configuration
-- `assignment_callback_url` - Assignment callback URL
-- `fallback_assignment_callback_url` - Fallback assignment callback URL
-- `task_reservation_timeout` - Maximum time the task can be unassigned for before it times out
-- `document_content_type` - The MIME type of the document
-- `date_created` - The date in RFC3339 format that the workflow was created
-- `date_updated` - The date in RFC3339 format that the workflow was updated
-- `url` - The URL of the workflow
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this workflow
+- `date_created` (String) The date and time the workflow was created, in RFC 3339 format
+- `date_updated` (String) The date and time the workflow was last updated, in RFC 3339 format
+- `document_content_type` (String) The MIME type of the workflow document
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this workflow by Twilio
+- `url` (String) The absolute URL of the workflow resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the workflow
-- `update` - (Defaults to 10 minutes) Used when updating the workflow
-- `read` - (Defaults to 5 minutes) Used when retrieving the workflow
-- `delete` - (Defaults to 10 minutes) Used when deleting the workflow
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

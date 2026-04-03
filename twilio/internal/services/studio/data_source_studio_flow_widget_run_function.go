@@ -17,41 +17,48 @@ func dataSourceStudioFlowWidgetRunFunction() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"json": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source",
 			},
 			"transitions": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The next widget(s) to transition to after this widget",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"fail": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when the function execution fails",
 						},
 						"success": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when the function executes successfully",
 						},
 					},
 				},
 			},
 			"offset": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The position of this widget in the Studio visual editor",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"x": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The x-axis position. Defaults to 0",
 						},
 						"y": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The y-axis position. Defaults to 0",
 						},
 					},
 				},
@@ -60,16 +67,19 @@ func dataSourceStudioFlowWidgetRunFunction() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The unique name of this widget within the flow, used to reference it in transitions",
 			},
 			"environment_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: utils.ServerlessEnvironmentSidValidation(),
+				Description:  "The SID of the Serverless environment to execute the function in",
 			},
 			"function_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: utils.ServerlessFunctionSidValidation(),
+				Description:  "The SID of the Serverless function to execute",
 			},
 			"service_sid": {
 				Type:     schema.TypeString,
@@ -80,26 +90,31 @@ func dataSourceStudioFlowWidgetRunFunction() *schema.Resource {
 					}, false),
 					utils.ServerlessServiceSidValidation(),
 				),
+				Description: "The SID of the Serverless service containing the function, or `default` for the default service",
 			},
 			"url": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.IsURLWithHTTPS,
+				Description:  "The HTTPS URL of the Serverless function to execute",
 			},
 			"parameters": {
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Description: "Key/value parameters to pass to the function as arguments",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"key": {
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "The parameter name",
 						},
 						"value": {
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "The parameter value",
 						},
 					},
 				},

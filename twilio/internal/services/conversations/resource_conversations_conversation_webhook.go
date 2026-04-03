@@ -49,28 +49,33 @@ func resourceConversationsConversationWebhook() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this conversation webhook by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this conversation webhook",
 			},
 			"service_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.ConversationServiceSidValidation(),
+				Description:  "The SID of the conversations service. Changing this forces a new resource",
 			},
 			"conversation_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.ConversationSidValidation(),
+				Description:  "The SID of the conversation. Changing this forces a new resource",
 			},
 			"target": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The target of the conversation webhook",
 			},
 			"method": {
 				Type:     schema.TypeString,
@@ -80,35 +85,42 @@ func resourceConversationsConversationWebhook() *schema.Resource {
 					"GET",
 					"POST",
 				}, false),
+				Description: "The HTTP method for the webhook. Valid values are `GET` or `POST`. Defaults to `POST`",
 			},
 			"webhook_url": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL to send webhook requests to",
 			},
 			"filters": {
-				Type:     schema.TypeList,
-				Required: true,
+				Type:        schema.TypeList,
+				Required:    true,
+				Description: "The list of webhook event filters to subscribe to",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
 			"replay_after": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				ForceNew: true,
+				Type:        schema.TypeInt,
+				Optional:    true,
+				ForceNew:    true,
+				Description: "The message index to replay messages from. Changing this forces a new resource",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the conversation webhook was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the conversation webhook was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the conversation webhook resource",
 			},
 		},
 	}

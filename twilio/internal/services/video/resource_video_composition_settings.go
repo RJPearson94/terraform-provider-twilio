@@ -29,41 +29,49 @@ func resourceVideoCompositionSettings() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this video composition settings",
 			},
 			"aws_credentials_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: utils.CredentialSidValidation(),
+				Description:  "The SID of the stored AWS credentials for external S3 composition storage",
 			},
 			"aws_s3_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL of the AWS S3 bucket where compositions are stored",
 			},
 			"aws_storage_enabled": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Whether compositions are stored in an external AWS S3 bucket. Defaults to `false`",
 			},
 			"encryption_enabled": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Whether compositions are encrypted at rest. Defaults to `false`",
 			},
 			"encryption_key_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: utils.CredentialSidValidation(),
+				Description:  "The SID of the stored encryption key used for at-rest encryption of compositions",
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "A human-readable label for the video composition settings",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the video composition settings resource",
 			},
 		},
 	}

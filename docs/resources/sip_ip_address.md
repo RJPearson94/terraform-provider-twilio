@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP IP Address"
+page_title: "twilio_sip_ip_address Resource - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_ip_address Resource
@@ -23,38 +25,36 @@ resource "twilio_sip_ip_address" "ip_address" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The account SID to associate the IP address with. Changing this forces a new resource to be created
-- `ip_access_control_list_sid` - (Mandatory) The IP access control list SID to associate the IP address with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The friendly name of the IP address
-- `ip_address` - (Mandatory) The IP address of the resource
-- `cidr_length_prefix` - (Optional) The CIDR length prefix to use with the IP address. The default value ia `32`
+- `account_sid` (String) The SID of the account that owns this SIP IP address. Changing this forces a new resource
+- `friendly_name` (String) A human-readable label for the SIP IP address
+- `ip_access_control_list_sid` (String) The SID of the IP access control list that this IP address belongs to. Changing this forces a new resource
+- `ip_address` (String) The IP address to allow or deny in the access control list
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `cidr_length_prefix` (Number) The CIDR prefix length for the IP address range. Defaults to `32`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the IP address (Same as the `sid`)
-- `sid` - The SID of the IP address (Same as the `id`)
-- `account_sid` - The account SID associated with the IP address
-- `ip_access_control_list_sid` - The IP access control list SID associated with the IP address
-- `friendly_name` - The friendly name of the IP address
-- `ip_address` - The IP address of the resource
-- `cidr_length_prefix` - The CIDR length prefix for the IP address
-- `date_created` - The date in RFC3339 format that the IP address was created
-- `date_updated` - The date in RFC3339 format that the IP address was updated
+### Read-Only
 
-## Timeouts
+- `date_created` (String) The date and time the SIP IP address was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP IP address was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this SIP IP address by Twilio
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the IP address
-- `update` - (Defaults to 10 minutes) Used when updating the IP address
-- `read` - (Defaults to 5 minutes) Used when retrieving the IP address
-- `delete` - (Defaults to 10 minutes) Used when deleting the IP address
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

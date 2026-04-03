@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Variables"
+page_title: "twilio_serverless_variables Data Source - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_variables Data Source
@@ -24,36 +26,39 @@ output "variables" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the variables are associated with
-- `environment_sid` - (Mandatory) The SID of the environment the variables are associated with
+- `environment_sid` (String) The SID of the Serverless environment
+- `service_sid` (String) The SID of the Serverless service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource in the format `service_sid/environment_sid`
-- `service_sid` - The SID of the service the variables are associated with
-- `environment_sid` - The SID of the environment the variables are associated with
-- `account_sid` - The account SID associated with the variables
-- `variables` - A list of `variable` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these variables
+- `id` (String) The ID of this resource.
+- `variables` (List of Object) A list of variables belonging to the Serverless environment (see [below for nested schema](#nestedatt--variables))
 
-A `variable` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the environment variable
-- `key` - The key of the environment variable
-- `value` - The value of the environment variable
-- `date_created` - The date in RFC3339 format that the environment variable was created
-- `date_updated` - The date in RFC3339 format that the environment variable was updated
-- `url` - The URL of the environment variable
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving environment variables
+<a id="nestedatt--variables"></a>
+### Nested Schema for `variables`
+
+Read-Only:
+
+- `date_created` (String)
+- `date_updated` (String)
+- `key` (String)
+- `sid` (String)
+- `url` (String)
+- `value` (String)

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Connect call to"
+page_title: "twilio_studio_flow_widget_connect_call_to Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_connect_call_to Data Source
@@ -97,41 +99,43 @@ data "twilio_studio_flow_widget_connect_call_to" "connect_call_to" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the connect call to widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `noun` - (Optional) The noun to use to indicate how the call should be connected. Valid values include: `client`, `conference`, `number`, `number-multi`, `sim` or `sip`
-- `caller_id` - (Optional) The phone number which will be used as the caller ID for the call. Default value is `{{contact.channel.address}}`
-- `record` - (Optional) Whether the call should be recorded
-- `sip_endpoint` - (Optional) The SIP endpoint to connect the call to. This should be set when setting the `noun` to `sip`
-- `sip_password` - (Optional) A password to authenticate the caller with when connecting the call
-- `sip_username` - (Optional) The username of the caller to use when connecting the call
-- `timeout` - (Optional) The amount of time in seconds to wait before timing out
-- `to` - (Optional) The target (phone number, SIM, conference, etc.) to connect the call to
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
+- `noun` (String) The TwiML noun that determines the call destination type. Valid values: `client`, `conference`, `number`, `number-multi`, `sim`, `sip`
 
-~> Due to data type and validation restrictions liquid templates are not supported for the `noun`, `record` and `timeout` arguments. Please see the widget documentation to determine whether other arguments support liquid templates
+### Optional
 
----
+- `caller_id` (String) The caller ID to display on the outbound call. Defaults to `{{contact.channel.address}}`
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `record` (Boolean) Whether to record the outbound call
+- `sip_endpoint` (String) The SIP URI to dial when `noun` is `sip` (e.g. `sip:user@domain.com`)
+- `sip_password` (String, Sensitive) The password for SIP authentication. Sensitive — will not be shown in logs or plans
+- `sip_username` (String) The username for SIP authentication
+- `timeout` (Number) The number of seconds to wait for the call to be answered before timing out
+- `to` (String) The destination to call. Format depends on `noun` (e.g. a phone number in E.164 format, a client name, or a conference name)
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
 
-A `transitions` block supports the following:
+### Read-Only
 
-- `call_completed` - (Optional) The widget to transition to when the call is complete
-- `hangup` - (Optional) The widget to transition to when the caller hangs up
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
----
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-An `offset` block supports the following:
+Optional:
 
-- `x` - (Optional) The x coordinate to display the connect call to widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the connect call to widget in the Studio console. The default value is `0`
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
-## Attributes Reference
 
-The following attributes are exported:
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
 
-- `id` - The name of the connect call to widget
-- `json` - The JSON state definition for the connect call to widget
+Optional:
+
+- `call_completed` (String) The name of the next widget when the outbound call completes
+- `hangup` (String) The name of the next widget when the caller hangs up

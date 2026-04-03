@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Asset"
+page_title: "twilio_serverless_asset Data Source - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_asset Data Source
@@ -24,35 +26,32 @@ output "asset" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the asset is associated with
-- `sid` - (Mandatory) The SID of the asset
+- `service_sid` (String) The SID of the Serverless service
+- `sid` (String) The SID of the Serverless asset
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the asset (Same as the `sid`)
-- `sid` - The SID of the asset (Same as the `id`)
-- `account_sid` - The account SID of the asset is deployed into
-- `service_sid` - The service SID of the asset is managed under
-- `friendly_name` - The name of the asset
-- `content_file_name` - The name of the file
-- `latest_version_sid` - The SID of the latest asset version
-- `source` - The relative path to the asset file
-- `source_hash` - A hash of the asset file to trigger deployments
-- `content_type` - The file MIME-type
-- `path` - The request URI path
-- `visibility` - The visibility of the asset
-- `date_created` - The date in RFC3339 format that the asset was created
-- `date_updated` - The date in RFC3339 format that the asset was updated
-- `url` - The URL of the asset
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this asset
+- `date_created` (String) The date and time the asset was created, in RFC 3339 format
+- `date_updated` (String) The date and time the asset was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the asset
+- `id` (String) The ID of this resource.
+- `latest_version_sid` (String) The SID of the latest version of the asset
+- `path` (String) The URL path at which the asset is accessible
+- `url` (String) The absolute URL of the asset resource
+- `visibility` (String) The access control for the asset
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the asset
+Optional:
+
+- `read` (String)

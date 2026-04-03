@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Builds"
+page_title: "twilio_serverless_builds Data Source - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_builds Data Source
@@ -23,61 +25,68 @@ output "builds" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the builds are associated with
+- `service_sid` (String) The SID of the Serverless service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `service_sid`)
-- `service_sid` - The SID of the service the builds are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the builds
-- `builds` - A list of `build` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these builds
+- `builds` (List of Object) A list of builds belonging to the Serverless service (see [below for nested schema](#nestedatt--builds))
+- `id` (String) The ID of this resource.
 
-A `build` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the build
-- `asset_version` - A `asset_version` block as documented below.
-- `function_version` - A `function_version` block as documented below.
-- `dependencies` - Map of dependencies to be included in the build
-- `runtime` - The target runtime of the serverless functions and assets
-- `status` - The current status of the build job
-- `date_created` - The date in RFC3339 format that the build was created
-- `date_updated` - The date in RFC3339 format that the build was updated
-- `url` - The URL of the build
+Optional:
 
----
+- `read` (String)
 
-An `asset_version` block supports the following:
 
-- `sid` - The SID of the asset version
-- `account_sid` - The account SID of the asset version is deployed into
-- `service_sid` - The account SID of the asset version is deployed into
-- `asset_sid` - The asset SID of the version is managed under
-- `date_created` - The date in RFC3339 format that the asset version was created
-- `path` - The request URI path
-- `visibility` - The visibility of the asset
+<a id="nestedatt--builds"></a>
+### Nested Schema for `builds`
 
----
+Read-Only:
 
-A `function_version` block supports the following:
+- `asset_versions` (List of Object) (see [below for nested schema](#nestedobjatt--builds--asset_versions))
+- `date_created` (String)
+- `date_updated` (String)
+- `dependencies` (Map of String)
+- `function_versions` (List of Object) (see [below for nested schema](#nestedobjatt--builds--function_versions))
+- `runtime` (String)
+- `sid` (String)
+- `status` (String)
+- `url` (String)
 
-- `sid` - The SID of the function version
-- `account_sid` - The account SID of the function version is deployed into
-- `service_sid` - The account SID of the function version is deployed into
-- `function_sid` - The function SID of the version is managed under
-- `date_created` - The date in RFC3339 format that the function version was created
-- `path` - The request URI path
-- `visibility` - The visibility of the function
+<a id="nestedobjatt--builds--asset_versions"></a>
+### Nested Schema for `builds.asset_versions`
 
-## Timeouts
+Read-Only:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+- `account_sid` (String)
+- `asset_sid` (String)
+- `date_created` (String)
+- `path` (String)
+- `service_sid` (String)
+- `sid` (String)
+- `visibility` (String)
 
-- `read` - (Defaults to 10 minutes) Used when retrieving builds
+
+<a id="nestedobjatt--builds--function_versions"></a>
+### Nested Schema for `builds.function_versions`
+
+Read-Only:
+
+- `account_sid` (String)
+- `date_created` (String)
+- `function_sid` (String)
+- `path` (String)
+- `service_sid` (String)
+- `sid` (String)
+- `visibility` (String)

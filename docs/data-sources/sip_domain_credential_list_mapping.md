@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Domain Credential List Mapping"
+page_title: "twilio_sip_domain_credential_list_mapping Data Source - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_domain_credential_list_mapping Data Source
@@ -21,28 +23,28 @@ output "credential_list_mapping" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The SID of the account the credential list mapping is associated with
-- `domain_sid` - (Mandatory) The SID of the domain the credential list mapping is associated with
-- `sid` - (Mandatory) The SID of the credential list mapping
+- `account_sid` (String) The SID of the account that owns this SIP domain credential list mapping
+- `domain_sid` (String) The SID of the SIP domain the credential list is mapped to
+- `sid` (String) The SID of the SIP domain credential list mapping to look up
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the credential list mapping (Same as the `sid`)
-- `sid` - The SID of the credential list mapping (Same as the `id`)
-- `account_sid` - The account SID associated with the credential list mapping
-- `domain_sid` - The domain SID associated with the credential list mapping
-- `friendly_name` - The friendly name of the credential list mapping
-- `date_created` - The date in RFC3339 format that the credential list mapping was created
-- `date_updated` - The date in RFC3339 format that the credential list mapping was updated
+### Read-Only
 
-## Timeouts
+- `date_created` (String) The date and time the SIP domain credential list mapping was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP domain credential list mapping was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the SIP domain credential list mapping
+- `id` (String) The ID of this resource.
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the credential list mapping details
+Optional:
+
+- `read` (String)

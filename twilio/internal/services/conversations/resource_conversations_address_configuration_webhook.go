@@ -47,35 +47,42 @@ func resourceConversationsAddressConfigurationWebhook() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this address configuration by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this address configuration",
 			},
 			"address": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "The address (e.g. phone number) for the configuration. Changing this forces a new resource",
 			},
 			"service_sid": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: utils.ConversationServiceSidValidation(),
+				Description:  "The SID of the conversations service",
 			},
 			"friendly_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "A human-readable label for the address configuration",
 			},
 			"integration_type": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The type of auto-creation integration",
 			},
 			"enabled": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+				Description: "Whether auto-creation is enabled for this address configuration. Defaults to `true`",
 			},
 			"type": {
 				Type:     schema.TypeString,
@@ -84,11 +91,13 @@ func resourceConversationsAddressConfigurationWebhook() *schema.Resource {
 					"sms",
 					"whatsapp",
 				}, false),
-				ForceNew: true,
+				ForceNew:    true,
+				Description: "The type of address. Valid values are `sms` or `whatsapp`. Changing this forces a new resource",
 			},
 			"webhook_filters": {
-				Type:     schema.TypeList,
-				Required: true,
+				Type:        schema.TypeList,
+				Required:    true,
+				Description: "The list of webhook event filters to subscribe to",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 					ValidateFunc: validation.StringInSlice([]string{
@@ -113,23 +122,28 @@ func resourceConversationsAddressConfigurationWebhook() *schema.Resource {
 					"GET",
 					"POST",
 				}, false),
+				Description: "The HTTP method for the webhook. Valid values are `GET` or `POST`. Defaults to `POST`",
 			},
 			"webhook_url": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL to send webhook requests to",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the address configuration was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the address configuration was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the address configuration resource",
 			},
 		},
 	}

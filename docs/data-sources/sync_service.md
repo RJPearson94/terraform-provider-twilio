@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Sync Service"
+page_title: "twilio_sync_service Data Source - twilio"
 subcategory: "Sync"
+description: |-
+  
 ---
 
 # twilio_sync_service Data Source
@@ -21,32 +23,34 @@ output "service" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the service
+- `sid` (String) The SID of the Sync service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the service (Same as the `sid`)
-- `sid` - The SID of the service (Same as the `id`)
-- `account_sid` - The account SID the service is associated with
-- `acl_enabled` - Whether access control lists are enabled
-- `friendly_name` - The friendly name of the service
-- `reachability_debouncing_enabled` - Whether endpoint_disconnected event should occur when the reachability_debouncing_window is reached
-- `reachability_debouncing_window` - The reachability event delay in milliseconds
-- `reachability_webhooks_enabled` - Whether the service should call the webhook url on client connections
-- `webhook_url` - The URL called when Sync objects are changed
-- `webhooks_from_rest_enabled` - Whether the service should call the webhook url on updates via the REST API
-- `date_created` - The date in RFC3339 format that the service was created
-- `date_updated` - The date in RFC3339 format that the service was updated
-- `url` - The URL of the service
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this Sync service
+- `acl_enabled` (Boolean) Whether token identities in the Sync service must be granted access to Sync objects via the Permissions API
+- `date_created` (String) The date and time the Sync service was created, in RFC 3339 format
+- `date_updated` (String) The date and time the Sync service was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the Sync service
+- `id` (String) The ID of this resource.
+- `reachability_debouncing_enabled` (Boolean) Whether every endpoint_disconnected event fires after a configurable delay
+- `reachability_debouncing_window` (Number) The reachability event delay, in milliseconds
+- `reachability_webhooks_enabled` (Boolean) Whether the service instance calls the webhook_url when client endpoints connect or disconnect from Sync
+- `url` (String) The absolute URL of the Sync service resource
+- `webhook_url` (String) The URL to which Sync sends webhooks
+- `webhooks_from_rest_enabled` (Boolean) Whether the service instance calls the webhook_url when the REST API is used to update Sync objects
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the service
+Optional:
+
+- `read` (String)

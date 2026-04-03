@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Chat Role"
+page_title: "twilio_chat_role Data Source - twilio"
 subcategory: "Programmable Chat"
+description: |-
+  
 ---
 
 # twilio_chat_role Data Source
@@ -24,30 +26,31 @@ output "role" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the role is associated with
-- `sid` - (Mandatory) The SID of the role
+- `service_sid` (String) The SID of the Programmable Chat service
+- `sid` (String) The SID of the role
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the role (Same as the `sid`)
-- `sid` - The SID of the role (Same as the `id`)
-- `account_sid` - The account SID associated with the role
-- `service_sid` - The service SID associated with the role
-- `friendly_name` - The friendly name of the role
-- `type` - The type of role
-- `permissions` - The list of permissions the role has
-- `date_created` - The date in RFC3339 format that the role was created
-- `date_updated` - The date in RFC3339 format that the role was updated
-- `url` - The URL of the role
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this role
+- `date_created` (String) The date and time the role was created, in RFC 3339 format
+- `date_updated` (String) The date and time the role was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the role
+- `id` (String) The ID of this resource.
+- `permissions` (List of String) The list of permissions granted to the role
+- `type` (String) The type of role. Values are `channel` or `deployment`
+- `url` (String) The absolute URL of the role resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the role
+Optional:
+
+- `read` (String)

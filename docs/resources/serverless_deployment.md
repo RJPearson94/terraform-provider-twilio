@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Deployment"
+page_title: "twilio_serverless_deployment Resource - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_deployment Resource
@@ -79,40 +81,37 @@ resource "twilio_serverless_deployment" "deployment" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The serverless service SID to associate the deployment with. Changing this forces a new resource to be created
-- `environment_sid` - (Mandatory) The serverless environment SID to associate the deployment with. Changing this forces a new resource to be created
-- `build_sid` - (Optional) The build SID to be deployed to the environment. Changing this forces a new resource to be created
-- `triggers` - (Optional) A map of key-value pairs which can be used to determine if changes have occurred and redeployment is necessary. Changing this forces a new resource to be created
-  ~> An alternative strategy is to use the [taint](https://www.terraform.io/docs/commands/taint.html) functionality of Terraform.
+- `environment_sid` (String) The SID of the Serverless environment. Changing this forces a new resource
+- `service_sid` (String) The SID of the Serverless service. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `build_sid` (String) The SID of the build to deploy to the environment. Changing this forces a new resource
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `triggers` (Map of String) A map of arbitrary keys and values that, when changed, will trigger a new deployment. Changing this forces a new resource
 
-- `id` - The ID of the deployment (Same as the `sid`)
-- `sid` - The SID of the deployment (Same as the `id`)
-- `account_sid` - The account SID associated with the deployment
-- `service_sid` - The service SID associated with the deployment
-- `environment_sid` - The environment SID associated with the deployment
-- `build_sid` - The build SID to be deployed to the environment
-- `is_latest_deployment` - Determine whether this deployment is the latest
-  ~> This caters for when deployments are made and Terraform state is not aware of them
-- `triggers` - A map of key-value pairs which can be used to determine if changes have occurred and redeployment is necessary.
-- `date_created` - The date in RFC3339 format that the deployment was created
-- `date_updated` - The date in RFC3339 format that the deployment was updated
-- `url` - The URL of the deployment
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this deployment
+- `date_created` (String) The date and time the deployment was created, in RFC 3339 format
+- `date_updated` (String) The date and time the deployment was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `is_latest_deployment` (Boolean) Whether this deployment is the most recent deployment for the environment
+- `sid` (String) The unique SID assigned to this deployment by Twilio
+- `url` (String) The absolute URL of the deployment resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the deployment
-- `read` - (Defaults to 5 minutes) Used when retrieving the deployment
-- `delete` - (Defaults to 10 minutes) Used when deleting the deployment
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
 
 ## Import
 

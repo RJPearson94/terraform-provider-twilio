@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Video Composition Hook"
+page_title: "twilio_video_composition_hook Resource - twilio"
 subcategory: "Video"
+description: |-
+  
 ---
 
 # twilio_video_composition_hook Resource
@@ -17,50 +19,43 @@ resource "twilio_video_composition_hook" "composition_hook" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `friendly_name` - (Mandatory) The friendly name of the composition hook
-- `audio_sources` - (Optional) A list of audio sources to include in the compositions
-- `audio_sources_excluded` - (Optional) A List of audio sources to exclude from the compositions
-- `enabled` - (Optional) Whether the composition hook is enabled. The default value is `true`
-- `format` - (Optional) The media file format of the compositions. Valid values are `mp4` or `webm`. The default value is `webm`
-- `resolution` - (Optional) The pixel dimensions for the video. The value must be in the format `{height in pixels}x{width in pixels}`. The default value is `640x480`
-- `status_callback_url` - (Optional) The URL to call on each status change
-- `status_callback_method` - (Optional) The HTTP method should be used to call the status callback URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `trim` - (Optional) Whether sections with no audio or media content should be trimmed from the composition. The default value is `true`
-- `video_layout` - (Optional) JSON string of the composition video layout. The default value is `{}`
+- `friendly_name` (String) A human-readable label for the video composition hook
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `audio_sources` (List of String) A list of audio source track names to include in the composition
+- `audio_sources_excluded` (List of String) A list of audio source track names to exclude from the composition
+- `enabled` (Boolean) Whether the composition hook is enabled. Defaults to `true`
+- `format` (String) The file format for the composition. Valid values are `mp4` or `webm`. Defaults to `webm`
+- `resolution` (String) The resolution of the composition in the format `WIDTHxHEIGHT`. Defaults to `640x480`
+- `status_callback_method` (String) The HTTP method used to call the status callback URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `status_callback_url` (String) The URL to call for composition status callback events
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `trim` (Boolean) Whether to remove intervals with no media from the composition. Defaults to `true`
+- `video_layout` (String) A JSON string describing the video layout of the composition
 
-- `id` - The ID of the composition hook (Same as the `sid`)
-- `sid` - The SID of the composition hook (Same as the `id`)
-- `account_sid` - The account SID the composition hook is associated with
-- `friendly_name` - The friendly name of the composition hook
-- `audio_sources` - A list of audio sources to include in the compositions
-- `audio_sources_excluded` - A list of audio sources to exclude from the compositions
-- `enabled` - Whether the composition hook is enabled
-- `format` - The media file format of the compositions
-- `resolution` - The pixel dimensions for the video
-- `status_callback_url` - The URL to call on each status change
-- `status_callback_method` - The HTTP method which should be used to call the status callback URL
-- `trim` - Whether sections with no audio or media content should be trimmed from the composition
-- `video_layout` - JSON string of the composition video layout
-- `date_created` - The date in RFC3339 format that the composition hook was created
-- `date_updated` - The date in RFC3339 format that the composition hook was updated
-- `url` - The URL of the composition hook
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this video composition hook
+- `date_created` (String) The date and time the video composition hook was created, in RFC 3339 format
+- `date_updated` (String) The date and time the video composition hook was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this video composition hook by Twilio
+- `url` (String) The absolute URL of the video composition hook resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the composition hook
-- `update` - (Defaults to 10 minutes) Used when updating the composition hook
-- `read` - (Defaults to 5 minutes) Used when retrieving the composition hook
-- `delete` - (Defaults to 10 minutes) Used when deleting the composition hook
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

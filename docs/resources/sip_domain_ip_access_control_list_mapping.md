@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Domain IP Access Control List Mapping"
+page_title: "twilio_sip_domain_ip_access_control_list_mapping Resource - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_domain_ip_access_control_list_mapping Resource
@@ -27,34 +29,34 @@ resource "twilio_sip_domain_ip_access_control_list_mapping" "ip_access_control_l
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The account SID to associate the IP access control list mapping with. Changing this forces a new resource to be created
-- `domain_sid` - (Mandatory) The domain SID to associate the IP access control list mapping with. Changing this forces a new resource to be created
-- `ip_access_control_list_sid` - (Mandatory) The SIP IP access control list SID to associate the IP access control list mapping with. Changing this forces a new resource to be created
+- `account_sid` (String) The SID of the account that owns this SIP domain IP access control list mapping. Changing this forces a new resource
+- `domain_sid` (String) The SID of the SIP domain to map the IP access control list to. Changing this forces a new resource
+- `ip_access_control_list_sid` (String) The SID of the IP access control list to map to the domain for call authentication. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the IP access control list mapping (Same as the `sid` & `ip_access_control_list_sid`)
-- `sid` - The SID of the IP access control list mapping (Same as the `id` & `ip_access_control_list_sid`)
-- `account_sid` - The account SID associated with the IP access control list mapping
-- `domain_sid` - The domain SID associated with the IP access control list mapping
-- `ip_access_control_list_sid` - The SIP IP access control list SID associated with the IP access control list mapping
-- `friendly_name` - The friendly name of the IP access control list mapping
-- `date_created` - The date in RFC3339 format that the IP access control list mapping was created
-- `date_updated` - The date in RFC3339 format that the IP access control list mapping was updated
+### Read-Only
 
-## Timeouts
+- `date_created` (String) The date and time the SIP domain IP access control list mapping was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP domain IP access control list mapping was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the SIP domain IP access control list mapping
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this SIP domain IP access control list mapping by Twilio
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the IP access control list
-- `read` - (Defaults to 5 minutes) Used when retrieving the IP access control list
-- `delete` - (Defaults to 10 minutes) Used when deleting the IP access control list
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
 
 ## Import
 

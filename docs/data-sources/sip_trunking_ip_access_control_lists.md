@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Trunking IP Access Control Lists"
+page_title: "twilio_sip_trunking_ip_access_control_lists Data Source - twilio"
 subcategory: "SIP Trunking"
+description: |-
+  
 ---
 
 # twilio_sip_trunking_ip_access_control_lists Data Source
@@ -21,33 +23,37 @@ output "ip_access_control_lists" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `trunk_sid` - (Mandatory) The SID of the SIP trunk the IP access control lists are associated with
+- `trunk_sid` (String) The SID of the SIP trunk to retrieve IP access control lists for
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `trunk_sid`)
-- `trunk_sid` - The SID of the SIP trunk the IP access control lists are associated with (Same as `id`)
-- `account_sid` - The account SID associated with the IP access control lists
-- `ip_access_control_lists` - A list of `ip_access_control_list` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the SIP trunk IP access control lists
+- `id` (String) The ID of this resource.
+- `ip_access_control_lists` (List of Object) A list of IP access control lists associated with the SIP trunk (see [below for nested schema](#nestedatt--ip_access_control_lists))
 
-An `ip_access_control_list` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the IP access control list
-- `friendly_name` - The friendly name of the IP access control list
-- `date_created` - The date in RFC3339 format that the IP access control list was created
-- `date_updated` - The date in RFC3339 format that the IP access control list was updated
-- `url` - The URL of the IP access control list resource
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving IP access control lists
+<a id="nestedatt--ip_access_control_lists"></a>
+### Nested Schema for `ip_access_control_lists`
+
+Read-Only:
+
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `sid` (String)
+- `url` (String)

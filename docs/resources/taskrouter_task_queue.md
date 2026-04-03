@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Task Queue"
+page_title: "twilio_taskrouter_task_queue Resource - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_task_queue Resource
@@ -24,46 +26,42 @@ resource "twilio_taskrouter_task_queue" "task_queue" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `friendly_name` - (Mandatory) The name of the task queue
-- `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the task queue with. Changing this forces a new resource to be created
-- `assignment_activity_sid` - (Optional) The assignment activity SID for the task queue
-- `max_reserved_workers` - (Optional) The max number of workers to create a reservation for. The value must be between `1` and `50` (inclusive). The default value is `1`
-- `target_workers` - (Optional) Worker selection criteria for any tasks that enter the task queue. The default value is `1==1`
-- `task_order` - (Optional) How TaskRouter will assign workers tasks on the queue. Valid values are `LIFO` or `FIFO`. Default value is `FIFO`
-- `reservation_activity_sid` - (Optional) The reservation activity SID for the task queue
+- `friendly_name` (String) A human-readable label for the task queue
+- `workspace_sid` (String) The SID of the TaskRouter workspace. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `assignment_activity_sid` (String) The SID of the activity to assign workers when a task is assigned
+- `max_reserved_workers` (Number) The maximum number of workers to reserve for a task in this queue (1-50). Defaults to `1`
+- `reservation_activity_sid` (String) The SID of the activity to assign workers when a task is reserved
+- `target_workers` (String) A worker selection expression for this task queue. Defaults to `1==1`
+- `task_order` (String) The order in which tasks are assigned to workers. Valid values are `LIFO` or `FIFO`. Defaults to `FIFO`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the task queue (Same as the `sid`)
-- `sid` - The SID of the task queue (Same as the `id`)
-- `account_sid` - The account SID of the task queue is deployed into
-- `workspace_sid` - The workspace SID to create the task queue under
-- `friendly_name` - The name of the task queue
-- `task_order` - How TaskRouter will assign workers tasks on the queue
-- `assignment_activity_name` - The assignment activity name for the task queue
-- `assignment_activity_sid` - The assignment activity SID for the task queue
-- `reservation_activity_name` - The reservation activity name for the task queue
-- `reservation_activity_sid` - The reservation activity SID for the task queue
-- `target_workers` - Worker selection criteria for any tasks that enter the task queue
-- `max_reserved_workers` - The max number of workers to create a reservation for
-- `date_created` - The date in RFC3339 format that the task queue was created
-- `date_updated` - The date in RFC3339 format that the task queue was updated
-- `url` - The URL of the task queue
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this task queue
+- `assignment_activity_name` (String) The name of the activity to assign workers when a task is assigned
+- `date_created` (String) The date and time the task queue was created, in RFC 3339 format
+- `date_updated` (String) The date and time the task queue was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `reservation_activity_name` (String) The name of the activity to assign workers when a task is reserved
+- `sid` (String) The unique SID assigned to this task queue by Twilio
+- `url` (String) The absolute URL of the task queue resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the task queue
-- `update` - (Defaults to 10 minutes) Used when updating the task queue
-- `read` - (Defaults to 5 minutes) Used when retrieving the task queue
-- `delete` - (Defaults to 10 minutes) Used when deleting the task queue
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

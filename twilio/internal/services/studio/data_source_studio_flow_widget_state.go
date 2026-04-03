@@ -17,30 +17,36 @@ func dataSourceStudioFlowWidgetState() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"json": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source",
 			},
 			"transitions": {
-				Type:     schema.TypeList,
-				Required: true,
+				Type:        schema.TypeList,
+				Required:    true,
+				Description: "The list of transitions for this generic state, each triggered by a named event",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"event": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "The event name that triggers this transition (e.g. `incomingMessage`, `audioComplete`)",
 						},
 						"next": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget to transition to when this event fires",
 						},
 						"conditions": {
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:        schema.TypeList,
+							Optional:    true,
+							Description: "Optional conditions that must be met for this transition to fire",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"arguments": {
-										Type:     schema.TypeList,
-										Required: true,
+										Type:        schema.TypeList,
+										Required:    true,
+										Description: "The arguments to pass to the condition operator",
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -49,16 +55,19 @@ func dataSourceStudioFlowWidgetState() *schema.Resource {
 										Type:         schema.TypeString,
 										Required:     true,
 										ValidateFunc: validation.StringIsNotEmpty,
+										Description:  "A human-readable label for this condition",
 									},
 									"type": {
 										Type:         schema.TypeString,
 										Required:     true,
 										ValidateFunc: validation.StringIsNotEmpty,
+										Description:  "The comparison operator type (e.g. `equal_to`, `regex`)",
 									},
 									"value": {
 										Type:         schema.TypeString,
 										Required:     true,
 										ValidateFunc: validation.StringIsNotEmpty,
+										Description:  "The value to compare against",
 									},
 								},
 							},
@@ -70,15 +79,18 @@ func dataSourceStudioFlowWidgetState() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The unique name of this widget within the flow, used to reference it in transitions",
 			},
 			"type": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The widget type identifier (e.g. `send-message`, `make-http-request`). Use this generic state data source for widget types not covered by a dedicated data source",
 			},
 			"properties": {
-				Type:     schema.TypeMap,
-				Required: true,
+				Type:        schema.TypeMap,
+				Required:    true,
+				Description: "A map of widget-specific properties. The expected keys depend on the `type` value",
 			},
 		},
 	}

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Video Composition Settings"
+page_title: "twilio_video_composition_settings Resource - twilio"
 subcategory: "Video"
+description: |-
+  
 ---
 
 # twilio_video_composition_settings Resource
@@ -140,34 +142,33 @@ resource "twilio_video_composition_settings" "composition_settings" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `friendly_name` - (Mandatory) The friendly name of the composition settings
-- `aws_credentials_sid` - (Optional) The SID of the AWS credentials supplied to Twilio to use to store compositions in your S3 bucket
-- `aws_s3_url` - (Optional) The URL of the S3 bucket to store compositions in
-- `aws_storage_enabled` - (Optional) Whether to store compositions in your S3 bucket. The default value is `false`
-- `encryption_enabled` - (Optional) Whether to encrypt the compositions. The default value is `false`
-- `encryption_key_sid` - (Optional) The SID of the credential supplied to Twilio to use to encrypt the compositions
+- `friendly_name` (String) A human-readable label for the video composition settings
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `aws_credentials_sid` (String) The SID of the stored AWS credentials for external S3 composition storage
+- `aws_s3_url` (String) The URL of the AWS S3 bucket where compositions are stored
+- `aws_storage_enabled` (Boolean) Whether compositions are stored in an external AWS S3 bucket. Defaults to `false`
+- `encryption_enabled` (Boolean) Whether compositions are encrypted at rest. Defaults to `false`
+- `encryption_key_sid` (String) The SID of the stored encryption key used for at-rest encryption of compositions
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the composition settings (Same as the `account_sid`)
-- `account_sid` - The account SID the composition settings is associated with
-- `aws_credentials_sid` - The SID of the AWS credentials supplied to Twilio which are used to store compositions in your S3 bucket
-- `aws_s3_url` - The URL of the S3 bucket where compositions are stored
-- `aws_storage_enabled` - (Optional) Whether compositions are stored in your S3 bucket
-- `encryption_enabled` - Whether encrypted compositions is enabled
-- `encryption_key_sid` - The SID of the credential supplied to Twilio which is used to encrypt the compositions
-- `url` - The URL of the composition settings
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this video composition settings
+- `id` (String) The ID of this resource.
+- `url` (String) The absolute URL of the video composition settings resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when updating the composition settings
-- `update` - (Defaults to 10 minutes) Used when updating the composition settings
-- `read` - (Defaults to 5 minutes) Used when retrieving the composition settings
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)

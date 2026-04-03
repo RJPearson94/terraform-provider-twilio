@@ -48,37 +48,44 @@ func resourceVerifyMessagingConfiguration() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this messaging configuration",
 			},
 			"service_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.VerifyServiceSidValidation(),
+				Description:  "The SID of the Verify service. Changing this forces a new resource",
 			},
 			"messaging_service_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: utils.MessagingServiceSidValidation(),
+				Description:  "The SID of the messaging service to associate with this configuration",
 			},
 			"country_code": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The ISO-3166-1 country code of the messaging configuration. Changing this forces a new resource",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the messaging configuration was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the messaging configuration was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the messaging configuration resource",
 			},
 		},
 	}

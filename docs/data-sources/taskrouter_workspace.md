@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Workspace"
+page_title: "twilio_taskrouter_workspace Data Source - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_workspace Data Source
@@ -21,35 +23,36 @@ output "workspace" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the workspace
+- `sid` (String) The SID of the workspace to retrieve
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the workspace (Same as the `sid`)
-- `sid` - The SID of the workspace (Same as the `id`)
-- `account_sid` - The account SID of the workspace is deployed into
-- `friendly_name` - The name of the workspace
-- `event_callback_url` - The event callback URL
-- `event_filters` - The event callback filter
-- `multi_task_enabled` - Whether or not multitasking is enabled
-- `template` - TaskRouter template to use
-- `prioritize_queue_order` - Determine how TaskRouter prioritizes incoming
-- `default_activity_name` - Name of default activity
-- `default_activity_sid` - SID of default activity
-- `timeout_activity_name` - Name of timeout activity
-- `timeout_activity_sid` - SID of timeout activity
-- `date_created` - The date in RFC3339 format that the workspace was created
-- `date_updated` - The date in RFC3339 format that the workspace was updated
-- `url` - The URL of the workspace
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this workspace
+- `date_created` (String) The date and time the workspace was created, in RFC 3339 format
+- `date_updated` (String) The date and time the workspace was last updated, in RFC 3339 format
+- `default_activity_name` (String) The name of the default activity for the workspace
+- `default_activity_sid` (String) The SID of the default activity for the workspace
+- `event_callback_url` (String) The URL to call when an event is fired in the workspace
+- `event_filters` (List of String) A list of event types the workspace is subscribed to
+- `friendly_name` (String) A human-readable label for the workspace
+- `id` (String) The ID of this resource.
+- `multi_task_enabled` (Boolean) Whether multi-tasking is enabled for the workspace
+- `prioritize_queue_order` (String) The order in which task queues are prioritized
+- `timeout_activity_name` (String) The name of the timeout activity for the workspace
+- `timeout_activity_sid` (String) The SID of the timeout activity for the workspace
+- `url` (String) The absolute URL of the workspace resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the workspace
+Optional:
+
+- `read` (String)

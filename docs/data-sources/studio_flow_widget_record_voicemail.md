@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Record voicemail"
+page_title: "twilio_studio_flow_widget_record_voicemail Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_record_voicemail Data Source
@@ -47,42 +49,44 @@ data "twilio_studio_flow_widget_record_voicemail" "record_voicemail" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the record voicemail widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `finish_on_key` - (Optional) The keypress which terminates the recording
-- `max_length` - (Optional) The maximum length (in seconds) of the recording. The value must be between `1` and `14400`
-- `play_beep` - (Optional) A string to represent whether a beep should be played or suppressed before recording starts. This value can be either a liquid template or the string `true` or `false`
-- `recording_status_callback_url` - (Optional) The URL which receives the recording completion callback. This value can be either a liquid template or a URL
-- `timeout` - (Optional) The time in seconds of silence to wait before terminating the recording
-- `transcribe` - (Optional) Whether the call should be transcribed
-- `trim` - (Optional) A string to indicate whether silence should be removed from the end of the recording. This value can be either a liquid template or the string `trim-silence` or `do-not-trim`
-- `transcription_callback_url` - (Optional) The URL which receives the transcription callback. This value can be either a liquid template or a URL
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
 
-~> Due to data type and validation restrictions liquid templates are not supported for the `transcribe`, `max_length` and `timeout` arguments. Please see the widget documentation to determine whether other arguments support liquid templates
+### Optional
 
----
+- `finish_on_key` (String) The DTMF key that ends the recording (e.g. `#`)
+- `max_length` (Number) The maximum recording length in seconds (1–14400)
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `play_beep` (String) Whether to play a beep before starting the recording. Valid values: `true`, `false`
+- `recording_status_callback_url` (String) The HTTP/HTTPS URL to receive recording status callback events
+- `timeout` (Number) The number of seconds of silence before the recording automatically stops
+- `transcribe` (Boolean) Whether to transcribe the voicemail recording
+- `transcription_callback_url` (String) The HTTP/HTTPS URL to receive the transcription result
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
+- `trim` (String) Whether to trim silence from the recording. Valid values: `trim-silence`, `do-not-trim`
 
-A `transitions` block supports the following:
+### Read-Only
 
-- `hangup` - (Optional) The widget to transition to when the caller ends the call
-- `no_audio` - (Optional) The widget to transition to when no audio is received
-- `recording_complete` - (Optional) The widget to transition to when the recording is complete
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
----
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-An `offset` block supports the following:
+Optional:
 
-- `x` - (Optional) The x coordinate to display the record voicemail widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the record voicemail widget in the Studio console. The default value is `0`
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
-## Attributes Reference
 
-The following attributes are exported:
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
 
-- `id` - The name of the record voicemail widget
-- `json` - The JSON state definition for the record voicemail widget
+Optional:
+
+- `hangup` (String) The name of the next widget when the caller hangs up during recording
+- `no_audio` (String) The name of the next widget when no audio is detected during recording
+- `recording_complete` (String) The name of the next widget when the voicemail recording completes successfully

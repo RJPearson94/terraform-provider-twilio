@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Account Address"
+page_title: "twilio_account_address Resource - twilio"
 subcategory: "Account"
+description: |-
+  
 ---
 
 # twilio_account_address Resource
@@ -21,50 +23,43 @@ resource "twilio_account_address" "address" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The account SID to associate the address with. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The friendly name of the address
-- `customer_name` - (Mandatory) The customer/ business name
-- `street` - (Mandatory) The address street
-- `street_secondary` - (Optional) The address secondary street
-- `city` - (Mandatory) The address city
-- `region` - (Mandatory) The address region
-- `postal_code` - (Mandatory) The address postal code
-- `iso_country` - (Mandatory) The address ISO country
-- `emergency_enabled` - (Optional) Whether emergency calling is enabled for the address. The default value is `false`
+- `account_sid` (String) The SID of the account that owns this address. Changing this forces a new resource
+- `city` (String) The city of the address
+- `customer_name` (String) The name of the customer associated with the address
+- `iso_country` (String) The ISO 3166-1 alpha-2 country code of the address. Changing this forces a new resource
+- `postal_code` (String) The postal code of the address
+- `region` (String) The state or region of the address
+- `street` (String) The street address
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `emergency_enabled` (Boolean) Whether emergency calling is enabled for the address. Defaults to `false`
+- `friendly_name` (String) A human-readable label for the address
+- `street_secondary` (String) The secondary street address information (e.g., suite or apartment number)
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the address (Same as the `sid`)
-- `sid` - The SID of the address (Same as the `id`)
-- `account_sid` - The account SID the address is associated with
-- `friendly_name` - The friendly name of the address
-- `customer_name` - The customer/ business name
-- `street` - The address street
-- `street_secondary` - The address secondary street
-- `city` - The address city
-- `region` - The address region
-- `postal_code` - The address postal code
-- `iso_country` - The address ISO country
-- `emergency_enabled` - Whether emergency calling is enabled for the address
-- `validated` - Whether the address has been validated
-- `verified` - Whether the address has been verified
-- `date_created` - The date in RFC3339 format that the address was created
-- `date_updated` - The date in RFC3339 format that the address was updated
+### Read-Only
 
-## Timeouts
+- `date_created` (String) The date and time the address was created, in RFC 3339 format
+- `date_updated` (String) The date and time the address was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this address by Twilio
+- `validated` (Boolean) Whether the address has been validated by Twilio
+- `verified` (Boolean) Whether the address has been verified by the customer
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the address
-- `update` - (Defaults to 10 minutes) Used when updating the address
-- `read` - (Defaults to 5 minutes) Used when retrieving the address
-- `delete` - (Defaults to 10 minutes) Used when deleting the address
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

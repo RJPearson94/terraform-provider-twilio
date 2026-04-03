@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Flex Flow"
+page_title: "twilio_flex_flow Data Source - twilio"
 subcategory: "Flex"
+description: |-
+  
 ---
 
 # twilio_flex_flow Data Source
@@ -21,48 +23,52 @@ output "flow" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the flex-flow
+- `sid` (String) The SID of the Flex flow to look up
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the flow (Same as the `sid`)
-- `sid` - The SID of the flow (Same as the `id`)
-- `account_sid` - The account SID associated with the flow
-- `channel_type` - The type of channel which is integrated with the flow
-- `chat_service_sid` - The chat service SID associated with the flow
-- `friendly_name` - The friendly name of the flow
-- `contact_identity` - The contact identity for the channel
-- `enabled` - Whether the flow is active
-- `integration_type` - The type of integration with the flow
-- `janitor_enabled` - Clean up chat channels and proxy sessions when the task is completed
-- `long_lived` - Whether to reuse the same channel for any future interactions with the customer
-- `integration` - A `integration` block as documented below
-- `date_created` - The date in RFC3339 format that the flow was created
-- `date_updated` - The date in RFC3339 format that the flow was updated
-- `url` - The URL of the flow
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this Flex flow
+- `channel_type` (String) The channel type of the Flex flow. Valid values are `web`, `sms`, `facebook`, `whatsapp`, `line`, or `custom`
+- `chat_service_sid` (String) The SID of the chat service associated with the Flex flow
+- `contact_identity` (String) The channel contact identity for the Flex flow
+- `date_created` (String) The date and time the Flex flow was created, in RFC 3339 format
+- `date_updated` (String) The date and time the Flex flow was last updated, in RFC 3339 format
+- `enabled` (Boolean) Whether the Flex flow is enabled
+- `friendly_name` (String) A human-readable label for the Flex flow
+- `id` (String) The ID of this resource.
+- `integration` (List of Object) The integration settings for the Flex flow (see [below for nested schema](#nestedatt--integration))
+- `integration_type` (String) The type of integration. Valid values are `studio`, `external`, or `task`
+- `janitor_enabled` (Boolean) Whether the janitor is enabled to clean up expired channels
+- `long_lived` (Boolean) Whether the Flex flow channel is long-lived
+- `url` (String) The absolute URL of the Flex flow resource
 
-An `integration` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `channel` - The channel to send new tasks too
-- `creation_on_message` - Whether to create a task when the first message arrives
-- `flow_sid` - The SID of the flow
-- `priority` - The priority assigned to any new task that is received
-- `retry_count` - The number of times a webhook request should be retried if the initial request fails
-- `timeout` - The timeout set for any new task that is received
-- `url` - The webhook URL
-- `workflow_sid` - The SID of the workflow to send tasks to
-- `workspace_sid` - The SID of the workspace to send tasks to
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the flow
+<a id="nestedatt--integration"></a>
+### Nested Schema for `integration`
+
+Read-Only:
+
+- `channel` (String)
+- `creation_on_message` (Boolean)
+- `flow_sid` (String)
+- `priority` (Number)
+- `retry_count` (Number)
+- `timeout` (Number)
+- `url` (String)
+- `workflow_sid` (String)
+- `workspace_sid` (String)

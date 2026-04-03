@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Messaging Phone Numbers"
+page_title: "twilio_messaging_phone_numbers Data Source - twilio"
 subcategory: "Programmable Messaging"
+description: |-
+  
 ---
 
 # twilio_messaging_phone_numbers Data Source
@@ -23,35 +25,39 @@ output "phone_numbers" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the messaging service the phone numbers are associated with
+- `service_sid` (String) The SID of the messaging service to retrieve phone numbers for
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `service_sid`)
-- `service_sid` - The SID of the messaging service the phone numbers are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the phone number
-- `phone_numbers` - A list of `phone_number` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these phone numbers
+- `id` (String) The ID of this resource.
+- `phone_numbers` (List of Object) The list of phone numbers associated with the messaging service (see [below for nested schema](#nestedatt--phone_numbers))
 
-A `phone_number` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the Twilio phone number associated with the messaging service
-- `capabilities` - The capabilities that are enabled for the phone number
-- `country_code` - The country code of the phone number
-- `phone_number` - The phone number
-- `date_created` - The date in RFC3339 format that the messaging phone number resource was created
-- `date_updated` - The date in RFC3339 format that the messaging phone number resource was updated
-- `url` - The URL of the messaging phone number resource
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving phone numbers resource
+<a id="nestedatt--phone_numbers"></a>
+### Nested Schema for `phone_numbers`
+
+Read-Only:
+
+- `capabilities` (List of String)
+- `country_code` (String)
+- `date_created` (String)
+- `date_updated` (String)
+- `phone_number` (String)
+- `sid` (String)
+- `url` (String)

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Voice Queues"
+page_title: "twilio_voice_queues Data Source - twilio"
 subcategory: "Voice"
+description: |-
+  
 ---
 
 # twilio_voice_queues Data Source
@@ -19,34 +21,38 @@ output "queues" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The SID of the account the queues are associated with
+- `account_sid` (String) The SID of the account to list queues for
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `account_sid`)
-- `account_sid` - The SID of the account the queues are associated with (Same as the `id`)
-- `queues` - A list of `queue` blocks as documented below
+### Read-Only
 
----
+- `id` (String) The ID of this resource.
+- `queues` (List of Object) The list of voice queues in the account (see [below for nested schema](#nestedatt--queues))
 
-An `queue` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the queue
-- `friendly_name` - The friendly name of the queue
-- `max_size` - The maximum number of calls which can be on the queue
-- `average_wait_time` - The average wait time of calls on the queue
-- `current_size` - The current size of the queue
-- `date_created` - The date in RFC3339 format that the queue was created
-- `date_updated` - The date in RFC3339 format that the queue was updated
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving queues
+<a id="nestedatt--queues"></a>
+### Nested Schema for `queues`
+
+Read-Only:
+
+- `average_wait_time` (Number)
+- `current_size` (Number)
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `max_size` (Number)
+- `sid` (String)

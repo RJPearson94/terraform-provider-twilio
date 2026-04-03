@@ -49,36 +49,42 @@ func resourceVideoCompositionHook() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this video composition hook by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this video composition hook",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "A human-readable label for the video composition hook",
 			},
 			"audio_sources": {
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Description: "A list of audio source track names to include in the composition",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
 			"audio_sources_excluded": {
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Description: "A list of audio source track names to exclude from the composition",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
 			"enabled": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+				Description: "Whether the composition hook is enabled. Defaults to `true`",
 			},
 			"format": {
 				Type:     schema.TypeString,
@@ -88,17 +94,20 @@ func resourceVideoCompositionHook() *schema.Resource {
 					"mp4",
 					"webm",
 				}, false),
+				Description: "The file format for the composition. Valid values are `mp4` or `webm`. Defaults to `webm`",
 			},
 			"resolution": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Default:      "640x480",
 				ValidateFunc: validation.StringMatch(regexp.MustCompile(`^(\d)+x(\d)+$`), ""),
+				Description:  "The resolution of the composition in the format `WIDTHxHEIGHT`. Defaults to `640x480`",
 			},
 			"status_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL to call for composition status callback events",
 			},
 			"status_callback_method": {
 				Type:     schema.TypeString,
@@ -108,11 +117,13 @@ func resourceVideoCompositionHook() *schema.Resource {
 					"GET",
 					"POST",
 				}, false),
+				Description: "The HTTP method used to call the status callback URL. Valid values are `GET` or `POST`. Defaults to `POST`",
 			},
 			"trim": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+				Description: "Whether to remove intervals with no media from the composition. Defaults to `true`",
 			},
 			"video_layout": {
 				Type:             schema.TypeString,
@@ -120,18 +131,22 @@ func resourceVideoCompositionHook() *schema.Resource {
 				Default:          "{}",
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
+				Description:      "A JSON string describing the video layout of the composition",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the video composition hook was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the video composition hook was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the video composition hook resource",
 			},
 		},
 	}

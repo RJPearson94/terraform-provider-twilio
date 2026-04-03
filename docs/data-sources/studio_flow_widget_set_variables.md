@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Set Variables"
+page_title: "twilio_studio_flow_widget_set_variables Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_set_variables Data Source
@@ -59,38 +61,44 @@ data "twilio_studio_flow_widget_set_variables" "set_variables" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the set variables widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `variables` - (Optional) A list of `variable` blocks as documented below
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
 
----
+### Optional
 
-A `variable` block supports the following:
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
+- `variables` (Block List) The list of flow variables to set or update (see [below for nested schema](#nestedblock--variables))
 
-- `key` - (Mandatory) The variable name/ key which will be used to access the variable value in the Studio Flow
-- `value` - (Mandatory) The value of the variable
+### Read-Only
 
----
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
-A `transitions` block supports the following:
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-- `next` - (Optional) The widget to transition to when the variable or variables have been set
+Optional:
 
----
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
-An `offset` block supports the following:
 
-- `x` - (Optional) The x coordinate to display the set variables widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the set variables widget in the Studio console. The default value is `0`
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
 
-## Attributes Reference
+Optional:
 
-The following attributes are exported:
+- `next` (String) The name of the next widget after the variables are set
 
-- `id` - The name of the set variables widget
-- `json` - The JSON state definition for the set variables widget
+
+<a id="nestedblock--variables"></a>
+### Nested Schema for `variables`
+
+Required:
+
+- `key` (String) The variable name
+- `value` (String) The variable value. Supports Liquid template expressions

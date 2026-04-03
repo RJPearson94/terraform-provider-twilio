@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Domain"
+page_title: "twilio_sip_domain Resource - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_domain Resource
@@ -16,81 +18,62 @@ resource "twilio_sip_domain" "domain" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The account SID to associate the domain with. Changing this forces a new resource to be created
-- `domain_name` - (Mandatory) The domain name of the resource. The domain name must end with `.sip.twilio.com`
-- `friendly_name` - (Optional) The friendly name of the domain
-- `voice` - (Optional) A `voice` block as documented below
-- `emergency` - (Optional) A `emergency` block as documented below
-- `byoc_trunk_sid` - (Optional) The BYOC trunk SID to associate the domain with
-- `secure` - (Optional) Whether secure SIP is enabled. The default value is `false`
-- `sip_registration` - (Optional) Whether the SIP endpoint is allowed to register with the domain. The default value is `false`
+- `account_sid` (String) The SID of the account that owns this SIP domain. Changing this forces a new resource
+- `domain_name` (String) The fully qualified domain name for the SIP domain, ending with `.sip.twilio.com`
 
----
+### Optional
 
-A `voice` block supports the following:
+- `byoc_trunk_sid` (String) The SID of the BYOC trunk to associate with this SIP domain
+- `emergency` (Block List, Max: 1) A block to configure emergency calling settings for the SIP domain (see [below for nested schema](#nestedblock--emergency))
+- `friendly_name` (String) A human-readable label for the SIP domain
+- `secure` (Boolean) Whether secure SIP (SIPS) is enabled for the domain. Defaults to `false`
+- `sip_registration` (Boolean) Whether SIP registration is allowed for the domain. Defaults to `false`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `voice` (Block List, Max: 1) A block to configure voice settings for the SIP domain (see [below for nested schema](#nestedblock--voice))
 
-- `url` - (Optional) The URL which should be called on each incoming call
-- `method` - (Optional) The HTTP method which should be used to call the URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `fallback_url` - (Optional) The URL which should be called when the URL request fails
-- `fallback_method` - (Optional) The HTTP method which should be used to call the fallback URL. Valid values are `GET` or `POST`. The default value is `POST`
-- `status_callback_url` - (Optional) The URL to call on each status change
-- `status_callback_method` - (Optional) The HTTP method which should be used to call the status callback URL. Valid values are `GET` or `POST`. The default value is `POST`
+### Read-Only
 
----
+- `auth_type` (String) The authentication type configured for the SIP domain
+- `date_created` (String) The date and time the SIP domain was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP domain was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this SIP domain by Twilio
 
-An `emergency` block supports the following:
+<a id="nestedblock--emergency"></a>
+### Nested Schema for `emergency`
 
-- `calling_enabled` - (Optional) Whether emergency calling is enabled for the domain. The default value is `false`
-- `caller_sid` - (Optional) The caller SID to associate with the domain
+Optional:
 
-## Attributes Reference
+- `caller_sid` (String) The SID of the phone number to use as the emergency caller ID
+- `calling_enabled` (Boolean) Whether emergency calling is enabled for this SIP domain. Defaults to `false`
 
-The following attributes are exported:
 
-- `id` - The ID of the domain (Same as the `sid`)
-- `sid` - The SID of the domain (Same as the `id`)
-- `account_sid` - The account SID associated with the domain
-- `domain_name` - The domain name of the resource
-- `friendly_name` - The friendly name of the domain
-- `voice` - A `voice` block as documented below
-- `emergency` - A `emergency` block as documented below
-- `byoc_trunk_sid` - The BYOC trunk SID to associate the domain with
-- `secure` - Whether secure SIP is enabled
-- `sip_registration` - Whether the SIP endpoint is allowed to register with the domain
-- `auth_type` - The authentication for the domain
-- `date_created` - The date in RFC3339 format that the domain was created
-- `date_updated` - The date in RFC3339 format that the domain was updated
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
----
+Optional:
 
-A `voice` block supports the following:
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
-- `url` - The URL which should be called on each incoming call
-- `method` - The HTTP method which should be used to call the URL
-- `fallback_url` - The URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method which should be used to call the fallback URL
-- `status_callback_url` - The URL to call on each status change
-- `status_callback_method` - The HTTP method which should be used to call the status callback URL
 
----
+<a id="nestedblock--voice"></a>
+### Nested Schema for `voice`
 
-An `emergency` block supports the following:
+Optional:
 
-- `calling_enabled` - Whether emergency calling is enabled for the domain
-- `caller_sid` - The caller SID to associate with the domain
-
-## Timeouts
-
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `create` - (Defaults to 10 minutes) Used when creating the domain
-- `update` - (Defaults to 10 minutes) Used when updating the domain
-- `read` - (Defaults to 5 minutes) Used when retrieving the domain
-- `delete` - (Defaults to 10 minutes) Used when deleting the domain
+- `fallback_method` (String) The HTTP method used to call the voice fallback URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `fallback_url` (String) The URL to call when an error occurs retrieving or executing the TwiML for voice calls
+- `method` (String) The HTTP method used to call the voice URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `status_callback_method` (String) The HTTP method used to call the voice status callback URL. Valid values are `GET` or `POST`. Defaults to `POST`
+- `status_callback_url` (String) The URL to call for voice status callback events
+- `url` (String) The URL to call when the SIP domain receives an incoming voice call
 
 ## Import
 

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Domain Registration Credential List Mapping"
+page_title: "twilio_sip_domain_registration_credential_list_mapping Resource - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_domain_registration_credential_list_mapping Resource
@@ -27,34 +29,34 @@ resource "twilio_sip_domain_registration_credential_list_mapping" "credential_li
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The account SID to associate the domain with. Changing this forces a new resource to be created
-- `domain_sid` - (Mandatory) The domain SID to associate the credential list mapping with. Changing this forces a new resource to be created
-- `credential_list_sid` - (Mandatory) The credential list SID to associate the credential list mapping with. Changing this forces a new resource to be created
+- `account_sid` (String) The SID of the account that owns this SIP domain registration credential list mapping. Changing this forces a new resource
+- `credential_list_sid` (String) The SID of the SIP credential list to map to the domain for registration authentication. Changing this forces a new resource
+- `domain_sid` (String) The SID of the SIP domain to map the credential list to for registration. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the credential list mapping (Same as the `sid` & `credential_list_sid`)
-- `sid` - The SID of the credential list mapping (Same as the `id` & `credential_list_sid`)
-- `account_sid` - The account SID associated with the credential list mapping
-- `domain_sid` - The domain SID associated with the credential list mapping
-- `credential_list_sid` - The credential list SID associated with the credential list mapping
-- `friendly_name` - The friendly name of the credential list mapping
-- `date_created` - The date in RFC3339 format that the credential list mapping was created
-- `date_updated` - The date in RFC3339 format that the credential list mapping was updated
+### Read-Only
 
-## Timeouts
+- `date_created` (String) The date and time the SIP domain registration credential list mapping was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP domain registration credential list mapping was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the SIP domain registration credential list mapping
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this SIP domain registration credential list mapping by Twilio
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the credential list mapping
-- `read` - (Defaults to 5 minutes) Used when retrieving the credential list mapping
-- `delete` - (Defaults to 10 minutes) Used when deleting the credential list mapping
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
 
 ## Import
 

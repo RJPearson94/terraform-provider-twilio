@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Messaging Alpha Senders"
+page_title: "twilio_messaging_alpha_senders Data Source - twilio"
 subcategory: "Programmable Messaging"
+description: |-
+  
 ---
 
 # twilio_messaging_alpha_senders Data Source
@@ -23,34 +25,38 @@ output "alpha_senders" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the alpha senders are associated with
+- `service_sid` (String) The SID of the messaging service to retrieve alpha senders for
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `service_sid`)
-- `service_sid` - The SID of the messaging service the alpha senders are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the alpha senders
-- `alpha_senders` - A list of `alpha_sender` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these alpha senders
+- `alpha_senders` (List of Object) The list of alpha senders associated with the messaging service (see [below for nested schema](#nestedatt--alpha_senders))
+- `id` (String) The ID of this resource.
 
-An `alpha_sender` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the alpha sender resource
-- `capabilities` - The capabilities that are enabled for the alpha sender
-- `alpha_sender` - The alpha sender name associated with the messaging service
-- `date_created` - The date in RFC3339 format that the messaging alpha sender resource was created
-- `date_updated` - The date in RFC3339 format that the messaging alpha sender resource was updated
-- `url` - The URL of the messaging alpha sender resource
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving the alpha sender
+<a id="nestedatt--alpha_senders"></a>
+### Nested Schema for `alpha_senders`
+
+Read-Only:
+
+- `alpha_sender` (String)
+- `capabilities` (List of String)
+- `date_created` (String)
+- `date_updated` (String)
+- `sid` (String)
+- `url` (String)

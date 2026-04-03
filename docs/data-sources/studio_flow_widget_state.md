@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - State"
+page_title: "twilio_studio_flow_widget_state Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_state Data Source
@@ -29,35 +31,38 @@ data "twilio_studio_flow_widget_state" "state" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the widget
-- `type` - (Mandatory) The type of the widget
-- `properties` - (Mandatory) A map of properties for the widget
-- `transitions` - (Optional) A list of `transition` blocks as documented below
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
+- `properties` (Map of String) A map of widget-specific properties. The expected keys depend on the `type` value
+- `transitions` (Block List, Min: 1) The list of transitions for this generic state, each triggered by a named event (see [below for nested schema](#nestedblock--transitions))
+- `type` (String) The widget type identifier (e.g. `send-message`, `make-http-request`). Use this generic state data source for widget types not covered by a dedicated data source
 
----
+### Read-Only
 
-A `transition` block supports the following:
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
-- `event` - (Mandatory) The name of the event which will trigger a transition
-- `next` - (Optional) The next state to transition to when the transition is activated
-- `conditions` - (Optional) A list of `condition` blocks as documented below
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
 
----
+Required:
 
-A `condition` block supports the following:
+- `event` (String) The event name that triggers this transition (e.g. `incomingMessage`, `audioComplete`)
 
-- `arguments` - (Mandatory) A list of arguments to evaluate
-- `friendly_name` - (Mandatory) The name of the condition
-- `type` - (Mandatory) The type/ operator to use when comparing the arguments and value
-- `value` - (Mandatory) The value or values to compare against
+Optional:
 
-## Attributes Reference
+- `conditions` (Block List) Optional conditions that must be met for this transition to fire (see [below for nested schema](#nestedblock--transitions--conditions))
+- `next` (String) The name of the next widget to transition to when this event fires
 
-The following attributes are exported:
+<a id="nestedblock--transitions--conditions"></a>
+### Nested Schema for `transitions.conditions`
 
-- `id` - The name of the widget
-- `json` - The JSON state definition for the widget
+Required:
+
+- `arguments` (List of String) The arguments to pass to the condition operator
+- `friendly_name` (String) A human-readable label for this condition
+- `type` (String) The comparison operator type (e.g. `equal_to`, `regex`)
+- `value` (String) The value to compare against

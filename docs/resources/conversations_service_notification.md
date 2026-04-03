@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Service Notification"
+page_title: "twilio_conversations_service_notification Resource - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_service_notification Resource
@@ -23,81 +25,63 @@ resource "twilio_conversations_service_notification" "service_notification" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The service SID to associate the notification configuration with. Changing this forces a new resource to be created
-- `new_message` - (Optional) A `new_message` block as documented below.
-- `added_to_conversation` - (Optional) An `added_to_conversation` block as documented below.
-- `removed_from_conversation` - (Optional) A `removed_from_conversation` block as documented below.
-- `log_enabled` - (Optional) Whether notification logging is enabled. The default value is `false`
+- `service_sid` (String) The SID of the conversations service. Changing this forces a new resource
 
----
+### Optional
 
-A `new_message` block supports the following:
+- `added_to_conversation` (Block List, Max: 1) Notification settings for when a user is added to a conversation (see [below for nested schema](#nestedblock--added_to_conversation))
+- `log_enabled` (Boolean) Whether notification logging is enabled for the service. Defaults to `false`
+- `new_message` (Block List, Max: 1) Notification settings for new messages (see [below for nested schema](#nestedblock--new_message))
+- `removed_from_conversation` (Block List, Max: 1) Notification settings for when a user is removed from a conversation (see [below for nested schema](#nestedblock--removed_from_conversation))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `enabled` - (Optional) Whether new message notifications are enabled. The default value is `false`
-- `template` - (Optional) The message template which is used when a new message is added to the conversation
-- `sound` - (Optional) The sound played when a new message is added to the conversation
-- `badge_count_enabled` - (Optional) Whether message badges are enabled for the conversation. The default value is `false`
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this service notification
+- `id` (String) The ID of this resource.
+- `url` (String) The absolute URL of the service notification resource
 
-An `added_to_conversation` block supports the following:
+<a id="nestedblock--added_to_conversation"></a>
+### Nested Schema for `added_to_conversation`
 
-- `enabled` - (Optional) Whether notifications for users being added to the conversation are enabled. The default value is `false`
-- `template` - (Optional) The message template which is used when a user is added to the conversation
-- `sound` - (Optional) The sound played when a user is added to the conversation
+Optional:
 
----
+- `enabled` (Boolean) Whether added-to-conversation notifications are enabled. Defaults to `false`
+- `sound` (String) The sound to play for added-to-conversation notifications
+- `template` (String) The template for added-to-conversation notifications
 
-A `removed_from_conversation` block supports the following:
 
-- `enabled` - (Optional) Whether notifications for users being removed from the conversation are enabled. The default value is `false`
-- `template` - (Optional) The message template which is used when a user is removed from the conversation
-- `sound` - (Optional) The sound played when a user is removed from the conversation
+<a id="nestedblock--new_message"></a>
+### Nested Schema for `new_message`
 
-## Attributes Reference
+Optional:
 
-The following attributes are exported:
+- `badge_count_enabled` (Boolean) Whether badge count is enabled for new message notifications. Defaults to `false`
+- `enabled` (Boolean) Whether new message notifications are enabled. Defaults to `false`
+- `sound` (String) The sound to play for new message notifications
+- `template` (String) The template for new message notifications
 
-- `id` - The ID of the service (Same as the `service_sid`)
-- `service_sid` - The service SID associated with the notification configuration (Same as the `id`)
-- `new_message` - A `new_message` block as documented below.
-- `added_to_conversation` - An `added_to_conversation` block as documented below.
-- `removed_from_conversation` - A `removed_from_conversation` block as documented below.
-- `log_enabled` - (Optional) Whether notification logging is enabled
-- `url` - The URL of the notification configuration
 
----
+<a id="nestedblock--removed_from_conversation"></a>
+### Nested Schema for `removed_from_conversation`
 
-A `new_message` block supports the following:
+Optional:
 
-- `enabled` - Whether new message notifications are enabled
-- `template` - The message template which is used when a new message is added to the conversation
-- `sound` - The sound played when a new message is added to the conversation
-- `badge_count_enabled` - Whether message badges are enabled for the conversation
+- `enabled` (Boolean) Whether removed-from-conversation notifications are enabled. Defaults to `false`
+- `sound` (String) The sound to play for removed-from-conversation notifications
+- `template` (String) The template for removed-from-conversation notifications
 
----
 
-An `added_to_conversation` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `enabled` - Whether notifications for users being added to the conversation are enabled
-- `template` - The message template which is used when a user is added to the conversation
-- `sound` - The sound played when a user is added to the conversation
+Optional:
 
----
-
-A `removed_from_conversation` block supports the following:
-
-- `enabled` - Whether notifications for users being removed from the conversation are enabled
-- `template` - The message template which is used when a user is removed from the conversation
-- `sound` - The sound played when a user is removed from the conversation
-
-## Timeouts
-
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `update` - (Defaults to 10 minutes) Used when updating the notification configuration
-- `read` - (Defaults to 5 minutes) Used when retrieving the notification configuration
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)

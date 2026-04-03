@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Account Balance"
+page_title: "twilio_account_balance Data Source - twilio"
 subcategory: "Account"
+description: |-
+  
 ---
 
 # twilio_account_balance Data Source
@@ -21,23 +23,25 @@ output "balance" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The sid of the account
+- `account_sid` (String) The SID of the account to retrieve the balance for
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the account (Same as the `sid`)
-- `account_sid` - The SID of the account (Same as the `id`)
-- `balance` - The balance of the account
-- `currency` - The currency of the account
+### Read-Only
 
-## Timeouts
+- `balance` (String) The current balance of the account
+- `currency` (String) The currency unit of the balance (e.g., USD)
+- `id` (String) The ID of this resource.
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the account balance
+Optional:
+
+- `read` (String)

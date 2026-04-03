@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Account Details"
+page_title: "twilio_account_details Data Source - twilio"
 subcategory: "Account"
+description: |-
+  
 ---
 
 # twilio_account_details Data Source
@@ -31,30 +33,27 @@ output "friendly_name" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Optional
 
-- `sid` - (Optional) The SID of the account
+- `sid` (String) The SID of the account to look up. If not specified, the provider's account SID is used
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-~> If an account SID is not supplied then the account SID configured on the provider is used instead
+### Read-Only
 
-## Attributes Reference
+- `auth_token` (String, Sensitive) The authorization token for the account. Sensitive -- will not be shown in logs or plans
+- `date_created` (String) The date and time the account was created, in RFC 3339 format
+- `date_updated` (String) The date and time the account was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the account
+- `id` (String) The ID of this resource.
+- `owner_account_sid` (String) The SID of the parent account that owns this account
+- `status` (String) The status of the account. Valid values are `active`, `suspended`, or `closed`
+- `type` (String) The type of the account (e.g., `Trial` or `Full`)
 
-The following attributes are exported:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `id` - The ID of the account (Same as the `sid`)
-- `sid` - The SID of the account (Same as the `id`)
-- `friendly_name` - The friendly name of the account
-- `status` - The status of the account
-- `owner_account_sid` - The SID of the parent/ owner account
-- `type` - The type of account
-- `auth_token` - The auth token for the account
-- `date_created` - The date in RFC3339 format that the account was created
-- `date_updated` - The date in RFC3339 format that the account was updated
+Optional:
 
-## Timeouts
-
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `read` - (Defaults to 5 minutes) Used when retrieving the account details
+- `read` (String)

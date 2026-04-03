@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Chat Channel"
+page_title: "twilio_chat_channel Data Source - twilio"
 subcategory: "Programmable Chat"
+description: |-
+  
 ---
 
 # twilio_chat_channel Data Source
@@ -24,34 +26,35 @@ output "channel" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the channel is associated with
-- `sid` - (Mandatory) The SID of the channel
+- `service_sid` (String) The SID of the Programmable Chat service
+- `sid` (String) The SID of the channel
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the channel (Same as the `sid`)
-- `sid` - The SID of the channel (Same as the `id`)
-- `account_sid` - The account SID associated with the channel
-- `service_sid` - The service SID associated with the channel
-- `friendly_name` - The friendly name of the channel
-- `unique_name` - The unique name of the channel
-- `attributes` - JSON string of channel attributes
-- `type` - The type of channel
-- `created_by` - Who created the chat channel
-- `members_count` - The number of members currently associated with the channel
-- `messages_count` - The number of messages that are currently associated with the channel
-- `date_created` - The date in RFC3339 format that the channel was created
-- `date_updated` - The date in RFC3339 format that the channel was updated
-- `url` - The URL of the channel
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this channel
+- `attributes` (String) A JSON string of custom attributes for the channel
+- `created_by` (String) The identity of the user that created the channel
+- `date_created` (String) The date and time the channel was created, in RFC 3339 format
+- `date_updated` (String) The date and time the channel was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the channel
+- `id` (String) The ID of this resource.
+- `members_count` (Number) The number of members in the channel
+- `messages_count` (Number) The number of messages in the channel
+- `type` (String) The visibility of the channel. Values are `public` or `private`
+- `unique_name` (String) A unique name for the channel
+- `url` (String) The absolute URL of the channel resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the channel
+Optional:
+
+- `read` (String)

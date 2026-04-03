@@ -18,41 +18,48 @@ func dataSourceStudioFlowWidgetSendMessage() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"json": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source",
 			},
 			"transitions": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The next widget(s) to transition to after this widget",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"failed": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when the message fails to send",
 						},
 						"sent": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The name of the next widget when the message is sent successfully",
 						},
 					},
 				},
 			},
 			"offset": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The position of this widget in the Studio visual editor",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"x": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The x-axis position. Defaults to 0",
 						},
 						"y": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Default:  0,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     0,
+							Description: "The y-axis position. Defaults to 0",
 						},
 					},
 				},
@@ -61,27 +68,32 @@ func dataSourceStudioFlowWidgetSendMessage() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The unique name of this widget within the flow, used to reference it in transitions",
 			},
 			"to": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "{{contact.channel.address}}",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "{{contact.channel.address}}",
+				Description: "The recipient address for the message. Defaults to `{{contact.channel.address}}`",
 			},
 			"from": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "{{flow.channel.address}}",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "{{flow.channel.address}}",
+				Description: "The sender address for the message. Defaults to `{{flow.channel.address}}`",
 			},
 			"body": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "The text body of the message to send. Supports Liquid template expressions",
 			},
 			"attributes": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
+				Description:      "A JSON string of custom attributes to attach to the message",
 			},
 			"service_sid": {
 				Type:     schema.TypeString,
@@ -90,6 +102,7 @@ func dataSourceStudioFlowWidgetSendMessage() *schema.Resource {
 					utils.StudioFlowWidgetLiquidTemplateValidation(),
 					utils.ChatServiceSidValidation(),
 				),
+				Description: "The SID of the Programmable Chat service to use for sending the message",
 			},
 			"channel_sid": {
 				Type:     schema.TypeString,
@@ -98,6 +111,7 @@ func dataSourceStudioFlowWidgetSendMessage() *schema.Resource {
 					utils.StudioFlowWidgetLiquidTemplateValidation(),
 					utils.ChatChannelSidValidation(),
 				),
+				Description: "The SID of the Programmable Chat channel to send the message to",
 			},
 			"media_url": {
 				Type:     schema.TypeString,
@@ -106,6 +120,7 @@ func dataSourceStudioFlowWidgetSendMessage() *schema.Resource {
 					utils.StudioFlowWidgetLiquidTemplateValidation(),
 					validation.IsURLWithHTTPorHTTPS,
 				),
+				Description: "The HTTP/HTTPS URL of a media file to include with the message (e.g. an image or PDF)",
 			},
 		},
 	}

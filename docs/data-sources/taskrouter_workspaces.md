@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Workspaces"
+page_title: "twilio_taskrouter_workspaces Data Source - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_workspaces Data Source
@@ -33,41 +35,42 @@ output "flex_workspace" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Optional
 
-- `friendly_name` - (Optional) Search for all workspaces which have the friendly name specified
+- `friendly_name` (String) Filter workspaces by friendly name
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-## Attributes Reference
+### Read-Only
 
-The following attributes are exported:
+- `account_sid` (String) The SID of the account that owns the workspaces
+- `id` (String) The ID of this resource.
+- `workspaces` (List of Object) A list of workspaces (see [below for nested schema](#nestedatt--workspaces))
 
-- `id` - The ID of the resource (Same as the `account_sid`)
-- `account_sid` - The account SID associated with the workspaces (Same as the `id`)
-- `workspaces` - A list of `workspace` blocks as documented below
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
----
+Optional:
 
-A `workspace` block supports the following:
+- `read` (String)
 
-- `sid` - The SID of the workspace (Same as the `id`)
-- `friendly_name` - The name of the workspace
-- `event_callback_url` - The event callback URL
-- `event_filters` - The event callback filter
-- `multi_task_enabled` - Whether or not multitasking is enabled
-- `template` - TaskRouter template to use
-- `prioritize_queue_order` - Determine how TaskRouter prioritizes incoming
-- `default_activity_name` - Name of default activity
-- `default_activity_sid` - SID of default activity
-- `timeout_activity_name` - Name of timeout activity
-- `timeout_activity_sid` - SID of timeout activity
-- `date_created` - The date in RFC3339 format that the workspace was created
-- `date_updated` - The date in RFC3339 format that the workspace was updated
-- `url` - The URL of the workspace
 
-## Timeouts
+<a id="nestedatt--workspaces"></a>
+### Nested Schema for `workspaces`
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+Read-Only:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving workspaces
+- `date_created` (String)
+- `date_updated` (String)
+- `default_activity_name` (String)
+- `default_activity_sid` (String)
+- `event_callback_url` (String)
+- `event_filters` (List of String)
+- `friendly_name` (String)
+- `multi_task_enabled` (Boolean)
+- `prioritize_queue_order` (String)
+- `sid` (String)
+- `timeout_activity_name` (String)
+- `timeout_activity_sid` (String)
+- `url` (String)

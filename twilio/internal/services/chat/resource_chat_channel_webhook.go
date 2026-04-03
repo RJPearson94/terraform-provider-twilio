@@ -52,28 +52,33 @@ func resourceChatChannelWebhook() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this channel webhook by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this channel webhook",
 			},
 			"service_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.ChatServiceSidValidation(),
+				Description:  "The SID of the Programmable Chat service. Changing this forces a new resource",
 			},
 			"channel_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.ChatChannelSidValidation(),
+				Description:  "The SID of the chat channel. Changing this forces a new resource",
 			},
 			"type": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The type of the channel webhook",
 			},
 			"method": {
 				Type:     schema.TypeString,
@@ -83,15 +88,18 @@ func resourceChatChannelWebhook() *schema.Resource {
 					"GET",
 					"POST",
 				}, false),
+				Description: "The HTTP method used for webhook requests. Valid values are `GET` or `POST`. Defaults to `POST`",
 			},
 			"webhook_url": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL to send webhook requests to",
 			},
 			"filters": {
-				Type:     schema.TypeList,
-				Required: true,
+				Type:        schema.TypeList,
+				Required:    true,
+				Description: "The list of events that trigger the webhook",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -101,18 +109,22 @@ func resourceChatChannelWebhook() *schema.Resource {
 				Optional:     true,
 				Default:      0,
 				ValidateFunc: validation.IntBetween(0, 3),
+				Description:  "The number of retry attempts for failed webhook requests. Defaults to `0`",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the channel webhook was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the channel webhook was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the channel webhook resource",
 			},
 		},
 	}

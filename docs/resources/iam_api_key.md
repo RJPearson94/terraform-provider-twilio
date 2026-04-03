@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio API Keys"
+page_title: "twilio_iam_api_key Resource - twilio"
 subcategory: "IAM"
+description: |-
+  
 ---
 
 # twilio_iam_api_key Resource
@@ -18,33 +20,34 @@ resource "twilio_iam_api_key" "api_key" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The Account SID associated with the API Key. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The name of the API Key
+- `account_sid` (String) The SID of the account that owns this API key. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `friendly_name` (String) A human-readable label for the API key. Must be between 0 and 64 characters
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the API Key (Same as the `sid`)
-- `sid` - The SID of the API Key (Same as the `id`)
-- `account_sid` - The Account SID associated with the API Key
-- `friendly_name` - The name of the API Key
-- `secret` - The API Key Secret
-- `date_created` - The date in RFC3339 format that the API Key was created
-- `date_updated` - The date in RFC3339 format that the API Key was updated
+### Read-Only
 
-## Timeouts
+- `date_created` (String) The date and time the API key was created, in RFC 3339 format
+- `date_updated` (String) The date and time the API key was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `secret` (String, Sensitive) The secret for the API key, used for authentication. Sensitive -- will not be shown in logs or plans. Only available on initial creation
+- `sid` (String) The unique SID assigned to this API key by Twilio
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the API Key
-- `update` - (Defaults to 10 minutes) Used when updating the API Key
-- `read` - (Defaults to 5 minutes) Used when retrieving the API Key
-- `delete` - (Defaults to 10 minutes) Used when deleting the API Key
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

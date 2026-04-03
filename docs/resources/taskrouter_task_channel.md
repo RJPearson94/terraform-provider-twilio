@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Task Channel"
+page_title: "twilio_taskrouter_task_channel Resource - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_task_channel Resource
@@ -25,38 +27,37 @@ resource "twilio_taskrouter_task_channel" "task_channel" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `workspace_sid` - (Mandatory) The TaskRouter workspace SID to associate the task channel with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The name of the task channel
-- `unique_name` - (Mandatory) The unique name of the task channel. Changing this forces a new resource to be created
-- `channel_optimized_routing` - (Optional) Whether the task channel should prioritise idle workers. The default value is `false`
+- `friendly_name` (String) A human-readable label for the task channel
+- `unique_name` (String) A unique identifier for the task channel. Changing this forces a new resource
+- `workspace_sid` (String) The SID of the TaskRouter workspace. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `channel_optimized_routing` (Boolean) Whether the task channel should prioritize optimized routing. Defaults to `false`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the task channel (Same as the `sid`)
-- `sid` - The SID of the task channel (Same as the `id`)
-- `account_sid` - The account SID of the task channel is deployed into
-- `workspace_sid` - The workspace SID to create the task channel under
-- `friendly_name` - The name of the task channel
-- `unique_name` - The unique name of the task channel
-- `channel_optimized_routing` - Whether the task channel should prioritise idle workers
-- `date_created` - The date in RFC3339 format that the task channel was created
-- `date_updated` - The date in RFC3339 format that the task channel was updated
-- `url` - The URL of the task channel
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this task channel
+- `date_created` (String) The date and time the task channel was created, in RFC 3339 format
+- `date_updated` (String) The date and time the task channel was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this task channel by Twilio
+- `url` (String) The absolute URL of the task channel resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the task channel
-- `update` - (Defaults to 10 minutes) Used when updating the task channel
-- `read` - (Defaults to 5 minutes) Used when retrieving the task channel
-- `delete` - (Defaults to 10 minutes) Used when deleting the task channel
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

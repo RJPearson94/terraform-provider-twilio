@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Workspace"
+page_title: "twilio_taskrouter_workspace Resource - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_workspace Resource
@@ -18,45 +20,43 @@ resource "twilio_taskrouter_workspace" "workspace" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `friendly_name` - (Mandatory) The name of the workspace
-- `event_callback_url` - (Optional) The event callback URL
-- `event_filters` - (Optional) list of event callback filters. Valid values are `task.created`,`task.completed`,`task.canceled`,`task.deleted`,`task.updated`,`task.wrapup`,`task-queue.entered`,`task-queue.moved`,`task-queue.timeout`,`reservation.created`,`reservation.accepted`,`reservation.rejected`,`reservation.timeout`,`reservation.canceled`,`reservation.rescinded`,`reservation.completed`,`workflow.entered`,`workflow.timeout`,`workflow.target-matched`,`worker.activity.update`,`worker.attributes.update`,`worker.capacity.update` or `worker.channel.availability.update`
-- `multi_task_enabled` - (Optional) Whether or not multitasking is enabled
-- `template` - (Optional) TaskRouter template to use. Valid values are `NONE` or `FIFO`. The default value is `NONE`. Changing this forces a new resource to be created
-- `prioritize_queue_order` - (Optional) Determine how TaskRouter prioritizes incoming tasks. Valid values are `LIFO` or `FIFO`. The default value is `FIFO`
+- `friendly_name` (String) A human-readable label for the workspace
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `event_callback_url` (String) The URL to call when an event is fired in the workspace
+- `event_filters` (List of String) A list of event types to subscribe to. Valid values are `task.created`, `task.completed`, `task.canceled`, `task.deleted`, `task.updated`, `task.wrapup`, `task-queue.entered`, `task-queue.moved`, `task-queue.timeout`, `reservation.created`, `reservation.accepted`, `reservation.rejected`, `reservation.timeout`, `reservation.canceled`, `reservation.rescinded`, `reservation.wrapup`, `reservation.completed`, `reservation.failed`, `workflow.entered`, `workflow.timeout`, `workflow.target-matched`, `worker.activity.update`, `worker.attributes.update`, `worker.capacity.update`, `worker.channel.availability.update`
+- `multi_task_enabled` (Boolean) Whether multi-tasking is enabled for the workspace. Defaults to `true`
+- `prioritize_queue_order` (String) The order in which task queues are prioritized. Valid values are `LIFO` or `FIFO`. Defaults to `FIFO`
+- `template` (String) The template to use when creating the workspace. Valid values are `NONE` or `FIFO`. Defaults to `NONE`. Changing this forces a new resource
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the workspace (Same as the `sid`)
-- `sid` - The SID of the workspace (Same as the `id`)
-- `account_sid` - The account SID of the workspace is deployed into
-- `friendly_name` - The name of the workspace
-- `event_callback_url` - The event callback URL
-- `event_filters` - The event callback filter
-- `multi_task_enabled` - Whether or not multitasking is enabled
-- `prioritize_queue_order` - Determine how TaskRouter prioritizes incoming
-- `default_activity_name` - Name of the default activity
-- `default_activity_sid` - SID of the default activity
-- `timeout_activity_name` - Name of the timeout activity
-- `timeout_activity_sid` - SID of the timeout activity
-- `date_created` - The date in RFC3339 format that the workspace was created
-- `date_updated` - The date in RFC3339 format that the workspace was updated
-- `url` - The URL of the workspace
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this workspace
+- `date_created` (String) The date and time the workspace was created, in RFC 3339 format
+- `date_updated` (String) The date and time the workspace was last updated, in RFC 3339 format
+- `default_activity_name` (String) The name of the default activity for the workspace
+- `default_activity_sid` (String) The SID of the default activity for the workspace
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this workspace by Twilio
+- `timeout_activity_name` (String) The name of the timeout activity for the workspace
+- `timeout_activity_sid` (String) The SID of the timeout activity for the workspace
+- `url` (String) The absolute URL of the workspace resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the workspace
-- `update` - (Defaults to 10 minutes) Used when updating the workspace
-- `read` - (Defaults to 5 minutes) Used when retrieving the workspace
-- `delete` - (Defaults to 10 minutes) Used when deleting the workspace
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

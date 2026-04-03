@@ -49,26 +49,30 @@ func resourceSIPCredential() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this SIP credential by Twilio",
 			},
 			"account_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.AccountSidValidation(),
+				Description:  "The SID of the account that owns this SIP credential. Changing this forces a new resource",
 			},
 			"credential_list_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: utils.SIPCredentialListSidValidation(),
+				Description:  "The SID of the credential list that this SIP credential belongs to. Changing this forces a new resource",
 			},
 			"username": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: validation.StringLenBetween(1, 32),
+				Description:  "The username for the SIP credential (1 to 32 characters). Changing this forces a new resource",
 			},
 			"password": {
 				Type:      schema.TypeString,
@@ -80,14 +84,17 @@ func resourceSIPCredential() *schema.Resource {
 					validation.StringMatch(regexp.MustCompile("^.*[a-z].*$"), "Must contain a lowercase letter"),
 					validation.StringMatch(regexp.MustCompile("^.*[0-9].*$"), "Must contain a number"),
 				),
+				Description: "The password for the SIP credential. Must be at least 12 characters and contain an uppercase letter, lowercase letter, and number. Sensitive -- will not be shown in logs or plans",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP credential was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the SIP credential was last updated, in RFC 3339 format",
 			},
 		},
 	}

@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TwiML App"
+page_title: "twilio_twiml_app Data Source - twilio"
 subcategory: "TwiML"
+description: |-
+  
 ---
 
 # twilio_twiml_app Data Source
@@ -20,50 +22,55 @@ output "friendly_name" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The SID of the account the application is associated with
-- `sid` - (Mandatory) The SID of the application
+- `account_sid` (String) The SID of the account that owns this TwiML application
+- `sid` (String) The SID of the TwiML application to look up
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the application (Same as the `sid`)
-- `sid` - The SID of the application (Same as the `id`)
-- `account_sid` - The account SID the application is associated with
-- `friendly_name` - The friendly name of the application
-- `messaging` - A `messaging` block as documented below.
-- `voice` - A `voice` block as documented below.
-- `date_created` - The date in RFC3339 format that the application was created
-- `date_updated` - The date in RFC3339 format that the application was updated
+### Read-Only
 
----
+- `date_created` (String) The date and time the TwiML application was created, in RFC 3339 format
+- `date_updated` (String) The date and time the TwiML application was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the TwiML application
+- `id` (String) The ID of this resource.
+- `messaging` (List of Object) The messaging settings for the TwiML application (see [below for nested schema](#nestedatt--messaging))
+- `voice` (List of Object) The voice settings for the TwiML application (see [below for nested schema](#nestedatt--voice))
 
-A `messaging` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `url` - The URL which should be called on each incoming message
-- `method` - The HTTP method that should be used to call the URL
-- `fallback_url` - The URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method that should be used to call the fallback URL
-- `status_callback_url` The URL to POST message status information to
+Optional:
 
----
+- `read` (String)
 
-A `voice` block supports the following:
 
-- `url` - The URL which should be called on each incoming call
-- `method` - The HTTP method that should be used to call the URL
-- `fallback_url` - The URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method that should be used to call the fallback URL
-- `caller_id_lookup` - Whether caller ID lookup is enabled for the phone number
-- `status_callback_url` - The URL to send status information to
-- `status_callback_method` The HTTP method that should be used to call the status callback URL
+<a id="nestedatt--messaging"></a>
+### Nested Schema for `messaging`
 
-## Timeouts
+Read-Only:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+- `fallback_method` (String)
+- `fallback_url` (String)
+- `method` (String)
+- `status_callback_url` (String)
+- `url` (String)
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the application details
+
+<a id="nestedatt--voice"></a>
+### Nested Schema for `voice`
+
+Read-Only:
+
+- `caller_id_lookup` (Boolean)
+- `fallback_method` (String)
+- `fallback_url` (String)
+- `method` (String)
+- `status_callback_method` (String)
+- `status_callback_url` (String)
+- `url` (String)

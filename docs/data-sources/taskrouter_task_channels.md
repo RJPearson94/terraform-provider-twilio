@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio TaskRouter Task Channels"
+page_title: "twilio_taskrouter_task_channels Data Source - twilio"
 subcategory: "TaskRouter"
+description: |-
+  
 ---
 
 # twilio_taskrouter_task_channels Data Source
@@ -21,35 +23,39 @@ output "task_channels" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `workspace_sid` - (Mandatory) The SID of the workspace the task channels are associated with
+- `workspace_sid` (String) The SID of the TaskRouter workspace
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `workspace_sid`)
-- `workspace_sid` - The SID of the workspace the task channels are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the task channels
-- `task_channels` - A list of `task_channel` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns the task channels
+- `id` (String) The ID of this resource.
+- `task_channels` (List of Object) A list of task channels in the workspace (see [below for nested schema](#nestedatt--task_channels))
 
-A `task_channel` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the task channel
-- `friendly_name` - The name of the task channel
-- `unique_name` - The unique name of the task channel
-- `channel_optimized_routing` - Whether the task channel should prioritise idle workers
-- `date_created` - The date in RFC3339 format that the task channel was created
-- `date_updated` - The date in RFC3339 format that the task channel was updated
-- `url` - The URL of the task channel
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving task channels
+<a id="nestedatt--task_channels"></a>
+### Nested Schema for `task_channels`
+
+Read-Only:
+
+- `channel_optimized_routing` (Boolean)
+- `date_created` (String)
+- `date_updated` (String)
+- `friendly_name` (String)
+- `sid` (String)
+- `unique_name` (String)
+- `url` (String)

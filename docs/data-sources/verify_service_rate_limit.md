@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Verify Service Rate Limit"
+page_title: "twilio_verify_service_rate_limit Data Source - twilio"
 subcategory: "Verify"
+description: |-
+  
 ---
 
 # twilio_verify_service_rate_limit Data Source
@@ -22,29 +24,30 @@ output "rate_limit" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `sid` - (Mandatory) The SID of the service rate limit
-- `service_sid` - (Mandatory) The service SID the rate limit is associated with
+- `service_sid` (String) The SID of the Verify service
+- `sid` (String) The SID of the service rate limit to fetch
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the rate limit (Same as the `sid`)
-- `sid` - The SID of the rate limit (Same as the `id`)
-- `account_sid` - The account SID the rate limit is associated with
-- `service_sid` - The service SID the rate limit is associated with
-- `unique_name` - Unique name of the rate limit
-- `description` - The description of the rate limit
-- `date_created` - The date in RFC3339 format that the rate limit was created
-- `date_updated` - The date in RFC3339 format that the rate limit was updated
-- `url` - The URL of the rate limit
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this service rate limit
+- `date_created` (String) The date and time the service rate limit was created, in RFC 3339 format
+- `date_updated` (String) The date and time the service rate limit was last updated, in RFC 3339 format
+- `description` (String) A description of the rate limit
+- `id` (String) The ID of this resource.
+- `unique_name` (String) The unique name of the rate limit
+- `url` (String) The absolute URL of the service rate limit resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the service rate limit
+Optional:
+
+- `read` (String)

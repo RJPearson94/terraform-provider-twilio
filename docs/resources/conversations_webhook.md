@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Webhook"
+page_title: "twilio_conversations_webhook Resource - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_webhook Resource
@@ -19,32 +21,27 @@ For more information on conversations, see the product [page](https://www.twilio
 resource "twilio_conversations_webhook" "webhook" {}
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Optional
 
-- `target` - (Optional) The target of webhook. Valid values are `webhook` or `flex`
-- `method` - (Optional) The HTTP method to trigger the webhook. Valid values are `POST` or `GET`
-- `pre_webhook_url` - (Optional) The pre webhook URL
-- `post_webhook_url` - (Optional) The post webhook URL
-- `filters` - (Optional) The filter conditions that trigger the webhook
+- `filters` (List of String) The list of webhook event triggers to subscribe to
+- `method` (String) The HTTP method for the webhook. Valid values are `GET` or `POST`
+- `post_webhook_url` (String) The URL called after an event is sent to the webhook
+- `pre_webhook_url` (String) The URL called before an event is sent to the webhook
+- `target` (String) The target of the webhook. Valid values are `webhook` or `flex`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-## Attributes Reference
+### Read-Only
 
-The following attributes are exported:
+- `account_sid` (String) The SID of the account that owns this webhook
+- `id` (String) The ID of this resource.
+- `url` (String) The absolute URL of the webhook resource
 
-- `id` - The ID of the service (Same as the `account_sid`)
-- `account_sid` - The account SID associated with the webhook (Same as the `id`)
-- `target` - The target of webhook
-- `method` - The HTTP method to trigger the webhook
-- `pre_webhook_url` - The pre webhook URL
-- `post_webhook_url` - The post webhook URL
-- `filters` - The filter conditions that trigger the webhook
-- `url` - The URL of the webhook
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-## Timeouts
+Optional:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
-
-- `update` - (Defaults to 10 minutes) Used when updating the webhook
-- `read` - (Defaults to 5 minutes) Used when retrieving the webhook
+- `read` (String)
+- `update` (String)

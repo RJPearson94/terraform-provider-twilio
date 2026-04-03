@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Deployments"
+page_title: "twilio_serverless_deployments Data Source - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_deployments Data Source
@@ -24,35 +26,38 @@ output "deployments" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the deployments are associated with
-- `environment_sid` - (Mandatory) The SID of the environment the deployments are associated with
+- `environment_sid` (String) The SID of the Serverless environment
+- `service_sid` (String) The SID of the Serverless service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource in the format `service_sid/environment_sid`
-- `service_sid` - The SID of the service the deployments are associated with
-- `environment_sid` - The SID of the environment the deployments are associated with
-- `account_sid` - The account SID associated with the deployments
-- `deployments` - A list of `deployment` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these deployments
+- `deployments` (List of Object) A list of deployments belonging to the Serverless environment (see [below for nested schema](#nestedatt--deployments))
+- `id` (String) The ID of this resource.
 
-A `deployment` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the deployment
-- `build_sid` - The build SID to be deployed to the environment
-- `date_created` - The date in RFC3339 format that the deployment was created
-- `date_updated` - The date in RFC3339 format that the deployment was updated
-- `url` - The URL of the deployment
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving deployments
+<a id="nestedatt--deployments"></a>
+### Nested Schema for `deployments`
+
+Read-Only:
+
+- `build_sid` (String)
+- `date_created` (String)
+- `date_updated` (String)
+- `sid` (String)
+- `url` (String)

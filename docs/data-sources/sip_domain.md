@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Domain"
+page_title: "twilio_sip_domain Data Source - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_domain Data Source
@@ -20,51 +22,56 @@ output "domain" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The SID of the account the domain is associated with
-- `sid` - (Mandatory) The SID of the domain
+- `account_sid` (String) The SID of the account that owns this SIP domain
+- `sid` (String) The SID of the SIP domain to look up
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the domain (Same as the `sid`)
-- `sid` - The SID of the domain (Same as the `id`)
-- `account_sid` - The account SID associated with the domain
-- `domain_name` - The domain name of the resource
-- `friendly_name` - The friendly name of the domain
-- `voice` - A `voice` block as documented below
-- `emergency` - A `emergency` block as documented below
-- `byoc_trunk_sid` - The BYOC trunk SID to associate the domain with
-- `secure` - Whether secure SIP is enabled
-- `sip_registration` - Whether the SIP endpoint is allowed to register with the domain
-- `auth_type` - The authentication for the domain
-- `date_created` - The date in RFC3339 format that the domain was created
-- `date_updated` - The date in RFC3339 format that the domain was updated
+### Read-Only
 
----
+- `auth_type` (String) The authentication type configured for the SIP domain
+- `byoc_trunk_sid` (String) The SID of the BYOC trunk associated with this SIP domain
+- `date_created` (String) The date and time the SIP domain was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP domain was last updated, in RFC 3339 format
+- `domain_name` (String) The fully qualified domain name for the SIP domain
+- `emergency` (List of Object) The emergency calling settings for the SIP domain (see [below for nested schema](#nestedatt--emergency))
+- `friendly_name` (String) A human-readable label for the SIP domain
+- `id` (String) The ID of this resource.
+- `secure` (Boolean) Whether secure SIP (SIPS) is enabled for the domain
+- `sip_registration` (Boolean) Whether SIP registration is allowed for the domain
+- `voice` (List of Object) The voice settings for the SIP domain (see [below for nested schema](#nestedatt--voice))
 
-A `voice` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `url` - The URL which should be called on each incoming call
-- `method` - The HTTP method which should be used to call the URL
-- `fallback_url` - The URL which should be called when the URL request fails
-- `fallback_method` - The HTTP method which should be used to call the fallback URL
-- `status_callback_url` - The URL to call on each status change
-- `status_callback_method` - The HTTP method which should be used to call the status callback URL
+Optional:
 
----
+- `read` (String)
 
-An `emergency` block supports the following:
 
-- `calling_enabled` - Whether emergency calling is enabled for the domain
-- `caller_sid` - The caller SID to associate with the domain
+<a id="nestedatt--emergency"></a>
+### Nested Schema for `emergency`
 
-## Timeouts
+Read-Only:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+- `caller_sid` (String)
+- `calling_enabled` (Boolean)
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the domain details
+
+<a id="nestedatt--voice"></a>
+### Nested Schema for `voice`
+
+Read-Only:
+
+- `fallback_method` (String)
+- `fallback_url` (String)
+- `method` (String)
+- `status_callback_method` (String)
+- `status_callback_url` (String)
+- `url` (String)

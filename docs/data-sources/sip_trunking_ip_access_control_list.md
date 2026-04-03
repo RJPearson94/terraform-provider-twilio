@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Trunking IP Access Control List"
+page_title: "twilio_sip_trunking_ip_access_control_list Data Source - twilio"
 subcategory: "SIP Trunking"
+description: |-
+  
 ---
 
 # twilio_sip_trunking_ip_access_control_list Data Source
@@ -22,28 +24,29 @@ output "ip_access_control_list" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `trunk_sid` - (Mandatory) The SID of the SIP trunk the IP access control list is associated with
-- `sid` - (Mandatory) The SID of the IP access control list
+- `sid` (String) The SID of the SIP trunk IP access control list to look up
+- `trunk_sid` (String) The SID of the SIP trunk the IP access control list belongs to
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the IP access control list (Same as the `sid`)
-- `sid` - The SID of the IP access control list (Same as the `id`)
-- `account_sid` - The account SID associated with the IP access control list
-- `trunk_sid` - The trunk SID associated with the IP access control list
-- `friendly_name` - The friendly name of the IP access control list
-- `date_created` - The date in RFC3339 format that the IP access control list was created
-- `date_updated` - The date in RFC3339 format that the IP access control list was updated
-- `url` - The URL of the IP access control list resource
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this SIP trunk IP access control list
+- `date_created` (String) The date and time the SIP trunk IP access control list was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP trunk IP access control list was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the SIP trunk IP access control list
+- `id` (String) The ID of this resource.
+- `url` (String) The absolute URL of the SIP trunk IP access control list resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the IP access control list details
+Optional:
+
+- `read` (String)

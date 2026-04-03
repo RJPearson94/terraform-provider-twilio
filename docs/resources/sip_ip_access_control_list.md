@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP IP Access Control List"
+page_title: "twilio_sip_ip_access_control_list Resource - twilio"
 subcategory: "SIP"
+description: |-
+  
 ---
 
 # twilio_sip_ip_access_control_list Resource
@@ -16,32 +18,33 @@ resource "twilio_sip_ip_access_control_list" "ip_access_control_list" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `account_sid` - (Mandatory) The account SID to associate the IP access control list with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The friendly name of the IP access control list
+- `account_sid` (String) The SID of the account that owns this SIP IP access control list. Changing this forces a new resource
+- `friendly_name` (String) A human-readable label for the SIP IP access control list
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the IP access control list (Same as the `sid`)
-- `sid` - The SID of the IP access control list (Same as the `id`)
-- `account_sid` - The account SID associated with the IP access control list
-- `friendly_name` - The friendly name of the IP access control list
-- `date_created` - The date in RFC3339 format that the IP access control list was created
-- `date_updated` - The date in RFC3339 format that the IP access control list was updated
+### Read-Only
 
-## Timeouts
+- `date_created` (String) The date and time the SIP IP access control list was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP IP access control list was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this SIP IP access control list by Twilio
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the IP access control list
-- `update` - (Defaults to 10 minutes) Used when updating the IP access control list
-- `read` - (Defaults to 5 minutes) Used when retrieving the IP access control list
-- `delete` - (Defaults to 10 minutes) Used when deleting the IP access control list
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

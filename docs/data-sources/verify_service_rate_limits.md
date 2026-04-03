@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Verify Service Rate Limits"
+page_title: "twilio_verify_service_rate_limits Data Source - twilio"
 subcategory: "Verify"
+description: |-
+  
 ---
 
 # twilio_verify_service_rate_limits Data Source
@@ -21,34 +23,38 @@ output "rate_limits" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The service SID the service rate limits are associated with
+- `service_sid` (String) The SID of the Verify service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the rate limits (Same as the `service_sid`)
-- `account_sid` - The account SID the rate limits are associated with
-- `service_sid` - The service SID the rate limits are associated with
-- `rate_limits` - A list of `rate_limit` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these service rate limits
+- `id` (String) The ID of this resource.
+- `rate_limits` (List of Object) A list of rate limits for the Verify service (see [below for nested schema](#nestedatt--rate_limits))
 
-A `rate_limit` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the rate limit
-- `unique_name` - Unique name of the rate limit
-- `description` - The description of the rate limit
-- `date_created` - The date in RFC3339 format that the rate limit was created
-- `date_updated` - The date in RFC3339 format that the rate limit was updated
-- `url` - The URL of the rate limit
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving the service rate limits
+<a id="nestedatt--rate_limits"></a>
+### Nested Schema for `rate_limits`
+
+Read-Only:
+
+- `date_created` (String)
+- `date_updated` (String)
+- `description` (String)
+- `sid` (String)
+- `unique_name` (String)
+- `url` (String)

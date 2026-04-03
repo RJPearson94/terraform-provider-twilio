@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Record call"
+page_title: "twilio_studio_flow_widget_record_call Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_record_call Data Source
@@ -48,39 +50,41 @@ data "twilio_studio_flow_widget_record_call" "record_call" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the record call widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented below
-- `record_call` - (Optional) Whether the call should be recorded. The default value is `false`
-- `trim` - (Optional) A string to indicate whether silence should be removed from the end of the recording. This value can be either a liquid template or the string `trim-silence` or `do-not-trim`
-- `recording_status_callback_method` - (Optional) The HTTP method to use when calling the recording status callback URL. This value can be either a liquid template or either `GET` or `POST`
-- `recording_status_callback_url` - (Optional) The URL which receives the recording completion callback. This value can be either a liquid template or a URL
-- `recording_channels` - (Optional) The channel or channels which are to be recorded. This value can be either a liquid template or either `dual` or `mono`
-- `recording_status_callback_events` - (Optional) A list of events that causes the recording status callback URL to be called. The valid elements in the list include: `absent`, `completed` and `in-progress`
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
 
-~> Due to data type and validation restrictions liquid templates are not supported for the `record_call` and `recording_channels` (items) arguments. Please see the widget documentation to determine whether other arguments support liquid templates
+### Optional
 
----
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `record_call` (Boolean) Whether to enable call recording. Defaults to false
+- `recording_channels` (String) The number of recording channels. Valid values: `dual`, `mono`
+- `recording_status_callback_events` (List of String) The recording events that trigger a callback. Valid values: `absent`, `completed`, `in-progress`
+- `recording_status_callback_method` (String) The HTTP method for the recording status callback. Valid values: `GET`, `POST`
+- `recording_status_callback_url` (String) The HTTP/HTTPS URL to receive recording status callback events
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
+- `trim` (String) Whether to trim silence from the recording. Valid values: `trim-silence`, `do-not-trim`
 
-A `transitions` block supports the following:
+### Read-Only
 
-- `failed` - (Optional) The widget to transition to when the recording fails
-- `success` - (Optional) The widget to transition to when the call is recorded
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
----
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-An `offset` block supports the following:
+Optional:
 
-- `x` - (Optional) The x coordinate to display the record call widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the record call widget in the Studio console. The default value is `0`
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
-## Attributes Reference
 
-The following attributes are exported:
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
 
-- `id` - The name of the record call widget
-- `json` - The JSON state definition for the record call widget
+Optional:
+
+- `failed` (String) The name of the next widget when the recording operation fails
+- `success` (String) The name of the next widget when the recording operation succeeds

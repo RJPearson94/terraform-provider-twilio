@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Chat User"
+page_title: "twilio_chat_user Data Source - twilio"
 subcategory: "Programmable Chat"
+description: |-
+  
 ---
 
 # twilio_chat_user Data Source
@@ -24,34 +26,35 @@ output "user" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the user is associated with
-- `sid` - (Mandatory) The SID of the user
+- `service_sid` (String) The SID of the Programmable Chat service
+- `sid` (String) The SID of the user
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the user (Same as the `sid`)
-- `sid` - The SID of the user (Same as the `id`)
-- `account_sid` - The account SID associated with the user
-- `service_sid` - The service SID associated with the user
-- `friendly_name` - The friendly name of the user
-- `attributes` - JSON string of user attributes
-- `identity` - The identity of the user
-- `is_notifiable` - Whether the user can be reached by push notification
-- `is_online` - Whether the user has an active connection to the service
-- `joined_channels_count` - The number of channels the user has joined
-- `role_sid` - The SID of the role associated with the user
-- `date_created` - The date in RFC3339 format that the user was created
-- `date_updated` - The date in RFC3339 format that the user was updated
-- `url` - The URL of the user
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this user
+- `attributes` (String) A JSON string of custom attributes for the user
+- `date_created` (String) The date and time the user was created, in RFC 3339 format
+- `date_updated` (String) The date and time the user was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the user
+- `id` (String) The ID of this resource.
+- `identity` (String) The unique identity string of the user
+- `is_notifiable` (Boolean) Whether the user has a potentially valid push registration for the chat service
+- `is_online` (Boolean) Whether the user is actively connected to the chat service
+- `joined_channels_count` (Number) The number of channels the user has joined
+- `role_sid` (String) The SID of the role assigned to the user
+- `url` (String) The absolute URL of the user resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the user
+Optional:
+
+- `read` (String)

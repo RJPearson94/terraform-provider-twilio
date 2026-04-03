@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Programmable Chat Channel Webhook (Studio)"
+page_title: "twilio_chat_channel_studio_webhook Resource - twilio"
 subcategory: "Programmable Chat"
+description: |-
+  
 ---
 
 # twilio_chat_channel_studio_webhook Resource
@@ -30,39 +32,38 @@ resource "twilio_chat_channel_studio_webhook" "studio_webhook" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The Service SID to associate the channel webhook with. Changing this forces a new resource to be created
-- `channel_sid` - (Mandatory) The Channel SID to associate the channel webhook with. Changing this forces a new resource to be created
-- `flow_sid` - (Mandatory) The SID for the Studio flow which will be called
-- `retry_count` - (Optional) The number of attempts to retry a failed webhook call. The value must be between `0` and `3` (inclusive). The default value is `3`
+- `channel_sid` (String) The SID of the chat channel. Changing this forces a new resource
+- `flow_sid` (String) The SID of the Studio Flow to trigger
+- `service_sid` (String) The SID of the Programmable Chat service. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `retry_count` (Number) The number of retry attempts for failed webhook requests. Defaults to `3`
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the channel webhook (Same as the `sid`)
-- `sid` - The SID of the channel webhook (Same as the `id`)
-- `account_sid` - The account SID associated with the channel webhook
-- `service_sid` - The service SID associated with the channel webhook
-- `channel_sid` - The channel SID associated with the channel webhook
-- `type` - The type of webhook. The value will be `studio`
-- `flow_sid` - The SID for the studio flow which will be called
-- `retry_count` - The number of attempts to retry a failed webhook call
-- `date_created` - The date in RFC3339 format that the channel webhook was created
-- `date_updated` - The date in RFC3339 format that the channel webhook was updated
-- `url` - The URL of the channel webhook
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this channel studio webhook
+- `date_created` (String) The date and time the channel studio webhook was created, in RFC 3339 format
+- `date_updated` (String) The date and time the channel studio webhook was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this channel studio webhook by Twilio
+- `type` (String) The type of the channel webhook
+- `url` (String) The absolute URL of the channel studio webhook resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the channel webhook
-- `update` - (Defaults to 10 minutes) Used when updating the channel webhook
-- `read` - (Defaults to 5 minutes) Used when retrieving the channel webhook
-- `delete` - (Defaults to 10 minutes) Used when deleting the channel webhook
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

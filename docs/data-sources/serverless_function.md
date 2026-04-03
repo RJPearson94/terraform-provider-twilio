@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Function"
+page_title: "twilio_serverless_function Data Source - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_function Data Source
@@ -24,35 +26,33 @@ output "function" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the function is associated with
-- `sid` - (Mandatory) The SID of the function
+- `service_sid` (String) The SID of the Serverless service
+- `sid` (String) The SID of the Serverless function
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the function (Same as the `sid`)
-- `sid` - The SID of the function (Same as the `id`)
-- `account_sid` - The account SID of the function is deployed into
-- `service_sid` - The service SID of the function is managed under
-- `friendly_name` - The name of the function
-- `content_file_name` - The name of the file
-- `latest_version_sid` - The SID of the latest function version
-- `source` - The relative path to the function file
-- `source_hash` - A hash of the function file to trigger deployments
-- `content_type` - The file MIME-type
-- `path` - The request URI path
-- `visibility` - The visibility of the function
-- `date_created` - The date in RFC3339 format that the function was created
-- `date_updated` - The date in RFC3339 format that the function was updated
-- `url` - The URL of the function
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this function
+- `content` (String) The content of the latest function version
+- `date_created` (String) The date and time the function was created, in RFC 3339 format
+- `date_updated` (String) The date and time the function was last updated, in RFC 3339 format
+- `friendly_name` (String) A human-readable label for the function
+- `id` (String) The ID of this resource.
+- `latest_version_sid` (String) The SID of the latest version of the function
+- `path` (String) The URL path at which the function is accessible
+- `url` (String) The absolute URL of the function resource
+- `visibility` (String) The access control for the function
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the function
+Optional:
+
+- `read` (String)

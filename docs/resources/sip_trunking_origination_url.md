@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio SIP Trunking Origination URL"
+page_title: "twilio_sip_trunking_origination_url Resource - twilio"
 subcategory: "SIP Trunking"
+description: |-
+  
 ---
 
 # twilio_sip_trunking_origination_url Resource
@@ -24,42 +26,39 @@ resource "twilio_sip_trunking_origination_url" "origination_url" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `trunk_sid` - (Mandatory) The trunk SID to associate the origination URL with. Changing this forces a new resource to be created
-- `enabled` - (Mandatory) Whether the origination URL is enabled
-- `friendly_name` - (Mandatory) The friendly name of the origination URL
-- `priority` - (Mandatory) The priority/ importance of the origination URL. The value must be between `0` and `65535` (inclusive)
-- `sip_url` - (Mandatory) The SIP address to route origination calls to. The SIP address must start with `sip:`
-- `weight` - (Mandatory) The weight/ share which is used to determine where the traffic is routed with origination URL of the same priority. The value must be between `0` and `65535` (inclusive)
+- `enabled` (Boolean) Whether the origination URL is enabled and available for use
+- `friendly_name` (String) A human-readable label for the SIP trunk origination URL
+- `priority` (Number) The priority of the origination URL, from 0 to 65535. Lower values have higher priority
+- `sip_url` (String) The SIP address to route origination calls to, must start with `sip:`
+- `trunk_sid` (String) The SID of the SIP trunk to add the origination URL to. Changing this forces a new resource
+- `weight` (Number) The weight of the origination URL, from 0 to 65535. Used for load balancing among URLs with the same priority
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the origination URL (Same as the `sid`)
-- `sid` - The SID of the origination URL (Same as the `id`)
-- `account_sid` - The account SID associated with the origination URL
-- `trunk_sid` - The trunk SID associated with the origination URL
-- `enabled` - Whether the origination URL is enabled
-- `friendly_name` - The friendly name of the origination URL
-- `priority` - The priority/ importance of the origination URL
-- `sip_url` - The SIP address to route origination calls to
-- `weight` - The weight/ share which is used to determine where the traffic is routed with origination URL of the same priority
-- `date_created` - The date in RFC3339 format that the origination URL was created
-- `date_updated` - The date in RFC3339 format that the origination URL was updated
-- `url` - The URL of the origination URL resource
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this SIP trunk origination URL
+- `date_created` (String) The date and time the SIP trunk origination URL was created, in RFC 3339 format
+- `date_updated` (String) The date and time the SIP trunk origination URL was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this SIP trunk origination URL by Twilio
+- `url` (String) The absolute URL of the SIP trunk origination URL resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the origination URL
-- `update` - (Defaults to 10 minutes) Used when updating the origination URL
-- `read` - (Defaults to 5 minutes) Used when retrieving the origination URL
-- `delete` - (Defaults to 10 minutes) Used when deleting the origination URL
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

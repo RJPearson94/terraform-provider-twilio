@@ -19,34 +19,40 @@ func dataSourceStudioFlowDefinition() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"json": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The assembled JSON flow definition, suitable for use in the `definition` argument of `twilio_studio_flow`",
 			},
 			"description": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "A human-readable description of the flow's purpose",
 			},
 			"flags": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Optional feature flags controlling flow execution behaviour",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"allow_concurrent_calls": {
-							Type:     schema.TypeBool,
-							Required: true,
+							Type:        schema.TypeBool,
+							Required:    true,
+							Description: "Whether the flow allows multiple simultaneous executions for the same contact",
 						},
 					},
 				},
 			},
 			"initial_state": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The name of the widget that handles the flow's entry point (typically the Trigger widget)",
 			},
 			"states": {
-				Type:     schema.TypeList,
-				Required: true,
-				MinItems: 1,
+				Type:        schema.TypeList,
+				Required:    true,
+				MinItems:    1,
+				Description: "The list of widget states that make up the flow. Use the widget data sources (e.g. `twilio_studio_flow_widget_trigger`) to generate each state's JSON",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"json": {
@@ -54,6 +60,7 @@ func dataSourceStudioFlowDefinition() *schema.Resource {
 							Required:         true,
 							ValidateFunc:     validation.StringIsJSON,
 							DiffSuppressFunc: structure.SuppressJsonDiff,
+							Description:      "The JSON representation of a single widget state, produced by a widget data source",
 						},
 					},
 				},

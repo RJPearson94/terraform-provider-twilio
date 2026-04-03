@@ -20,81 +20,97 @@ func dataSourceConversationsConversationWebhooks() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns these conversation webhooks",
 			},
 			"service_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: utils.ConversationServiceSidValidation(),
+				Description:  "The SID of the conversations service",
 			},
 			"conversation_sid": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: utils.ConversationSidValidation(),
+				Description:  "The SID of the conversation",
 			},
 			"webhooks": {
-				Type:     schema.TypeList,
-				Computed: true,
+				Type:        schema.TypeList,
+				Computed:    true,
+				Description: "The list of conversation webhooks",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"sid": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The unique SID assigned to this conversation webhook by Twilio",
 						},
 						"target": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The target of the conversation webhook",
 						},
 						"configuration": {
-							Type:     schema.TypeList,
-							Computed: true,
+							Type:        schema.TypeList,
+							Computed:    true,
+							Description: "The configuration of the conversation webhook",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"method": {
-										Type:     schema.TypeString,
-										Computed: true,
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The HTTP method for the webhook",
 									},
 									"webhook_url": {
-										Type:     schema.TypeString,
-										Computed: true,
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The URL to send webhook requests to",
 									},
 									"filters": {
-										Type:     schema.TypeList,
-										Computed: true,
+										Type:        schema.TypeList,
+										Computed:    true,
+										Description: "The list of webhook event filters",
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
 									},
 									"triggers": {
-										Type:     schema.TypeList,
-										Computed: true,
+										Type:        schema.TypeList,
+										Computed:    true,
+										Description: "The list of keywords that trigger the webhook",
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
 									},
 									"replay_after": {
-										Type:     schema.TypeInt,
-										Computed: true,
+										Type:        schema.TypeInt,
+										Computed:    true,
+										Description: "The message index to replay messages from",
 									},
 									"flow_sid": {
-										Type:     schema.TypeInt,
-										Computed: true,
+										Type:        schema.TypeInt,
+										Computed:    true,
+										Description: "The SID of the Studio flow",
 									},
 								},
 							},
 						},
 						"date_created": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The date and time the conversation webhook was created, in RFC 3339 format",
 						},
 						"date_updated": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The date and time the conversation webhook was last updated, in RFC 3339 format",
 						},
 						"url": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The absolute URL of the conversation webhook resource",
 						},
 					},
 				},

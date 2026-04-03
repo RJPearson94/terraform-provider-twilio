@@ -50,26 +50,31 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The unique SID assigned to this workspace by Twilio",
 			},
 			"account_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the account that owns this workspace",
 			},
 			"friendly_name": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "A human-readable label for the workspace",
 			},
 			"event_callback_url": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+				Description:  "The URL to call when an event is fired in the workspace",
 			},
 			"event_filters": {
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Description: "A list of event types to subscribe to. Valid values are `task.created`, `task.completed`, `task.canceled`, `task.deleted`, `task.updated`, `task.wrapup`, `task-queue.entered`, `task-queue.moved`, `task-queue.timeout`, `reservation.created`, `reservation.accepted`, `reservation.rejected`, `reservation.timeout`, `reservation.canceled`, `reservation.rescinded`, `reservation.wrapup`, `reservation.completed`, `reservation.failed`, `workflow.entered`, `workflow.timeout`, `workflow.target-matched`, `worker.activity.update`, `worker.attributes.update`, `worker.capacity.update`, `worker.channel.availability.update`",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 					ValidateFunc: validation.StringInSlice([]string{
@@ -102,9 +107,10 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 				},
 			},
 			"multi_task_enabled": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+				Description: "Whether multi-tasking is enabled for the workspace. Defaults to `true`",
 			},
 			"template": {
 				Type:     schema.TypeString,
@@ -115,6 +121,7 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 					"NONE",
 					"FIFO",
 				}, false),
+				Description: "The template to use when creating the workspace. Valid values are `NONE` or `FIFO`. Defaults to `NONE`. Changing this forces a new resource",
 			},
 			"prioritize_queue_order": {
 				Type:     schema.TypeString,
@@ -124,34 +131,42 @@ func resourceTaskRouterWorkspace() *schema.Resource {
 					"LIFO",
 					"FIFO",
 				}, false),
+				Description: "The order in which task queues are prioritized. Valid values are `LIFO` or `FIFO`. Defaults to `FIFO`",
 			},
 			"default_activity_name": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The name of the default activity for the workspace",
 			},
 			"default_activity_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the default activity for the workspace",
 			},
 			"timeout_activity_name": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The name of the timeout activity for the workspace",
 			},
 			"timeout_activity_sid": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The SID of the timeout activity for the workspace",
 			},
 			"date_created": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the workspace was created, in RFC 3339 format",
 			},
 			"date_updated": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The date and time the workspace was last updated, in RFC 3339 format",
 			},
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The absolute URL of the workspace resource",
 			},
 		},
 	}

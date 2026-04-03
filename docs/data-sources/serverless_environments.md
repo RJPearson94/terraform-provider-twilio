@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Environments"
+page_title: "twilio_serverless_environments Data Source - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_environments Data Source
@@ -23,36 +25,40 @@ output "environments" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the environments are associated with
+- `service_sid` (String) The SID of the Serverless service
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the resource (Same as the `service_sid`)
-- `service_sid` - The SID of the service the environments are associated with (Same as the `id`)
-- `account_sid` - The account SID associated with the environments
-- `environments` - A list of `environment` blocks as documented below
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns these environments
+- `environments` (List of Object) A list of environments belonging to the Serverless service (see [below for nested schema](#nestedatt--environments))
+- `id` (String) The ID of this resource.
 
-An `environment` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the environment
-- `build_sid` - The build SID of the current build deployed to the environment
-- `unique_name` - The unique name of the environment
-- `domain_suffix` - The domain suffix of the environment
-- `domain_name` - The domain name of the environment
-- `date_created` - The date in RFC3339 format that the environment was created
-- `date_updated` - The date in RFC3339 format that the environment was updated
-- `url` - The URL of the environment
+Optional:
 
-## Timeouts
+- `read` (String)
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
 
-- `read` - (Defaults to 10 minutes) Used when retrieving environments
+<a id="nestedatt--environments"></a>
+### Nested Schema for `environments`
+
+Read-Only:
+
+- `build_sid` (String)
+- `date_created` (String)
+- `date_updated` (String)
+- `domain_name` (String)
+- `domain_suffix` (String)
+- `sid` (String)
+- `unique_name` (String)
+- `url` (String)

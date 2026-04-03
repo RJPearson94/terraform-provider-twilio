@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Studio Flow Widget - Fork stream"
+page_title: "twilio_studio_flow_widget_fork_stream Data Source - twilio"
 subcategory: "Studio"
+description: |-
+  
 ---
 
 # twilio_studio_flow_widget_fork_stream Data Source
@@ -67,46 +69,50 @@ data "twilio_studio_flow_widget_fork_stream" "fork_stream" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `name` - (Mandatory) The name of the fork stream widget
-- `transitions` - (Optional) A `transitions` block as documented below
-- `offset` - (Optional) A `offset` block as documented belows
-- `stream_action` - (Mandatory) The action you want to perform on a stream. Valid values include: `start` or `stop`
-- `stream_connector` - (Optional) The name of the SIPREC stream
-- `stream_name` - (Optional) The friendly name of the stream
-- `stream_parameters` - (Optional) A list of `stream_parameter` blocks as documented below
-- `stream_track` - (Optional) The stream tracks which will be sent. Valid values include: `both_tracks`, `inbound_track` or `outbound_track`
-- `stream_transport_type` - (Optional) The transport protocol to use. Valid values include: `siprec` or `websocket`
-- `stream_url` - (Optional) The websocket URL to stream audio to. This value can be either a liquid template or a URL starting with `wss://`
+- `name` (String) The unique name of this widget within the flow, used to reference it in transitions
+- `stream_action` (String) Whether to start or stop the audio stream. Valid values: `start`, `stop`
 
-~> Due to data type and validation restrictions liquid templates are not supported for the `stream_action`, `stream_track` and `stream_transport_type` arguments. Please see the widget documentation to determine whether other arguments support liquid templates
+### Optional
 
----
+- `offset` (Block List, Max: 1) The position of this widget in the Studio visual editor (see [below for nested schema](#nestedblock--offset))
+- `stream_connector` (String) The name of the SIPREC connector when using `siprec` transport
+- `stream_name` (String) A friendly name for the stream, used to reference it when stopping
+- `stream_parameters` (Block List) Additional key/value parameters to send to the remote stream service (see [below for nested schema](#nestedblock--stream_parameters))
+- `stream_track` (String) Which audio track(s) to stream. Valid values: `both_tracks`, `inbound_track`, `outbound_track`
+- `stream_transport_type` (String) The transport protocol for the stream. Valid values: `siprec`, `websocket`
+- `stream_url` (String) The WebSocket URL (`wss://`) to stream audio to when using `websocket` transport
+- `transitions` (Block List, Max: 1) The next widget(s) to transition to after this widget (see [below for nested schema](#nestedblock--transitions))
 
-A `stream_parameter` block supports the following:
+### Read-Only
 
-- `key` - (Mandatory) The parameter name/ key sent to the remote service
-- `value` - (Mandatory) The value of the parameter sent to the remote service
+- `id` (String) The ID of this resource.
+- `json` (String) A JSON string representation of the widget state, for use as an entry in the `states` list of a `twilio_studio_flow_definition` data source
 
----
+<a id="nestedblock--offset"></a>
+### Nested Schema for `offset`
 
-A `transitions` block supports the following:
+Optional:
 
-- `next` - (Optional) The widget to transition to when the stream has been started or stopped
+- `x` (Number) The x-axis position. Defaults to 0
+- `y` (Number) The y-axis position. Defaults to 0
 
----
 
-An `offset` block supports the following:
+<a id="nestedblock--stream_parameters"></a>
+### Nested Schema for `stream_parameters`
 
-- `x` - (Optional) The x coordinate to display the fork stream widget in the Studio console. The default value is `0`
-- `y` - (Optional) The y coordinate to display the fork stream widget in the Studio console. The default value is `0`
+Required:
 
-## Attributes Reference
+- `key` (String) The parameter name
+- `value` (String) The parameter value
 
-The following attributes are exported:
 
-- `id` - The name of the fork stream widget
-- `json` - The JSON state definition for the fork stream widget
+<a id="nestedblock--transitions"></a>
+### Nested Schema for `transitions`
+
+Optional:
+
+- `next` (String) The name of the next widget after the stream is started or stopped

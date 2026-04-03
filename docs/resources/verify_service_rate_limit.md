@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Verify Service Rate Limit"
+page_title: "twilio_verify_service_rate_limit Resource - twilio"
 subcategory: "Verify"
+description: |-
+  
 ---
 
 # twilio_verify_service_rate_limit Resource
@@ -22,36 +24,36 @@ resource "twilio_verify_service_rate_limit" "rate_limit" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The service SID to associate the rate limit bucket with. Changing this forces a new resource to be created
-- `unique_name` - (Mandatory) Unique name of the rate limit. Changing this forces a new resource to be created
-- `description` - (Optional) The description of the rate limit
+- `service_sid` (String) The SID of the Verify service. Changing this forces a new resource
+- `unique_name` (String) A unique name for the rate limit. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `description` (String) A description of the rate limit
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the rate limit (Same as the `sid`)
-- `sid` - The SID of the rate limit (Same as the `id`)
-- `account_sid` - The account SID the rate limit is associated with
-- `service_sid` - The service SID the rate limit bucket is associated with
-- `unique_name` - Unique name of the rate limit
-- `description` - The description of the rate limit
-- `date_created` - The date in RFC3339 format that the rate limit was created
-- `date_updated` - The date in RFC3339 format that the rate limit was updated
-- `url` - The URL of the rate limit
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this service rate limit
+- `date_created` (String) The date and time the service rate limit was created, in RFC 3339 format
+- `date_updated` (String) The date and time the service rate limit was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this service rate limit by Twilio
+- `url` (String) The absolute URL of the service rate limit resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the rate limit
-- `update` - (Defaults to 10 minutes) Used when updating the rate limit
-- `read` - (Defaults to 5 minutes) Used when retrieving the rate limit
-- `delete` - (Defaults to 10 minutes) Used when deleting the rate limit
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

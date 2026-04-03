@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Flex Plugin"
+page_title: "twilio_flex_plugin Resource - twilio"
 subcategory: "Flex"
+description: |-
+  
 ---
 
 # twilio_flex_plugin Resource
@@ -19,47 +21,43 @@ resource "twilio_flex_plugin" "plugin" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `unique_name` - (Mandatory) The unique name of the plugin. Changing this forces a new resource to be created
-- `friendly_name` - (Optional) The friendly name of the plugin
-- `description` - (Optional) The description of the plugin
-- `changelog` - (Optional) The changelog for the plugin
-- `version` - (Mandatory) The version of the plugin
-- `plugin_url` - (Mandatory) The URL of the hosted plugin bundle
-- `private` - (Optional) Whether credentials are required to access the plugin
+- `plugin_url` (String) The hosted URL of the plugin bundle. Must use HTTP or HTTPS
+- `unique_name` (String) The unique name of the Flex plugin. Changing this forces a new resource
+- `version` (String) The version string for the plugin (e.g., `1.0.0`)
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `changelog` (String) The changelog for this version of the plugin
+- `description` (String) A description of the Flex plugin
+- `friendly_name` (String) A human-readable label for the Flex plugin
+- `private` (Boolean) Whether the plugin version is private
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the plugin (Same as the `sid`)
-- `sid` - The SID of the plugin (Same as the `id`)
-- `account_sid` - The account SID associated with the plugin
-- `unique_name` - The unique name of the plugin
-- `friendly_name` - The friendly name of the plugin
-- `description` - The description of the plugin
-- `changelog` - The changelog for the plugin
-- `version` - The version of the plugin
-- `plugin_url` - The URL of the hosted plugin bundle
-- `private` - Whether credentials are required to access the plugin
-- `archived` - Whether the plugin has been archived
-- `version_archived` - Whether the latest plugin version has been archived
-- `latest_version_sid` - The SID of the latest plugin version
-- `date_created` - The date in RFC3339 format that the plugin was created
-- `date_updated` - The date in RFC3339 format that the plugin was updated
-- `url` - The URL of the plugin
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this Flex plugin
+- `archived` (Boolean) Whether the Flex plugin has been archived
+- `date_created` (String) The date and time the Flex plugin was created, in RFC 3339 format
+- `date_updated` (String) The date and time the Flex plugin was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `latest_version_sid` (String) The SID of the latest plugin version
+- `sid` (String) The unique SID assigned to this Flex plugin by Twilio
+- `url` (String) The absolute URL of the Flex plugin resource
+- `version_archived` (Boolean) Whether the latest version of the plugin has been archived
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the plugin
-- `update` - (Defaults to 10 minutes) Used when updating the plugin
-- `read` - (Defaults to 5 minutes) Used when retrieving the plugin
-- `delete` - (Defaults to 10 minutes) Used when retrieving the plugin
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

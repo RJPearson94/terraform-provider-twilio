@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Role"
+page_title: "twilio_conversations_role Resource - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_role Resource
@@ -27,40 +29,37 @@ resource "twilio_conversations_role" "role" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The service SID to associate the role with. Changing this forces a new resource to be created
-- `friendly_name` - (Mandatory) The friendly name of the role. Changing this forces a new resource to be created. The length of the string must be between `1` and `256` characters (inclusive)
-- `type` - (Mandatory) The type of role. Valid values are `service` or `conversation`. Changing this forces a new resource to be created
-- `permissions` - (Mandatory) The list of permissions the role has. Valid values are `editOwnMessage`, `deleteAnyMessage`, `addParticipant`, `editConversationAttributes`, `editAnyParticipantAttributes`, `editAnyMessage`, `editConversationName`, `editAnyMessageAttributes`, `deleteOwnMessage`, `editOwnMessageAttributes`, `removeParticipant`, `addNonChatParticipant`, `editOwnParticipantAttributes`, `deleteConversation`, `editNotificationLevel`, `sendMessage`, `leaveConversation`, `sendMediaMessage`, `editAnyUserInfo`, `removeParticipant`, `createConversation`, `editOwnUserInfo` or `joinConversation`
+- `friendly_name` (String) A human-readable label for the role. Changing this forces a new resource
+- `permissions` (List of String) The list of permissions granted to the role
+- `service_sid` (String) The SID of the conversations service. Changing this forces a new resource
+- `type` (String) The type of role. Valid values are `conversation` or `service`. Changing this forces a new resource
 
-~> Some of these permissions are only appliable to a specific role type. Please see the documentation or the Twilio console to see what permissions apply to a given role type
+### Optional
 
-## Attributes Reference
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-The following attributes are exported:
+### Read-Only
 
-- `id` - The ID of the role (Same as the `sid`)
-- `sid` - The SID of the role (Same as the `id`)
-- `account_sid` - The account SID associated with the role
-- `service_sid` - The service SID associated with the role
-- `friendly_name` - The friendly name of the role
-- `type` - The type of role
-- `permissions` - The list of permissions the role has
-- `date_created` - The date in RFC3339 format that the role was created
-- `date_updated` - The date in RFC3339 format that the role was updated
-- `url` - The URL of the role
+- `account_sid` (String) The SID of the account that owns this role
+- `date_created` (String) The date and time the role was created, in RFC 3339 format
+- `date_updated` (String) The date and time the role was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this role by Twilio
+- `url` (String) The absolute URL of the role resource
 
-## Timeouts
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+Optional:
 
-- `create` - (Defaults to 10 minutes) Used when creating the role
-- `update` - (Defaults to 10 minutes) Used when updating the role
-- `read` - (Defaults to 5 minutes) Used when retrieving the role
-- `delete` - (Defaults to 10 minutes) Used when deleting the role
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

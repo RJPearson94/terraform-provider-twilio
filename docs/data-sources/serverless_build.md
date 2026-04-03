@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Serverless Build"
+page_title: "twilio_serverless_build Data Source - twilio"
 subcategory: "Serverless"
+description: |-
+  
 ---
 
 # twilio_serverless_build Data Source
@@ -24,56 +26,61 @@ output "build" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The SID of the service the build is associated with
-- `sid` - (Mandatory) The SID of the build
+- `service_sid` (String) The SID of the Serverless service
+- `sid` (String) The SID of the Serverless build
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the build (Same as the `sid`)
-- `sid` - The SID of the build (Same as the `id`)
-- `account_sid` - The account SID associated with the build
-- `service_sid` - The account SID associated with the build
-- `asset_version` - A `asset_version` block as documented below.
-- `function_version` - A `function_version` block as documented below.
-- `dependencies` - Map of dependencies to be included in the build
-- `runtime` - The target runtime of the serverless functions and assets
-- `status` - The current status of the build job
-- `date_created` - The date in RFC3339 format that the build was created
-- `date_updated` - The date in RFC3339 format that the build was updated
-- `url` - The URL of the build
+### Read-Only
 
----
+- `account_sid` (String) The SID of the account that owns this build
+- `asset_versions` (List of Object) A list of asset versions included in this build (see [below for nested schema](#nestedatt--asset_versions))
+- `date_created` (String) The date and time the build was created, in RFC 3339 format
+- `date_updated` (String) The date and time the build was last updated, in RFC 3339 format
+- `dependencies` (Map of String) A map of npm package names to version ranges included in the build
+- `function_versions` (List of Object) A list of function versions included in this build (see [below for nested schema](#nestedatt--function_versions))
+- `id` (String) The ID of this resource.
+- `runtime` (String) The Node.js runtime version used for the build
+- `status` (String) The current status of the build
+- `url` (String) The absolute URL of the build resource
 
-An `asset_version` block supports the following:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `sid` - The SID of the asset version
-- `account_sid` - The account SID of the asset version is deployed into
-- `service_sid` - The account SID of the asset version is deployed into
-- `asset_sid` - The asset SID of the version is managed under
-- `date_created` - The date in RFC3339 format that the asset version was created
-- `path` - The request URI path
-- `visibility` - The visibility of the asset
+Optional:
 
----
+- `read` (String)
 
-A `function_version` block supports the following:
 
-- `sid` - The SID of the function version
-- `account_sid` - The account SID of the function version is deployed into
-- `service_sid` - The account SID of the function version is deployed into
-- `function_sid` - The function SID of the version is managed under
-- `date_created` - The date in RFC3339 format that the function version was created
-- `path` - The request URI path
-- `visibility` - The visibility of the function
+<a id="nestedatt--asset_versions"></a>
+### Nested Schema for `asset_versions`
 
-## Timeouts
+Read-Only:
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+- `account_sid` (String)
+- `asset_sid` (String)
+- `date_created` (String)
+- `path` (String)
+- `service_sid` (String)
+- `sid` (String)
+- `visibility` (String)
 
-- `read` - (Defaults to 5 minutes) Used when retrieving the build
+
+<a id="nestedatt--function_versions"></a>
+### Nested Schema for `function_versions`
+
+Read-Only:
+
+- `account_sid` (String)
+- `date_created` (String)
+- `function_sid` (String)
+- `path` (String)
+- `service_sid` (String)
+- `sid` (String)
+- `visibility` (String)

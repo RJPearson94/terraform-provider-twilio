@@ -1,6 +1,8 @@
 ---
-page_title: "Twilio Conversations Conversation Webhook (Studio)"
+page_title: "twilio_conversations_conversation_studio_webhook Resource - twilio"
 subcategory: "Conversations"
+description: |-
+  
 ---
 
 # twilio_conversations_conversation_studio_webhook Resource
@@ -27,39 +29,38 @@ resource "twilio_conversations_conversation_studio_webhook" "studio_webhook" {
 }
 ```
 
-## Argument Reference
+## Schema
 
-The following arguments are supported:
+### Required
 
-- `service_sid` - (Mandatory) The service SID to associate the conversation with. Changing this forces a new resource to be created
-- `conversation_sid` - (Mandatory) The conversation SID to associate the webhook with. Changing this forces a new resource to be created
-- `flow_sid` - (Mandatory) The SID for the Studio flow which will be called
-- `replay_after` - (Optional) Message Index to replay messages from
+- `conversation_sid` (String) The SID of the conversation. Changing this forces a new resource
+- `flow_sid` (String) The SID of the Studio flow to trigger
+- `service_sid` (String) The SID of the conversations service. Changing this forces a new resource
 
-## Attributes Reference
+### Optional
 
-The following attributes are exported:
+- `replay_after` (Number) The message index to replay messages from. Changing this forces a new resource
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
-- `id` - The ID of the conversation webhook (Same as the `sid`)
-- `sid` - The SID of the conversation webhook (Same as the `id`)
-- `account_sid` - The account SID associated with the conversation webhook
-- `service_sid` - The service SID associated with the conversation webhook
-- `conversation_sid` - The conversation SID to associate the webhook with
-- `target` - The target of webhook. The value will be `studio`
-- `flow_sid` - The SID for the studio flow which will be called
-- `replay_after` - Message Index to replay messages from
-- `date_created` - The date in RFC3339 format that the conversation webhook was created
-- `date_updated` - The date in RFC3339 format that the conversation webhook was updated
-- `url` - The URL of the conversation webhook
+### Read-Only
 
-## Timeouts
+- `account_sid` (String) The SID of the account that owns this conversation studio webhook
+- `date_created` (String) The date and time the conversation studio webhook was created, in RFC 3339 format
+- `date_updated` (String) The date and time the conversation studio webhook was last updated, in RFC 3339 format
+- `id` (String) The ID of this resource.
+- `sid` (String) The unique SID assigned to this conversation studio webhook by Twilio
+- `target` (String) The target of the conversation studio webhook
+- `url` (String) The absolute URL of the conversation studio webhook resource
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
 
-- `create` - (Defaults to 10 minutes) Used when creating the conversation webhook
-- `update` - (Defaults to 10 minutes) Used when updating the conversation webhook
-- `read` - (Defaults to 5 minutes) Used when retrieving the conversation webhook
-- `delete` - (Defaults to 10 minutes) Used when deleting the conversation webhook
+Optional:
+
+- `create` (String)
+- `delete` (String)
+- `read` (String)
+- `update` (String)
 
 ## Import
 

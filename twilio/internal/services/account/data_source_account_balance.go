@@ -23,14 +23,17 @@ func dataSourceAccountBalance() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: utils.AccountSidValidation(),
+				Description:  "The SID of the account to retrieve the balance for",
 			},
 			"balance": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The current balance of the account",
 			},
 			"currency": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The currency unit of the balance (e.g., USD)",
 			},
 		},
 	}
