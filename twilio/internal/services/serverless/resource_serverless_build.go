@@ -339,7 +339,7 @@ func resourceServerlessBuildRead(ctx context.Context, d *schema.ResourceData, me
 }
 
 func resourceServerlessBuildUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("[INFO] Serverless deployments cannot be updated. So only polling config can be updated without a new resource being created")
+	log.Printf("[INFO] Serverless builds cannot be updated. So only polling config can be updated without a new resource being created")
 
 	return nil
 }
@@ -380,7 +380,11 @@ func poll(ctx context.Context, d *schema.ResourceData, client *common.TwilioClie
 			if getResponse.Status == "completed" {
 				return nil
 			}
-			time.Sleep(time.Duration(pollingConfig["delay_in_ms"].(int)) * time.Millisecond)
+			select {
+			case <-ctx.Done():
+				return diag.Errorf("Context cancelled while polling build status")
+			case <-time.After(time.Duration(pollingConfig["delay_in_ms"].(int)) * time.Millisecond):
+			}
 		}
 		return diag.Errorf("Reached max polling attempts without a completed build")
 	}

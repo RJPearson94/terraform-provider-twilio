@@ -232,7 +232,7 @@ func resourceServerlessFunctionRead(ctx context.Context, d *schema.ResourceData,
 				d.SetId("")
 				return nil
 			}
-			return diag.Errorf("Failed to read serverless function version content: %s", err.Error())
+			return diag.Errorf("Failed to read serverless function version content: %s", contentErr.Error())
 		}
 
 		d.Set("content", contentGetResponse.Content)
