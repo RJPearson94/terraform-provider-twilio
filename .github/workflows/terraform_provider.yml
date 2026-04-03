@@ -11,6 +11,8 @@ on:
       - go.sum
       - makefile
       - main.go
+      - docs/**
+      - examples/**
 
 jobs:
   pipeline:
@@ -21,7 +23,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.24'
+          go-version: '1.26'
 
       - name: Install goimports
         run: go install golang.org/x/tools/cmd/goimports@latest
@@ -34,6 +36,9 @@ jobs:
 
       - name: Build
         run: make build
+
+      - name: Validate examples
+        run: make validate-all-examples
 
       - name: Test
         run: make test

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "skills": {
+    "new-terraform-provider": {
+      "source": "hashicorp/agent-skills",
+      "sourceType": "github",
+      "computedHash": "2f12647edea2705451301a24a864d71af4aa7758e8a8e977a1f95f83a297dc4a"
+    },
+    "provider-actions": {
+      "source": "hashicorp/agent-skills",
+      "sourceType": "github",
+      "computedHash": "e3852e6583ab4c2199a26793583a3463ce80d31b4b972f7855585c8885d0c0e4"
+    },
+    "provider-resources": {
+      "source": "hashicorp/agent-skills",
+      "sourceType": "github",
+      "computedHash": "97edcbb115a59d93da5ec28cb445d883307c66143b6fbc1f6f61bd4b2cfd7def"
+    },
+    "provider-test-patterns": {
+      "source": "hashicorp/agent-skills",
+      "sourceType": "github",
+      "computedHash": "5357774c5d08fa1666737d49ffb68f0c86689be3b3620be5779fd882b159c09c"
+    }
+  }
+}
