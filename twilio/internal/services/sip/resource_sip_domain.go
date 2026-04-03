@@ -221,7 +221,21 @@ func resourceSIPDomainCreate(ctx context.Context, d *schema.ResourceData, meta i
 	}
 
 	d.SetId(createResult.Sid)
-	return resourceSIPDomainRead(ctx, d, meta)
+	d.Set("sid", createResult.Sid)
+	d.Set("account_sid", createResult.AccountSid)
+	d.Set("auth_type", createResult.AuthType)
+	d.Set("byoc_trunk_sid", createResult.ByocTrunkSid)
+	d.Set("domain_name", createResult.DomainName)
+	d.Set("emergency", helper.FlattenEmergencyFromCreate(createResult))
+	d.Set("friendly_name", createResult.FriendlyName)
+	d.Set("secure", createResult.Secure)
+	d.Set("sip_registration", createResult.SipRegistration)
+	d.Set("voice", helper.FlattenVoiceFromCreate(createResult))
+	d.Set("date_created", createResult.DateCreated.Time.Format(time.RFC3339))
+	if createResult.DateUpdated != nil {
+		d.Set("date_updated", createResult.DateUpdated.Time.Format(time.RFC3339))
+	}
+	return nil
 }
 
 func resourceSIPDomainRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
